@@ -1,4 +1,5 @@
 import { Link } from '@/i18n/routing'
+import AddToCartButton from '@/components/cart/AddToCartButton'
 
 export interface ProductCardProps {
   name: string
@@ -92,6 +93,10 @@ export default function ProductCard({
           {!inStock && (
             <p className="mt-2 text-[10px] text-[#9A9A9A]">Consultá por preventas</p>
           )}
+
+          <div className="mt-3">
+            <AddToCartButton sku={slug} name={name} category={category} inStock={inStock} />
+          </div>
         </div>
       </div>
     </Link>

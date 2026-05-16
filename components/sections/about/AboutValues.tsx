@@ -1,29 +1,20 @@
+import { useTranslations } from 'next-intl'
 import { RefreshCw, Eye, Award, Leaf, Headphones } from 'lucide-react'
 
-const SMALL_CARDS = [
-  {
-    Icon: Award,
-    title: 'Garantía extendida',
-    desc: 'Respaldo de marca en cada instalación certificada.',
-  },
-  {
-    Icon: Leaf,
-    title: 'Eficiencia energética',
-    desc: 'Reducción de carga térmica en edificios y vehículos.',
-  },
-  {
-    Icon: Headphones,
-    title: 'Soporte técnico',
-    desc: 'Equipo especializado para instaladores y distribuidores.',
-  },
-]
-
 export default function AboutValues() {
+  const t = useTranslations('about')
+
+  const smallCards = [
+    { Icon: Award, titleKey: 'values_5_title', bodyKey: 'values_5_body' },
+    { Icon: Leaf, titleKey: 'values_6_title', bodyKey: 'values_6_body' },
+    { Icon: Headphones, titleKey: 'values_7_title', bodyKey: 'values_7_body' },
+  ]
+
   return (
     <section className="bg-[var(--bg)]" style={{ padding: '0 40px 64px' }}>
       <div className="max-w-[1160px] mx-auto">
         <div className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#9A9A9A] mb-6">
-          Nuestros valores
+          {t('values_label')}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
@@ -39,30 +30,27 @@ export default function AboutValues() {
             >
               01
             </div>
-            <div className="text-sm font-medium text-white mb-2">Precisión ante todo</div>
+            <div className="text-sm font-medium text-white mb-2">{t('values_1_title')}</div>
             <div className="text-xs text-white/45 leading-relaxed">
-              Cada lámina es medida, ensayada y validada antes de salir de producción. No existe
-              tolerancia al defecto.
+              {t('values_1_body')}
             </div>
           </div>
 
           {/* Card 02 */}
           <div className="bg-white border border-[#E4E4E2] rounded-2xl p-6 shadow-[var(--shadow-card)]">
             <RefreshCw size={18} className="text-[#9A9A9A] mb-3" />
-            <div className="text-sm font-medium text-[#0A0A0A] mb-2">Consistencia de proceso</div>
+            <div className="text-sm font-medium text-[#0A0A0A] mb-2">{t('values_2_title')}</div>
             <div className="text-xs text-[#5C5C5C] leading-relaxed">
-              El mismo estándar productivo en cada lote. Lo que instalás hoy es idéntico a lo que
-              instalaste el año pasado.
+              {t('values_2_body')}
             </div>
           </div>
 
           {/* Card 03 */}
           <div className="bg-white border border-[#E4E4E2] rounded-2xl p-6 shadow-[var(--shadow-card)]">
             <Eye size={18} className="text-[#9A9A9A] mb-3" />
-            <div className="text-sm font-medium text-[#0A0A0A] mb-2">Transparencia técnica</div>
+            <div className="text-sm font-medium text-[#0A0A0A] mb-2">{t('values_3_title')}</div>
             <div className="text-xs text-[#5C5C5C] leading-relaxed">
-              Publicamos fichas técnicas completas. Cada especificación es medible y verificable
-              por el instalador o el cliente final.
+              {t('values_3_body')}
             </div>
           </div>
 
@@ -78,23 +66,22 @@ export default function AboutValues() {
             >
               04
             </div>
-            <div className="text-sm font-medium text-white mb-2">Alcance regional</div>
+            <div className="text-sm font-medium text-white mb-2">{t('values_4_title')}</div>
             <div className="text-xs text-white/45 leading-relaxed">
-              Tecnología de origen alemán disponible hoy en Argentina y América Latina, con soporte
-              local y tiempos de respuesta regionales.
+              {t('values_4_body')}
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-          {SMALL_CARDS.map(({ Icon, title, desc }) => (
+          {smallCards.map(({ Icon, titleKey, bodyKey }) => (
             <div
-              key={title}
+              key={titleKey}
               className="bg-white border border-[#E4E4E2] rounded-xl p-4 shadow-[var(--shadow-card)]"
             >
               <Icon size={15} className="text-[#9A9A9A] mb-2" />
-              <div className="text-[13px] font-medium mb-1 text-[#0A0A0A]">{title}</div>
-              <div className="text-[11px] text-[#9A9A9A] leading-relaxed">{desc}</div>
+              <div className="text-[13px] font-medium mb-1 text-[#0A0A0A]">{t(titleKey as Parameters<typeof t>[0])}</div>
+              <div className="text-[11px] text-[#9A9A9A] leading-relaxed">{t(bodyKey as Parameters<typeof t>[0])}</div>
             </div>
           ))}
         </div>

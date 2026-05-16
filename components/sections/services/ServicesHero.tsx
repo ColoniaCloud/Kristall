@@ -1,7 +1,9 @@
 import Image from 'next/image'
 import GermanyFlag from '@/components/common/GermanyFlag'
+import { useTranslations } from 'next-intl'
 
 export default function ServicesHero() {
+  const t = useTranslations('services_page')
   return (
     <section
       className="relative overflow-hidden bg-[#1A1A1A]"
@@ -21,7 +23,7 @@ export default function ServicesHero() {
         <div className="flex items-center gap-2.5">
           <GermanyFlag />
           <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/50">
-            Servicios profesionales
+            {t('hero_eyebrow')}
           </span>
         </div>
 
@@ -33,12 +35,11 @@ export default function ServicesHero() {
             fontWeight: 600,
           }}
         >
-          Soluciones para la industria automotriz
+          {t('hero_headline')}
         </h1>
 
         <p className="text-sm text-white/55 max-w-[420px] leading-relaxed">
-          Desde la instalación profesional en concesionarias hasta el software de gestión
-          operativa. Kristall Film acompaña todo el proceso.
+          {t('hero_body')}
         </p>
 
         <div className="flex gap-3 mt-8">
@@ -47,10 +48,10 @@ export default function ServicesHero() {
               className="text-2xl text-white"
               style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
             >
-              48hs
+              {t('hero_stat1_value')}
             </div>
             <div className="text-[11px] text-white/45 mt-1">
-              Tiempo de respuesta promedio
+              {t('hero_stat1_label')}
             </div>
           </div>
           <div className="bg-white/6 border border-white/10 rounded-xl px-5 py-4 backdrop-blur-sm">
@@ -58,10 +59,10 @@ export default function ServicesHero() {
               className="text-2xl text-white"
               style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
             >
-              100%
+              {t('hero_stat2_value')}
             </div>
             <div className="text-[11px] text-white/45 mt-1">
-              Garantía de instalación
+              {t('hero_stat2_label')}
             </div>
           </div>
         </div>

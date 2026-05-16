@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl'
+
 const LAYERS = [
   {
     bg: 'bg-[#EBEBEA]',
@@ -38,12 +40,13 @@ const LAYERS = [
 ]
 
 export default function AboutLayers() {
+  const t = useTranslations('about')
   return (
     <section className="bg-[var(--surface)]" style={{ padding: '0 40px 64px' }}>
       <div className="max-w-[1160px] mx-auto">
         <div className="bg-[#F2F2F0] border border-[#E4E4E2] rounded-2xl p-6">
           <div className="text-sm font-medium mb-5 text-[#0A0A0A]">
-            Estructura multicapa de la lámina
+            {t('layers_title')}
           </div>
           <div className="flex flex-col gap-1.5">
             {LAYERS.map((l) => (

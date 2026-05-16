@@ -1,6 +1,8 @@
 import { Link } from '@/i18n/routing'
+import { useTranslations } from 'next-intl'
 
 export default function AboutCTA() {
+  const t = useTranslations('about')
   return (
     <section style={{ margin: '0 40px 40px' }}>
       <div
@@ -16,18 +18,17 @@ export default function AboutCTA() {
               fontWeight: 500,
             }}
           >
-            ¿Querés trabajar con Kristall Film?
+            {t('cta_title')}
           </h3>
           <p className="text-sm text-white/40 leading-relaxed">
-            Sumá tecnología alemana a tu negocio. Contactá al equipo y recibí una propuesta en 24
-            hs.
+            {t('cta_body')}
           </p>
         </div>
         <Link
           href="/contacto"
           className="bg-white text-[#0A0A0A] px-6 py-3 rounded-lg text-sm font-medium hover:bg-white/90 transition-opacity whitespace-nowrap"
         >
-          Contactar →
+          {t('cta_button')}
         </Link>
       </div>
     </section>

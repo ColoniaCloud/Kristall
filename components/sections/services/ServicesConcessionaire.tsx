@@ -1,27 +1,18 @@
 import Image from 'next/image'
 import { Check } from 'lucide-react'
 import { Link } from '@/i18n/routing'
-
-const FEATURES = [
-  {
-    title: 'Proceso estandarizado',
-    desc: 'Protocolo de instalación certificado para toda la flota',
-  },
-  {
-    title: 'Tiempos controlados',
-    desc: 'Entrega garantizada según cronograma acordado',
-  },
-  {
-    title: 'Garantía Kristall Film',
-    desc: 'Respaldo de marca en cada vehículo instalado',
-  },
-  {
-    title: 'Soporte técnico dedicado',
-    desc: 'Equipo disponible para consultas y seguimiento',
-  },
-]
+import { useTranslations } from 'next-intl'
 
 export default function ServicesConcessionaire() {
+  const t = useTranslations('services_page')
+
+  const features = [
+    { title: t('conc_f1_title'), desc: t('conc_f1_body') },
+    { title: t('conc_f2_title'), desc: t('conc_f2_body') },
+    { title: t('conc_f3_title'), desc: t('conc_f3_body') },
+    { title: t('conc_f4_title'), desc: t('conc_f4_body') },
+  ]
+
   return (
     <section
       className="bg-[var(--bg)]"
@@ -31,7 +22,7 @@ export default function ServicesConcessionaire() {
         {/* Columna izquierda */}
         <div>
           <div className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#9A9A9A] mb-4">
-            Polarizado para concesionarias
+            {t('conc_label')}
           </div>
           <h2
             className="text-[#0A0A0A] mb-4 leading-tight"
@@ -41,16 +32,14 @@ export default function ServicesConcessionaire() {
               fontWeight: 500,
             }}
           >
-            Instalación profesional a escala
+            {t('conc_headline')}
           </h2>
           <p className="text-sm text-[#5C5C5C] leading-relaxed mb-6">
-            Trabajamos directamente con concesionarias para ofrecer un servicio de polarizado
-            estandarizado, con tiempos controlados y garantía de marca Kristall Film en cada
-            instalación.
+            {t('conc_body')}
           </p>
 
           <ul className="flex flex-col gap-3 mb-8">
-            {FEATURES.map((f) => (
+            {features.map((f) => (
               <li key={f.title} className="flex items-start gap-3">
                 <div className="w-5 h-5 rounded bg-[#0A0A0A] flex items-center justify-center flex-shrink-0 mt-0.5">
                   <Check size={11} className="text-white" strokeWidth={2.5} />
@@ -67,7 +56,7 @@ export default function ServicesConcessionaire() {
             href="/contacto?servicio=concesionarias"
             className="inline-block bg-[#0A0A0A] text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-[#2a2a2a] transition-colors"
           >
-            Solicitar propuesta
+            {t('conc_cta')}
           </Link>
         </div>
 
@@ -84,15 +73,15 @@ export default function ServicesConcessionaire() {
           <div className="absolute inset-0 bg-black/10" />
           <div className="absolute bottom-4 left-4 bg-white rounded-xl px-4 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.15)]">
             <div className="text-[10px] font-medium uppercase tracking-[0.1em] text-[#9A9A9A]">
-              Instalación certificada
+              {t('conc_badge_label')}
             </div>
             <div
               className="text-xl text-[#0A0A0A]"
               style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
             >
-              100%
+              {t('conc_badge_value')}
             </div>
-            <div className="text-xs text-[#5C5C5C]">de garantía en cada trabajo</div>
+            <div className="text-xs text-[#5C5C5C]">{t('conc_badge_body')}</div>
           </div>
         </div>
       </div>

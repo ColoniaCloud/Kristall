@@ -1,4 +1,4 @@
-'use client'
+content = r"""'use client'
 
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/routing'
@@ -46,3 +46,10 @@ export default function Header() {
     </>
   )
 }
+"""
+
+import os
+path = os.path.join(os.path.dirname(__file__), '..', 'components', 'layout', 'Header.tsx')
+with open(path, 'w', encoding='utf-8', newline='\n') as f:
+    f.write(content)
+print('Done')

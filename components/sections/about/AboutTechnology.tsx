@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl'
+
 const SPECS = [
   ['Bloqueo UV', '99%'],
   ['Rechazo IR (línea KERAMX)', 'hasta 95%'],
@@ -16,6 +18,7 @@ const BARS = [
 ]
 
 export default function AboutTechnology() {
+  const t = useTranslations('about')
   return (
     <section
       className="bg-[var(--surface)] border-t border-[#E4E4E2]"
@@ -23,13 +26,13 @@ export default function AboutTechnology() {
     >
       <div className="max-w-[1160px] mx-auto">
         <div className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#9A9A9A] mb-6">
-          Tecnología de producto
+          {t('tech_label')}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Specs */}
           <div className="bg-[#F2F2F0] border border-[#E4E4E2] rounded-2xl p-6">
-            <div className="text-sm font-medium mb-5 text-[#0A0A0A]">Especificaciones base</div>
+            <div className="text-sm font-medium mb-5 text-[#0A0A0A]">{t('tech_specs_title')}</div>
             <div className="flex flex-col divide-y divide-[#E4E4E2]">
               {SPECS.map(([label, value]) => (
                 <div key={label} className="flex justify-between items-center py-3">
@@ -42,7 +45,7 @@ export default function AboutTechnology() {
 
           {/* Bars */}
           <div className="bg-[#F2F2F0] border border-[#E4E4E2] rounded-2xl p-6">
-            <div className="text-sm font-medium mb-5 text-[#0A0A0A]">Performance por línea</div>
+            <div className="text-sm font-medium mb-5 text-[#0A0A0A]">{t('tech_perf_title')}</div>
             <div className="flex flex-col gap-5">
               {BARS.map(({ label, value, width }) => (
                 <div key={label}>

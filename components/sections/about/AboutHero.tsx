@@ -1,6 +1,8 @@
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 export default function AboutHero() {
+  const t = useTranslations('about')
   return (
     <section
       className="relative overflow-hidden bg-[#1A1A1A]"
@@ -23,7 +25,7 @@ export default function AboutHero() {
             <span className="w-4 h-[3px] rounded-sm bg-[#E6A800]" />
           </div>
           <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/35">
-            Nuestra historia
+            {t('hero_eyebrow')}
           </span>
         </div>
 
@@ -35,14 +37,13 @@ export default function AboutHero() {
             fontWeight: 500,
           }}
         >
-          Ingeniería <span className="text-white/30">alemana,</span>
+          {t('hero_headline')} <span className="text-white/30">{t('hero_headline_muted')}</span>
           <br />
-          alcance global.
+          {t('hero_headline2')}
         </h1>
 
         <p className="text-sm text-white/45 max-w-[440px] leading-relaxed">
-          Kristall Film es el resultado de décadas de investigación en materiales ópticos de
-          precisión, aplicados hoy en la industria automotriz y arquitectónica de todo el mundo.
+          {t('hero_body')}
         </p>
       </div>
 
@@ -53,7 +54,7 @@ export default function AboutHero() {
           fontSize: '90px',
         }}
       >
-        PRÄZISION
+        {t('hero_watermark')}
       </div>
     </section>
   )
