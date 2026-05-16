@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anybody:wght@900&display=swap');
+
+@font-face {
+  font-family: 'Clash Display';
+  src: url('/fonts/ClashDisplay-Variable.woff2') format('woff2-variations');
+  font-weight: 200 700;
+  font-display: swap;
+}
+
+@import "tailwindcss";
+
+:root {
+  --bg: #F2F2F0;
+  --surface: #FFFFFF;
+  --text-primary: #0A0A0A;
+  --text-secondary: #5C5C5C;
+  --text-muted: #9A9A9A;
+  --accent: #0A0A0A;
+  --border: #E4E4E2;
+  --border-strong: #C8C8C4;
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-hover: 0 4px 20px rgba(0,0,0,0.10);
+  --de-black: #1A1A1A;
+  --de-red: #CC0000;
+  --de-gold: #E6A800;
+  --r: 8px;
+  --rl: 12px;
+  --font-display: 'Clash Display', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-brand: 'Anybody', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}

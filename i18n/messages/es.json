@@ -1,0 +1,87 @@
+{
+  "nav": {
+    "products": "Productos",
+    "services": "Servicios",
+    "about": "Nosotros",
+    "blog": "Blog",
+    "contact": "Contacto",
+    "quote": "Cotizar"
+  },
+  "hero": {
+    "eyebrow": "Tecnología alemana · Alta performance",
+    "headline": "Precisión que se ve.",
+    "subheadline": "Láminas de polarizado vehicular, seguridad y PPF con estándares de ingeniería alemana para instaladores y concesionarias exigentes.",
+    "cta_primary": "Ver productos",
+    "cta_secondary": "Solicitar cotización"
+  },
+  "stats": {
+    "years_value": "+15",
+    "years_label": "Años de tecnología",
+    "refs_value": "12",
+    "refs_label": "Referencias de producto",
+    "langs_value": "3",
+    "langs_label": "Idiomas",
+    "cert_value": "ISO",
+    "cert_label": "Certificación calidad"
+  },
+  "brand": {
+    "label": "Nuestra historia",
+    "title": "Ingeniería alemana, precisión universal",
+    "body": "Kristall Film nació de la obsesión por el detalle. Cada lámina es el resultado de décadas de investigación en óptica de precisión y materiales de alta performance, aplicados hoy a la industria automotriz y arquitectónica.",
+    "dark_title": "Estándares alemanes",
+    "dark_body": "Cada producto cumple especificaciones de ingeniería rigurosas antes de llegar a instalación.",
+    "cert1_title": "Calidad certificada",
+    "cert1_body": "Control de proceso en cada lote de producción",
+    "cert2_title": "Rechazo solar",
+    "cert2_body": "Tecnología de bloqueo UV e infrarrojo",
+    "cert3_title": "Multicapa",
+    "cert3_body": "Estructura de láminas de precisión óptica"
+  },
+  "products": {
+    "label": "Productos",
+    "see_all": "Catálogo completo",
+    "klar_name": "Láminas polarizadas estándar premium",
+    "klar_desc": "Alto rechazo solar con tecnología de tinte duradero. Disponible en 5%, 20%, 35% y 50% de transmisión.",
+    "klar_badge": "Polarizado estándar",
+    "karbon_name": "Láminas polarizadas nanocarbon",
+    "karbon_desc": "Tecnología de nanopartículas de carbono para máximo rechazo solar sin interferencia de señal.",
+    "karbon_badge": "Nanocarbon",
+    "keramx_name": "Láminas polarizadas nanocerámica",
+    "keramx_desc": "La mejor tecnología en polarizado: nanocerámica de alto rendimiento con claridad óptica superior.",
+    "keramx_badge": "Nanocerámica",
+    "krypton_name": "Láminas de seguridad",
+    "krypton_desc": "Tecnología nanoceramic con retención de fragmentos en impacto y resistencia a intrusión. Protección máxima para ocupantes y activos.",
+    "krypton_badge": "Seguridad · Nanoceramic",
+    "ppf_name": "Film de protección de pintura",
+    "ppf_desc": "Protección invisible de pintura automotriz contra impactos, rayones y agentes químicos.",
+    "ppf_badge": "Self-healing",
+    "vitral_name": "Láminas para arquitectura",
+    "vitral_desc": "Control solar para vidriados comerciales y residenciales de alta gama. Decorativas y de privacidad.",
+    "vitral_badge": "Arquitectura"
+  },
+  "services": {
+    "label": "Servicios",
+    "svc1_title": "Servicio para concesionarias",
+    "svc1_desc": "Instalación profesional de láminas en flotas de concesionarias. Proceso estandarizado, tiempos controlados y garantía de marca.",
+    "svc1_cta": "Solicitar propuesta",
+    "svc2_title": "Software de gestión",
+    "svc2_desc": "Plataforma digital para concesionarias: seguimiento de órdenes, inventario de láminas y reportes de instalación.",
+    "svc2_cta": "Solicitar demo",
+    "svc2_f1": "Órdenes de trabajo",
+    "svc2_f2": "Control de inventario",
+    "svc2_f3": "Reportes en tiempo real"
+  },
+  "cta": {
+    "title": "¿Listo para elevar tu instalación?",
+    "subtitle": "Contactá a nuestro equipo y recibí una propuesta a medida en 24 hs.",
+    "placeholder": "tu@empresa.com",
+    "button": "Contactar"
+  },
+  "footer": {
+    "tagline": "Tecnología alemana de láminas de alto rendimiento para instaladores y concesionarias.",
+    "col_products": "Productos",
+    "col_services": "Servicios",
+    "col_company": "Empresa",
+    "copyright": "© 2026 Kristall Film. Todos los derechos reservados."
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "nav": {
+    "products": "Produkte",
+    "services": "Dienstleistungen",
+    "about": "Über uns",
+    "blog": "Blog",
+    "contact": "Kontakt",
+    "quote": "Angebot"
+  },
+  "hero": {
+    "eyebrow": "Deutsche Technologie · Hochleistung",
+    "headline": "Präzision, die man sieht.",
+    "subheadline": "Fahrzeug-, Sicherheits- und PPF-Folien mit deutschen Ingenieurstandards für anspruchsvolle Installateure und Autohäuser.",
+    "cta_primary": "Produkte ansehen",
+    "cta_secondary": "Angebot anfordern"
+  },
+  "stats": {
+    "years_value": "+15",
+    "years_label": "Jahre Technologie",
+    "refs_value": "12",
+    "refs_label": "Produktreferenzen",
+    "langs_value": "3",
+    "langs_label": "Sprachen",
+    "cert_value": "ISO",
+    "cert_label": "Qualitätszertifizierung"
+  },
+  "brand": {
+    "label": "Unsere Geschichte",
+    "title": "Deutsche Ingenieurskunst, universelle Präzision",
+    "body": "Kristall Film entstand aus der Obsession für Details. Jede Folie ist das Ergebnis jahrzehntelanger Forschung in Präzisionsoptik und Hochleistungsmaterialien, die heute in der Automobil- und Architekturindustrie eingesetzt werden.",
+    "dark_title": "Deutsche Standards",
+    "dark_body": "Jedes Produkt erfüllt strenge technische Spezifikationen vor der Installation.",
+    "cert1_title": "Zertifizierte Qualität",
+    "cert1_body": "Prozesskontrolle in jeder Produktionscharge",
+    "cert2_title": "Sonnenschutz",
+    "cert2_body": "UV- und Infrarot-Blockierungstechnologie",
+    "cert3_title": "Mehrschichtig",
+    "cert3_body": "Optische Präzisionsfolienstruktur"
+  },
+  "products": {
+    "label": "Produkte",
+    "see_all": "Vollständiger Katalog",
+    "klar_name": "Premium Standard-Tönungsfolien",
+    "klar_desc": "Hohe Sonnenschutzwirkung mit langlebiger Farbtechnologie. Verfügbar in 5%, 20%, 35% und 50% Transmission.",
+    "klar_badge": "Standard-Tönung",
+    "karbon_name": "Nanokohlenstoff-Tönungsfolien",
+    "karbon_desc": "Nanokohlenstoff-Technologie für maximale Sonnenschutzwirkung ohne Signalstörungen.",
+    "karbon_badge": "Nanocarbon",
+    "keramx_name": "Nanokeramik-Tönungsfolien",
+    "keramx_desc": "Die beste Folientechnologie: Hochleistungs-Nanokeramik mit überlegener optischer Klarheit.",
+    "keramx_badge": "Nanokeramik",
+    "krypton_name": "Sicherheitsfolien",
+    "krypton_desc": "Nanokeramische Technologie mit Splitterbindung bei Aufprall und Einbruchschutz. Maximaler Schutz für Insassen und Sachwerte.",
+    "krypton_badge": "Sicherheit · Nanokeramik",
+    "ppf_name": "Lackschutzfolie",
+    "ppf_desc": "Unsichtbarer Fahrzeuglackschutz gegen Stöße, Kratzer und chemische Einwirkungen.",
+    "ppf_badge": "Selbstheilend",
+    "vitral_name": "Architekturfolien",
+    "vitral_desc": "Sonnenschutz für hochwertige gewerbliche und private Verglasungen. Dekorativ und Sichtschutz.",
+    "vitral_badge": "Architektur"
+  },
+  "services": {
+    "label": "Dienstleistungen",
+    "svc1_title": "Autohaus-Service",
+    "svc1_desc": "Professionelle Folieninstallation für Autohaus-Flotten. Standardisierter Prozess, kontrollierte Zeitplanung und Markengarantie.",
+    "svc1_cta": "Angebot anfordern",
+    "svc2_title": "Management-Software",
+    "svc2_desc": "Digitale Plattform für Autohäuser: Auftragsverfolgung, Folieninventar und Installationsberichte.",
+    "svc2_cta": "Demo anfordern",
+    "svc2_f1": "Arbeitsaufträge",
+    "svc2_f2": "Bestandskontrolle",
+    "svc2_f3": "Echtzeit-Berichte"
+  },
+  "cta": {
+    "title": "Bereit, Ihre Installation zu verbessern?",
+    "subtitle": "Kontaktieren Sie unser Team und erhalten Sie ein maßgeschneidertes Angebot in 24 Stunden.",
+    "placeholder": "sie@unternehmen.de",
+    "button": "Kontakt"
+  },
+  "footer": {
+    "tagline": "Deutsche Hochleistungsfolientechnologie für Installateure und Autohäuser.",
+    "col_products": "Produkte",
+    "col_services": "Dienstleistungen",
+    "col_company": "Unternehmen",
+    "copyright": "© 2026 Kristall Film. Alle Rechte vorbehalten."
+  }
+}

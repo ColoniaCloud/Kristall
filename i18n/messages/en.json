@@ -1,0 +1,87 @@
+{
+  "nav": {
+    "products": "Products",
+    "services": "Services",
+    "about": "About",
+    "blog": "Blog",
+    "contact": "Contact",
+    "quote": "Get Quote"
+  },
+  "hero": {
+    "eyebrow": "German technology · High performance",
+    "headline": "Precision you can see.",
+    "subheadline": "Automotive, security and PPF window films with German engineering standards for demanding installers and dealerships.",
+    "cta_primary": "View products",
+    "cta_secondary": "Request quote"
+  },
+  "stats": {
+    "years_value": "+15",
+    "years_label": "Years of technology",
+    "refs_value": "12",
+    "refs_label": "Product references",
+    "langs_value": "3",
+    "langs_label": "Languages",
+    "cert_value": "ISO",
+    "cert_label": "Quality certification"
+  },
+  "brand": {
+    "label": "Our story",
+    "title": "German engineering, universal precision",
+    "body": "Kristall Film was born from an obsession with detail. Each film is the result of decades of research in precision optics and high-performance materials, applied today to the automotive and architectural industries.",
+    "dark_title": "German standards",
+    "dark_body": "Every product meets rigorous engineering specifications before reaching installation.",
+    "cert1_title": "Certified quality",
+    "cert1_body": "Process control in every production batch",
+    "cert2_title": "Solar rejection",
+    "cert2_body": "UV and infrared blocking technology",
+    "cert3_title": "Multi-layer",
+    "cert3_body": "Optical precision film structure"
+  },
+  "products": {
+    "label": "Products",
+    "see_all": "Full catalog",
+    "klar_name": "Premium standard tint films",
+    "klar_desc": "High solar rejection with durable dye technology. Available in 5%, 20%, 35% and 50% transmission.",
+    "klar_badge": "Standard tint",
+    "karbon_name": "Nanocarbon tint films",
+    "karbon_desc": "Carbon nanoparticle technology for maximum solar rejection without signal interference.",
+    "karbon_badge": "Nanocarbon",
+    "keramx_name": "Nanoceramic tint films",
+    "keramx_desc": "The best window film technology: high-performance nanoceramic with superior optical clarity.",
+    "keramx_badge": "Nanoceramic",
+    "krypton_name": "Security films",
+    "krypton_desc": "Nanoceramic technology with fragment retention on impact and intrusion resistance. Maximum protection for occupants and assets.",
+    "krypton_badge": "Safety · Nanoceramic",
+    "ppf_name": "Paint protection film",
+    "ppf_desc": "Invisible automotive paint protection against impacts, scratches and chemical agents.",
+    "ppf_badge": "Self-healing",
+    "vitral_name": "Architectural window films",
+    "vitral_desc": "Solar control for high-end commercial and residential glazing. Decorative and privacy options.",
+    "vitral_badge": "Architecture"
+  },
+  "services": {
+    "label": "Services",
+    "svc1_title": "Dealership service",
+    "svc1_desc": "Professional film installation on dealership fleets. Standardized process, controlled timing and brand warranty.",
+    "svc1_cta": "Request proposal",
+    "svc2_title": "Management software",
+    "svc2_desc": "Digital platform for dealerships: order tracking, film inventory and installation reports.",
+    "svc2_cta": "Request demo",
+    "svc2_f1": "Work orders",
+    "svc2_f2": "Inventory control",
+    "svc2_f3": "Real-time reports"
+  },
+  "cta": {
+    "title": "Ready to elevate your installation?",
+    "subtitle": "Contact our team and receive a custom proposal in 24 hours.",
+    "placeholder": "you@company.com",
+    "button": "Contact"
+  },
+  "footer": {
+    "tagline": "German high-performance window film technology for installers and dealerships.",
+    "col_products": "Products",
+    "col_services": "Services",
+    "col_company": "Company",
+    "copyright": "© 2026 Kristall Film. All rights reserved."
+  }
+}
