@@ -25,9 +25,9 @@ export default function Header() {
           </Link>
           <nav className="flex items-center gap-5">
             <Link href="/productos" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">{t('products')}</Link>
-            <Link href="/servicios" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">{t('services')}</Link>
             <Link href="/nosotros" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">{t('about')}</Link>
             <Link href="/blog" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">{t('blog')}</Link>
+            <Link href="/servicios" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">{t('services')}</Link>
             <Link href="/contacto" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">{t('contact')}</Link>
           </nav>
           <div className="flex items-center gap-4">

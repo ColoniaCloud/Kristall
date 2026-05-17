@@ -1,7 +1,7 @@
 {
   "nav": {
     "products": "Produkte",
-    "services": "Dienstleistungen",
+    "services": "Software",
     "about": "Über uns",
     "blog": "Blog",
     "contact": "Kontakt",
@@ -10,7 +10,7 @@
   "hero": {
     "eyebrow": "Deutsche Technologie · Hochleistung",
     "headline": "Präzision, die man sieht.",
-    "subheadline": "Fahrzeug-, Sicherheits- und PPF-Folien mit deutschen Ingenieurstandards für anspruchsvolle Installateure und Autohäuser.",
+    "subheadline": "Fahrzeug-, Sicherheits- und PPF-Folien mit deutschen Ingenieurstandards für anspruchsvolle Installateure.",
     "cta_primary": "Produkte ansehen",
     "cta_secondary": "Angebot anfordern"
   },
@@ -60,12 +60,12 @@
     "vitral_badge": "Architektur"
   },
   "services": {
-    "label": "Dienstleistungen",
-    "svc1_title": "Autohaus-Service",
-    "svc1_desc": "Professionelle Folieninstallation für Autohaus-Flotten. Standardisierter Prozess, kontrollierte Zeitplanung und Markengarantie.",
-    "svc1_cta": "Angebot anfordern",
+    "label": "Software",
+    "svc1_title": "Implementierung und Onboarding",
+    "svc1_desc": "Geführter Start mit Polarized App inklusive Erstkonfiguration, Benutzerverwaltung und operativen Workflows.",
+    "svc1_cta": "Implementierung anfordern",
     "svc2_title": "Management-Software",
-    "svc2_desc": "Digitale Plattform für Autohäuser: Auftragsverfolgung, Folieninventar und Installationsberichte.",
+    "svc2_desc": "Digitale Plattform zur Verwaltung von Arbeitsaufträgen, Folienbestand und Installationsberichten in Echtzeit.",
     "svc2_cta": "Demo anfordern",
     "svc2_f1": "Arbeitsaufträge",
     "svc2_f2": "Bestandskontrolle",
@@ -78,9 +78,9 @@
     "button": "Kontakt"
   },
   "footer": {
-    "tagline": "Deutsche Hochleistungsfolientechnologie für Installateure und Autohäuser.",
+    "tagline": "Deutsche Hochleistungsfolientechnologie für professionelle Installateure.",
     "col_products": "Produkte",
-    "col_services": "Dienstleistungen",
+    "col_services": "Software",
     "col_company": "Unternehmen",
     "copyright": "© 2026 Kristall Film. Alle Rechte vorbehalten."
   },
@@ -138,16 +138,16 @@
     "cta_button": "Kontakt →"
   },
   "services_page": {
-    "hero_eyebrow": "Professionelle Dienstleistungen",
-    "hero_headline": "Lösungen für die Automobilindustrie",
-    "hero_body": "Von der professionellen Installation in Autohäusern bis zur Betriebsmanagement-Software. Kristall Film begleitet den gesamten Prozess.",
+    "hero_eyebrow": "Professionelle Software",
+    "hero_headline": "Software für Installationsmanagement",
+    "hero_body": "Polarized App zentralisiert den Betrieb: Arbeitsaufträge, Folienbestand und Leistungskennzahlen an einem Ort.",
     "hero_stat1_value": "48Std",
     "hero_stat1_label": "Durchschnittliche Antwortzeit",
     "hero_stat2_value": "100%",
-    "hero_stat2_label": "Installationsgarantie",
-    "conc_label": "Folierung für Autohäuser",
+    "hero_stat2_label": "Systemverfügbarkeit",
+    "conc_label": "Zentralisierte Abläufe",
     "conc_headline": "Professionelle Installation in großem Maßstab",
-    "conc_body": "Wir arbeiten direkt mit Autohäusern zusammen, um einen standardisierten Folierungsservice mit kontrollierten Zeitrahmen und Kristall Film-Markengarantie bei jeder Installation anzubieten.",
+    "conc_body": "Steuern Sie den gesamten Ablauf über eine Plattform mit vollständiger Nachverfolgbarkeit je Auftrag, Kunde und Produkt.",
     "conc_f1_title": "Standardisierter Prozess",
     "conc_f1_body": "Zertifiziertes Installationsprotokoll für die gesamte Flotte",
     "conc_f2_title": "Kontrollierte Zeitrahmen",
@@ -162,7 +162,7 @@
     "conc_badge_body": "Garantie bei jedem Auftrag",
     "app_label": "Verwaltungssoftware",
     "app_headline": "Polarized App",
-    "app_body": "Betriebsmanagement-Plattform speziell für Autohäuser, die mit Folierungen arbeiten. Auftragskontrolle, Inventar und Echtzeitberichte.",
+    "app_body": "Betriebsmanagement-Plattform für Installationsteams. Auftragskontrolle, Inventar und Echtzeitberichte.",
     "app_badge": "System aktiv",
     "app_f1_title": "Arbeitsaufträge",
     "app_f1_body": "Vollständiges Management jedes Installationszyklus",
@@ -176,7 +176,7 @@
     "comp_label": "Was beinhaltet jeder Service?",
     "comp_headline": "Servicevergleich",
     "comp_svc_label": "Service",
-    "comp_svc_name": "Folierung für Autohäuser",
+    "comp_svc_name": "Operations-Modul",
     "comp_svc_i1": "Gesamte Flotteninstallation",
     "comp_svc_i2": "Standardisiertes Protokoll",
     "comp_svc_i3": "Kristall Film-Garantie",
@@ -191,9 +191,9 @@
     "comp_app_i4": "Produktivitätsberichte",
     "comp_app_i5": "Verlauf nach Kunde und Fahrzeug",
     "comp_app_cta": "Demo anfordern",
-    "final_headline": "Bereit, Ihr Autohaus zu optimieren?",
-    "final_body": "Kontaktieren Sie unser Team und erhalten Sie ein personalisiertes Angebot für Ihren Betrieb. Wir antworten in weniger als 48 Stunden.",
-    "final_cta1": "Angebot anfordern",
+    "final_headline": "Bereit, Ihren Betrieb zu digitalisieren?",
+    "final_body": "Kontaktieren Sie unser Team und erhalten Sie ein personalisiertes Angebot zur Einführung von Polarized App. Wir antworten in weniger als 48 Stunden.",
+    "final_cta1": "Implementierung anfordern",
     "final_cta2": "Produkte ansehen"
   },
   "contact": {

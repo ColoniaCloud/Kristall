@@ -51,19 +51,17 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Col 3: Servicios */}
+        {/* Col 3: Software */}
         <div>
           <h3 className="text-white font-medium text-sm mb-3">{t('col_services')}</h3>
           <ul className="space-y-2 text-xs">
             <li>
               <Link href="/servicios" className="text-white/50 hover:text-white transition-colors">
-                Concesionarias
+                Polarized App
               </Link>
             </li>
             <li>
-              <Link href="/servicios" className="text-white/50 hover:text-white transition-colors">
-                Software de gestión
-              </Link>
+              <Link href="/servicios" className="text-white/50 hover:text-white transition-colors">Dashboard y reportes</Link>
             </li>
           </ul>
         </div>

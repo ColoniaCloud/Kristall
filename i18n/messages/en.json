@@ -1,7 +1,7 @@
 {
   "nav": {
     "products": "Products",
-    "services": "Services",
+    "services": "Software",
     "about": "About",
     "blog": "Blog",
     "contact": "Contact",
@@ -10,7 +10,7 @@
   "hero": {
     "eyebrow": "German technology · High performance",
     "headline": "Precision you can see.",
-    "subheadline": "Automotive, security and PPF window films with German engineering standards for demanding installers and dealerships.",
+    "subheadline": "Automotive, security and PPF window films with German engineering standards for demanding installers.",
     "cta_primary": "View products",
     "cta_secondary": "Request quote"
   },
@@ -60,12 +60,12 @@
     "vitral_badge": "Architecture"
   },
   "services": {
-    "label": "Services",
-    "svc1_title": "Dealership service",
-    "svc1_desc": "Professional film installation on dealership fleets. Standardized process, controlled timing and brand warranty.",
-    "svc1_cta": "Request proposal",
+    "label": "Software",
+    "svc1_title": "Implementation and onboarding",
+    "svc1_desc": "Guided Polarized App setup with initial configuration, users and operational workflows for your team.",
+    "svc1_cta": "Request implementation",
     "svc2_title": "Management software",
-    "svc2_desc": "Digital platform for dealerships: order tracking, film inventory and installation reports.",
+    "svc2_desc": "Digital platform to manage work orders, film inventory and installation reports in real time.",
     "svc2_cta": "Request demo",
     "svc2_f1": "Work orders",
     "svc2_f2": "Inventory control",
@@ -78,9 +78,9 @@
     "button": "Contact"
   },
   "footer": {
-    "tagline": "German high-performance window film technology for installers and dealerships.",
+    "tagline": "German high-performance window film technology for professional installers.",
     "col_products": "Products",
-    "col_services": "Services",
+    "col_services": "Software",
     "col_company": "Company",
     "copyright": "© 2026 Kristall Film. All rights reserved."
   },
@@ -138,16 +138,16 @@
     "cta_button": "Contact us →"
   },
   "services_page": {
-    "hero_eyebrow": "Professional services",
-    "hero_headline": "Solutions for the automotive industry",
-    "hero_body": "From professional installation at dealerships to operations management software. Kristall Film supports the entire process.",
+    "hero_eyebrow": "Professional software",
+    "hero_headline": "Software to manage installations",
+    "hero_body": "Polarized App centralizes operations: work orders, film inventory and performance metrics in one place.",
     "hero_stat1_value": "48h",
     "hero_stat1_label": "Average response time",
     "hero_stat2_value": "100%",
-    "hero_stat2_label": "Installation guarantee",
-    "conc_label": "Window tinting for dealerships",
+    "hero_stat2_label": "System availability",
+    "conc_label": "Centralized operations",
     "conc_headline": "Professional installation at scale",
-    "conc_body": "We work directly with dealerships to offer a standardized window tinting service, with controlled timelines and Kristall Film brand warranty on every installation.",
+    "conc_body": "Manage your full workflow from one platform with complete traceability per order, customer and product.",
     "conc_f1_title": "Standardized process",
     "conc_f1_body": "Certified installation protocol for the entire fleet",
     "conc_f2_title": "Controlled timelines",
@@ -162,7 +162,7 @@
     "conc_badge_body": "warranty on every job",
     "app_label": "Management software",
     "app_headline": "Polarized App",
-    "app_body": "Operations management platform designed specifically for dealerships working with window film. Order control, inventory and real-time reports.",
+    "app_body": "Operations management platform for installation teams. Order control, inventory and real-time reports.",
     "app_badge": "System active",
     "app_f1_title": "Work orders",
     "app_f1_body": "Complete management of each installation cycle",
@@ -176,7 +176,7 @@
     "comp_label": "What does each service include?",
     "comp_headline": "Service comparison",
     "comp_svc_label": "Service",
-    "comp_svc_name": "Window tinting for dealerships",
+    "comp_svc_name": "Operations module",
     "comp_svc_i1": "Full fleet installation",
     "comp_svc_i2": "Standardized protocol",
     "comp_svc_i3": "Kristall Film warranty",
@@ -191,9 +191,9 @@
     "comp_app_i4": "Productivity reports",
     "comp_app_i5": "History by customer and vehicle",
     "comp_app_cta": "Request demo",
-    "final_headline": "Ready to optimize your dealership?",
-    "final_body": "Contact our team and receive a personalized proposal for your operation. We respond in less than 48 hours.",
-    "final_cta1": "Request proposal",
+    "final_headline": "Ready to digitize your operation?",
+    "final_body": "Contact our team and receive a personalized proposal to implement Polarized App. We respond in less than 48 hours.",
+    "final_cta1": "Request implementation",
     "final_cta2": "View products"
   },
   "contact": {

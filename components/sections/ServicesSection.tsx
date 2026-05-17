@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Car, Monitor } from 'lucide-react'
+import { Monitor, ShieldCheck } from 'lucide-react'
 import { Link } from '@/i18n/routing'
 import { motion, type Variants } from 'framer-motion'
 
@@ -33,13 +33,13 @@ export default function ServicesSection() {
         viewport={{ once: true, margin: "-100px" }}
         transition={{ staggerChildren: 0.15 }}
       >
-        {/* Card blanca: Concesionarias */}
+        {/* Card blanca: Onboarding */}
         <motion.div 
           className="bg-white border border-[0.5px] border-[#E4E4E2] rounded-xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.04)]"
           variants={cardVariants}
         >
           <div className="w-10 h-10 rounded-lg bg-[#F2F2F0] border border-[0.5px] border-[#E4E4E2] flex items-center justify-center mb-3.5">
-            <Car size={16} className="text-[#5C5C5C]" />
+            <ShieldCheck size={16} className="text-[#5C5C5C]" />
           </div>
           <h3 className="text-[15px] font-medium text-[#0A0A0A] mb-1.5">
             {t('svc1_title')}
@@ -48,7 +48,7 @@ export default function ServicesSection() {
             {t('svc1_desc')}
           </p>
           <Link
-            href="/contacto"
+            href="/contacto?servicio=software"
             className="inline-block text-xs border border-[#C8C8C4] px-3.5 py-1.5 rounded-lg hover:bg-[#0A0A0A] hover:text-white hover:border-[#0A0A0A] transition-all duration-200"
           >
             {t('svc1_cta')}
@@ -70,7 +70,7 @@ export default function ServicesSection() {
             {t('svc2_desc')}
           </p>
           <Link
-            href="/contacto"
+            href="/contacto?servicio=software"
             className="inline-block text-xs border border-white/20 text-white px-3.5 py-1.5 rounded-lg bg-white/6 hover:bg-white/12 transition-all duration-200"
           >
             {t('svc2_cta')}

@@ -89,14 +89,20 @@ export default function BrandStory() {
           {mainCards[0].content}
         </motion.div>
 
-        {/* Card derecha (negra) */}
+        {/* Card derecha (imagen de fondo) */}
         <motion.div 
-          className="bg-[#1A1A1A] rounded-xl p-6 flex flex-col justify-between h-full"
+          className="rounded-xl h-full overflow-hidden"
           variants={fadeInUpVariants}
           transition={{ delay: 0.1 }}
-        >
-          {mainCards[1].content}
-        </motion.div>
+          style={{
+            backgroundImage: 'url(/builds.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            aspectRatio: '16 / 9'
+          }}
+        />
+
       </motion.div>
 
       {/* Grid 3 columnas */}

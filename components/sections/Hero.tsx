@@ -3,7 +3,6 @@
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/routing'
 import Image from 'next/image'
-import GermanFlag from '@/components/common/GermanFlag'
 import { motion } from 'framer-motion'
 
 
@@ -38,19 +37,6 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
-      {/* Eyebrow */}
-      <motion.div 
-        className="flex items-center gap-2 mb-5"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-      >
-        <GermanFlag />
-        <span className="text-[11px] uppercase tracking-[0.1em] text-white/60 font-medium">
-          {t('eyebrow')}
-        </span>
-      </motion.div>
-
       {/* Headline */}
       <motion.h1
         initial={{ opacity: 0, y: 20 }}

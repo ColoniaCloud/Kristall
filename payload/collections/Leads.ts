@@ -43,8 +43,8 @@ export const Leads: CollectionConfig = {
       options: [
         { label: 'Formulario de contacto', value: 'contacto' },
         { label: 'Cotización de carrito', value: 'cotizacion' },
-        { label: 'Página de servicios', value: 'servicios' },
-        { label: 'Concesionaria', value: 'concesionaria' },
+        { label: 'Página de software', value: 'software' },
+        { label: 'Software', value: 'software-demo' },
       ],
       admin: {
         position: 'sidebar',

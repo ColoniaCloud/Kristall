@@ -21,7 +21,7 @@ export default function ServicesCTA() {
         </p>
         <div className="flex flex-wrap gap-3 justify-center">
           <Link
-            href="/contacto?servicio=concesionarias"
+            href="/contacto?servicio=software"
             className="inline-block bg-[#0A0A0A] text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-[#2a2a2a] transition-colors"
           >
             {t('final_cta1')}
