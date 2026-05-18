@@ -271,7 +271,7 @@ export default function ProductActions({ sku, name, category, inStock }: Product
                   type="submit"
                   className="w-full bg-[#0A0A0A] text-white px-4 py-3 rounded-lg text-sm font-medium hover:opacity-85 transition-opacity mt-1"
                 >
-                  {step === 'loading' ? t('submitting') : t('submit')}
+                  {t('submit')}
                 </button>
               </form>
             </div>
