@@ -1,13 +1,21 @@
 import { Resend } from 'resend'
 
+let resendClient: Resend | null = null
+
 function getResendClient() {
+  if (resendClient) {
+    return resendClient
+  }
+
   const apiKey = process.env.RESEND_API_KEY
 
   if (!apiKey) {
     throw new Error('Missing RESEND_API_KEY')
   }
 
-  return new Resend(apiKey)
+  resendClient = new Resend(apiKey)
+
+  return resendClient
 }
 
 export async function sendLeadNotification(lead: {
