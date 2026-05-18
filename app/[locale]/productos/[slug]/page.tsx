@@ -9,6 +9,17 @@ import ProductActions from '@/components/product/ProductActions'
 
 export const revalidate = 3600
 
+interface ProductDoc {
+  category: string
+  name_es: string
+  sku: string
+  description_es?: string
+  vlt?: number | null
+  uv?: number | null
+  irr?: number | null
+  inStock?: boolean
+}
+
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
 }
@@ -156,7 +167,7 @@ export default async function ProductPage({ params }: PageProps) {
               sku={product.sku}
               name={product.name_es}
               category={product.category}
-              inStock={product.inStock}
+              inStock={product.inStock ?? false}
             />
           </div>
 
