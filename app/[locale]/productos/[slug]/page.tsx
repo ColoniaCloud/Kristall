@@ -38,17 +38,6 @@ export default async function ProductPage({ params }: PageProps) {
     limit: 1,
   })
 
-  interface ProductDoc {
-    category: string
-    name_es: string
-    sku: string
-    description_es?: string
-    vlt?: number | null
-    uv?: number | null
-    irr?: number | null
-    inStock?: boolean
-  }
-
   const product = docs[0] as unknown as ProductDoc | undefined
   if (!product) notFound()
 

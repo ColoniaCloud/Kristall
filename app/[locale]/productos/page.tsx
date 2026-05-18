@@ -1,7 +1,7 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import ProductsHero from '@/components/product/ProductsHero'
-import ProductsClient from '@/components/product/ProductsClient'
+import ProductsClient, { type ProductItem } from '@/components/product/ProductsClient'
 
 export const revalidate = 3600
 
@@ -13,7 +13,7 @@ export default async function ProductsPage() {
     limit: 100,
   })
 
-  const serialized = (products as Record<string, unknown>[]).map((p) => ({
+  const serialized = (products as unknown as ProductItem[]).map((p) => ({
     id: p.id,
     name_es: p.name_es,
     category: p.category,

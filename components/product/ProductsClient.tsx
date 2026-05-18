@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl'
 import ProductCard from '@/components/product/ProductCard'
 import { CATEGORIES } from '@/lib/categories'
 
-interface ProductItem {
+export interface ProductItem {
   id: string
   name_es: string
   category: string
