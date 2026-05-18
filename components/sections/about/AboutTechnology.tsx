@@ -6,18 +6,19 @@ export default function AboutTechnology() {
   const SPECS = [
     [t('tech_spec_uv'), '99%'],
     [t('tech_spec_ir'), 'hasta 95%'],
-    [t('tech_spec_thickness'), '1.5 mil — 8 mil'],
-    [t('tech_spec_warranty'), 'Sin decoloración'],
+    [t('tech_spec_thickness'), '1 mil — 12 mil'],
+    [t('tech_spec_warranty'), t('tech_spec_warranty_value')],
     [t('tech_spec_adhesive'), 'Micro-canales'],
     [t('tech_bar_clarity'), '98%'],
   ]
 
-  const BARS = [
-    { label: t('tech_bar_solar'), value: '94%', width: 94 },
-    { label: t('tech_bar_ir'), value: '95%', width: 95 },
-    { label: t('tech_spec_uv'), value: '99%', width: 99 },
-    { label: t('tech_bar_clarity'), value: '98%', width: 98 },
-    { label: t('tech_bar_durability'), value: '10+ años', width: 85 },
+  const LAYERS = [
+    { bg: 'bg-[#EBEBEA]', text: 'text-[#444]', name: t('layer_1_name'), func: t('layer_1_desc') },
+    { bg: 'bg-[#DCDCDA]', text: 'text-[#333]', name: t('layer_2_name'), func: t('layer_2_desc') },
+    { bg: 'bg-[#C8C8C6]', text: 'text-[#222]', name: t('layer_3_name'), func: t('layer_3_desc') },
+    { bg: 'bg-[#ADADAB]', text: 'text-[#111]', name: t('layer_4_name'), func: t('layer_4_desc') },
+    { bg: 'bg-[#888886]', text: 'text-white', name: t('layer_5_name'), func: t('layer_5_desc') },
+    { bg: 'bg-[#5C5C5A]', text: 'text-white', name: t('layer_6_name'), func: t('layer_6_desc') },
   ]
 
   return (
@@ -44,22 +45,17 @@ export default function AboutTechnology() {
             </div>
           </div>
 
-          {/* Bars */}
+          {/* Layers */}
           <div className="bg-[#F2F2F0] border border-[#E4E4E2] rounded-2xl p-6">
-            <div className="text-sm font-medium mb-5 text-[#0A0A0A]">{t('tech_perf_title')}</div>
-            <div className="flex flex-col gap-5">
-              {BARS.map(({ label, value, width }) => (
-                <div key={label}>
-                  <div className="flex justify-between mb-1.5">
-                    <span className="text-xs text-[#5C5C5C]">{label}</span>
-                    <span className="text-xs font-medium text-[#0A0A0A]">{value}</span>
-                  </div>
-                  <div className="h-[3px] bg-[#E4E4E2] rounded-full">
-                    <div
-                      className="h-full bg-[#0A0A0A] rounded-full"
-                      style={{ width: `${width}%` }}
-                    />
-                  </div>
+            <div className="text-sm font-medium mb-5 text-[#0A0A0A]">{t('layers_title')}</div>
+            <div className="flex flex-col gap-1.5">
+              {LAYERS.map((l) => (
+                <div
+                  key={l.name}
+                  className={`${l.bg} ${l.text} rounded-lg px-4 py-3 flex justify-between items-center`}
+                >
+                  <span className="text-xs font-medium">{l.name}</span>
+                  <span className="text-[11px] opacity-60">{l.func}</span>
                 </div>
               ))}
             </div>

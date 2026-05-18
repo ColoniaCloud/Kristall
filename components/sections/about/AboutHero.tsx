@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 
 export default function AboutHero() {
@@ -6,16 +5,19 @@ export default function AboutHero() {
   return (
     <section
       className="relative overflow-hidden bg-[#1A1A1A]"
-      style={{ padding: '72px 40px 64px' }}
+      style={{ minHeight: '520px', padding: '100px 40px 80px' }}
     >
-      <Image
-        src="/porsche.png"
-        alt=""
-        fill
-        priority
-        className="absolute inset-0 object-cover opacity-15"
-      />
-      <div className="absolute inset-0 bg-[#1A1A1A]/75" />
+      {/* Video de fondo */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover opacity-30"
+      >
+        <source src="/cat/video.mp4" type="video/mp4" />
+      </video>
+      <div className="absolute inset-0 bg-gradient-to-r from-[#1A1A1A]/90 via-[#1A1A1A]/60 to-[#1A1A1A]/30" />
 
       <div className="relative z-10 max-w-[1160px] mx-auto">
         <div className="flex items-center gap-2 mb-5">
@@ -37,12 +39,10 @@ export default function AboutHero() {
             fontWeight: 500,
           }}
         >
-          {t('hero_headline')} <span className="text-white/30">{t('hero_headline_muted')}</span>
-          <br />
-          {t('hero_headline2')}
+          {t('hero_headline')}
         </h1>
 
-        <p className="text-sm text-white/45 max-w-[440px] leading-relaxed">
+        <p className="text-sm text-white max-w-[440px] leading-relaxed">
           {t('hero_body')}
         </p>
       </div>

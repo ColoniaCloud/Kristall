@@ -10,6 +10,7 @@ import CartDrawer from '@/components/cart/CartDrawer'
 
 export default function Header() {
   const t = useTranslations('nav')
+  const tCart = useTranslations('cart')
   const { items, openCart } = useCart()
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
 
@@ -33,7 +34,7 @@ export default function Header() {
           </nav>
           <div className="flex items-center gap-4">
             <LanguageSelector />
-            <button type="button" onClick={openCart} className="relative text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" aria-label="Abrir carrito">
+            <button type="button" onClick={openCart} className="relative text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" aria-label={tCart('open_cart')}>
               <ShoppingCart size={16} />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#0A0A0A] text-white text-[9px] flex items-center justify-center">{totalItems}</span>

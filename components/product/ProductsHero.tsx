@@ -102,7 +102,7 @@ export default function ProductsHero() {
               className={`w-1.5 h-1.5 rounded-full transition-colors ${
                 idx === current ? 'bg-white' : 'bg-white/30 cursor-pointer'
               }`}
-              aria-label={`Imagen ${idx + 1}`}
+              aria-label={t('slide_label', { n: idx + 1 })}
             />
           ))}
         </div>

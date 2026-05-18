@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { ShoppingCart } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useCart } from '@/lib/cart'
 import CartItem from '@/components/cart/CartItem'
 import QuoteModal from '@/components/cart/QuoteModal'
@@ -10,6 +11,7 @@ import { Link } from '@/i18n/routing'
 export default function CarritoPage() {
   const { items } = useCart()
   const [quoteOpen, setQuoteOpen] = useState(false)
+  const t = useTranslations('cart')
 
   const totalRefs = items.length
 
@@ -21,14 +23,14 @@ export default function CarritoPage() {
           className="text-xl font-medium text-[#0A0A0A]"
           style={{ fontFamily: 'var(--font-display)' }}
         >
-          Tu carrito está vacío
+          {t('empty_title')}
         </h1>
-        <p className="text-sm text-[#5C5C5C]">Explorá nuestros productos y agregá los que te interesan.</p>
+        <p className="text-sm text-[#5C5C5C]">{t('empty_body')}</p>
         <Link
           href="/productos"
           className="bg-[#0A0A0A] text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-[#2a2a2a] transition-colors"
         >
-          Ver productos
+          {t('empty_cta')}
         </Link>
       </section>
     )
@@ -41,13 +43,13 @@ export default function CarritoPage() {
           {/* Lista */}
           <div>
             <div className="section-label mb-2">
-              Carrito de cotización
+              {t('label')}
             </div>
             <h1
               className="text-2xl font-medium text-[#0A0A0A] mb-6"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              Tu selección
+              {t('selection_title')}
             </h1>
             <div className="bg-white border border-[#E4E4E2] rounded-2xl p-4">
               {items.map((item) => (
@@ -59,7 +61,7 @@ export default function CarritoPage() {
           {/* Resumen */}
           <div className="bg-white border border-[#E4E4E2] rounded-2xl p-5">
             <div className="text-sm font-medium text-[#0A0A0A] mb-4" style={{ fontFamily: 'var(--font-display)' }}>
-              Resumen de cotización
+              {t('summary_title')}
             </div>
             <div className="flex flex-col gap-2 mb-4">
               {items.map((item) => (
@@ -71,7 +73,7 @@ export default function CarritoPage() {
             </div>
             <div className="border-t border-[#E4E4E2] pt-3 mb-4">
               <div className="text-xs text-[#9A9A9A]">
-                {totalRefs} {totalRefs === 1 ? 'referencia' : 'referencias'}
+                {totalRefs} {totalRefs === 1 ? t('reference_one') : t('reference_other')}
               </div>
             </div>
             <button
@@ -79,7 +81,7 @@ export default function CarritoPage() {
               onClick={() => setQuoteOpen(true)}
               className="w-full bg-[#0A0A0A] text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-[#2a2a2a] transition-colors"
             >
-              Solicitar cotización
+              {t('request_quote')}
             </button>
           </div>
         </div>

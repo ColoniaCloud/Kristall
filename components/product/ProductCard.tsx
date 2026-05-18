@@ -14,6 +14,7 @@ export interface ProductCardProps {
   vlt?: number | null
   uv?: number | null
   irr?: number | null
+  vlts?: number[]
   sku: string
   inStock: boolean
   slug: string
@@ -23,9 +24,10 @@ export interface ProductCardProps {
 const badgeClass = "text-[10px] bg-[#F2F2F0] border border-[#E4E4E2] rounded px-1.5 py-0.5 text-[#5C5C5C]"
 
 export default function ProductCard({
-  name, category, description, vlt, uv, irr, inStock, slug, badge,
+  name, category, description, vlt, uv, irr, vlts, inStock, slug, badge,
 }: ProductCardProps) {
   const t = useTranslations('cart')
+  const tp = useTranslations('products')
   return (
     <AnimatedBorderCard borderRadius={12} className="h-full">
       <div className="flex flex-col h-full bg-white rounded-xl overflow-hidden border-[0.5px] border-[#E4E4E2] shadow-[0_1px_3px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.04)]">
@@ -46,7 +48,14 @@ export default function ProductCard({
           </div>
           <p className="text-sm font-medium text-[#0A0A0A] mb-1">{name}</p>
           <p className="text-xs text-[#5C5C5C] leading-relaxed mb-3 flex-1">{description}</p>
-          {(vlt != null || uv != null || irr != null) && (
+          {vlts && vlts.length > 0 ? (
+            <div className="flex flex-wrap items-center gap-1.5 mb-3">
+              <span className="text-[10px] text-[#9A9A9A]">{tp('available_in')}:</span>
+              {vlts.map(v => (
+                <span key={v} className={badgeClass}>VLT {v}%</span>
+              ))}
+            </div>
+          ) : (vlt != null || uv != null || irr != null) && (
             <div className="flex flex-wrap gap-1.5 mb-3">
               {vlt != null && <span className={badgeClass}>VLT {vlt}%</span>}
               {uv != null && <span className={badgeClass}>UV {uv}%</span>}

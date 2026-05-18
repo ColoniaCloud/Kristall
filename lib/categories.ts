@@ -14,7 +14,7 @@ export const CATEGORIES: CategoryMeta[] = [
     slug: 'klar',
     name: 'KLAR',
     tagline: 'Línea Premium',
-    description: 'Láminas de la línea premium con máximo oscurecimiento y alto bloqueo UV. La elección clásica para polarizado vehicular profesional.',
+    description: 'Láminas de la línea premium con máximo oscurecimiento y alto bloqueo UV. La elección clásica para polarizado automotriz profesional.',
     image: '/cat/top-KLAR.jpg',
     logo: '/cat/KLAR.png',
   },

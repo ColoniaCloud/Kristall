@@ -37,7 +37,7 @@ export default function ContactForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...data, source: 'contacto' }),
       })
-      if (!res.ok) throw new Error('Error en servidor')
+      if (!res.ok) throw new Error(t('error_server'))
       setStatus('success')
       reset()
     } catch {

@@ -16,9 +16,9 @@ import { useCart } from '@/lib/cart'
 import { useTranslations } from 'next-intl'
 
 const schema = z.object({
-  name: z.string().min(2, 'Nombre requerido'),
+  name: z.string().min(2),
   company: z.string().optional(),
-  email: z.string().email('Email inválido'),
+  email: z.string().email(),
   phone: z.string().optional(),
   message: z.string().optional(),
 })
@@ -37,12 +37,20 @@ export default function QuoteModal({ open, onClose }: QuoteModalProps) {
   const t = useTranslations('cart')
   const tc = useTranslations('contact')
 
+  const formSchema = z.object({
+    name: z.string().min(2, tc('error_name')),
+    company: z.string().optional(),
+    email: z.string().email(tc('error_email')),
+    phone: z.string().optional(),
+    message: z.string().optional(),
+  })
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<FormData>({ resolver: zodResolver(schema) })
+  } = useForm<FormData>({ resolver: zodResolver(formSchema) })
 
   const onSubmit = async (data: FormData) => {
     setStatus('loading')
@@ -53,7 +61,7 @@ export default function QuoteModal({ open, onClose }: QuoteModalProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...data, source: 'cotizacion', cartItems }),
       })
-      if (!res.ok) throw new Error('Error en servidor')
+      if (!res.ok) throw new Error(tc('error_server'))
       setStatus('success')
       reset()
       setTimeout(() => {

@@ -2,15 +2,20 @@
 
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useCallback } from 'react'
+import { useTranslations } from 'next-intl'
 import { CATEGORIES } from '@/types/product'
-
-const ALL_CATEGORIES = [{ value: '', label: 'Todos' }, ...CATEGORIES.map((c) => ({ value: c.value, label: c.label }))]
 
 export default function ProductFilter() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const active = searchParams.get('categoria') ?? ''
+  const t = useTranslations('products_page')
+
+  const allCategories = [
+    { value: '', label: t('filter_todos') },
+    ...CATEGORIES.map((c) => ({ value: c.value, label: c.label })),
+  ]
 
   const setFilter = useCallback(
     (value: string) => {
@@ -27,7 +32,7 @@ export default function ProductFilter() {
 
   return (
     <div className="flex flex-wrap gap-2">
-      {ALL_CATEGORIES.map((cat) => (
+      {allCategories.map((cat) => (
         <button
           key={cat.value}
           onClick={() => setFilter(cat.value)}

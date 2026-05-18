@@ -37,17 +37,6 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
-      {/* Eyebrow */}
-      <motion.p
-        className="section-label mb-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-        style={{ color: 'rgba(255,255,255,0.55)' }}
-      >
-        {t('eyebrow')}
-      </motion.p>
-
       {/* Headline */}
       <motion.h1
         initial={{ opacity: 0, y: 20 }}
