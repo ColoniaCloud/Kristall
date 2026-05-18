@@ -14,7 +14,7 @@ export default function AboutTimeline() {
   return (
     <section className="bg-[var(--bg)]" style={{ padding: '64px 40px' }}>
       <div className="max-w-[1160px] mx-auto">
-        <div className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#9A9A9A] mb-8">
+        <div className="section-label mb-8">
           {t('timeline_label')}
         </div>
 

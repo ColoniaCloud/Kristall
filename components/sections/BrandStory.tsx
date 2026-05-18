@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl'
 import { Shield, Sun, Layers } from 'lucide-react'
 import { motion, type Variants } from 'framer-motion'
 import GermanyFlag from '@/components/common/GermanyFlag'
+import { Link } from '@/i18n/routing'
 
 
 const fadeInUpVariants: Variants = {
@@ -61,16 +62,16 @@ export default function BrandStory() {
   ]
 
   const certCards = [
-    { icon: Shield, title: 'cert1_title', body: 'cert1_body' },
-    { icon: Sun, title: 'cert2_title', body: 'cert2_body' },
-    { icon: Layers, title: 'cert3_title', body: 'cert3_body' }
+    { icon: Shield, title: 'cert1_title', body: 'cert1_body', animate: { rotate: [0, -8, 8, 0] } },
+    { icon: Sun, title: 'cert2_title', body: 'cert2_body', animate: { rotate: 360 } },
+    { icon: Layers, title: 'cert3_title', body: 'cert3_body', animate: { y: [-2, 2, -2] } }
   ]
 
   return (
     <section className="px-6 py-10 bg-[#F2F2F0]">
       <div className="max-w-[1160px] mx-auto">
       {/* Label */}
-      <div className="text-[11px] uppercase tracking-[0.1em] text-[#9A9A9A] font-medium mb-6">
+      <div className="section-label mb-6">
         {t('label')}
       </div>
 
@@ -91,7 +92,7 @@ export default function BrandStory() {
 
         {/* Card derecha (imagen de fondo) */}
         <motion.div 
-          className="rounded-xl h-full overflow-hidden"
+          className="rounded-xl h-full overflow-hidden flex flex-col justify-end"
           variants={fadeInUpVariants}
           transition={{ delay: 0.1 }}
           style={{
@@ -101,7 +102,16 @@ export default function BrandStory() {
             backgroundRepeat: 'no-repeat',
             aspectRatio: '16 / 9'
           }}
-        />
+        >
+          <div className="p-4">
+            <Link
+              href="/contacto"
+              className="block w-full bg-[#0A0A0A] text-white text-sm font-medium text-center py-3 rounded-lg hover:bg-[#1A1A1A] transition-colors"
+            >
+              {t('contact_btn')}
+            </Link>
+          </div>
+        </motion.div>
 
       </motion.div>
 
@@ -118,10 +128,21 @@ export default function BrandStory() {
             key={index}
             className="bg-white border border-[0.5px] border-[#E4E4E2] rounded-xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.06)]"
             variants={fadeInUpVariants}
+            whileHover="iconAnim"
           >
-            <cert.icon size={16} className="text-[#9A9A9A] mb-3" />
-            <h4 className="text-[13px] font-medium mb-1">{t(cert.title)}</h4>
-            <p className="text-[11px] text-[#9A9A9A] leading-relaxed">
+            <motion.div
+              className="mb-3 w-fit"
+              variants={{
+                iconAnim: {
+                  ...cert.animate,
+                  transition: { duration: 0.6, ease: 'easeInOut', repeat: cert.icon === Sun ? Infinity : 0 }
+                }
+              }}
+            >
+              <cert.icon size={22} className="text-[#9A9A9A]" />
+            </motion.div>
+            <h4 className="text-[15px] font-medium mb-1" style={{ fontFamily: 'var(--font-display)' }}>{t(cert.title)}</h4>
+            <p className="text-[11px] md:text-[13px] text-[#9A9A9A] leading-relaxed">
               {t(cert.body)}
             </p>
           </motion.div>

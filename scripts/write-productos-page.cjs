@@ -1,4 +1,6 @@
-import { getPayload } from 'payload'
+const fs = require('fs');
+
+const content = `import { getPayload } from 'payload'
 import config from '@payload-config'
 import ProductsHero from '@/components/product/ProductsHero'
 import ProductsClient from '@/components/product/ProductsClient'
@@ -33,3 +35,7 @@ export default async function ProductsPage() {
     </div>
   )
 }
+`;
+
+fs.writeFileSync('c:/Users/JMGarrido/kristall-web/app/[locale]/productos/page.tsx', content, 'utf8');
+console.log('OK');

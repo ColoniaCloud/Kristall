@@ -60,7 +60,7 @@ export default function ContactForm() {
       <div className="max-w-[1160px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
         {/* Columna izquierda */}
         <div>
-          <div className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#9A9A9A] mb-4">
+          <div className="section-label mb-4">
             {t('label')}
           </div>
           <h1

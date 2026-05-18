@@ -1,9 +1,10 @@
-import { getPayload } from 'payload'
+const fs = require('fs');
+
+const content = `import { getPayload } from 'payload'
 import config from '@payload-config'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { Link } from '@/i18n/routing'
-import { getTranslations } from 'next-intl/server'
 import { getCategoryImage, getCategoryLogo, getCategoryMeta } from '@/lib/categories'
 import ProductActions from '@/components/product/ProductActions'
 
@@ -14,8 +15,7 @@ interface PageProps {
 }
 
 export default async function ProductPage({ params }: PageProps) {
-  const { slug, locale } = await params
-  const t = await getTranslations({ locale, namespace: 'product_slug' })
+  const { slug } = await params
 
   const payload = await getPayload({ config })
   const { docs } = await payload.find({
@@ -35,11 +35,11 @@ export default async function ProductPage({ params }: PageProps) {
   const catMeta = getCategoryMeta(product.category)
 
   const specs = [
-    { label: t('spec_vlt'), value: product.vlt != null ? `${product.vlt}%` : null },
-    { label: t('spec_uv'), value: product.uv != null ? `${product.uv}%` : null },
-    { label: t('spec_irr'), value: product.irr != null ? `${product.irr}%` : null },
-    { label: t('spec_sku'), value: product.sku },
-    { label: t('spec_availability'), value: product.inStock ? t('spec_in_stock') : t('spec_coming_soon') },
+    { label: 'VLT (Transmitancia de luz visible)', value: product.vlt != null ? \`\${product.vlt}%\` : null },
+    { label: 'Bloqueo UV', value: product.uv != null ? \`\${product.uv}%\` : null },
+    { label: 'Rechazo calor infrarrojo', value: product.irr != null ? \`\${product.irr}%\` : null },
+    { label: 'SKU / Referencia', value: product.sku },
+    { label: 'Disponibilidad', value: product.inStock ? 'En stock' : 'Próximamente' },
   ].filter(s => s.value !== null)
 
   return (
@@ -60,9 +60,9 @@ export default async function ProductPage({ params }: PageProps) {
         {/* Breadcrumb */}
         <div className="absolute top-6 left-0 right-0 z-10 px-10 max-w-[1160px] mx-auto">
           <nav className="flex items-center gap-2 text-xs text-white/50">
-            <Link href="/productos" className="hover:text-white transition-colors">{t('breadcrumb_products')}</Link>
+            <Link href="/productos" className="hover:text-white transition-colors">Productos</Link>
             <span>/</span>
-            <Link href={`/productos/categorias/${product.category}`} className="hover:text-white transition-colors uppercase">
+            <Link href={\`/productos/categorias/\${product.category}\`} className="hover:text-white transition-colors uppercase">
               {product.category}
             </Link>
             <span>/</span>
@@ -104,14 +104,14 @@ export default async function ProductPage({ params }: PageProps) {
 
             {product.description_es && (
               <div className="bg-white border border-[#E4E4E2] rounded-xl p-6 shadow-[var(--shadow-card)]">
-                <p className="section-label mb-3">{t('section_description')}</p>
+                <p className="section-label mb-3">Descripción</p>
                 <p className="text-sm text-[#5C5C5C] leading-relaxed">{product.description_es}</p>
               </div>
             )}
 
             {specs.length > 0 && (
               <div className="bg-white border border-[#E4E4E2] rounded-xl p-6 shadow-[var(--shadow-card)]">
-                <p className="section-label mb-4">{t('section_specs')}</p>
+                <p className="section-label mb-4">Especificaciones técnicas</p>
                 <div className="flex flex-col divide-y divide-[#F2F2F0]">
                   {specs.map(s => (
                     <div key={s.label} className="flex items-center justify-between py-3">
@@ -126,14 +126,14 @@ export default async function ProductPage({ params }: PageProps) {
             {catMeta && (
               <div className="border border-[#E4E4E2] rounded-xl p-5 flex items-center justify-between bg-[#F2F2F0]">
                 <div>
-                  <p className="text-xs text-[#9A9A9A] mb-0.5">{t('line_label')}</p>
+                  <p className="text-xs text-[#9A9A9A] mb-0.5">Línea de producto</p>
                   <p className="text-sm font-medium text-[#0A0A0A]">{catMeta.name}</p>
                 </div>
                 <Link
-                  href={`/productos/categorias/${product.category}`}
+                  href={\`/productos/categorias/\${product.category}\`}
                   className="text-xs text-[#5C5C5C] hover:text-[#0A0A0A] border border-[#E4E4E2] rounded-lg px-3 py-2 hover:border-[#0A0A0A] transition-all"
                 >
-                  {t('see_line')}
+                  Ver toda la línea →
                 </Link>
               </div>
             )}
@@ -154,3 +154,7 @@ export default async function ProductPage({ params }: PageProps) {
     </div>
   )
 }
+`;
+
+fs.writeFileSync('c:/Users/JMGarrido/kristall-web/app/[locale]/productos/[slug]/page.tsx', content, 'utf8');
+console.log('OK');

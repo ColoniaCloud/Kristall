@@ -21,7 +21,7 @@ export default function ServicesSection() {
     <section className="px-6 pb-8 bg-[#F2F2F0]">
       <div className="max-w-[1160px] mx-auto">
       {/* Label */}
-      <div className="text-[11px] uppercase tracking-[0.1em] text-[#9A9A9A] font-medium mb-6">
+      <div className="section-label mb-6">
         {t('label')}
       </div>
 

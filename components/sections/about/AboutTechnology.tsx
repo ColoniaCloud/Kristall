@@ -1,31 +1,32 @@
 import { useTranslations } from 'next-intl'
 
-const SPECS = [
-  ['Bloqueo UV', '99%'],
-  ['Rechazo IR (línea KERAMX)', 'hasta 95%'],
-  ['Grosor de lámina', '1.5 mil — 8 mil'],
-  ['Garantía de color', 'Sin decoloración'],
-  ['Adhesivo', 'Micro-canales'],
-  ['Claridad óptica', '98%'],
-]
-
-const BARS = [
-  { label: 'Rechazo solar total', value: '94%', width: 94 },
-  { label: 'Bloqueo infrarrojo', value: '95%', width: 95 },
-  { label: 'Bloqueo UV', value: '99%', width: 99 },
-  { label: 'Claridad óptica', value: '98%', width: 98 },
-  { label: 'Durabilidad', value: '10+ años', width: 85 },
-]
-
 export default function AboutTechnology() {
   const t = useTranslations('about')
+
+  const SPECS = [
+    [t('tech_spec_uv'), '99%'],
+    [t('tech_spec_ir'), 'hasta 95%'],
+    [t('tech_spec_thickness'), '1.5 mil — 8 mil'],
+    [t('tech_spec_warranty'), 'Sin decoloración'],
+    [t('tech_spec_adhesive'), 'Micro-canales'],
+    [t('tech_bar_clarity'), '98%'],
+  ]
+
+  const BARS = [
+    { label: t('tech_bar_solar'), value: '94%', width: 94 },
+    { label: t('tech_bar_ir'), value: '95%', width: 95 },
+    { label: t('tech_spec_uv'), value: '99%', width: 99 },
+    { label: t('tech_bar_clarity'), value: '98%', width: 98 },
+    { label: t('tech_bar_durability'), value: '10+ años', width: 85 },
+  ]
+
   return (
     <section
       className="bg-[var(--surface)] border-t border-[#E4E4E2]"
       style={{ padding: '64px 40px' }}
     >
       <div className="max-w-[1160px] mx-auto">
-        <div className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#9A9A9A] mb-6">
+        <div className="section-label mb-6">
           {t('tech_label')}
         </div>
 

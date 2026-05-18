@@ -29,24 +29,16 @@ export default function Footer() {
           <h3 className="text-white font-medium text-sm mb-3">{t('col_products')}</h3>
           <ul className="space-y-2 text-xs">
             <li>
-              <Link href="/productos" className="text-white/50 hover:text-white transition-colors">
-                Polarizado vehicular
-              </Link>
+              <Link href="/productos" className="text-white/50 hover:text-white transition-colors">{t('link_polarizado')}</Link>
             </li>
             <li>
-              <Link href="/productos" className="text-white/50 hover:text-white transition-colors">
-                Seguridad vehicular
-              </Link>
+              <Link href="/productos" className="text-white/50 hover:text-white transition-colors">{t('link_seguridad')}</Link>
             </li>
             <li>
-              <Link href="/productos" className="text-white/50 hover:text-white transition-colors">
-                Arquitectura
-              </Link>
+              <Link href="/productos" className="text-white/50 hover:text-white transition-colors">{t('link_arquitectura')}</Link>
             </li>
             <li>
-              <Link href="/productos" className="text-white/50 hover:text-white transition-colors">
-                PPF
-              </Link>
+              <Link href="/productos" className="text-white/50 hover:text-white transition-colors">{t('link_ppf')}</Link>
             </li>
           </ul>
         </div>
@@ -57,11 +49,11 @@ export default function Footer() {
           <ul className="space-y-2 text-xs">
             <li>
               <Link href="/servicios" className="text-white/50 hover:text-white transition-colors">
-                Polarized App
+                {t('link_polarized_app')}
               </Link>
             </li>
             <li>
-              <Link href="/servicios" className="text-white/50 hover:text-white transition-colors">Dashboard y reportes</Link>
+              <Link href="/servicios" className="text-white/50 hover:text-white transition-colors">{t('link_dashboard')}</Link>
             </li>
           </ul>
         </div>
@@ -72,17 +64,17 @@ export default function Footer() {
           <ul className="space-y-2 text-xs">
             <li>
               <Link href="/nosotros" className="text-white/50 hover:text-white transition-colors">
-                Nosotros
+                {t('link_nosotros')}
               </Link>
             </li>
             <li>
               <Link href="/blog" className="text-white/50 hover:text-white transition-colors">
-                Blog
+                {t('link_blog')}
               </Link>
             </li>
             <li>
               <Link href="/contacto" className="text-white/50 hover:text-white transition-colors">
-                Contacto
+                {t('link_contacto')}
               </Link>
             </li>
           </ul>

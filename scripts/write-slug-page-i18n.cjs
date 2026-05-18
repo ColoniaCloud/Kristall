@@ -1,4 +1,6 @@
-import { getPayload } from 'payload'
+const fs = require('fs');
+
+const content = `import { getPayload } from 'payload'
 import config from '@payload-config'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
@@ -35,9 +37,9 @@ export default async function ProductPage({ params }: PageProps) {
   const catMeta = getCategoryMeta(product.category)
 
   const specs = [
-    { label: t('spec_vlt'), value: product.vlt != null ? `${product.vlt}%` : null },
-    { label: t('spec_uv'), value: product.uv != null ? `${product.uv}%` : null },
-    { label: t('spec_irr'), value: product.irr != null ? `${product.irr}%` : null },
+    { label: t('spec_vlt'), value: product.vlt != null ? \`\${product.vlt}%\` : null },
+    { label: t('spec_uv'), value: product.uv != null ? \`\${product.uv}%\` : null },
+    { label: t('spec_irr'), value: product.irr != null ? \`\${product.irr}%\` : null },
     { label: t('spec_sku'), value: product.sku },
     { label: t('spec_availability'), value: product.inStock ? t('spec_in_stock') : t('spec_coming_soon') },
   ].filter(s => s.value !== null)
@@ -62,7 +64,7 @@ export default async function ProductPage({ params }: PageProps) {
           <nav className="flex items-center gap-2 text-xs text-white/50">
             <Link href="/productos" className="hover:text-white transition-colors">{t('breadcrumb_products')}</Link>
             <span>/</span>
-            <Link href={`/productos/categorias/${product.category}`} className="hover:text-white transition-colors uppercase">
+            <Link href={\`/productos/categorias/\${product.category}\`} className="hover:text-white transition-colors uppercase">
               {product.category}
             </Link>
             <span>/</span>
@@ -130,7 +132,7 @@ export default async function ProductPage({ params }: PageProps) {
                   <p className="text-sm font-medium text-[#0A0A0A]">{catMeta.name}</p>
                 </div>
                 <Link
-                  href={`/productos/categorias/${product.category}`}
+                  href={\`/productos/categorias/\${product.category}\`}
                   className="text-xs text-[#5C5C5C] hover:text-[#0A0A0A] border border-[#E4E4E2] rounded-lg px-3 py-2 hover:border-[#0A0A0A] transition-all"
                 >
                   {t('see_line')}
@@ -154,3 +156,7 @@ export default async function ProductPage({ params }: PageProps) {
     </div>
   )
 }
+`;
+
+fs.writeFileSync('c:/Users/JMGarrido/kristall-web/app/[locale]/productos/[slug]/page.tsx', content, 'utf8');
+console.log('OK');

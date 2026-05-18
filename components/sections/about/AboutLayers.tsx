@@ -1,46 +1,17 @@
 import { useTranslations } from 'next-intl'
 
-const LAYERS = [
-  {
-    bg: 'bg-[#EBEBEA]',
-    text: 'text-[#444]',
-    name: 'Hard coat exterior',
-    func: 'Resistencia a rayones',
-  },
-  {
-    bg: 'bg-[#DCDCDA]',
-    text: 'text-[#333]',
-    name: 'Capa de color / metalizada',
-    func: 'Control de transmisión',
-  },
-  {
-    bg: 'bg-[#C8C8C6]',
-    text: 'text-[#222]',
-    name: 'Filtro IR / UV',
-    func: 'Bloqueo espectral selectivo',
-  },
-  {
-    bg: 'bg-[#ADADAB]',
-    text: 'text-[#111]',
-    name: 'Polyester base',
-    func: 'Soporte estructural',
-  },
-  {
-    bg: 'bg-[#888886]',
-    text: 'text-white',
-    name: 'Adhesivo micro-canales',
-    func: 'Instalación sin burbujas',
-  },
-  {
-    bg: 'bg-[#5C5C5A]',
-    text: 'text-white',
-    name: 'Liner de protección',
-    func: 'Se retira en instalación',
-  },
-]
-
 export default function AboutLayers() {
   const t = useTranslations('about')
+
+  const LAYERS = [
+    { bg: 'bg-[#EBEBEA]', text: 'text-[#444]', name: t('layer_1_name'), func: t('layer_1_desc') },
+    { bg: 'bg-[#DCDCDA]', text: 'text-[#333]', name: t('layer_2_name'), func: t('layer_2_desc') },
+    { bg: 'bg-[#C8C8C6]', text: 'text-[#222]', name: t('layer_3_name'), func: t('layer_3_desc') },
+    { bg: 'bg-[#ADADAB]', text: 'text-[#111]', name: t('layer_4_name'), func: t('layer_4_desc') },
+    { bg: 'bg-[#888886]', text: 'text-white', name: t('layer_5_name'), func: t('layer_5_desc') },
+    { bg: 'bg-[#5C5C5A]', text: 'text-white', name: t('layer_6_name'), func: t('layer_6_desc') },
+  ]
+
   return (
     <section className="bg-[var(--surface)]" style={{ padding: '0 40px 64px' }}>
       <div className="max-w-[1160px] mx-auto">

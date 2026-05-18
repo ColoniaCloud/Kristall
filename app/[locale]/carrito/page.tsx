@@ -40,7 +40,7 @@ export default function CarritoPage() {
         <div className="max-w-[1160px] mx-auto grid grid-cols-1 md:grid-cols-[1fr_320px] gap-8 items-start">
           {/* Lista */}
           <div>
-            <div className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#9A9A9A] mb-2">
+            <div className="section-label mb-2">
               Carrito de cotización
             </div>
             <h1

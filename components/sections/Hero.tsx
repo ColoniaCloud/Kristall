@@ -6,14 +6,14 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 
-const filmCards = [
-  { name: 'KLAR KPRO05', sub: 'Alta protección UV', tint: '#0a0a0a', opacity: 0.5, transparent: false },
-  { name: 'KRYPTON KS4', sub: 'Calidad nanoceramica de seguridad', tint: '#0a0a0a', opacity: 0.2, transparent: false },
-  { name: 'PPF', sub: 'Protección transparente de pintura', tint: null, opacity: 0, transparent: true },
-]
-
 export default function Hero() {
   const t = useTranslations('hero')
+
+  const filmCards = [
+    { name: t('card1_sku'), sub: t('card1_label'), tint: '#0a0a0a', opacity: 0.5, transparent: false },
+    { name: t('card2_sku'), sub: t('card2_label'), tint: '#0a0a0a', opacity: 0.2, transparent: false },
+    { name: t('card3_sku'), sub: t('card3_label'), tint: null, opacity: 0, transparent: true },
+  ]
 
   return (
     <section className="relative overflow-hidden px-6">
@@ -37,6 +37,17 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
+      {/* Eyebrow */}
+      <motion.p
+        className="section-label mb-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+        style={{ color: 'rgba(255,255,255,0.55)' }}
+      >
+        {t('eyebrow')}
+      </motion.p>
+
       {/* Headline */}
       <motion.h1
         initial={{ opacity: 0, y: 20 }}

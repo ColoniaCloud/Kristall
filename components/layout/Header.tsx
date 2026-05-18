@@ -24,6 +24,7 @@ export default function Header() {
             <Image src="/LogoPlano.png" alt="Kristall" width={140} height={32} priority className="h-8 w-auto" />
           </Link>
           <nav className="flex items-center gap-5">
+            <Link href="/" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">{t('home')}</Link>
             <Link href="/productos" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">{t('products')}</Link>
             <Link href="/nosotros" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">{t('about')}</Link>
             <Link href="/blog" className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">{t('blog')}</Link>

@@ -16,7 +16,7 @@ export default function AboutCertifications() {
       style={{ padding: '64px 40px' }}
     >
       <div className="max-w-[1160px] mx-auto">
-        <div className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#9A9A9A] mb-6">
+        <div className="section-label mb-6">
           {t('certs_label')}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
