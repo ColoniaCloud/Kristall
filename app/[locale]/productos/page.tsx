@@ -13,7 +13,7 @@ export default async function ProductsPage() {
     limit: 100,
   })
 
-  const serialized = (products as any[]).map((p) => ({
+  const serialized = (products as Record<string, unknown>[]).map((p) => ({
     id: p.id,
     name_es: p.name_es,
     category: p.category,

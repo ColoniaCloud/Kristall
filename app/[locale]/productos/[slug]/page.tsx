@@ -27,7 +27,7 @@ export default async function ProductPage({ params }: PageProps) {
     limit: 1,
   })
 
-  const product = docs[0] as any
+  const product = docs[0] as Record<string, unknown>
   if (!product) notFound()
 
   const heroImage = getCategoryImage(product.category)
