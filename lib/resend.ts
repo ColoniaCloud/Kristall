@@ -1,6 +1,22 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+let resendClient: Resend | null = null
+
+function getResendClient() {
+  if (resendClient) {
+    return resendClient
+  }
+
+  const apiKey = process.env.RESEND_API_KEY
+
+  if (!apiKey) {
+    throw new Error('Missing RESEND_API_KEY')
+  }
+
+  resendClient = new Resend(apiKey)
+
+  return resendClient
+}
 
 export async function sendLeadNotification(lead: {
   name: string
@@ -11,6 +27,7 @@ export async function sendLeadNotification(lead: {
   source: string
   cartItems?: { productName: string; quantity: number }[]
 }) {
+  const resend = getResendClient()
   const itemsHtml = lead.cartItems?.length
     ? `<h3>Productos solicitados:</h3><ul>${lead.cartItems.map(i => `<li>${i.productName} × ${i.quantity}</li>`).join('')}</ul>`
     : ''
@@ -36,6 +53,7 @@ export async function sendLeadConfirmation(lead: {
   name: string
   email: string
 }) {
+  const resend = getResendClient()
   await resend.emails.send({
     from: process.env.EMAIL_FROM!,
     to: lead.email,
