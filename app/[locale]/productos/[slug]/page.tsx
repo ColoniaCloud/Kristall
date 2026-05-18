@@ -38,7 +38,7 @@ export default async function ProductPage({ params }: PageProps) {
     inStock?: boolean
   }
 
-  const product = docs[0] as ProductDoc | undefined
+  const product = docs[0] as unknown as ProductDoc | undefined
   if (!product) notFound()
 
   const heroImage = getCategoryImage(product.category)
