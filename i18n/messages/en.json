@@ -20,7 +20,7 @@
     "card1_sku": "KLAR KPRO05",
     "card1_label": "High UV protection",
     "card2_sku": "KRYPTON KS4",
-    "card2_label": "Nanoceramic safety quality",
+    "card2_label": "Security",
     "card3_sku": "PPF",
     "card3_label": "Transparent paint protection"
   },
@@ -266,7 +266,7 @@
     "info_email_label": "Email",
     "info_email_value": "ventas@kristallfilm.com",
     "info_time_label": "Response time",
-    "info_time_value": "Less than 24 hours",
+    "info_time_value": "48 hours",
     "info_location_label": "Location",
     "info_location_value": "Buenos Aires, Argentina",
     "field_name": "Name *",

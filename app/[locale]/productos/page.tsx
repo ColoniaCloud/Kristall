@@ -1,9 +1,26 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import ProductsHero from '@/components/product/ProductsHero'
 import ProductsClient, { type ProductItem } from '@/components/product/ProductsClient'
 
 export const revalidate = 3600
+
+const pageMeta: Record<string, { title: string; description: string }> = {
+  es: { title: 'Productos', description: 'Explorá nuestro catálogo completo de láminas automotrices, arquitectónicas y PPF.' },
+  en: { title: 'Products', description: 'Browse our full catalog of automotive, architectural and PPF window films.' },
+  de: { title: 'Produkte', description: 'Durchstöbern Sie unser vollständiges Sortiment an Automobil-, Architektur- und Lackschutzfolien.' },
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const m = pageMeta[locale] ?? pageMeta.es
+  return {
+    title: m.title,
+    description: m.description,
+    openGraph: { title: `${m.title} | Kristall Film`, description: m.description, url: `/${locale}/productos` },
+  }
+}
 
 export default async function ProductsPage() {
   const payload = await getPayload({ config })

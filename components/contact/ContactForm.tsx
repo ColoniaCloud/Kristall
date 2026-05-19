@@ -1,11 +1,21 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Mail, Clock, MapPin, Loader2, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
+
+const SLIDES = [
+  '/cat/top-VITRAL.jpg',
+  '/cat/top-PPF.jpg',
+  '/cat/top-KRYPTON.jpg',
+  '/cat/top-KLAR.jpg',
+  '/cat/top-KERAMX.jpg',
+  '/cat/top-KARBON.jpg',
+]
 
 const schema = z.object({
   name: z.string().min(2),
@@ -21,6 +31,14 @@ export default function ContactForm() {
   const t = useTranslations('contact')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+  const [slideIndex, setSlideIndex] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSlideIndex(i => (i + 1) % SLIDES.length)
+    }, 3000)
+    return () => clearInterval(timer)
+  }, [])
 
   const {
     register,
@@ -52,14 +70,13 @@ export default function ContactForm() {
   const infoCards = [
     { Icon: Mail, labelKey: 'info_email_label', valueKey: 'info_email_value' },
     { Icon: Clock, labelKey: 'info_time_label', valueKey: 'info_time_value' },
-    { Icon: MapPin, labelKey: 'info_location_label', valueKey: 'info_location_value' },
   ] as const
 
   return (
     <section className="bg-[var(--bg)]" style={{ padding: '64px 40px' }}>
-      <div className="max-w-[1160px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+      <div className="max-w-[1160px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch">
         {/* Columna izquierda */}
-        <div>
+        <div className="flex flex-col">
           <div className="section-label mb-4">
             {t('label')}
           </div>
@@ -91,6 +108,32 @@ export default function ContactForm() {
                   <div className="text-sm font-medium text-[#0A0A0A]">{t(valueKey)}</div>                </div>
               </div>
             ))}
+          </div>
+
+          {/* Slider de imágenes */}
+          <div className="mt-4 relative flex-1 min-h-[12rem] rounded-xl overflow-hidden">
+            {SLIDES.map((src, i) => (
+              <Image
+                key={src}
+                src={src}
+                alt=""
+                fill
+                className="object-cover transition-opacity duration-700"
+                style={{ opacity: i === slideIndex ? 1 : 0 }}
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            ))}
+            {/* Dots */}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+              {SLIDES.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setSlideIndex(i)}
+                  className={`w-1.5 h-1.5 rounded-full transition-colors ${i === slideIndex ? 'bg-white' : 'bg-white/40'}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
 

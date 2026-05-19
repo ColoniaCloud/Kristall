@@ -6,6 +6,7 @@ import { Link } from '@/i18n/routing'
 import { getTranslations } from 'next-intl/server'
 import { getCategoryImage, getCategoryLogo, getCategoryMeta } from '@/lib/categories'
 import ProductActions from '@/components/product/ProductActions'
+import type { Metadata } from 'next'
 
 export const revalidate = 3600
 
@@ -22,6 +23,32 @@ interface ProductDoc {
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug, locale } = await params
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'products',
+    where: { slug: { equals: slug }, active: { equals: true } },
+    limit: 1,
+  })
+  const product = docs[0] as unknown as ProductDoc | undefined
+  if (!product) return {}
+  const image = getCategoryImage(product.category)
+  const title = product.name_es
+  const description = product.description_es ?? `${product.name_es} — Kristall Film`
+  return {
+    title,
+    description,
+    openGraph: {
+      title: `${title} | Kristall Film`,
+      description,
+      url: `/${locale}/productos/${slug}`,
+      images: [{ url: image, width: 1200, height: 630, alt: title }],
+    },
+    twitter: { card: 'summary_large_image', title, description, images: [image] },
+  }
 }
 
 export default async function ProductPage({ params }: PageProps) {
