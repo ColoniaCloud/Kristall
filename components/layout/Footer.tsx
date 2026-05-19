@@ -19,15 +19,15 @@ export default function Footer() {
               className="h-[26px] w-auto"
             />
           </div>
-          <p className="text-xs text-white/35 leading-relaxed">
+          <p className="text-sm text-white/35 leading-relaxed">
             {t('tagline')}
           </p>
         </div>
 
         {/* Col 2: Productos */}
         <div>
-          <h3 className="text-white font-medium text-sm mb-3">{t('col_products')}</h3>
-          <ul className="space-y-2 text-xs">
+          <h3 className="text-white font-medium text-[15px] mb-3">{t('col_products')}</h3>
+          <ul className="space-y-2 text-sm">
             <li>
               <Link href="/productos" className="text-white/50 hover:text-white transition-colors">{t('link_polarizado')}</Link>
             </li>
@@ -45,8 +45,8 @@ export default function Footer() {
 
         {/* Col 3: Software */}
         <div>
-          <h3 className="text-white font-medium text-sm mb-3">{t('col_services')}</h3>
-          <ul className="space-y-2 text-xs">
+          <h3 className="text-white font-medium text-[15px] mb-3">{t('col_services')}</h3>
+          <ul className="space-y-2 text-sm">
             <li>
               <Link href="/servicios" className="text-white/50 hover:text-white transition-colors">
                 {t('link_polarized_app')}
@@ -60,8 +60,8 @@ export default function Footer() {
 
         {/* Col 4: Empresa */}
         <div>
-          <h3 className="text-white font-medium text-sm mb-3">{t('col_company')}</h3>
-          <ul className="space-y-2 text-xs">
+          <h3 className="text-white font-medium text-[15px] mb-3">{t('col_company')}</h3>
+          <ul className="space-y-2 text-sm">
             <li>
               <Link href="/nosotros" className="text-white/50 hover:text-white transition-colors">
                 {t('link_nosotros')}
@@ -83,7 +83,7 @@ export default function Footer() {
 
       {/* Copyright */}
       <div className="mx-auto max-w-[1160px] mt-8 pt-6 border-t border-white/10">
-        <p className="text-xs text-white/35 text-center">{t('copyright')}</p>
+        <p className="text-sm text-white/35 text-center">{t('copyright')}</p>
       </div>
     </footer>
   )

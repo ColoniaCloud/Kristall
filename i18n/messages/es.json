@@ -6,7 +6,10 @@
     "about": "Nosotros",
     "blog": "Blog",
     "contact": "Contacto",
-    "quote": "Cotizar"
+    "quote": "Cotizar",
+    "open_menu": "Abrir menú",
+    "close_menu": "Cerrar menú",
+    "language": "Idioma"
   },
   "hero": {
     "eyebrow": "Soluciones avanzadas para control solar, seguridad y protección de superficies",
@@ -68,7 +71,7 @@
     "vitral_badge": "Arquitectura",
     "available_in": "Disponible en",
     "cat_polarizado_name": "Premium",
-    "cat_polarizado_desc": "Alto rechazo solar, disponible en 5%, 20%, 35% y 50% de transmisión.",
+    "cat_polarizado_desc": "La definición de lo esencial. Oscuridad precisa, visibilidad perfecta.",
     "cat_polarizado_badge": "5 referencias",
     "cat_karbon_name": "Nano Carbon",
     "cat_karbon_desc": "Tecnología de nanopartículas de carbono para máximo rechazo solar sin interferencia de señal.",
@@ -97,8 +100,8 @@
     "svc2_f3": "Reportes en tiempo real"
   },
   "cta": {
-    "title": "¿Listo para elevar tu instalación?",
-    "subtitle": "Contacta a nuestro equipo para más información.",
+    "title": "¿Necesitas más información?",
+    "subtitle": "Dejanos tu email y a la brevedad un asesor de nuestro equipo te contactará.",
     "placeholder": "tu@empresa.com",
     "button": "Contactar"
   },

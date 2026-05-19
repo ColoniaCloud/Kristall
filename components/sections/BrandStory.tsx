@@ -30,12 +30,12 @@ export default function BrandStory() {
             <div className="w-5 h-[3px] rounded-sm bg-[#E6A800]" />
           </div>
           <h3 
-            className="text-base font-medium text-[#0A0A0A] mb-3"
+            className="text-[17px] font-medium text-[#0A0A0A] mb-3"
             style={{ fontFamily: 'var(--font-display)' }}
           >
             {t('title')}
           </h3>
-          <p className="text-sm text-[#5C5C5C] leading-relaxed">
+          <p className="text-[15px] text-[#5C5C5C] leading-relaxed">
             {t('body')}
           </p>
         </>
@@ -49,10 +49,10 @@ export default function BrandStory() {
             <GermanyFlag width={48} height={32} />
           </div>
           <div>
-            <h4 className="text-[15px] font-medium text-white mb-1.5">
+            <h4 className="text-base font-medium text-white mb-1.5">
               {t('dark_title')}
             </h4>
-            <p className="text-xs text-white/45 leading-relaxed">
+            <p className="text-sm text-white/45 leading-relaxed">
               {t('dark_body')}
             </p>
           </div>
@@ -106,7 +106,7 @@ export default function BrandStory() {
           <div className="p-4">
             <Link
               href="/contacto"
-              className="block w-full bg-[#0A0A0A] text-white text-sm font-medium text-center py-3 rounded-lg hover:bg-[#1A1A1A] transition-colors"
+              className="block w-full bg-[#0A0A0A] text-white text-[15px] font-medium text-center py-3 rounded-lg hover:bg-[#1A1A1A] transition-colors"
             >
               {t('contact_btn')}
             </Link>
@@ -141,8 +141,8 @@ export default function BrandStory() {
             >
               <cert.icon size={22} className="text-[#9A9A9A]" />
             </motion.div>
-            <h4 className="text-[15px] font-medium mb-1" style={{ fontFamily: 'var(--font-display)' }}>{t(cert.title)}</h4>
-            <p className="text-[11px] md:text-[13px] text-[#9A9A9A] leading-relaxed">
+            <h4 className="text-base font-medium mb-1" style={{ fontFamily: 'var(--font-display)' }}>{t(cert.title)}</h4>
+            <p className="text-xs md:text-sm text-[#9A9A9A] leading-relaxed">
               {t(cert.body)}
             </p>
           </motion.div>

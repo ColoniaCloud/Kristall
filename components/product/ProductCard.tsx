@@ -22,6 +22,7 @@ export interface ProductCardProps {
 }
 
 const badgeClass = "text-[10px] bg-[#F2F2F0] border border-[#E4E4E2] rounded px-1.5 py-0.5 text-[#5C5C5C]"
+const varBadgeClass = "text-[11px] font-medium bg-[#0A0A0A]/[0.04] border border-[#0A0A0A]/[0.10] rounded px-2 py-0.5 text-[#0A0A0A]"
 
 export default function ProductCard({
   name, category, description, vlt, uv, irr, vlts, inStock, slug, badge,
@@ -46,20 +47,20 @@ export default function ProductCard({
           <div className="relative w-20 h-8 mb-2">
             <Image src={getCategoryLogo(category)} alt={category} fill className="object-contain object-left" sizes="80px" />
           </div>
-          <p className="text-sm font-medium text-[#0A0A0A] mb-1">{name}</p>
-          <p className="text-xs text-[#5C5C5C] leading-relaxed mb-3 flex-1">{description}</p>
+          <p className="text-[15px] font-medium text-[#0A0A0A] mb-1">{name}</p>
+          <p className="text-sm text-[#5C5C5C] leading-relaxed mb-3 flex-1">{description}</p>
           {vlts && vlts.length > 0 ? (
             <div className="flex flex-wrap items-center gap-1.5 mb-3">
               <span className="text-[10px] text-[#9A9A9A]">{tp('available_in')}:</span>
               {vlts.map(v => (
-                <span key={v} className={badgeClass}>VLT {v}%</span>
+                <span key={v} className={varBadgeClass}>VLT {v}%</span>
               ))}
             </div>
           ) : (vlt != null || uv != null || irr != null) && (
             <div className="flex flex-wrap gap-1.5 mb-3">
-              {vlt != null && <span className={badgeClass}>VLT {vlt}%</span>}
-              {uv != null && <span className={badgeClass}>UV {uv}%</span>}
-              {irr != null && <span className={badgeClass}>IRR {irr}%</span>}
+              {vlt != null && <span className={varBadgeClass}>VLT {vlt}%</span>}
+              {uv != null && <span className={varBadgeClass}>UV {uv}%</span>}
+              {irr != null && <span className={varBadgeClass}>IRR {irr}%</span>}
             </div>
           )}
           <div className="flex justify-between items-center mt-auto pt-2 border-t border-[#F2F2F0]">

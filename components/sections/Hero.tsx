@@ -3,11 +3,15 @@
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/routing'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef } from 'react'
 
 
 export default function Hero() {
   const t = useTranslations('hero')
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] })
+  const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
 
   const filmCards = [
     { name: t('card1_sku'), sub: t('card1_label'), tint: '#0a0a0a', opacity: 0.5, transparent: false },
@@ -16,19 +20,23 @@ export default function Hero() {
   ]
 
   return (
-    <section className="relative overflow-hidden px-6">
-      {/* Background Image */}
-      <Image
-        src="/porsche.png"
-        fill
-        alt=""
-        priority
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ objectFit: 'cover', objectPosition: 'center' }}
-      />
-      
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/45" />
+    <section ref={sectionRef} className="relative overflow-hidden px-6 bg-[var(--surface)]">
+      {/* Background Image con parallax */}
+      <motion.div
+        className="absolute inset-0"
+        style={{ y: imageY, scale: 1.15, transformOrigin: 'center' }}
+      >
+        <Image
+          src="/hero1.png"
+          fill
+          alt=""
+          priority
+          className="object-cover object-center"
+          style={{ transform: 'scaleX(-1)' }}
+        />
+      </motion.div>
+      {/* Overlay negro semitransparente */}
+      <div className="absolute inset-0 bg-black/40" />
 
       {/* Content */}
       <motion.div 
@@ -45,7 +53,7 @@ export default function Hero() {
         className="font-medium tracking-tight max-w-[520px] mt-5 mb-4 text-white"
         style={{ 
           fontFamily: 'var(--font-display)', 
-          fontSize: 'clamp(2rem, 4vw, 3.5rem)',
+          fontSize: 'clamp(2.2rem, 4vw, 3.7rem)',
           fontWeight: 600,
           letterSpacing: '-0.02em'
         }}
@@ -55,7 +63,7 @@ export default function Hero() {
 
       {/* Subheadline */}
       <motion.p 
-        className="text-[15px] text-white/70 max-w-[420px] leading-relaxed mt-5 mb-8"
+        className="text-base text-white/75 max-w-[420px] leading-relaxed mt-5 mb-8"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4, duration: 0.5 }}
@@ -72,13 +80,13 @@ export default function Hero() {
       >
         <Link
           href="/productos"
-          className="bg-[#0A0A0A] text-white px-6 py-3 rounded-lg text-sm font-medium tracking-wide hover:opacity-80 transition-opacity"
+          className="bg-white text-[#0A0A0A] px-6 py-3 rounded-lg text-[15px] font-medium tracking-wide hover:bg-white/90 transition-opacity"
         >
           {t('cta_primary')}
         </Link>
         <Link
           href="/carrito"
-          className="border border-white/40 text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-white hover:text-[#0A0A0A] transition-all duration-200"
+          className="border border-white/50 text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:bg-white hover:text-[#0A0A0A] transition-all duration-200"
         >
           {t('cta_secondary')}
         </Link>
@@ -95,19 +103,15 @@ export default function Hero() {
           {filmCards.map((card, index) => (
             <div
               key={index}
-              className={`border border-[0.5px] border-white/15 rounded-lg p-3 transition-all duration-200 ${
-                card.transparent
-                  ? 'bg-white/5 hover:bg-white/10'
-                  : 'bg-black/30 backdrop-blur-sm hover:bg-black/40'
-              }`}
+              className="bg-white/10 border border-white/20 backdrop-blur-sm rounded-lg p-3 transition-all duration-200 hover:bg-white/15"
             >
               {card.transparent ? (
-                <div className="h-14 rounded mb-2 border border-white/10" />
+                <div className="h-14 rounded mb-2 border border-[#E4E4E2]" />
               ) : (
                 <div className="h-14 rounded mb-2" style={{ backgroundColor: card.tint!, opacity: card.opacity }} />
               )}
-              <div className="text-xs text-white/70 mb-0.5">{card.name}</div>
-              <div className="text-[10px] text-white/50">{card.sub}</div>
+              <div className="text-sm text-white/90 mb-0.5" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, letterSpacing: '-0.01em' }}>{card.name}</div>
+              <div className="text-xs text-white/60">{card.sub}</div>
             </div>
           ))}
         </div>
@@ -115,7 +119,7 @@ export default function Hero() {
 
       {/* Watermark */}
       <div 
-        className="absolute bottom-4 right-[-8px] text-[88px] text-white/[0.06] select-none pointer-events-none leading-none"
+        className="absolute bottom-4 right-[-8px] text-[clamp(2.5rem,12vw,88px)] text-white/[0.07] select-none pointer-events-none leading-none"
         style={{ fontFamily: 'var(--font-brand)', fontWeight: 900, letterSpacing: '0.15em' }}
       >
         KRISTALL

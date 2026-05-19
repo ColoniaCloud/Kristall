@@ -76,7 +76,7 @@ export default function QuoteModal({ open, onClose }: QuoteModalProps) {
   }
 
   const inputClass =
-    'w-full border border-[#E4E4E2] rounded-lg px-3 py-2.5 text-sm bg-[#F2F2F0] outline-none focus:border-[#0A0A0A] transition-colors'
+    'w-full border border-[#E4E4E2] rounded-lg px-3 py-2.5 text-[15px] bg-[#F2F2F0] outline-none focus:border-[#0A0A0A] transition-colors'
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -88,7 +88,7 @@ export default function QuoteModal({ open, onClose }: QuoteModalProps) {
           >
             {t('quote_title')}
           </DialogTitle>
-          <DialogDescription className="text-xs text-[#5C5C5C] leading-relaxed">
+          <DialogDescription className="text-sm text-[#5C5C5C] leading-relaxed">
             {t('quote_subtitle')}
           </DialogDescription>
         </DialogHeader>
@@ -106,35 +106,35 @@ export default function QuoteModal({ open, onClose }: QuoteModalProps) {
         {status === 'success' ? (
           <div className="bg-[#F0FFF4] border border-green-200 rounded-xl p-6 text-center">
             <CheckCircle size={20} className="text-green-500 mx-auto mb-2" />
-            <div className="text-sm font-medium text-[#0A0A0A] mb-1">{t('quote_title')} ✓</div>
-            <div className="text-xs text-[#5C5C5C]">{t('quote_success')}</div>
+              <div className="text-[15px] font-medium text-[#0A0A0A] mb-1">{t('quote_title')} ✓</div>
+              <div className="text-sm text-[#5C5C5C]">{t('quote_success')}</div>
           </div>
         ) : (
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-[#0A0A0A]">{tc('field_name')}</label>
+              <label className="text-sm font-medium text-[#0A0A0A]">{tc('field_name')}</label>
               <input {...register('name')} type="text" placeholder={tc('field_name_placeholder')} className={inputClass} />
-              {errors.name && <span className="text-xs text-red-500">{errors.name.message}</span>}
+              {errors.name && <span className="text-sm text-red-500">{errors.name.message}</span>}
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-[#0A0A0A]">{tc('field_company')}</label>
+              <label className="text-sm font-medium text-[#0A0A0A]">{tc('field_company')}</label>
               <input {...register('company')} type="text" placeholder={tc('field_company_placeholder')} className={inputClass} />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-[#0A0A0A]">{tc('field_email')}</label>
+              <label className="text-sm font-medium text-[#0A0A0A]">{tc('field_email')}</label>
               <input {...register('email')} type="email" placeholder={tc('field_email_placeholder')} className={inputClass} />
-              {errors.email && <span className="text-xs text-red-500">{errors.email.message}</span>}
+              {errors.email && <span className="text-sm text-red-500">{errors.email.message}</span>}
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-[#0A0A0A]">{tc('field_phone')}</label>
+              <label className="text-sm font-medium text-[#0A0A0A]">{tc('field_phone')}</label>
               <input {...register('phone')} type="tel" placeholder={tc('field_phone_placeholder')} className={inputClass} />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-[#0A0A0A]">{tc('field_message')}</label>
+              <label className="text-sm font-medium text-[#0A0A0A]">{tc('field_message')}</label>
               <textarea {...register('message')} rows={3} placeholder={tc('field_message_placeholder')} className={inputClass} />
             </div>
 
@@ -147,7 +147,7 @@ export default function QuoteModal({ open, onClose }: QuoteModalProps) {
             <button
               type="submit"
               disabled={status === 'loading'}
-              className="w-full bg-[#0A0A0A] text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-[#2a2a2a] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full bg-[#0A0A0A] text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:bg-[#2a2a2a] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {status === 'loading' ? (
                 <>

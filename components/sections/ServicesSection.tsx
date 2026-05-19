@@ -41,15 +41,15 @@ export default function ServicesSection() {
           <div className="w-10 h-10 rounded-lg bg-[#F2F2F0] border border-[0.5px] border-[#E4E4E2] flex items-center justify-center mb-3.5">
             <ShieldCheck size={16} className="text-[#5C5C5C]" />
           </div>
-          <h3 className="text-[15px] font-medium text-[#0A0A0A] mb-1.5">
+          <h3 className="text-base font-medium text-[#0A0A0A] mb-1.5">
             {t('svc1_title')}
           </h3>
-          <p className="text-xs text-[#5C5C5C] leading-relaxed mb-3.5">
+          <p className="text-sm text-[#5C5C5C] leading-relaxed mb-3.5">
             {t('svc1_desc')}
           </p>
           <Link
             href="/contacto?servicio=software"
-            className="inline-block text-xs border border-[#C8C8C4] px-3.5 py-1.5 rounded-lg hover:bg-[#0A0A0A] hover:text-white hover:border-[#0A0A0A] transition-all duration-200"
+            className="inline-block text-sm border border-[#C8C8C4] px-3.5 py-1.5 rounded-lg hover:bg-[#0A0A0A] hover:text-white hover:border-[#0A0A0A] transition-all duration-200"
           >
             {t('svc1_cta')}
           </Link>
@@ -63,30 +63,30 @@ export default function ServicesSection() {
           <div className="w-9 h-9 rounded-lg bg-white/6 border border-white/8 flex items-center justify-center mb-3.5">
             <Monitor size={16} className="text-white/50" />
           </div>
-          <h3 className="text-[15px] font-medium text-white mb-1.5">
+          <h3 className="text-base font-medium text-white mb-1.5">
             {t('svc2_title')}
           </h3>
-          <p className="text-xs text-white/45 leading-relaxed mb-3.5">
+          <p className="text-sm text-white/45 leading-relaxed mb-3.5">
             {t('svc2_desc')}
           </p>
           <Link
             href="/contacto?servicio=software"
-            className="inline-block text-xs border border-white/20 text-white px-3.5 py-1.5 rounded-lg bg-white/6 hover:bg-white/12 transition-all duration-200"
+            className="inline-block text-sm border border-white/20 text-white px-3.5 py-1.5 rounded-lg bg-white/6 hover:bg-white/12 transition-all duration-200"
           >
             {t('svc2_cta')}
           </Link>
           <div className="mt-3.5 flex flex-col gap-1.5">
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-white/25 flex-shrink-0" />
-              <span className="text-[11px] text-white/55">{t('svc2_f1')}</span>
+              <span className="text-xs text-white/55">{t('svc2_f1')}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-white/25 flex-shrink-0" />
-              <span className="text-[11px] text-white/55">{t('svc2_f2')}</span>
+              <span className="text-xs text-white/55">{t('svc2_f2')}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-white/25 flex-shrink-0" />
-              <span className="text-[11px] text-white/55">{t('svc2_f3')}</span>
+              <span className="text-xs text-white/55">{t('svc2_f3')}</span>
             </div>
           </div>
         </motion.div>

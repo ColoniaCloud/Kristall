@@ -35,14 +35,14 @@ export default function AboutHero() {
           className="text-white leading-tight mb-4"
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.2rem, 4vw, 3.5rem)',
+              fontSize: 'clamp(2.4rem, 4vw, 3.7rem)',
             fontWeight: 500,
           }}
         >
           {t('hero_headline')}
         </h1>
 
-        <p className="text-sm text-white max-w-[440px] leading-relaxed">
+        <p className="text-[15px] text-white max-w-[440px] leading-relaxed">
           {t('hero_body')}
         </p>
       </div>

@@ -34,12 +34,12 @@ export default function AboutTechnology() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Specs */}
           <div className="bg-[#F2F2F0] border border-[#E4E4E2] rounded-2xl p-6">
-            <div className="text-sm font-medium mb-5 text-[#0A0A0A]">{t('tech_specs_title')}</div>
+            <div className="text-[15px] font-medium mb-5 text-[#0A0A0A]">{t('tech_specs_title')}</div>
             <div className="flex flex-col divide-y divide-[#E4E4E2]">
               {SPECS.map(([label, value]) => (
                 <div key={label} className="flex justify-between items-center py-3">
-                  <span className="text-xs text-[#5C5C5C]">{label}</span>
-                  <span className="text-xs font-medium text-[#0A0A0A]">{value}</span>
+                  <span className="text-sm text-[#5C5C5C]">{label}</span>
+                  <span className="text-sm font-medium text-[#0A0A0A]">{value}</span>
                 </div>
               ))}
             </div>
@@ -47,15 +47,15 @@ export default function AboutTechnology() {
 
           {/* Layers */}
           <div className="bg-[#F2F2F0] border border-[#E4E4E2] rounded-2xl p-6">
-            <div className="text-sm font-medium mb-5 text-[#0A0A0A]">{t('layers_title')}</div>
+            <div className="text-[15px] font-medium mb-5 text-[#0A0A0A]">{t('layers_title')}</div>
             <div className="flex flex-col gap-1.5">
               {LAYERS.map((l) => (
                 <div
                   key={l.name}
                   className={`${l.bg} ${l.text} rounded-lg px-4 py-3 flex justify-between items-center`}
                 >
-                  <span className="text-xs font-medium">{l.name}</span>
-                  <span className="text-[11px] opacity-60">{l.func}</span>
+                  <span className="text-sm font-medium">{l.name}</span>
+                  <span className="text-xs opacity-60">{l.func}</span>
                 </div>
               ))}
             </div>

@@ -44,13 +44,13 @@ export default function ServicesPolarizedApp() {
             className="text-white mb-4 leading-tight"
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.6rem, 3vw, 2.4rem)',
+              fontSize: 'clamp(1.8rem, 3vw, 2.6rem)',
               fontWeight: 500,
             }}
           >
             {t('app_headline')}
           </h2>
-          <p className="text-sm text-white/55 leading-relaxed mb-8">
+          <p className="text-[15px] text-white/55 leading-relaxed mb-8">
             {t('app_body')}
           </p>
 
@@ -61,15 +61,15 @@ export default function ServicesPolarizedApp() {
                 className="bg-white/5 border border-white/8 rounded-xl p-4"
               >
                 <Icon size={16} className="text-white/40 mb-2" />
-                <div className="text-sm font-medium text-white mb-1">{title}</div>
-                <div className="text-xs text-white/45 leading-relaxed">{desc}</div>
+                <div className="text-[15px] font-medium text-white mb-1">{title}</div>
+                <div className="text-sm text-white/45 leading-relaxed">{desc}</div>
               </div>
             ))}
           </div>
 
           <button
             type="button"
-            className="border border-white/25 text-white px-6 py-3 rounded-lg text-sm hover:bg-white hover:text-[#0A0A0A] transition-all"
+              className="border border-white/25 text-white px-6 py-3 rounded-lg text-[15px] hover:bg-white hover:text-[#0A0A0A] transition-all"
           >
             {t('app_cta')}
           </button>

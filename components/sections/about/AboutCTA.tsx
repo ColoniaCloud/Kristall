@@ -20,13 +20,13 @@ export default function AboutCTA() {
           >
             {t('cta_title')}
           </h3>
-          <p className="text-sm text-white/40 leading-relaxed">
+          <p className="text-[15px] text-white/40 leading-relaxed">
             {t('cta_body')}
           </p>
         </div>
         <Link
           href="/contacto"
-          className="bg-white text-[#0A0A0A] px-6 py-3 rounded-lg text-sm font-medium hover:bg-white/90 transition-opacity whitespace-nowrap"
+          className="bg-white text-[#0A0A0A] px-6 py-3 rounded-lg text-[15px] font-medium hover:bg-white/90 transition-opacity whitespace-nowrap"
         >
           {t('cta_button')}
         </Link>

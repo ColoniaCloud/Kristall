@@ -31,14 +31,14 @@ export default function ServicesHero() {
           className="font-[var(--font-display)] text-white max-w-[500px] mt-4 mb-4 leading-[1.1]"
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2rem, 4vw, 3rem)',
+              fontSize: 'clamp(2.2rem, 4vw, 3.2rem)',
             fontWeight: 600,
           }}
         >
           {t('hero_headline')}
         </h1>
 
-        <p className="text-sm text-white/55 max-w-[420px] leading-relaxed">
+        <p className="text-[15px] text-white/55 max-w-[420px] leading-relaxed">
           {t('hero_body')}
         </p>
 

@@ -113,7 +113,7 @@ export default function ProductActions({ sku, name, category, inStock }: Product
         <div className="pb-4 border-b border-[#F2F2F0] mb-2">
           <p className="text-[11px] uppercase tracking-widest text-[#9A9A9A] mb-1">{category.toUpperCase()}</p>
           <p className="text-sm font-medium text-[#0A0A0A]">{name}</p>
-          <p className="text-xs text-[#9A9A9A] mt-0.5">{t('ref_label')} {sku}</p>
+          <p className="text-sm text-[#9A9A9A] mt-0.5">{t('ref_label')} {sku}</p>
         </div>
 
         <button
@@ -204,7 +204,7 @@ export default function ProductActions({ sku, name, category, inStock }: Product
               <DialogHeader className="mb-5">
                 <button
                   onClick={() => setStep('confirm')}
-                  className="text-[11px] text-[#9A9A9A] hover:text-[#0A0A0A] mb-3 flex items-center gap-1 transition-colors"
+                  className="text-xs text-[#9A9A9A] hover:text-[#0A0A0A] mb-3 flex items-center gap-1 transition-colors"
                 >
                   {t('back')}
                 </button>
@@ -218,17 +218,17 @@ export default function ProductActions({ sku, name, category, inStock }: Product
 
               <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
                 <div>
-                  <label className="text-xs font-medium text-[#0A0A0A] block mb-1">{t('field_name')}</label>
+                  <label className="text-sm font-medium text-[#0A0A0A] block mb-1">{t('field_name')}</label>
                   <input
                     {...register('name')}
                     placeholder={t('field_name_placeholder')}
                     className="w-full border border-[#E4E4E2] rounded-lg px-3 py-2.5 text-sm bg-[#F2F2F0] outline-none focus:border-[#0A0A0A] transition-colors"
                   />
-                  {errors.name && <p className="text-[11px] text-red-500 mt-1">{errors.name.message}</p>}
+                  {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>}
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-[#0A0A0A] block mb-1">{t('field_company')}</label>
+                  <label className="text-sm font-medium text-[#0A0A0A] block mb-1">{t('field_company')}</label>
                   <input
                     {...register('company')}
                     placeholder={t('field_company_placeholder')}
@@ -237,18 +237,18 @@ export default function ProductActions({ sku, name, category, inStock }: Product
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-[#0A0A0A] block mb-1">{t('field_email')}</label>
+                  <label className="text-sm font-medium text-[#0A0A0A] block mb-1">{t('field_email')}</label>
                   <input
                     {...register('email')}
                     type="email"
                     placeholder={t('field_email_placeholder')}
                     className="w-full border border-[#E4E4E2] rounded-lg px-3 py-2.5 text-sm bg-[#F2F2F0] outline-none focus:border-[#0A0A0A] transition-colors"
                   />
-                  {errors.email && <p className="text-[11px] text-red-500 mt-1">{errors.email.message}</p>}
+                  {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>}
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-[#0A0A0A] block mb-1">{t('field_phone')}</label>
+                  <label className="text-sm font-medium text-[#0A0A0A] block mb-1">{t('field_phone')}</label>
                   <input
                     {...register('phone')}
                     type="tel"
@@ -258,7 +258,7 @@ export default function ProductActions({ sku, name, category, inStock }: Product
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-[#0A0A0A] block mb-1">{t('field_message')}</label>
+                  <label className="text-sm font-medium text-[#0A0A0A] block mb-1">{t('field_message')}</label>
                   <textarea
                     {...register('message')}
                     rows={3}
@@ -269,7 +269,7 @@ export default function ProductActions({ sku, name, category, inStock }: Product
 
                 <button
                   type="submit"
-                  className="w-full bg-[#0A0A0A] text-white px-4 py-3 rounded-lg text-sm font-medium hover:opacity-85 transition-opacity mt-1"
+                  className="w-full bg-[#0A0A0A] text-white px-4 py-3 rounded-lg text-[15px] font-medium hover:opacity-85 transition-opacity mt-1"
                 >
                   {t('submit')}
                 </button>
@@ -280,7 +280,7 @@ export default function ProductActions({ sku, name, category, inStock }: Product
           {step === 'loading' && (
             <div className="p-6 flex flex-col items-center justify-center min-h-[200px] gap-3">
               <div className="w-6 h-6 border-2 border-[#E4E4E2] border-t-[#0A0A0A] rounded-full animate-spin" />
-              <p className="text-sm text-[#5C5C5C]">{t('submitting')}</p>
+              <p className="text-[15px] text-[#5C5C5C]">{t('submitting')}</p>
             </div>
           )}
 
@@ -290,14 +290,14 @@ export default function ProductActions({ sku, name, category, inStock }: Product
                 <Check size={20} className="text-green-600" />
               </div>
               <div>
-                <p className="text-sm font-medium text-[#0A0A0A] mb-1">{t('success_title')}</p>
-                <p className="text-xs text-[#5C5C5C] leading-relaxed max-w-[260px]">
+                <p className="text-[15px] font-medium text-[#0A0A0A] mb-1">{t('success_title')}</p>
+                <p className="text-sm text-[#5C5C5C] leading-relaxed max-w-[260px]">
                   {t('success_body', { name })}
                 </p>
               </div>
               <button
                 onClick={handleClose}
-                className="mt-2 text-xs text-[#9A9A9A] hover:text-[#0A0A0A] transition-colors"
+                className="mt-2 text-sm text-[#9A9A9A] hover:text-[#0A0A0A] transition-colors"
               >
                 {t('close')}
               </button>

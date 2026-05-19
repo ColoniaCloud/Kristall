@@ -47,7 +47,7 @@ export default function ContactForm() {
   }
 
   const inputClass =
-    'w-full border border-[#E4E4E2] rounded-lg px-3 py-2.5 text-sm bg-[#F2F2F0] outline-none focus:border-[#0A0A0A] transition-colors'
+    'w-full border border-[#E4E4E2] rounded-lg px-3 py-2.5 text-[15px] bg-[#F2F2F0] outline-none focus:border-[#0A0A0A] transition-colors'
 
   const infoCards = [
     { Icon: Mail, labelKey: 'info_email_label', valueKey: 'info_email_value' },
@@ -67,13 +67,13 @@ export default function ContactForm() {
             className="text-[#0A0A0A] mb-4 leading-tight"
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.8rem, 3vw, 2.6rem)',
+              fontSize: 'clamp(2rem, 3vw, 2.8rem)',
               fontWeight: 500,
             }}
           >
             {t('headline')}
           </h1>
-          <p className="text-sm text-[#5C5C5C] leading-relaxed mb-8">
+          <p className="text-[15px] text-[#5C5C5C] leading-relaxed mb-8">
             {t('body')}
           </p>
 
@@ -88,8 +88,7 @@ export default function ContactForm() {
                   <div className="text-[11px] font-medium uppercase tracking-[0.08em] text-[#9A9A9A] mb-0.5">
                     {t(labelKey)}
                   </div>
-                  <div className="text-sm font-medium text-[#0A0A0A]">{t(valueKey)}</div>
-                </div>
+                  <div className="text-sm font-medium text-[#0A0A0A]">{t(valueKey)}</div>                </div>
               </div>
             ))}
           </div>
@@ -100,13 +99,13 @@ export default function ContactForm() {
           {status === 'success' ? (
             <div className="bg-[#F0FFF4] border border-green-200 rounded-xl p-6 text-center">
               <CheckCircle size={20} className="text-green-500 mx-auto mb-2" />
-              <div className="text-sm font-medium text-[#0A0A0A] mb-1">{t('success_title')}</div>
-              <div className="text-xs text-[#5C5C5C]">{t('success_body')}</div>
+              <div className="text-[15px] font-medium text-[#0A0A0A] mb-1">{t('success_title')}</div>
+              <div className="text-sm text-[#5C5C5C]">{t('success_body')}</div>
             </div>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-1.5 mb-4">
-                <label className="text-xs font-medium text-[#0A0A0A]">{t('field_name')}</label>
+                <label className="text-sm font-medium text-[#0A0A0A]">{t('field_name')}</label>
                 <input
                   {...register('name')}
                   type="text"
@@ -114,12 +113,12 @@ export default function ContactForm() {
                   className={inputClass}
                 />
                 {errors.name && (
-                  <span className="text-xs text-red-500">{errors.name.message}</span>
+                  <span className="text-sm text-red-500">{errors.name.message}</span>
                 )}
               </div>
 
               <div className="flex flex-col gap-1.5 mb-4">
-                <label className="text-xs font-medium text-[#0A0A0A]">{t('field_company')}</label>
+                <label className="text-sm font-medium text-[#0A0A0A]">{t('field_company')}</label>
                 <input
                   {...register('company')}
                   type="text"
@@ -129,7 +128,7 @@ export default function ContactForm() {
               </div>
 
               <div className="flex flex-col gap-1.5 mb-4">
-                <label className="text-xs font-medium text-[#0A0A0A]">{t('field_email')}</label>
+                <label className="text-sm font-medium text-[#0A0A0A]">{t('field_email')}</label>
                 <input
                   {...register('email')}
                   type="email"
@@ -137,12 +136,12 @@ export default function ContactForm() {
                   className={inputClass}
                 />
                 {errors.email && (
-                  <span className="text-xs text-red-500">{errors.email.message}</span>
+                  <span className="text-sm text-red-500">{errors.email.message}</span>
                 )}
               </div>
 
               <div className="flex flex-col gap-1.5 mb-4">
-                <label className="text-xs font-medium text-[#0A0A0A]">{t('field_phone')}</label>
+                <label className="text-sm font-medium text-[#0A0A0A]">{t('field_phone')}</label>
                 <input
                   {...register('phone')}
                   type="tel"
@@ -152,7 +151,7 @@ export default function ContactForm() {
               </div>
 
               <div className="flex flex-col gap-1.5 mb-6">
-                <label className="text-xs font-medium text-[#0A0A0A]">{t('field_message')}</label>
+                <label className="text-sm font-medium text-[#0A0A0A]">{t('field_message')}</label>
                 <textarea
                   {...register('message')}
                   rows={4}
@@ -160,7 +159,7 @@ export default function ContactForm() {
                   className={inputClass}
                 />
                 {errors.message && (
-                  <span className="text-xs text-red-500">{errors.message.message}</span>
+                  <span className="text-sm text-red-500">{errors.message.message}</span>
                 )}
               </div>
 
@@ -173,7 +172,7 @@ export default function ContactForm() {
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="w-full bg-[#0A0A0A] text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-[#2a2a2a] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full bg-[#0A0A0A] text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:bg-[#2a2a2a] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {status === 'loading' ? (
                   <>

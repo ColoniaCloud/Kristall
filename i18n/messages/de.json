@@ -6,11 +6,14 @@
     "about": "Über uns",
     "blog": "Blog",
     "contact": "Kontakt",
-    "quote": "Angebot"
+    "quote": "Angebot",
+    "open_menu": "Menü öffnen",
+    "close_menu": "Menü schließen",
+    "language": "Sprache"
   },
   "hero": {
     "eyebrow": "Fortschrittliche Lösungen für Sonnenschutz, Sicherheit und Oberflächenschutz",
-    "headline": "Performance aplicada al confort",
+    "headline": "Performance für maximalen Komfort",
     "subheadline": "Automobil-, Architektur- und PPF-Folien für den professionellen Markt.",
     "cta_primary": "Produkte ansehen",
     "cta_secondary": "Angebot anfordern",
@@ -68,7 +71,7 @@
     "vitral_badge": "Architektur",
     "available_in": "Verfügbar in",
     "cat_polarizado_name": "Premium",
-    "cat_polarizado_desc": "Hohe Solarabweisung, erhältlich in 5%, 20%, 35% und 50% Transmission.",
+    "cat_polarizado_desc": "Die Definition des Wesentlichen. Präzise Dunkelheit, perfekte Sichtbarkeit.",
     "cat_polarizado_badge": "5 Referenzen",
     "cat_karbon_name": "Nano Carbon",
     "cat_karbon_desc": "Kohlenstoff-Nanopartikel-Technologie für maximale Solarabweisung ohne Signalstörung.",

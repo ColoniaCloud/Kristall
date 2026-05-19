@@ -6,11 +6,14 @@
     "about": "About",
     "blog": "Blog",
     "contact": "Contact",
-    "quote": "Get Quote"
+    "quote": "Get Quote",
+    "open_menu": "Open menu",
+    "close_menu": "Close menu",
+    "language": "Language"
   },
   "hero": {
     "eyebrow": "Advanced solutions for solar control, security and surface protection",
-    "headline": "Performance aplicada al confort",
+    "headline": "Performance applied to comfort",
     "subheadline": "Automotive, architectural and PPF films developed for the professional market.",
     "cta_primary": "View products",
     "cta_secondary": "Request quote",
@@ -68,7 +71,7 @@
     "vitral_badge": "Architecture",
     "available_in": "Available in",
     "cat_polarizado_name": "Premium",
-    "cat_polarizado_desc": "High solar rejection, available in 5%, 20%, 35% and 50% transmission.",
+    "cat_polarizado_desc": "The definition of the essential. Precise darkness, perfect visibility.",
     "cat_polarizado_badge": "5 references",
     "cat_karbon_name": "Nano Carbon",
     "cat_karbon_desc": "Carbon nanoparticle technology for maximum solar rejection without signal interference.",

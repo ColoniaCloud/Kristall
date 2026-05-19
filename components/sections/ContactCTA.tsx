@@ -1,32 +1,49 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import Image from 'next/image'
 
 export default function ContactCTA() {
   const t = useTranslations('cta')
   const [email, setEmail] = useState('')
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
+  const imageY = useTransform(scrollYProgress, [0, 1], ['10%', '-10%'])
 
   return (
-    <section className="bg-[#FFFFFF] border-t border-[0.5px] border-b border-[0.5px] border-[#E4E4E2] px-6 py-10">
+    <section ref={sectionRef} className="relative overflow-hidden border-t border-[0.5px] border-b border-[0.5px] border-[#E4E4E2] px-6 min-h-[50vh] flex items-center">
+      {/* Background Image con parallax */}
+      <motion.div className="absolute inset-[-2px]" style={{ y: imageY, transformOrigin: 'center bottom' }}>
+        <Image
+          src="/futermail.png"
+          fill
+          alt=""
+          className="object-cover object-bottom"
+        />
+      </motion.div>
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/50" />
+
+      {/* Content */}
       <motion.div 
-        className="max-w-[1160px] mx-auto"
-        initial={{ opacity: 0, y: 20 }}
+        className="relative z-10 max-w-[1160px] mx-auto"
+        initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
       >
       <div className="flex justify-between items-center gap-6">
         {/* Izquierda */}
         <div>
           <h2 
-            className="text-xl font-medium text-[#0A0A0A] mb-1.5 tracking-tight"
+            className="text-2xl font-medium text-white mb-1.5 tracking-tight"
             style={{ fontFamily: 'var(--font-display)' }}
           >
             {t('title')}
           </h2>
-          <p className="text-sm text-[#5C5C5C]">
+          <p className="text-[15px] text-white/70">
             {t('subtitle')}
           </p>
         </div>
@@ -38,9 +55,9 @@ export default function ContactCTA() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder={t('placeholder')}
-            className="border border-[#C8C8C4] rounded-lg px-3 py-2.5 text-sm bg-[#F2F2F0] w-48 outline-none focus:border-[#0A0A0A] transition-colors"
+            className="border border-white/30 rounded-lg px-3 py-2.5 text-[15px] bg-white/10 text-white placeholder:text-white/40 w-72 outline-none focus:border-white/70 transition-colors backdrop-blur-sm"
           />
-          <button className="bg-[#0A0A0A] text-white px-6 py-2.5 rounded-lg text-sm font-medium tracking-wide hover:opacity-85 transition-opacity">
+          <button className="bg-white text-[#0A0A0A] px-6 py-2.5 rounded-lg text-[15px] font-medium tracking-wide hover:bg-white/90 transition-opacity">
             {t('button')}
           </button>
         </div>
