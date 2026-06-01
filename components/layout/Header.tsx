@@ -5,16 +5,11 @@ import { useTranslations } from 'next-intl'
 import { Link, useRouter, usePathname } from '@/i18n/routing'
 import Image from 'next/image'
 import LanguageSelector from '@/components/common/LanguageSelector'
-import { ShoppingCart, Menu, X } from 'lucide-react'
-import { useCart } from '@/lib/cart'
-import CartDrawer from '@/components/cart/CartDrawer'
+import { Menu, X } from 'lucide-react'
 import { useLocale } from 'next-intl'
 
 export default function Header() {
   const t = useTranslations('nav')
-  const tCart = useTranslations('cart')
-  const { items, openCart } = useCart()
-  const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
   const [mobileOpen, setMobileOpen] = useState(false)
   const pathname = usePathname()
   const locale = useLocale() as 'es' | 'en' | 'de'
@@ -69,23 +64,11 @@ export default function Header() {
           {/* Desktop right */}
           <div className="hidden md:flex items-center gap-4">
             <LanguageSelector />
-            <button type="button" onClick={openCart} className="relative text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" aria-label={tCart('open_cart')}>
-              <ShoppingCart size={16} />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#0A0A0A] text-white text-[9px] flex items-center justify-center">{totalItems}</span>
-              )}
-            </button>
-            <Link href="/carrito" className="bg-[#0A0A0A] text-white px-6 py-3 rounded-lg text-[15px] font-medium tracking-wide hover:opacity-85 transition-opacity">{t('quote')}</Link>
+            <Link href="/contacto" className="bg-[#0A0A0A] text-white px-6 py-3 rounded-lg text-[15px] font-medium tracking-wide hover:opacity-85 transition-opacity">{t('quote')}</Link>
           </div>
 
           {/* Mobile right */}
           <div className="flex md:hidden items-center gap-3">
-            <button type="button" onClick={openCart} className="relative text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors" aria-label={tCart('open_cart')}>
-              <ShoppingCart size={16} />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#0A0A0A] text-white text-[9px] flex items-center justify-center">{totalItems}</span>
-              )}
-            </button>
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
@@ -155,7 +138,7 @@ export default function Header() {
             {/* CTA */}
             <div className="mt-auto pt-8">
               <Link
-                href="/carrito"
+                href="/contacto"
                 onClick={() => setMobileOpen(false)}
                 className="block w-full bg-[#0A0A0A] text-white text-center py-4 text-base font-medium rounded-lg hover:opacity-85 transition-opacity"
               >
@@ -165,8 +148,6 @@ export default function Header() {
           </div>
         </div>
       )}
-
-      <CartDrawer />
     </>
   )
 }

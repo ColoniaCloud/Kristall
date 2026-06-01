@@ -60,7 +60,7 @@ export async function sendLeadConfirmation(lead: {
     subject: 'Recibimos tu consulta — Kristall Film',
     html: `
       <h2>Hola ${lead.name},</h2>
-      <p>Recibimos tu consulta y te contactaremos en las próximas 24 horas.</p>
+      <p>Recibimos tu consulta y te contactaremos a la brevedad.</p>
       <p>Gracias por tu interés en Kristall Film.</p>
       <br/>
       <p style="color:#9A9A9A;font-size:12px">Kristall Film — Tecnología alemana de precisión</p>
