@@ -14,9 +14,9 @@ export default function Hero() {
   const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
 
   const filmCards = [
-    { name: t('card1_sku'), sub: t('card1_label'), tint: '#0a0a0a', opacity: 0.5, transparent: false },
-    { name: t('card2_sku'), sub: t('card2_label'), tint: '#0a0a0a', opacity: 0.2, transparent: false },
-    { name: t('card3_sku'), sub: t('card3_label'), tint: null, opacity: 0, transparent: true },
+    { name: t('card1_sku'), sub: t('card1_label'), tint: '#0a0a0a', opacity: 0.5, transparent: false, ring: 'ring-1 ring-inset ring-white/10' },
+    { name: t('card2_sku'), sub: t('card2_label'), tint: '#0a0a0a', opacity: 0.2, transparent: false, ring: 'ring-1 ring-inset ring-white/10' },
+    { name: t('card3_sku'), sub: t('card3_label'), tint: null, opacity: 0, transparent: true, ring: 'ring-1 ring-inset ring-white/15' },
   ]
 
   return (
@@ -72,8 +72,8 @@ export default function Hero() {
       </motion.p>
 
       {/* Buttons */}
-      <motion.div 
-        className="flex gap-3 mb-8"
+      <motion.div
+        className="flex flex-wrap gap-3 mb-8"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.5 }}
@@ -86,7 +86,7 @@ export default function Hero() {
         </Link>
         <Link
           href="/carrito"
-          className="border border-white/50 text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:bg-white hover:text-[#0A0A0A] transition-all duration-200"
+          className="border border-white/50 text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:bg-[#0A0A0A] hover:border-[#0A0A0A] hover:text-white transition-all duration-200"
         >
           {t('cta_secondary')}
         </Link>
@@ -103,12 +103,12 @@ export default function Hero() {
           {filmCards.map((card, index) => (
             <div
               key={index}
-              className="bg-white/10 border border-white/20 backdrop-blur-sm rounded-lg p-3 transition-all duration-200 hover:bg-white/15"
+              className="bg-white/10 border border-white/40 backdrop-blur-sm rounded-lg p-2 sm:p-3 transition-all duration-200 hover:bg-white/15"
             >
               {card.transparent ? (
-                <div className="h-14 rounded mb-2 border border-[#E4E4E2]" />
+                <div className={`h-14 rounded mb-2 border border-[#E4E4E2] ${card.ring}`} />
               ) : (
-                <div className="h-14 rounded mb-2" style={{ backgroundColor: card.tint!, opacity: card.opacity }} />
+                <div className={`h-14 rounded mb-2 ${card.ring}`} style={{ backgroundColor: card.tint!, opacity: card.opacity }} />
               )}
               <div className="text-sm text-white/90 mb-0.5" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, letterSpacing: '-0.01em' }}>{card.name}</div>
               <div className="text-xs text-white/60">{card.sub}</div>

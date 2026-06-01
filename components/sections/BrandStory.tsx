@@ -106,7 +106,7 @@ export default function BrandStory() {
           <div className="p-4">
             <Link
               href="/contacto"
-              className="block w-full bg-[#0A0A0A] text-white text-[15px] font-medium text-center py-3 rounded-lg hover:bg-[#1A1A1A] transition-colors"
+              className="btn-primary block w-full text-white text-[15px] font-medium text-center py-3 rounded-lg transition-all"
             >
               {t('contact_btn')}
             </Link>

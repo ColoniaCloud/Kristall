@@ -45,7 +45,7 @@ export default function ProductActions({ sku, name, category, inStock }: Product
 
       <Link
         href={`/contacto?producto=${sku}`}
-        className="w-full bg-[#0A0A0A] text-white px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:opacity-85 transition-opacity"
+        className="btn-primary w-full text-white px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-all"
       >
         <MessageSquare size={15} />
         {t('consult_product')}

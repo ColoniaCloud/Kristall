@@ -64,7 +64,7 @@ export default function Header() {
           {/* Desktop right */}
           <div className="hidden md:flex items-center gap-4">
             <LanguageSelector />
-            <Link href="/contacto" className="bg-[#0A0A0A] text-white px-6 py-3 rounded-lg text-[15px] font-medium tracking-wide hover:opacity-85 transition-opacity">{t('quote')}</Link>
+            <Link href="/contacto" className="btn-primary text-white px-4 py-1.5 rounded-lg text-xs font-medium tracking-wide transition-all">{t('quote')}</Link>
           </div>
 
           {/* Mobile right */}
@@ -140,7 +140,7 @@ export default function Header() {
               <Link
                 href="/contacto"
                 onClick={() => setMobileOpen(false)}
-                className="block w-full bg-[#0A0A0A] text-white text-center py-4 text-base font-medium rounded-lg hover:opacity-85 transition-opacity"
+                className="btn-primary block w-full text-white text-center py-4 text-base font-medium rounded-lg transition-all"
               >
                 {t('quote')}
               </Link>

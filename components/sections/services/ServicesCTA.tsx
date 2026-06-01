@@ -22,7 +22,7 @@ export default function ServicesCTA() {
         <div className="flex flex-wrap gap-3 justify-center">
           <Link
             href="/contacto?servicio=software"
-            className="inline-block bg-[#0A0A0A] text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:bg-[#2a2a2a] transition-colors"
+            className="btn-primary inline-block text-white px-6 py-3 rounded-lg text-[15px] font-medium transition-all"
           >
             {t('final_cta1')}
           </Link>

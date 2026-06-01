@@ -34,10 +34,10 @@ export default function ContactCTA() {
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
-      <div className="flex justify-between items-center gap-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         {/* Izquierda */}
         <div>
-          <h2 
+          <h2
             className="text-2xl font-medium text-white mb-1.5 tracking-tight"
             style={{ fontFamily: 'var(--font-display)' }}
           >
@@ -49,15 +49,15 @@ export default function ContactCTA() {
         </div>
 
         {/* Derecha: Form */}
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center w-full md:w-auto">
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder={t('placeholder')}
-            className="border border-white/30 rounded-lg px-3 py-2.5 text-[15px] bg-white/10 text-white placeholder:text-white/40 w-72 outline-none focus:border-white/70 transition-colors backdrop-blur-sm"
+            className="border border-white/30 rounded-lg px-3 py-2.5 text-[15px] bg-white/10 text-white placeholder:text-white/40 flex-1 md:w-72 outline-none focus:border-white/70 transition-colors backdrop-blur-sm"
           />
-          <button className="bg-white text-[#0A0A0A] px-6 py-2.5 rounded-lg text-[15px] font-medium tracking-wide hover:bg-white/90 transition-opacity">
+          <button className="bg-white text-[#0A0A0A] px-6 py-2.5 rounded-lg text-[15px] font-medium tracking-wide hover:bg-white/90 transition-opacity flex-shrink-0">
             {t('button')}
           </button>
         </div>
