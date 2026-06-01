@@ -71,7 +71,7 @@ export default function StatsRow() {
         {loopedCategories.map((cat, i) => (
           <Link
             key={`${cat.slug}-${i}`}
-            href={`/productos/${cat.slug}`}
+            href={`/productos/categorias/${cat.slug}`}
             className="group flex-shrink-0 w-1/2 flex items-center justify-center py-5 px-4 transition-all duration-200 hover:bg-[#F2F2F0]"
             draggable={false}
           >
@@ -91,7 +91,7 @@ export default function StatsRow() {
         {categories.map((cat) => (
           <Link
             key={cat.slug}
-            href={`/productos/${cat.slug}`}
+            href={`/productos/categorias/${cat.slug}`}
             className="group flex items-center justify-center py-5 px-4 transition-all duration-200 hover:bg-[#F2F2F0]"
           >
             <Image

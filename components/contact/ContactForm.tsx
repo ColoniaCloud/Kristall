@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Mail, Clock, MapPin, Loader2, CheckCircle } from 'lucide-react'
+import { Mail, Clock, Loader2, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 

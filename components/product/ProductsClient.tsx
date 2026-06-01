@@ -37,6 +37,11 @@ export default function ProductsClient({ products }: ProductsClientProps) {
     { label: t('filter_todos'), value: 'all' },
     { label: '5%', value: '5' },
     { label: '15%', value: '15' },
+    { label: '30%', value: '30' },
+    { label: '35%', value: '35' },
+    { label: '46%', value: '46' },
+    { label: '50%', value: '50' },
+    { label: '75%', value: '75' },
     { label: '80%', value: '80' },
     { label: t('filter_sin_vlt'), value: 'none' },
   ]
@@ -45,6 +50,8 @@ export default function ProductsClient({ products }: ProductsClientProps) {
     { label: t('filter_todos'), value: 'all' },
     { label: '99%', value: '99' },
     { label: '92%', value: '92' },
+    { label: '81%', value: '81' },
+    { label: '56%', value: '56' },
     { label: t('filter_sin_uv'), value: 'none' },
   ]
 

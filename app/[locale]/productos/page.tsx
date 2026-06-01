@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import ProductsHero from '@/components/product/ProductsHero'
 import ProductsClient, { type ProductItem } from '@/components/product/ProductsClient'
+import CatalogViewer from '@/components/sections/CatalogViewer'
 
 export const revalidate = 3600
 
@@ -46,6 +47,7 @@ export default async function ProductsPage() {
   return (
     <div className="min-h-screen bg-[#F2F2F0]">
       <ProductsHero />
+      <CatalogViewer />
       <ProductsClient products={serialized} />
     </div>
   )
