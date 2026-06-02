@@ -85,7 +85,7 @@ export default function Hero() {
           {t('cta_primary')}
         </Link>
         <Link
-          href="/carrito"
+          href="/contacto"
           className="border border-white/50 text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:bg-[#0A0A0A] hover:border-[#0A0A0A] hover:text-white transition-all duration-200"
         >
           {t('cta_secondary')}

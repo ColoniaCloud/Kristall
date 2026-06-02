@@ -42,6 +42,14 @@ export default function ProductsGrid() {
       description: t('cat_polarizado_desc'),
     },
     {
+      name: t('cat_krypton_name'),
+      category: 'krypton' as const,
+      vlt: 15, uv: 99, irr: 95, sku: 'KS4', inStock: true,
+      vlts: [15],
+      badge: t('cat_krypton_badge'), slug: 'ks4',
+      description: t('cat_krypton_desc'),
+    },
+    {
       name: t('cat_karbon_name'),
       category: 'karbon' as const,
       vlt: 20, uv: 99, irr: 85, sku: 'KARBON01', inStock: true,
@@ -56,14 +64,6 @@ export default function ProductsGrid() {
       vlts: [5, 15],
       badge: t('cat_keramx_badge'), slug: 'keramx01',
       description: t('cat_keramx_desc'),
-    },
-    {
-      name: t('cat_krypton_name'),
-      category: 'krypton' as const,
-      vlt: 15, uv: 99, irr: 95, sku: 'KS4', inStock: true,
-      vlts: [15],
-      badge: t('cat_krypton_badge'), slug: 'ks4',
-      description: t('cat_krypton_desc'),
     },
     {
       name: t('cat_ppf_name'),

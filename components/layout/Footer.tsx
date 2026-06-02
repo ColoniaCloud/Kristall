@@ -19,7 +19,7 @@ export default function Footer() {
               className="h-[26px] w-auto"
             />
           </div>
-          <p className="text-sm text-white/35 leading-relaxed">
+          <p className="text-sm text-white/40 leading-relaxed">
             {t('tagline')}
           </p>
         </div>

@@ -82,7 +82,7 @@ export default function CatalogViewer() {
                   <span className="w-3 h-[2px] rounded-sm bg-[#E6A800] block" />
                 </div>
                 <p className="text-[11px] uppercase tracking-[0.12em] text-white/40 font-medium">
-                  Catálogo Kristall Film 2025
+                  Catálogo Kristall Film 2026
                 </p>
               </div>
               <div className="flex items-center gap-1">
@@ -114,7 +114,7 @@ export default function CatalogViewer() {
                 frameBorder="0"
                 allowFullScreen
                 className="w-full h-full border-0"
-                title="Catálogo Kristall Film 2025"
+                title="Catálogo Kristall Film 2026"
               />
             </div>
 

@@ -48,7 +48,13 @@ export default async function CategoriaPage({ params }: PageProps) {
   const meta = getCategoryMeta(categoria)
   if (!meta) notFound()
 
-  const products = await getProductsByCategory(categoria)
+  const rawProducts = await getProductsByCategory(categoria)
+  const products = [...rawProducts].sort((a, b) => {
+    if (a.vlt == null && b.vlt == null) return 0
+    if (a.vlt == null) return 1
+    if (b.vlt == null) return -1
+    return (a.vlt as number) - (b.vlt as number)
+  })
 
   return (
     <div className="min-h-screen bg-[#F2F2F0]">

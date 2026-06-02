@@ -24,6 +24,9 @@
   --de-black: #1A1A1A;
   --de-red: #CC0000;
   --de-gold: #E6A800;
+  --text-on-dark: rgba(255, 255, 255, 0.85);
+  --text-on-dark-secondary: rgba(255, 255, 255, 0.55);
+  --text-on-dark-muted: rgba(255, 255, 255, 0.35);
   --r: 8px;
   --rl: 12px;
   --font-display: 'Clash Display', sans-serif;

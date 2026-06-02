@@ -31,7 +31,14 @@ export default async function ProductsPage() {
     limit: 100,
   })
 
-  const serialized = (products as unknown as ProductItem[]).map((p) => ({
+  const sorted = (products as unknown as ProductItem[]).sort((a, b) => {
+    if (a.vlt == null && b.vlt == null) return 0
+    if (a.vlt == null) return 1
+    if (b.vlt == null) return -1
+    return a.vlt - b.vlt
+  })
+
+  const serialized = sorted.map((p) => ({
     id: p.id,
     name_es: p.name_es,
     category: p.category,
