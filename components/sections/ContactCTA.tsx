@@ -13,7 +13,7 @@ export default function ContactCTA() {
   const imageY = useTransform(scrollYProgress, [0, 1], ['10%', '-10%'])
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden px-6 min-h-[50vh] flex items-center" style={{ borderTop: '0.5px solid #E4E4E2', borderBottom: '0.5px solid #E4E4E2' }}>
+    <section ref={sectionRef} className="relative overflow-hidden px-6 min-h-[50vh] flex items-center" style={{ borderTop: '0.5px solid #E4E4E2' }}>
       {/* Background Image con parallax */}
       <motion.div className="absolute inset-[-2px]" style={{ y: imageY, transformOrigin: 'center bottom' }}>
         <Image
