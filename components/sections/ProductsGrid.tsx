@@ -33,37 +33,56 @@ export default function ProductsGrid() {
   const t = useTranslations('products')
 
   const products = [
+    // Standard
+    {
+      name: t('cat_klass_name'),
+      category: 'klass' as const,
+      vlt: 5, uv: 99, irr: 60, sku: 'KLASS05', inStock: true,
+      vlts: [5, 20, 35],
+      badge: t('cat_klass_badge'), slug: 'klass05',
+      description: t('cat_klass_desc'),
+    },
     {
       name: t('cat_polarizado_name'),
       category: 'klar' as const,
       vlt: 5, uv: 99, irr: 73, sku: 'KPRO05', inStock: true,
-      vlts: [5, 15],
+      vlts: [5, 20, 35, 50],
       badge: t('cat_polarizado_badge'), slug: 'kpro05',
       description: t('cat_polarizado_desc'),
     },
-    {
-      name: t('cat_krypton_name'),
-      category: 'krypton' as const,
-      vlt: 15, uv: 99, irr: 95, sku: 'KS4', inStock: true,
-      vlts: [15],
-      badge: t('cat_krypton_badge'), slug: 'ks4',
-      description: t('cat_krypton_desc'),
-    },
+    // Premium
     {
       name: t('cat_karbon_name'),
       category: 'karbon' as const,
-      vlt: 20, uv: 99, irr: 85, sku: 'KARBON01', inStock: true,
-      vlts: [5, 15, 80],
-      badge: t('cat_karbon_badge'), slug: 'karbon01',
+      vlt: 35, uv: 99, irr: 85, sku: 'KARBON35', inStock: true,
+      vlts: [5, 20, 35],
+      badge: t('cat_karbon_badge'), slug: 'karbon35',
       description: t('cat_karbon_desc'),
     },
     {
       name: t('cat_keramx_name'),
       category: 'keramx' as const,
-      vlt: 35, uv: 99, irr: 97, sku: 'KERAMX01', inStock: true,
-      vlts: [5, 15],
-      badge: t('cat_keramx_badge'), slug: 'keramx01',
+      vlt: 35, uv: 99, irr: 97, sku: 'KERAMX35', inStock: true,
+      vlts: [5, 20, 35, 50],
+      badge: t('cat_keramx_badge'), slug: 'keramx35',
       description: t('cat_keramx_desc'),
+    },
+    // Ultra
+    {
+      name: t('cat_krypton_name'),
+      category: 'krypton' as const,
+      vlt: 5, uv: 99, irr: 95, sku: 'KS05', inStock: true,
+      vlts: [5, 35, 50, 75],
+      badge: t('cat_krypton_badge'), slug: 'ks05',
+      description: t('cat_krypton_desc'),
+    },
+    {
+      name: t('cat_kaiser_name'),
+      category: 'kaiser' as const,
+      vlt: 10, uv: 99, irr: 98, sku: 'KAISER10', inStock: true,
+      vlts: [10, 20, 40, 70],
+      badge: t('cat_kaiser_badge'), slug: 'kaiser10',
+      description: t('cat_kaiser_desc'),
     },
     {
       name: t('cat_ppf_name'),
