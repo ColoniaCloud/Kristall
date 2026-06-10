@@ -21,7 +21,7 @@ export interface ProductCardProps {
   badge?: string
 }
 
-const badgeClass = "text-[10px] bg-[#F2F2F0] border border-[#E4E4E2] rounded px-1.5 py-0.5 text-[#5C5C5C]"
+const badgeClass = "text-[10px] bg-[#0A0A0A] text-white rounded-full px-2.5 py-0.5 font-medium"
 const varBadgeClass = "text-[11px] font-medium bg-[#0A0A0A]/[0.04] border border-[#0A0A0A]/[0.10] rounded px-2 py-0.5 text-[#0A0A0A]"
 
 export default function ProductCard({

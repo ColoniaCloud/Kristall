@@ -7,7 +7,7 @@ import { SlidersHorizontal, X } from 'lucide-react'
 import ProductCard from '@/components/product/ProductCard'
 import { CATEGORIES, getCategoryMeta } from '@/lib/categories'
 
-const SECTION_ORDER = ['kaiser', 'keramx', 'karbon', 'krypton', 'klar', 'ppf', 'klass', 'vitral']
+const SECTION_ORDER = ['kaiser', 'keramx', 'karbon', 'krypton', 'klar', 'klass', 'ppf', 'vitral']
 
 export interface ProductItem {
   id: string
@@ -248,7 +248,7 @@ export default function ProductsClient({ products }: ProductsClientProps) {
                       sizes="128px"
                     />
                   </div>
-                  <p className="text-[11px] uppercase tracking-[0.12em] text-[#9A9A9A] mb-2 font-medium">
+                  <p className="text-[13px] font-semibold text-[#0A0A0A] mb-2">
                     {meta!.tagline}
                   </p>
                   <p className="text-sm text-[#5C5C5C] max-w-[640px] leading-relaxed">
