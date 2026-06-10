@@ -3,10 +3,7 @@ import { useTranslations } from 'next-intl'
 export default function BrandHistory() {
   const t = useTranslations('about')
   return (
-    <section
-      className="bg-[var(--surface)] border-b border-[#E4E4E2]"
-      style={{ padding: '64px 40px' }}
-    >
+    <section className="bg-[var(--surface)] border-b border-[#E4E4E2] py-10 px-6 md:py-16 md:px-10">
       <div className="max-w-[1160px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
 
         {/* Columna izquierda */}

@@ -13,7 +13,7 @@ export default function AboutLayers() {
   ]
 
   return (
-    <section className="bg-[var(--surface)]" style={{ padding: '0 40px 64px' }}>
+    <section className="bg-[var(--surface)] pb-10 px-6 md:pb-16 md:px-10">
       <div className="max-w-[1160px] mx-auto">
         <div className="bg-[#F2F2F0] border border-[#E4E4E2] rounded-2xl p-6">
           <div className="text-sm font-medium mb-5 text-[#0A0A0A]">

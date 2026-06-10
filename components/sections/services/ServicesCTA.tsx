@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl'
 export default function ServicesCTA() {
   const t = useTranslations('services_page')
   return (
-    <section className="bg-[var(--bg)]" style={{ padding: '64px 40px' }}>
+    <section className="bg-[var(--bg)] py-10 px-6 md:py-16 md:px-10">
       <div className="max-w-[640px] mx-auto text-center">
         <h2
           className="text-[#0A0A0A] mb-4"

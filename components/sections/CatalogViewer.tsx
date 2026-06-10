@@ -21,7 +21,7 @@ export default function CatalogViewer() {
   return (
     <>
       {/* Sección de entrada */}
-      <section className="bg-[#0A0A0A] py-16 px-10">
+      <section className="bg-[#0A0A0A] py-10 md:py-16 px-6 md:px-10">
         <div className="max-w-[1160px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
           <div>
             <p className="text-[11px] uppercase tracking-[0.14em] text-white/30 font-medium mb-3">
@@ -38,7 +38,7 @@ export default function CatalogViewer() {
               las referencias, especificaciones y garantías.
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+          <div className="flex flex-col xs:flex-row sm:flex-row gap-3 w-full sm:w-auto flex-shrink-0">
             <button
               onClick={() => setOpen(true)}
               className="bg-white text-[#0A0A0A] px-6 py-3 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2"

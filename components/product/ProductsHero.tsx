@@ -43,7 +43,7 @@ export default function ProductsHero() {
   }
 
   return (
-    <section className="relative h-[420px] overflow-hidden">
+    <section className="relative min-h-[280px] md:h-[420px] overflow-hidden">
       {/* Imagen actual */}
       <Image
         src={HERO_IMAGES[current]}
@@ -72,7 +72,7 @@ export default function ProductsHero() {
       <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/40 to-black/15" />
 
       {/* Contenido */}
-      <div className="relative z-10 h-full flex flex-col justify-end pb-12 px-10 max-w-[1160px] mx-auto">
+      <div className="relative z-10 h-full flex flex-col justify-end pb-8 md:pb-12 px-6 md:px-10 max-w-[1160px] mx-auto">
         <p className="section-label mb-3" style={{ color: 'rgba(255,255,255,0.4)' }}>
           {t('hero_label')}
         </p>

@@ -72,7 +72,7 @@ export default function ProductsClient({ products }: ProductsClientProps) {
     <div>
       {/* Barra de filtros sticky */}
       <div className="bg-white border-b border-[#E4E4E2] sticky top-[56px] z-40">
-        <div className="px-10 py-4 max-w-[1160px] mx-auto flex flex-col gap-3">
+        <div className="px-4 md:px-10 py-3 md:py-4 max-w-[1160px] mx-auto flex flex-col gap-2 md:gap-3">
 
           {/* Fila 1 — Categoría */}
           <div className="flex items-center flex-wrap gap-2">
@@ -146,7 +146,7 @@ export default function ProductsClient({ products }: ProductsClientProps) {
       </div>
 
       {/* Grid */}
-      <div className="px-10 py-10 max-w-[1160px] mx-auto">
+      <div className="px-4 md:px-10 py-6 md:py-10 max-w-[1160px] mx-auto">
         {filtered.length === 0 ? (
           <div className="text-center py-20 flex flex-col items-center gap-4">
             <p className="text-sm text-[#9A9A9A]">{t('filter_empty')}</p>

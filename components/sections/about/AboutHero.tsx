@@ -4,8 +4,7 @@ export default function AboutHero() {
   const t = useTranslations('about')
   return (
     <section
-      className="relative overflow-hidden bg-[#1A1A1A]"
-      style={{ minHeight: '520px', padding: '100px 40px 80px' }}
+      className="relative overflow-hidden bg-[#1A1A1A] min-h-[360px] md:min-h-[520px] pt-16 md:pt-[100px] px-6 md:px-10 pb-12 md:pb-20"
     >
       {/* Video de fondo */}
       <video
@@ -42,7 +41,7 @@ export default function AboutHero() {
           {t('hero_headline')}
         </h1>
 
-        <p className="text-[15px] text-white max-w-[440px] leading-relaxed">
+        <p className="text-sm md:text-[15px] text-white/80 max-w-[440px] leading-relaxed">
           {t('hero_body')}
         </p>
       </div>

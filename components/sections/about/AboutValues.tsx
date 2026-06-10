@@ -11,7 +11,7 @@ export default function AboutValues() {
   ]
 
   return (
-    <section className="bg-[var(--bg)]" style={{ padding: '30px 40px 64px' }}>
+    <section className="bg-[var(--bg)] pt-6 pb-10 px-6 md:pt-8 md:pb-16 md:px-10">
       <div className="max-w-[1160px] mx-auto">
         <div className="section-label mb-6">
           {t('values_label')}

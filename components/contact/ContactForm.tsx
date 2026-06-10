@@ -65,7 +65,7 @@ export default function ContactForm() {
   }
 
   const inputClass =
-    'w-full border border-[#E4E4E2] rounded-lg px-3 py-2.5 text-[15px] bg-[#F2F2F0] outline-none focus:border-[#0A0A0A] transition-colors'
+    'w-full border border-[#E4E4E2] rounded-lg px-3 py-2.5 text-base bg-[#F2F2F0] outline-none focus:border-[#0A0A0A] transition-colors'
 
   const infoCards = [
     { Icon: Mail, labelKey: 'info_email_label', valueKey: 'info_email_value' },
@@ -73,7 +73,7 @@ export default function ContactForm() {
   ] as const
 
   return (
-    <section className="bg-[var(--bg)]" style={{ padding: '64px 40px' }}>
+    <section className="bg-[var(--bg)] py-10 px-4 md:py-16 md:px-10">
       <div className="max-w-[1160px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch">
         {/* Columna izquierda */}
         <div className="flex flex-col">

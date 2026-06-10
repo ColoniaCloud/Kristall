@@ -13,10 +13,7 @@ export default function ServicesPolarizedApp() {
   ]
 
   return (
-    <section
-      className="bg-[#0A0A0A]"
-      style={{ padding: '64px 40px' }}
-    >
+    <section className="bg-[#0A0A0A] py-10 px-6 md:py-16 md:px-10">
       <div className="max-w-[1160px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         {/* Columna izquierda — imagen */}
         <div className="relative h-[440px] rounded-2xl overflow-hidden bg-[#1A1A1A] border border-white/8">

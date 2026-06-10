@@ -5,10 +5,7 @@ import { useTranslations } from 'next-intl'
 export default function ServicesHero() {
   const t = useTranslations('services_page')
   return (
-    <section
-      className="relative overflow-hidden bg-[#1A1A1A]"
-      style={{ padding: '72px 40px 64px' }}
-    >
+    <section className="relative overflow-hidden bg-[#1A1A1A] pt-14 md:pt-[72px] px-6 md:px-10 pb-12 md:pb-16">
       <Image
         src="/porsche.png"
         alt=""

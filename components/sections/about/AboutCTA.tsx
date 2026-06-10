@@ -4,11 +4,8 @@ import { useTranslations } from 'next-intl'
 export default function AboutCTA() {
   const t = useTranslations('about')
   return (
-    <section style={{ margin: '0 40px 40px' }}>
-      <div
-        className="max-w-[1160px] mx-auto bg-[#1A1A1A] rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-8"
-        style={{ padding: '40px' }}
-      >
+    <section className="px-4 pb-4 md:px-10 md:pb-10">
+      <div className="max-w-[1160px] mx-auto bg-[#1A1A1A] rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6 p-6 md:p-10">
         <div>
           <h3
             className="text-white mb-2"

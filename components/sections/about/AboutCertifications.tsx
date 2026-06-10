@@ -11,10 +11,7 @@ export default function AboutCertifications() {
   ]
 
   return (
-    <section
-      className="bg-[var(--bg)] border-t border-[#E4E4E2]"
-      style={{ padding: '64px 40px' }}
-    >
+    <section className="bg-[var(--bg)] border-t border-[#E4E4E2] py-10 px-6 md:py-16 md:px-10">
       <div className="max-w-[1160px] mx-auto">
         <div className="section-label mb-6">
           {t('certs_label')}
