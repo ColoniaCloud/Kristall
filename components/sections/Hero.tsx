@@ -15,7 +15,7 @@ export default function Hero() {
 
   const filmCards = [
     { name: 'KRYPTON', sub: 'Seguridad y confort',    badge: 'PREMIUM', bg: 'bg-black/75' },
-    { name: 'KAISER',  sub: 'Máxima protección UV',   badge: 'ULTRA',   bg: 'bg-black/40' },
+    { name: 'KAISER',  sub: 'Máxima protección solar y rechazo IR', badge: 'ULTRA', bg: 'bg-black/40' },
     { name: 'PPF',     sub: 'Protección de pintura',  badge: 'ULTRA',   bg: 'bg-transparent' },
   ]
 
