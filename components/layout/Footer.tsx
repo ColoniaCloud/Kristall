@@ -7,10 +7,10 @@ export default function Footer() {
 
   return (
     <footer className="mt-auto bg-[#1A1A1A] px-8 py-8 pb-6">
-      <div className="mx-auto max-w-[1160px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="mx-auto max-w-[1160px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center md:text-left">
         {/* Col 1: Branding */}
         <div>
-          <div className="flex items-center mb-3">
+          <div className="flex items-center justify-center md:justify-start mb-3">
             <Image
               src="/LogoPlano.png"
               alt="Kristall"
