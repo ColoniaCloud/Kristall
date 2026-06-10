@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Download, BookOpen, X } from 'lucide-react'
 
 const PDF_URL = '/catalogo/kristall-catalogo-2025.pdf'
-const FLIPBOOK_URL = 'https://heyzine.com/flip-book/99d9661b85.html'
+const FLIPBOOK_URL = 'https://heyzine.com/flip-book/8e70b24a14.html'
 
 export default function CatalogViewer() {
   const [open, setOpen] = useState(false)

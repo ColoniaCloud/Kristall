@@ -1,23 +1,28 @@
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 import { getCategoryMeta, CATEGORIES } from '@/lib/categories'
 import ProductCard from '@/components/product/ProductCard'
 import { Link } from '@/i18n/routing'
 import type { Product } from '@/types/product'
 
-export const revalidate = 0
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
 async function getProductsByCategory(categoria: string): Promise<Product[]> {
   try {
-    const base = process.env.NEXT_PUBLIC_SERVER_URL ?? 'http://localhost:3000'
-    const res = await fetch(
-      `${base}/api/products?where[active][equals]=true&where[category][equals]=${categoria}&limit=100&depth=0`,
-      { cache: 'no-store' },
-    )
-    if (!res.ok) return []
-    const data = await res.json()
-    return data.docs ?? []
+    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'products',
+      where: {
+        and: [
+          { active: { equals: true } },
+          { category: { equals: categoria } },
+        ],
+      },
+      limit: 100,
+    })
+    return docs as unknown as Product[]
   } catch {
     return []
   }
@@ -101,7 +106,7 @@ export default async function CategoriaPage({ params }: PageProps) {
       </section>
 
       {/* Grid de productos */}
-      <section className="px-10 py-12 max-w-[1160px] mx-auto">
+      <section className="px-4 md:px-10 py-10 md:py-12 max-w-[1160px] mx-auto">
         <div className="flex justify-between items-baseline mb-8">
           <div>
             <p className="section-label mb-1">
@@ -133,7 +138,7 @@ export default async function CategoriaPage({ params }: PageProps) {
                 key={p.id}
                 name={(p[`name_${locale}` as keyof Product] as string) || p.name_es}
                 category={p.category}
-                description={''}
+                description={(p[`description_${locale}` as keyof Product] as string) || p.description_es || meta.description}
                 vlt={p.vlt}
                 uv={p.uv}
                 irr={p.irr}
@@ -149,19 +154,17 @@ export default async function CategoriaPage({ params }: PageProps) {
 
       {/* Otras categorías */}
       <section className="pb-16">
-        <p className="section-label mb-5 px-10 max-w-[1160px] mx-auto">
+        <p className="section-label mb-5 px-4 md:px-10 max-w-[1160px] mx-auto">
           Otras líneas
         </p>
-        {/* Carrusel en móvil, flex-wrap en desktop */}
-        <div className="flex md:flex-wrap md:max-w-[1160px] md:mx-auto md:px-10 gap-3 overflow-x-auto md:overflow-x-visible px-10 pb-2 md:pb-0 scrollbar-none snap-x snap-mandatory md:snap-none">
+        <div className="flex md:flex-wrap md:max-w-[1160px] md:mx-auto md:px-10 gap-3 overflow-x-auto md:overflow-x-visible px-4 pb-2 md:pb-0 scrollbar-none snap-x snap-mandatory md:snap-none">
           {CATEGORIES.filter(c => c.slug !== categoria).map(c => (
             <Link
               key={c.slug}
               href={`/productos/categorias/${c.slug}`}
               className="flex-shrink-0 md:flex-shrink flex items-center gap-3 bg-white border border-[#E4E4E2] rounded-lg px-4 py-2.5 text-[#5C5C5C] hover:border-[#0A0A0A] hover:text-[#0A0A0A] transition-all shadow-[0_1px_3px_rgba(0,0,0,0.04)] snap-start"
             >
-              {/* Logo: w-15 h-7.5 en móvil (60×30), w-[60px] h-[30px] en desktop (150% de 40×20) */}
-              <div className="relative w-[60px] h-[30px] md:w-[60px] md:h-[30px]">
+              <div className="relative w-[60px] h-[30px]">
                 <Image src={c.logo} alt={c.name} fill className="object-contain object-left" sizes="60px" />
               </div>
               <span className="font-medium text-xs">{c.name}</span>
