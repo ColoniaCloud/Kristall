@@ -29,6 +29,18 @@ const btnInactive = 'bg-[#F2F2F0] text-[#5C5C5C] hover:bg-[#E8E8E6]'
 
 export default function ProductsClient({ products }: ProductsClientProps) {
   const t = useTranslations('products_page')
+  const tp = useTranslations('products')
+
+  const categoryDesc: Record<string, string> = {
+    klass:  tp('cat_klass_desc'),
+    klar:   tp('cat_polarizado_desc'),
+    karbon: tp('cat_karbon_desc'),
+    keramx: tp('cat_keramx_desc'),
+    krypton: tp('cat_krypton_desc'),
+    kaiser: tp('cat_kaiser_desc'),
+    ppf:    tp('cat_ppf_desc'),
+    vitral: tp('cat_vitral_desc'),
+  }
   const [activeCategory, setActiveCategory] = useState('all')
   const [activeVLT, setActiveVLT] = useState('all')
   const [activeUV, setActiveUV] = useState('all')
@@ -164,7 +176,7 @@ export default function ProductsClient({ products }: ProductsClientProps) {
                 key={p.id}
                 name={p.name_es}
                 category={p.category}
-                description={p.description_es}
+                description={p.description_es || categoryDesc[p.category] || ''}
                 vlt={p.vlt}
                 uv={p.uv}
                 irr={p.irr}

@@ -47,7 +47,7 @@ export default function ProductCard({
           <div className="relative w-20 h-8 mb-2">
             <Image src={getCategoryLogo(category)} alt={category} fill className="object-contain object-left" sizes="80px" />
           </div>
-          <p className="text-[15px] font-medium text-[#0A0A0A] mb-1">{name}</p>
+          <p className="text-[15px] font-medium text-[#6B6B6B] mb-1">{name}</p>
           <p className="text-sm text-[#5C5C5C] leading-relaxed mb-3 flex-1">{description}</p>
           {vlts && vlts.length > 0 ? (
             <div className="flex flex-wrap items-center gap-1.5 mb-3">
