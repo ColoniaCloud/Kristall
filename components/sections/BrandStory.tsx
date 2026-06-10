@@ -84,7 +84,7 @@ export default function BrandStory() {
       >
         {/* Card izquierda */}
         <motion.div 
-          className="bg-white border border-[0.5px] border-[#E4E4E2] rounded-xl p-6 shadow-[0_1px_3px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.04)] h-full"
+          className="bg-white border border-[0.5px] border-[#E4E4E2] rounded-xl p-6 shadow-[var(--shadow-card)] h-full"
           variants={fadeInUpVariants}
         >
           {mainCards[0].content}

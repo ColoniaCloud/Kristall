@@ -63,7 +63,7 @@ export default function StatsRow() {
   }, [])
 
   return (
-    <div className="bg-[#FFFFFF] border-b border-[0.5px] border-[#E4E4E2]">
+    <div className="bg-white border-b border-[0.5px] border-[#E4E4E2]">
       {/* Mobile: auto-scroll + draggable carousel */}
       <div
         ref={scrollRef}
