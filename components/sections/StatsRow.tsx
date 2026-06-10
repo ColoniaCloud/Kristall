@@ -5,12 +5,14 @@ import { Link } from '@/i18n/routing'
 import { useRef, useEffect } from 'react'
 
 const categories = [
-  { slug: 'klar',    image: '/cat/KLAR.png',    label: 'KLAR' },
-  { slug: 'karbon',  image: '/cat/KARBON.png',   label: 'KARBÖN' },
-  { slug: 'keramx',  image: '/cat/KERAMX.png',   label: 'KERAMX' },
-  { slug: 'krypton', image: '/cat/KRYPTON.png',  label: 'KRYPTON' },
-  { slug: 'ppf',     image: '/cat/PPF.png',       label: 'PPF' },
-  { slug: 'vitral',  image: '/cat/VITRAL.png',    label: 'VITRAL' },
+  { slug: 'klass',   image: '/cat/KLASS.png',    label: 'KLASS' },
+  { slug: 'klar',    image: '/cat/KLAR.png',      label: 'KLAR' },
+  { slug: 'karbon',  image: '/cat/KARBON.png',    label: 'KARBÖN' },
+  { slug: 'keramx',  image: '/cat/KERAMX.png',    label: 'KERAMX' },
+  { slug: 'krypton', image: '/cat/KRYPTON.png',   label: 'KRYPTON' },
+  { slug: 'kaiser',  image: '/cat/KAISER.png',    label: 'KAISER' },
+  { slug: 'ppf',     image: '/cat/PPF.png',        label: 'PPF' },
+  { slug: 'vitral',  image: '/cat/VITRAL.png',     label: 'VITRAL' },
 ]
 
 // Duplicamos para efecto de loop infinito
@@ -87,7 +89,7 @@ export default function StatsRow() {
       </div>
 
       {/* Desktop: 6-column grid */}
-      <div className="hidden md:grid max-w-[1160px] mx-auto grid-cols-6 px-6">
+      <div className="hidden md:grid max-w-[1160px] mx-auto grid-cols-8 px-6">
         {categories.map((cat) => (
           <Link
             key={cat.slug}

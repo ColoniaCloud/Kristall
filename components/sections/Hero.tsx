@@ -14,9 +14,9 @@ export default function Hero() {
   const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
 
   const filmCards = [
-    { name: t('card1_sku'), sub: t('card1_label'), tint: '#0a0a0a', opacity: 0.5, transparent: false, ring: 'ring-1 ring-inset ring-white/10' },
-    { name: t('card2_sku'), sub: t('card2_label'), tint: '#0a0a0a', opacity: 0.2, transparent: false, ring: 'ring-1 ring-inset ring-white/10' },
-    { name: t('card3_sku'), sub: t('card3_label'), tint: null, opacity: 0, transparent: true, ring: 'ring-1 ring-inset ring-white/15' },
+    { name: 'KRYPTON', sub: 'Seguridad y confort',    badge: 'PREMIUM', bg: 'bg-black/75' },
+    { name: 'KAISER',  sub: 'Máxima protección UV',   badge: 'ULTRA',   bg: 'bg-black/40' },
+    { name: 'PPF',     sub: 'Protección de pintura',  badge: 'ULTRA',   bg: 'bg-transparent' },
   ]
 
   return (
@@ -105,13 +105,13 @@ export default function Hero() {
               key={index}
               className="bg-white/10 border border-white/40 backdrop-blur-sm rounded-lg p-2 sm:p-3 transition-all duration-200 hover:bg-white/15"
             >
-              {card.transparent ? (
-                <div className={`h-14 rounded mb-2 border border-[#E4E4E2] ${card.ring}`} />
-              ) : (
-                <div className={`h-14 rounded mb-2 ${card.ring}`} style={{ backgroundColor: card.tint!, opacity: card.opacity }} />
-              )}
+              {/* Film simulation — mismo borde en las 3 para dar relieve */}
+              <div className={`h-14 rounded mb-2 border border-white/20 ring-1 ring-inset ring-white/10 ${card.bg}`} />
               <div className="text-sm text-white/90 mb-0.5" style={{ fontFamily: 'var(--font-display)', fontWeight: 600, letterSpacing: '-0.01em' }}>{card.name}</div>
-              <div className="text-xs text-white/60">{card.sub}</div>
+              <div className="text-xs text-white/60 mb-1.5">{card.sub}</div>
+              <span className="inline-block bg-black/80 text-white/70 text-[9px] font-semibold tracking-widest uppercase px-1.5 py-0.5 rounded">
+                {card.badge}
+              </span>
             </div>
           ))}
         </div>

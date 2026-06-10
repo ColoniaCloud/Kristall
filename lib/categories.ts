@@ -1,4 +1,4 @@
-export type CategorySlug = 'klar' | 'karbon' | 'keramx' | 'krypton' | 'ppf' | 'vitral'
+export type CategorySlug = 'klass' | 'klar' | 'karbon' | 'keramx' | 'krypton' | 'kaiser' | 'ppf' | 'vitral'
 
 export interface CategoryMeta {
   slug: CategorySlug
@@ -10,6 +10,14 @@ export interface CategoryMeta {
 }
 
 export const CATEGORIES: CategoryMeta[] = [
+  {
+    slug: 'klass',
+    name: 'KLASS',
+    tagline: 'Línea Estándar',
+    description: 'La línea de entrada de Kristall. Acabado Charcoal Black con construcción 1 ply y 3 años de garantía. Cobertura completa de los niveles de transmisión más demandados.',
+    image: '/cat/top-KLAR.jpg',
+    logo: '/cat/KLASS.png',
+  },
   {
     slug: 'klar',
     name: 'KLAR',
@@ -41,6 +49,14 @@ export const CATEGORIES: CategoryMeta[] = [
     description: 'Láminas de seguridad con tecnología Nano Ceramic. Retención de fragmentos en impacto con máximo rendimiento térmico.',
     image: '/cat/top-KRYPTON.jpg',
     logo: '/cat/KRYPTON.png',
+  },
+  {
+    slug: 'kaiser',
+    name: 'KAISER',
+    tagline: 'Sputtering Ceramic',
+    description: 'El techo técnico de Kristall. Tecnología Sputtering Ceramic con hasta 99% de rechazo infrarrojo y 99% de bloqueo UV. Claridad óptica superior con 10 años de garantía.',
+    image: '/cat/top-KERAMX.jpg',
+    logo: '/cat/KAISER.png',
   },
   {
     slug: 'ppf',

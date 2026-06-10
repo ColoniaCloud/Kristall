@@ -68,10 +68,12 @@ export const Products: CollectionConfig = {
       type: 'select',
       required: true,
       options: [
+        { label: 'KLASS', value: 'klass' },
         { label: 'KLAR', value: 'klar' },
         { label: 'KARBÖN', value: 'karbon' },
         { label: 'KERAMX', value: 'keramx' },
         { label: 'KRYPTON', value: 'krypton' },
+        { label: 'KAISER', value: 'kaiser' },
         { label: 'PPF', value: 'ppf' },
         { label: 'VITRAL', value: 'vitral' },
       ],
