@@ -138,7 +138,7 @@ export default async function CategoriaPage({ params }: PageProps) {
                 key={p.id}
                 name={(p[`name_${locale}` as keyof Product] as string) || p.name_es}
                 category={p.category}
-                description={(p[`description_${locale}` as keyof Product] as string) || p.description_es || meta.description}
+                description={(p[`description_${locale}` as keyof Product] as string) || meta.description}
                 vlt={p.vlt}
                 uv={p.uv}
                 irr={p.irr}
