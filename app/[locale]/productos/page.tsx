@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { buildAlternates } from '@/lib/seo'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import ProductsHero from '@/components/product/ProductsHero'
@@ -19,7 +20,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: m.title,
     description: m.description,
-    openGraph: { title: `${m.title} | Kristall Film`, description: m.description, url: `/${locale}/productos` },
+    alternates: buildAlternates('/productos', locale),
+    openGraph: { title: `${m.title} | Kristall Film`, description: m.description, url: `https://kristallfilm.com/${locale}/productos` },
   }
 }
 

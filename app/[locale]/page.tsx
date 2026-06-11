@@ -5,6 +5,7 @@ import BrandStory from '@/components/sections/BrandStory'
 import ProductsGrid from '@/components/sections/ProductsGrid'
 import ServicesSection from '@/components/sections/ServicesSection'
 import ContactCTA from '@/components/sections/ContactCTA'
+import { buildAlternates } from '@/lib/seo'
 
 const pageMeta: Record<string, { title: string; description: string }> = {
   es: { title: 'Inicio', description: 'Láminas polarizantes de tecnología alemana para automotriz, arquitectura y PPF. Distribuidor oficial en Argentina.' },
@@ -18,7 +19,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: m.title,
     description: m.description,
-    openGraph: { title: `${m.title} | Kristall Film`, description: m.description, url: `/${locale}` },
+    alternates: buildAlternates('', locale),
+    openGraph: { title: `${m.title} | Kristall Film`, description: m.description, url: `https://kristallfilm.com/${locale}` },
   }
 }
 

@@ -6,6 +6,7 @@ import { getCategoryMeta, CATEGORIES } from '@/lib/categories'
 import ProductCard from '@/components/product/ProductCard'
 import { Link } from '@/i18n/routing'
 import type { Product } from '@/types/product'
+import { buildAlternates } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -34,13 +35,27 @@ export async function generateStaticParams() {
   )
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ categoria: string }> }) {
-  const { categoria } = await params
+export async function generateMetadata({ params }: { params: Promise<{ locale: string; categoria: string }> }) {
+  const { locale, categoria } = await params
   const meta = getCategoryMeta(categoria)
   if (!meta) return {}
+  const title = `${meta.name} — ${meta.tagline}`
   return {
-    title: `${meta.name} — ${meta.tagline} | Kristall Film`,
+    title,
     description: meta.description,
+    alternates: buildAlternates(`/productos/categorias/${categoria}`, locale),
+    openGraph: {
+      title: `${title} | Kristall Film`,
+      description: meta.description,
+      url: `https://kristallfilm.com/${locale}/productos/categorias/${categoria}`,
+      images: [{ url: meta.image, width: 1200, height: 630, alt: `${meta.name} — Kristall Film` }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${title} | Kristall Film`,
+      description: meta.description,
+      images: [meta.image],
+    },
   }
 }
 

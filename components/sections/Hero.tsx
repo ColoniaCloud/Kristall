@@ -29,7 +29,7 @@ export default function Hero() {
         <Image
           src="/hero1.png"
           fill
-          alt=""
+          alt="Lámina de control solar Kristall Film aplicada en vehículo"
           priority
           className="object-cover object-center"
           style={{ transform: 'scaleX(-1)' }}

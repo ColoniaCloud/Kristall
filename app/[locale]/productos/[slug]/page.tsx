@@ -7,6 +7,7 @@ import { getTranslations } from 'next-intl/server'
 import { getCategoryImage, getCategoryLogo, getCategoryMeta } from '@/lib/categories'
 import ProductActions from '@/components/product/ProductActions'
 import type { Metadata } from 'next'
+import { buildAlternates, BASE } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -41,10 +42,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    alternates: buildAlternates(`/productos/${slug}`, locale),
     openGraph: {
       title: `${title} | Kristall Film`,
       description,
-      url: `/${locale}/productos/${slug}`,
+      url: `${BASE}/${locale}/productos/${slug}`,
       images: [{ url: image, width: 1200, height: 630, alt: title }],
     },
     twitter: { card: 'summary_large_image', title, description, images: [image] },
@@ -79,6 +81,32 @@ export default async function ProductPage({ params }: PageProps) {
     { label: t('spec_sku'), value: product.sku },
     { label: t('spec_availability'), value: product.inStock ? t('spec_in_stock') : t('spec_coming_soon') },
   ].filter(s => s.value !== null)
+
+  const productLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name_es,
+    sku: product.sku,
+    brand: { '@type': 'Brand', name: 'Kristall Film' },
+    description: product.description_es ?? `${product.name_es} — Kristall Film`,
+    image: `${BASE}${getCategoryImage(product.category)}`,
+    offers: {
+      '@type': 'Offer',
+      availability: product.inStock ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+      priceCurrency: 'ARS',
+      seller: { '@type': 'Organization', name: 'Kristall Film' },
+    },
+  }
+
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Productos', item: `${BASE}/${locale}/productos` },
+      { '@type': 'ListItem', position: 2, name: catMeta?.name ?? product.category, item: `${BASE}/${locale}/productos/categorias/${product.category}` },
+      { '@type': 'ListItem', position: 3, name: product.name_es, item: `${BASE}/${locale}/productos/${slug}` },
+    ],
+  }
 
   return (
     <div className="min-h-screen bg-[#F2F2F0]">
@@ -189,6 +217,8 @@ export default async function ProductPage({ params }: PageProps) {
 
         </div>
       </div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
     </div>
   )
 }

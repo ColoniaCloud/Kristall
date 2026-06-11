@@ -6,20 +6,49 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import type { Metadata } from 'next'
 
+const organizationLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Kristall Film',
+  url: 'https://kristallfilm.com',
+  logo: {
+    '@type': 'ImageObject',
+    url: 'https://kristallfilm.com/LogoPlano.png',
+    width: 300,
+    height: 80,
+  },
+  description: 'Distribuidor oficial de láminas polarizantes de tecnología alemana para automotriz, arquitectura y PPF en Argentina.',
+  areaServed: { '@type': 'Country', name: 'Argentina' },
+  knowsLanguage: ['es', 'en', 'de'],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer support',
+    availableLanguage: ['Spanish', 'English'],
+  },
+}
+
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Kristall Film',
+  url: 'https://kristallfilm.com',
+  inLanguage: ['es', 'en', 'de'],
+}
+
 const localeMeta: Record<string, { title: string; description: string; locale: string }> = {
   es: {
     title: 'Kristall Film',
-    description: 'Láminas polarizantes de tecnología alemana para automotriz, arquitectura y PPF.',
+    description: 'Láminas polarizantes de tecnología alemana para automotriz, arquitectura y PPF. Distribuidor oficial en Argentina.',
     locale: 'es_AR',
   },
   en: {
     title: 'Kristall Film',
-    description: 'German-engineered window films for automotive, architectural and PPF applications.',
+    description: 'German-engineered window films for automotive, architectural and PPF applications. Official distributor in Argentina.',
     locale: 'en_US',
   },
   de: {
     title: 'Kristall Film',
-    description: 'Deutsche Folientechnologie für Automobil, Architektur und Lackschutzfolie.',
+    description: 'Deutsche Folientechnologie für Automobil, Architektur und Lackschutzfolie. Offizieller Vertrieb in Argentinien.',
     locale: 'de_DE',
   },
 }
@@ -31,8 +60,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: meta.title,
     description: meta.description,
     alternates: {
-      canonical: `/${locale}`,
-      languages: { es: '/es', en: '/en', de: '/de' },
+      canonical: `https://kristallfilm.com/${locale}`,
+      languages: {
+        'x-default': 'https://kristallfilm.com/es',
+        es: 'https://kristallfilm.com/es',
+        en: 'https://kristallfilm.com/en',
+        de: 'https://kristallfilm.com/de',
+      },
     },
     openGraph: {
       title: meta.title,
@@ -64,6 +98,14 @@ export default async function LocaleLayout({
           <main className="flex-1">{children}</main>
           <Footer />
         </NextIntlClientProvider>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }}
+        />
       </body>
     </html>
   )

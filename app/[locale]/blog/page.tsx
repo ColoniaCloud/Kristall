@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
+import { buildAlternates } from '@/lib/seo'
 
 const pageMeta: Record<string, { title: string; description: string }> = {
-  es: { title: 'Blog', description: 'Artículos, guías y novedades sobre láminas y protección de superficies.' },
-  en: { title: 'Blog', description: 'Articles, guides and news about window films and surface protection.' },
-  de: { title: 'Blog', description: 'Artikel, Ratgeber und Neuigkeiten rund um Folien und Oberflächenschutz.' },
+  es: { title: 'Blog', description: 'Artículos técnicos, guías de instalación y novedades sobre láminas automotrices, arquitectónicas y protección de pintura de Kristall Film.' },
+  en: { title: 'Blog', description: 'Technical articles, installation guides and news about automotive, architectural window films and paint protection from Kristall Film.' },
+  de: { title: 'Blog', description: 'Technische Artikel, Installationsanleitungen und Neuigkeiten rund um Automobil-, Architekturfolien und Lackschutz von Kristall Film.' },
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -12,7 +13,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: m.title,
     description: m.description,
-    openGraph: { title: `${m.title} | Kristall Film`, description: m.description, url: `/${locale}/blog` },
+    alternates: buildAlternates('/blog', locale),
+    openGraph: { title: `${m.title} | Kristall Film`, description: m.description, url: `https://kristallfilm.com/${locale}/blog` },
   }
 }
 
