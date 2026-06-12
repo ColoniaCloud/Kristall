@@ -1,60 +1,47 @@
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { getPayload } from 'payload'
-import config from '@payload-config'
-import { getCategoryMeta, CATEGORIES } from '@/lib/categories'
-import ProductCard from '@/components/product/ProductCard'
+import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/routing'
-import type { Product } from '@/types/product'
+import ProductCard from '@/components/product/ProductCard'
+import { LINES, LINE_ORDER, getLine, laminasByLine } from '@/lib/catalogo'
 import { buildAlternates } from '@/lib/seo'
 
-export const revalidate = 3600
-
-async function getProductsByCategory(categoria: string): Promise<Product[]> {
-  try {
-    const payload = await getPayload({ config })
-    const { docs } = await payload.find({
-      collection: 'products',
-      where: {
-        and: [
-          { active: { equals: true } },
-          { category: { equals: categoria } },
-        ],
-      },
-      limit: 100,
-    })
-    return docs as unknown as Product[]
-  } catch {
-    return []
-  }
+export function generateStaticParams() {
+  return LINE_ORDER.flatMap((slug) =>
+    ['es', 'en', 'de'].map((locale) => ({ locale, categoria: slug })),
+  )
 }
 
-export async function generateStaticParams() {
-  return CATEGORIES.flatMap((cat) =>
-    ['es', 'en', 'de'].map((locale) => ({ locale, categoria: cat.slug })),
-  )
+async function tagline(locale: string, slug: string): Promise<string> {
+  const line = getLine(slug)
+  if (!line) return ''
+  const tm = await getTranslations({ locale, namespace: 'product_modal' })
+  const tier = tm(`tier_${line.tier}`)
+  return line.warrantyYears ? `${tier} · ${tm('warranty_years', { n: line.warrantyYears })}` : tier
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; categoria: string }> }) {
   const { locale, categoria } = await params
-  const meta = getCategoryMeta(categoria)
-  if (!meta) return {}
-  const title = `${meta.name} — ${meta.tagline}`
+  const line = getLine(categoria)
+  if (!line) return {}
+  const tp = await getTranslations({ locale, namespace: 'products' })
+  const description = tp(line.descKey)
+  const title = `${line.name} — ${await tagline(locale, categoria)}`
   return {
     title,
-    description: meta.description,
+    description,
     alternates: buildAlternates(`/productos/categorias/${categoria}`, locale),
     openGraph: {
       title: `${title} | Kristall Film`,
-      description: meta.description,
+      description,
       url: `https://kristallfilm.com/${locale}/productos/categorias/${categoria}`,
-      images: [{ url: meta.image, width: 1200, height: 630, alt: `${meta.name} — Kristall Film` }],
+      images: [{ url: line.image, width: 1200, height: 630, alt: `${line.name} — Kristall Film` }],
     },
     twitter: {
       card: 'summary_large_image',
       title: `${title} | Kristall Film`,
-      description: meta.description,
-      images: [meta.image],
+      description,
+      images: [line.image],
     },
   }
 }
@@ -65,30 +52,19 @@ interface PageProps {
 
 export default async function CategoriaPage({ params }: PageProps) {
   const { locale, categoria } = await params
-  const meta = getCategoryMeta(categoria)
-  if (!meta) notFound()
+  const line = getLine(categoria)
+  if (!line) notFound()
 
-  const rawProducts = await getProductsByCategory(categoria)
-  const products = [...rawProducts].sort((a, b) => {
-    if (a.vlt == null && b.vlt == null) return 0
-    if (a.vlt == null) return 1
-    if (b.vlt == null) return -1
-    return (a.vlt as number) - (b.vlt as number)
-  })
+  const tp = await getTranslations({ locale, namespace: 'products' })
+  const products = laminasByLine(categoria)
+  const lineTagline = await tagline(locale, categoria)
 
   return (
     <div className="min-h-screen bg-[#F2F2F0]">
 
       {/* HERO */}
       <section className="relative h-[420px] overflow-hidden">
-        <Image
-          src={meta.image}
-          alt={meta.name}
-          fill
-          className="object-cover object-center"
-          priority
-          sizes="100vw"
-        />
+        <Image src={line.image} alt={line.name} fill className="object-cover object-center" priority sizes="100vw" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/20" />
 
         <div className="relative z-10 h-full flex flex-col justify-end pb-12 px-10 max-w-[1160px] mx-auto">
@@ -97,26 +73,15 @@ export default async function CategoriaPage({ params }: PageProps) {
               Productos
             </Link>
             <span className="text-white/25 text-[11px]">/</span>
-            <span className="text-[11px] text-white/60 uppercase tracking-widest">{meta.name}</span>
+            <span className="text-[11px] text-white/60 uppercase tracking-widest">{line.name}</span>
           </div>
 
           <div className="relative w-32 h-16 md:w-56 md:h-28 mb-4">
-            <Image
-              src={meta.logo}
-              alt={meta.name}
-              fill
-              className="object-contain object-left brightness-0 invert"
-              sizes="(max-width: 768px) 128px, 224px"
-            />
+            <Image src={line.logo} alt={line.name} fill className="object-contain object-left brightness-0 invert" sizes="(max-width: 768px) 128px, 224px" />
           </div>
 
-          <p className="text-[11px] uppercase tracking-[0.15em] text-white/45 mb-2 font-medium">
-            {meta.tagline}
-          </p>
-
-          <p className="text-sm text-white/60 max-w-[480px] leading-relaxed">
-            {meta.description}
-          </p>
+          <p className="text-[11px] uppercase tracking-[0.15em] text-white/45 mb-2 font-medium">{lineTagline}</p>
+          <p className="text-sm text-white/60 max-w-[480px] leading-relaxed">{tp(line.descKey)}</p>
         </div>
       </section>
 
@@ -127,17 +92,11 @@ export default async function CategoriaPage({ params }: PageProps) {
             <p className="section-label mb-1">
               {products.length} producto{products.length !== 1 ? 's' : ''}
             </p>
-            <h2
-              className="text-2xl font-medium text-[#0A0A0A]"
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
-              Línea {meta.name}
+            <h2 className="text-2xl font-medium text-[#0A0A0A]" style={{ fontFamily: 'var(--font-display)' }}>
+              Línea {line.name}
             </h2>
           </div>
-          <Link
-            href="/productos"
-            className="text-xs text-[#5C5C5C] hover:text-[#0A0A0A] transition-colors"
-          >
+          <Link href="/productos" className="text-xs text-[#5C5C5C] hover:text-[#0A0A0A] transition-colors">
             ← Ver todas las líneas
           </Link>
         </div>
@@ -149,31 +108,19 @@ export default async function CategoriaPage({ params }: PageProps) {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {products.map((p) => (
-              <ProductCard
-                key={p.id}
-                name={(p[`name_${locale}` as keyof Product] as string) || p.name_es}
-                category={p.category}
-                description={(p[`description_${locale}` as keyof Product] as string) || meta.description}
-                vlt={p.vlt}
-                uv={p.uv}
-                irr={p.irr}
-                sku={p.sku}
-                inStock={p.inStock}
-                slug={p.slug}
-                badge={p.sku}
-              />
+              <ProductCard key={p.sku} lamina={p} />
             ))}
           </div>
         )}
       </section>
 
-      {/* Otras categorías */}
+      {/* Otras líneas */}
       <section className="pb-16">
         <p className="section-label mb-5 px-4 md:px-10 max-w-[1160px] mx-auto">
           Otras líneas
         </p>
         <div className="flex md:flex-wrap md:max-w-[1160px] md:mx-auto md:px-10 gap-3 overflow-x-auto md:overflow-x-visible px-4 pb-2 md:pb-0 scrollbar-none snap-x snap-mandatory md:snap-none">
-          {CATEGORIES.filter(c => c.slug !== categoria).map(c => (
+          {LINES.filter((c) => c.slug !== categoria).map((c) => (
             <Link
               key={c.slug}
               href={`/productos/categorias/${c.slug}`}

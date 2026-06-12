@@ -95,7 +95,9 @@ export default async function LocaleLayout({
       <body className="flex min-h-screen flex-col">
         <NextIntlClientProvider messages={messages}>
           <Header />
-          <main className="flex-1">{children}</main>
+          {/* relative+z-10+bg opaco: <main> se desliza por encima del footer y lo
+              "descubre" al llegar al final (efecto cortina / parallax). */}
+          <main className="relative z-10 flex-1 bg-[var(--bg)]">{children}</main>
           <Footer />
         </NextIntlClientProvider>
         <script

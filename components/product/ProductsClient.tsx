@@ -5,26 +5,7 @@ import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { SlidersHorizontal, X } from 'lucide-react'
 import ProductCard from '@/components/product/ProductCard'
-import { CATEGORIES, getCategoryMeta } from '@/lib/categories'
-
-const SECTION_ORDER = ['kaiser', 'keramx', 'karbon', 'krypton', 'klar', 'klass', 'ppf', 'vitral']
-
-export interface ProductItem {
-  id: string
-  name_es: string
-  category: string
-  description_es: string
-  vlt: number | null
-  uv: number | null
-  irr: number | null
-  sku: string
-  inStock: boolean
-  slug: string
-}
-
-interface ProductsClientProps {
-  products: ProductItem[]
-}
+import { LAMINAS, LINE_ORDER, getLine, type Lamina } from '@/lib/catalogo'
 
 const btnBase = 'px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors'
 const btnActive = 'bg-[#0A0A0A] text-white'
@@ -36,49 +17,33 @@ const catBtn = (active: boolean) =>
       : 'bg-white border-[#E4E4E2] text-[#5C5C5C] hover:border-[#0A0A0A]'
   }`
 
-export default function ProductsClient({ products }: ProductsClientProps) {
+// Valores reales presentes en el catálogo (orden ascendente)
+const VLT_VALUES = [...new Set(LAMINAS.map((l) => l.vlt).filter((v): v is number => v != null))].sort((a, b) => a - b)
+const UV_VALUES = [...new Set(LAMINAS.map((l) => l.uv).filter((v): v is number => v != null))].sort((a, b) => a - b)
+
+export default function ProductsClient() {
   const t = useTranslations('products_page')
   const tp = useTranslations('products')
+  const tm = useTranslations('product_modal')
   const [activeCategory, setActiveCategory] = useState('all')
   const [activeVLT, setActiveVLT] = useState('all')
   const [activeUV, setActiveUV] = useState('all')
   const [modalOpen, setModalOpen] = useState(false)
 
-  const categoryDesc: Record<string, string> = {
-    klass:   tp('cat_klass_desc'),
-    klar:    tp('cat_polarizado_desc'),
-    karbon:  tp('cat_karbon_desc'),
-    keramx:  tp('cat_keramx_desc'),
-    krypton: tp('cat_krypton_desc'),
-    kaiser:  tp('cat_kaiser_desc'),
-    ppf:     tp('cat_ppf_desc'),
-    vitral:  tp('cat_vitral_desc'),
-  }
-
   const VLT_OPTIONS = [
     { label: t('filter_todos'), value: 'all' },
-    { label: '5%', value: '5' },
-    { label: '15%', value: '15' },
-    { label: '30%', value: '30' },
-    { label: '35%', value: '35' },
-    { label: '46%', value: '46' },
-    { label: '50%', value: '50' },
-    { label: '75%', value: '75' },
-    { label: '80%', value: '80' },
+    ...VLT_VALUES.map((v) => ({ label: `${v}%`, value: String(v) })),
     { label: t('filter_sin_vlt'), value: 'none' },
   ]
 
   const UV_OPTIONS = [
     { label: t('filter_todos'), value: 'all' },
-    { label: '99%', value: '99' },
-    { label: '92%', value: '92' },
-    { label: '81%', value: '81' },
-    { label: '56%', value: '56' },
+    ...UV_VALUES.map((v) => ({ label: `${v}%`, value: String(v) })),
     { label: t('filter_sin_uv'), value: 'none' },
   ]
 
-  const matchesFilters = (p: ProductItem) => {
-    const catOk = activeCategory === 'all' || p.category === activeCategory
+  const matchesFilters = (p: Lamina) => {
+    const catOk = activeCategory === 'all' || p.line === activeCategory
     const vltOk = activeVLT === 'all' ? true : activeVLT === 'none' ? p.vlt == null : String(p.vlt) === activeVLT
     const uvOk = activeUV === 'all' ? true : activeUV === 'none' ? p.uv == null : String(p.uv) === activeUV
     return catOk && vltOk && uvOk
@@ -90,16 +55,23 @@ export default function ProductsClient({ products }: ProductsClientProps) {
     setActiveUV('all')
   }
 
+  const lineTagline = (slug: string) => {
+    const line = getLine(slug)
+    if (!line) return ''
+    const tier = tm(`tier_${line.tier}`)
+    return line.warrantyYears ? `${tier} · ${tm('warranty_years', { n: line.warrantyYears })}` : tier
+  }
+
   const hasActiveFilters = activeCategory !== 'all' || activeVLT !== 'all' || activeUV !== 'all'
   const activeFilterCount = [activeCategory !== 'all', activeVLT !== 'all', activeUV !== 'all'].filter(Boolean).length
 
-  const sections = SECTION_ORDER
-    .map(slug => ({
+  const sections = LINE_ORDER
+    .map((slug) => ({
       slug,
-      meta: getCategoryMeta(slug),
-      items: products.filter(p => p.category === slug && matchesFilters(p)),
+      line: getLine(slug),
+      items: LAMINAS.filter((p) => p.line === slug && matchesFilters(p)),
     }))
-    .filter(s => s.meta != null && s.items.length > 0)
+    .filter((s) => s.line != null && s.items.length > 0)
 
   const totalFiltered = sections.reduce((sum, s) => sum + s.items.length, 0)
 
@@ -111,9 +83,9 @@ export default function ProductsClient({ products }: ProductsClientProps) {
           <button onClick={() => setActiveCategory('all')} className={catBtn(activeCategory === 'all')}>
             {t('filter_todas')}
           </button>
-          {CATEGORIES.map(cat => (
-            <button key={cat.slug} onClick={() => setActiveCategory(cat.slug)} className={catBtn(activeCategory === cat.slug)}>
-              {cat.name}
+          {LINE_ORDER.map((slug) => (
+            <button key={slug} onClick={() => setActiveCategory(slug)} className={catBtn(activeCategory === slug)}>
+              {getLine(slug)?.name}
             </button>
           ))}
         </div>
@@ -121,7 +93,7 @@ export default function ProductsClient({ products }: ProductsClientProps) {
       <div>
         <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A] block mb-2">{t('filter_vlt')}</span>
         <div className="flex flex-wrap gap-1.5">
-          {VLT_OPTIONS.map(opt => (
+          {VLT_OPTIONS.map((opt) => (
             <button key={opt.value} onClick={() => setActiveVLT(opt.value)} className={`${btnBase} ${activeVLT === opt.value ? btnActive : btnInactive}`}>
               {opt.label}
             </button>
@@ -131,7 +103,7 @@ export default function ProductsClient({ products }: ProductsClientProps) {
       <div>
         <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A] block mb-2">{t('filter_uv')}</span>
         <div className="flex flex-wrap gap-1.5">
-          {UV_OPTIONS.map(opt => (
+          {UV_OPTIONS.map((opt) => (
             <button key={opt.value} onClick={() => setActiveUV(opt.value)} className={`${btnBase} ${activeUV === opt.value ? btnActive : btnInactive}`}>
               {opt.label}
             </button>
@@ -162,22 +134,22 @@ export default function ProductsClient({ products }: ProductsClientProps) {
             <button onClick={() => setActiveCategory('all')} className={catBtn(activeCategory === 'all')}>
               {t('filter_todas')}
             </button>
-            {CATEGORIES.map(cat => (
-              <button key={cat.slug} onClick={() => setActiveCategory(cat.slug)} className={catBtn(activeCategory === cat.slug)}>
-                {cat.name}
+            {LINE_ORDER.map((slug) => (
+              <button key={slug} onClick={() => setActiveCategory(slug)} className={catBtn(activeCategory === slug)}>
+                {getLine(slug)?.name}
               </button>
             ))}
           </div>
           <div className="flex items-center flex-wrap gap-2">
             <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A] mr-1">{t('filter_vlt')}</span>
-            {VLT_OPTIONS.map(opt => (
+            {VLT_OPTIONS.map((opt) => (
               <button key={opt.value} onClick={() => setActiveVLT(opt.value)} className={`${btnBase} ${activeVLT === opt.value ? btnActive : btnInactive}`}>
                 {opt.label}
               </button>
             ))}
             <div className="w-px h-4 bg-[#E4E4E2] mx-2" />
             <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A] mr-1">{t('filter_uv')}</span>
-            {UV_OPTIONS.map(opt => (
+            {UV_OPTIONS.map((opt) => (
               <button key={opt.value} onClick={() => setActiveUV(opt.value)} className={`${btnBase} ${activeUV === opt.value ? btnActive : btnInactive}`}>
                 {opt.label}
               </button>
@@ -235,42 +207,20 @@ export default function ProductsClient({ products }: ProductsClientProps) {
           </div>
         ) : (
           <div className="space-y-16">
-            {sections.map(({ slug, meta, items }) => (
+            {sections.map(({ slug, line, items }) => (
               <section key={slug}>
                 {/* Header de sección */}
                 <div className="mb-6 pb-6 border-b border-[#E4E4E2]">
                   <div className="relative h-7 w-32 mb-3">
-                    <Image
-                      src={meta!.logo}
-                      alt={meta!.name}
-                      fill
-                      className="object-contain object-left"
-                      sizes="128px"
-                    />
+                    <Image src={line!.logo} alt={line!.name} fill className="object-contain object-left" sizes="128px" />
                   </div>
-                  <p className="text-[13px] font-semibold text-[#0A0A0A] mb-2">
-                    {meta!.tagline}
-                  </p>
-                  <p className="text-sm text-[#5C5C5C] max-w-[640px] leading-relaxed">
-                    {meta!.description}
-                  </p>
+                  <p className="text-[13px] font-semibold text-[#0A0A0A] mb-2">{lineTagline(slug)}</p>
+                  <p className="text-sm text-[#5C5C5C] max-w-[640px] leading-relaxed">{tp(line!.descKey)}</p>
                 </div>
                 {/* Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {items.map(p => (
-                    <ProductCard
-                      key={p.id}
-                      name={p.name_es}
-                      category={p.category}
-                      description={p.description_es || categoryDesc[p.category] || ''}
-                      vlt={p.vlt}
-                      uv={p.uv}
-                      irr={p.irr}
-                      sku={p.sku}
-                      inStock={p.inStock}
-                      slug={p.slug}
-                      badge={p.sku}
-                    />
+                  {items.map((p) => (
+                    <ProductCard key={p.sku} lamina={p} />
                   ))}
                 </div>
               </section>

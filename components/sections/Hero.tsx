@@ -20,7 +20,7 @@ export default function Hero() {
   ]
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden px-6 bg-[var(--surface)]">
+    <section ref={sectionRef} className="relative overflow-hidden px-6 bg-[var(--surface)] flex-1 min-h-0 flex flex-col justify-center">
       {/* Background Image con parallax */}
       <motion.div
         className="absolute inset-0"
@@ -40,7 +40,7 @@ export default function Hero() {
 
       {/* Content */}
       <motion.div 
-        className="relative z-10 max-w-[1160px] mx-auto pt-16 pb-14"
+        className="relative z-10 w-full max-w-[1160px] mx-auto pt-16 pb-14"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}

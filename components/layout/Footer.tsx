@@ -6,7 +6,7 @@ export default function Footer() {
   const t = useTranslations('footer')
 
   return (
-    <footer className="mt-auto bg-[#1A1A1A] px-8 py-8 pb-6">
+    <footer className="sticky bottom-0 z-0 mt-auto bg-[#1A1A1A] px-8 py-8 pb-6">
       <div className="mx-auto max-w-[1160px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center md:text-left">
         {/* Col 1: Branding */}
         <div>

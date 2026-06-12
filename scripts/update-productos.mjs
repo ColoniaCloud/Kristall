@@ -39,17 +39,17 @@ const UPDATES = [
   {
     sku: 'KPRO05',
     patch: {
-      description_es: 'Lámina de la línea Premium con 5% de transmisión de luz visible. Hasta 99% de bloqueo UV y 3 años de garantía.',
-      description_en: 'Premium line film with 5% visible light transmission. Up to 99% UV block and 3-year warranty.',
-      description_de: 'Premium-Linie Folie mit 5% Lichttransmission. Bis zu 99% UV-Schutz und 3 Jahre Garantie.',
+      description_es: 'Lámina de la línea Estándar con 5% de transmisión de luz visible. Hasta 99% de bloqueo UV y 3 años de garantía.',
+      description_en: 'Standard line film with 5% visible light transmission. Up to 99% UV block and 3-year warranty.',
+      description_de: 'Standardlinie Folie mit 5% Lichttransmission. Bis zu 99% UV-Schutz und 3 Jahre Garantie.',
     },
   },
   {
     sku: 'KPRO15',
     patch: {
-      description_es: 'Lámina Premium con 15% VLT. Balance entre privacidad y visibilidad con 92% de bloqueo UV y 3 años de garantía.',
-      description_en: 'Premium film with 15% VLT. Balance between privacy and visibility with 92% UV block and 3-year warranty.',
-      description_de: 'Premium Folie mit 15% VLT. Balance zwischen Privatsphäre und Sicht. 92% UV-Schutz, 3 Jahre Garantie.',
+      description_es: 'Lámina Estándar con 15% VLT. Balance entre privacidad y visibilidad con 92% de bloqueo UV y 3 años de garantía.',
+      description_en: 'Standard film with 15% VLT. Balance between privacy and visibility with 92% UV block and 3-year warranty.',
+      description_de: 'Standardfolie mit 15% VLT. Balance zwischen Privatsphäre und Sicht. 92% UV-Schutz, 3 Jahre Garantie.',
     },
   },
 ]

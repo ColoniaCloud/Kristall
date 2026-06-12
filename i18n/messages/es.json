@@ -51,7 +51,7 @@
   "products": {
     "label": "Productos",
     "see_all": "Catálogo completo",
-    "klar_name": "Láminas polarizadas estándar premium",
+    "klar_name": "Láminas polarizadas estándar",
     "klar_desc": "Alto rechazo solar con tecnología de tinte duradero. Disponible en 5%, 20%, 35% y 50% de transmisión.",
     "klar_badge": "Polarizado estándar",
     "karbon_name": "Láminas polarizadas nanocarbon",
@@ -103,7 +103,10 @@
     "svc2_cta": "Solicitar demo",
     "svc2_f1": "Órdenes de trabajo",
     "svc2_f2": "Control de inventario",
-    "svc2_f3": "Reportes en tiempo real"
+    "svc2_f3": "Reportes en tiempo real",
+    "video_kaiser": "Máxima protección solar",
+    "video_ppf": "Protección premium para tu pintura",
+    "video_cta": "Ver todas las láminas"
   },
   "cta": {
     "title": "¿Necesitas más información?",
@@ -389,5 +392,35 @@
     "section_specs": "Especificaciones técnicas",
     "line_label": "Línea de producto",
     "see_line": "Ver toda la línea →"
+  },
+  "product_modal": {
+    "tier_estandar": "Estándar",
+    "tier_premium": "Premium",
+    "tier_ultra": "Ultra",
+    "tier_seguridad": "Seguridad",
+    "tier_proteccion": "Protección",
+    "tier_arquitectura": "Arquitectura",
+    "coming_soon": "Próximamente",
+    "detail_label": "Ficha técnica",
+    "technology_label": "Tecnología",
+    "warranty_label": "Garantía",
+    "warranty_years": "{n} años",
+    "spec_thickness": "Espesor",
+    "spec_roll": "Rollo",
+    "form_title": "¿Tenés consultas sobre este producto?",
+    "field_name": "Nombre completo",
+    "field_name_placeholder": "Tu nombre",
+    "field_phone": "Teléfono",
+    "field_phone_placeholder": "+54 11 0000-0000",
+    "field_email": "Email",
+    "field_email_placeholder": "tu@email.com",
+    "submit": "Enviar consulta",
+    "submitting": "Enviando...",
+    "success_title": "¡Consulta enviada!",
+    "success_body": "Te contactaremos a la brevedad.",
+    "error": "Hubo un error al enviar. Intentá de nuevo.",
+    "error_name": "Nombre requerido",
+    "error_email": "Email inválido",
+    "close": "Cerrar"
   }
 }

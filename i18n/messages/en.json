@@ -51,7 +51,7 @@
   "products": {
     "label": "Products",
     "see_all": "Full catalog",
-    "klar_name": "Premium standard tint films",
+    "klar_name": "Standard tint films",
     "klar_desc": "High solar rejection with durable dye technology. Available in 5%, 20%, 35% and 50% transmission.",
     "klar_badge": "Standard tint",
     "karbon_name": "Nanocarbon tint films",
@@ -103,7 +103,10 @@
     "svc2_cta": "Request demo",
     "svc2_f1": "Work orders",
     "svc2_f2": "Inventory control",
-    "svc2_f3": "Real-time reports"
+    "svc2_f3": "Real-time reports",
+    "video_kaiser": "Maximum solar protection",
+    "video_ppf": "Premium protection for your paint",
+    "video_cta": "View all films"
   },
   "cta": {
     "title": "Ready to elevate your installation?",
@@ -389,5 +392,35 @@
     "section_specs": "Technical specifications",
     "line_label": "Product line",
     "see_line": "View full line →"
+  },
+  "product_modal": {
+    "tier_estandar": "Standard",
+    "tier_premium": "Premium",
+    "tier_ultra": "Ultra",
+    "tier_seguridad": "Security",
+    "tier_proteccion": "Protection",
+    "tier_arquitectura": "Architecture",
+    "coming_soon": "Coming soon",
+    "detail_label": "Tech sheet",
+    "technology_label": "Technology",
+    "warranty_label": "Warranty",
+    "warranty_years": "{n} years",
+    "spec_thickness": "Thickness",
+    "spec_roll": "Roll",
+    "form_title": "Questions about this product?",
+    "field_name": "Full name",
+    "field_name_placeholder": "Your name",
+    "field_phone": "Phone",
+    "field_phone_placeholder": "+1 000 000-0000",
+    "field_email": "Email",
+    "field_email_placeholder": "you@email.com",
+    "submit": "Send inquiry",
+    "submitting": "Sending...",
+    "success_title": "Inquiry sent!",
+    "success_body": "We will contact you shortly.",
+    "error": "There was an error. Please try again.",
+    "error_name": "Name required",
+    "error_email": "Invalid email",
+    "close": "Close"
   }
 }

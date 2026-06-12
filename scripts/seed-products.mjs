@@ -18,9 +18,9 @@ if (!PASSWORD) {
 
 const PRODUCTS = [
   {
-    name_es: 'KLAR 05 — Línea Premium',
-    name_en: 'KLAR 05 — Premium Line',
-    name_de: 'KLAR 05 — Premium-Linie',
+    name_es: 'KLAR 05 — Línea Estándar',
+    name_en: 'KLAR 05 — Standard Line',
+    name_de: 'KLAR 05 — Standardlinie',
     sku: 'KPRO05',
     category: 'klar',
     vlt: 5,
@@ -31,9 +31,9 @@ const PRODUCTS = [
     featured: false,
   },
   {
-    name_es: 'KLAR 15 — Línea Premium',
-    name_en: 'KLAR 15 — Premium Line',
-    name_de: 'KLAR 15 — Premium-Linie',
+    name_es: 'KLAR 15 — Línea Estándar',
+    name_en: 'KLAR 15 — Standard Line',
+    name_de: 'KLAR 15 — Standardlinie',
     sku: 'KPRO15',
     category: 'klar',
     vlt: 15,

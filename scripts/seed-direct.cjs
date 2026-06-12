@@ -4,16 +4,16 @@ const client = new Client({ connectionString: process.env.DATABASE_URI })
 
 const PRODUCTS = [
   {
-    name_es: 'KLAR 05 — Línea Premium',
-    name_en: 'KLAR 05 — Premium Line',
-    name_de: 'KLAR 05 — Premium-Linie',
+    name_es: 'KLAR 05 — Línea Estándar',
+    name_en: 'KLAR 05 — Standard Line',
+    name_de: 'KLAR 05 — Standardlinie',
     sku: 'KPRO05', slug: 'kpro05', category: 'klar',
     vlt: 5, uv: 99, irr: 73, in_stock: true, featured: false, active: true,
   },
   {
-    name_es: 'KLAR 15 — Línea Premium',
-    name_en: 'KLAR 15 — Premium Line',
-    name_de: 'KLAR 15 — Premium-Linie',
+    name_es: 'KLAR 15 — Línea Estándar',
+    name_en: 'KLAR 15 — Standard Line',
+    name_de: 'KLAR 15 — Standardlinie',
     sku: 'KPRO15', slug: 'kpro15', category: 'klar',
     vlt: 15, uv: 92, irr: 58, in_stock: true, featured: false, active: true,
   },

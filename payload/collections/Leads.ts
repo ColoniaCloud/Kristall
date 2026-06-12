@@ -42,6 +42,7 @@ export const Leads: CollectionConfig = {
       type: 'select',
       options: [
         { label: 'Formulario de contacto', value: 'contacto' },
+        { label: 'Consulta de producto', value: 'producto' },
         { label: 'Cotización de carrito', value: 'cotizacion' },
         { label: 'Página de software', value: 'software' },
         { label: 'Software', value: 'software-demo' },

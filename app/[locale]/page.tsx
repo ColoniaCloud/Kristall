@@ -27,8 +27,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default function HomePage() {
   return (
     <>
-      <Hero />
-      <StatsRow />
+      {/* Hero + barra de logos ocupan exactamente la primera pantalla.
+          100dvh menos la altura del header sticky (h-14 = 3.5rem) → los logos
+          quedan pegados al fondo del viewport sin necesidad de scroll. */}
+      <div className="flex flex-col h-[calc(100dvh_-_3.5rem)]">
+        <Hero />
+        <StatsRow />
+      </div>
       <BrandStory />
       <ProductsGrid />
       <ServicesSection />

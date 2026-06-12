@@ -51,7 +51,7 @@
   "products": {
     "label": "Produkte",
     "see_all": "Vollständiger Katalog",
-    "klar_name": "Premium Standard-Tönungsfolien",
+    "klar_name": "Standard-Tönungsfolien",
     "klar_desc": "Hohe Sonnenschutzwirkung mit langlebiger Farbtechnologie. Verfügbar in 5%, 20%, 35% und 50% Transmission.",
     "klar_badge": "Standard-Tönung",
     "karbon_name": "Nanokohlenstoff-Tönungsfolien",
@@ -103,7 +103,10 @@
     "svc2_cta": "Demo anfordern",
     "svc2_f1": "Arbeitsaufträge",
     "svc2_f2": "Bestandskontrolle",
-    "svc2_f3": "Echtzeit-Berichte"
+    "svc2_f3": "Echtzeit-Berichte",
+    "video_kaiser": "Maximaler Sonnenschutz",
+    "video_ppf": "Premium-Schutz für deinen Lack",
+    "video_cta": "Alle Folien ansehen"
   },
   "cta": {
     "title": "Bereit, Ihre Installation zu verbessern?",
@@ -389,5 +392,35 @@
     "section_specs": "Technische Daten",
     "line_label": "Produktlinie",
     "see_line": "Gesamte Linie ansehen →"
+  },
+  "product_modal": {
+    "tier_estandar": "Standard",
+    "tier_premium": "Premium",
+    "tier_ultra": "Ultra",
+    "tier_seguridad": "Sicherheit",
+    "tier_proteccion": "Schutz",
+    "tier_arquitectura": "Architektur",
+    "coming_soon": "Demnächst",
+    "detail_label": "Datenblatt",
+    "technology_label": "Technologie",
+    "warranty_label": "Garantie",
+    "warranty_years": "{n} Jahre",
+    "spec_thickness": "Stärke",
+    "spec_roll": "Rolle",
+    "form_title": "Fragen zu diesem Produkt?",
+    "field_name": "Vollständiger Name",
+    "field_name_placeholder": "Ihr Name",
+    "field_phone": "Telefon",
+    "field_phone_placeholder": "+49 000 0000000",
+    "field_email": "E-Mail",
+    "field_email_placeholder": "sie@email.com",
+    "submit": "Anfrage senden",
+    "submitting": "Senden...",
+    "success_title": "Anfrage gesendet!",
+    "success_body": "Wir melden uns schnellstmöglich.",
+    "error": "Es ist ein Fehler aufgetreten. Bitte erneut versuchen.",
+    "error_name": "Name erforderlich",
+    "error_email": "Ungültige E-Mail",
+    "close": "Schließen"
   }
 }
