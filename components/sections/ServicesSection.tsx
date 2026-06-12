@@ -15,14 +15,15 @@ const KAISER_IN = 1.5
 const KAISER_OUT = 4.0
 const PPF_IN = 4.0
 
-// Fondo de la columna de software: grid de líneas grises oscuras super finas
-// con un glow radial en el centro.
+// Fondo de la columna de software: negro, con grid de líneas finas y un radial
+// negro en el centro (oscurece el centro para que el texto se lea limpio y el
+// grid quede más visible hacia los bordes).
 const promoBg: React.CSSProperties = {
-  backgroundColor: '#F4F4F2',
+  backgroundColor: '#0A0A0A',
   backgroundImage:
-    'radial-gradient(circle at 50% 45%, rgba(255,255,255,0.8) 0%, rgba(244,244,242,0) 55%), ' +
-    'linear-gradient(to right, rgba(10,10,10,0.09) 1px, transparent 1px), ' +
-    'linear-gradient(to bottom, rgba(10,10,10,0.09) 1px, transparent 1px)',
+    'radial-gradient(circle at 50% 45%, rgba(0,0,0,0.85) 0%, rgba(10,10,10,0) 55%), ' +
+    'linear-gradient(to right, rgba(255,255,255,0.07) 1px, transparent 1px), ' +
+    'linear-gradient(to bottom, rgba(255,255,255,0.07) 1px, transparent 1px)',
   backgroundSize: '100% 100%, 26px 26px, 26px 26px',
 }
 
@@ -85,28 +86,28 @@ export default function ServicesSection() {
 
   return (
     <section className="px-6 pb-8 bg-[#F2F2F0]">
-      <div className="max-w-[1160px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-2">
+      <div className="max-w-[1160px] mx-auto grid grid-cols-1 md:grid-cols-[35fr_65fr] gap-2">
         {/* Columna 1: promoción del software */}
         <div
           className="relative rounded-xl overflow-hidden h-[420px] md:h-[520px] flex items-center justify-center p-8"
           style={promoBg}
         >
           <div className="relative z-10 text-center max-w-[340px]">
-            <div className="w-11 h-11 rounded-xl bg-white border border-[0.5px] border-[#E4E4E2] shadow-[0_1px_3px_rgba(0,0,0,0.06)] flex items-center justify-center mx-auto mb-4">
-              <Monitor size={18} className="text-[#0A0A0A]" />
+            <div className="w-11 h-11 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center mx-auto mb-4">
+              <Monitor size={18} className="text-white/60" />
             </div>
             <h3
-              className="text-xl md:text-2xl font-medium text-[#0A0A0A] mb-2 tracking-tight"
+              className="text-xl md:text-2xl font-medium text-white mb-2 tracking-tight"
               style={{ fontFamily: 'var(--font-display)' }}
             >
               {t('svc2_title')}
             </h3>
-            <p className="text-sm text-[#5C5C5C] leading-relaxed mb-5">
+            <p className="text-sm text-white/50 leading-relaxed mb-5">
               {t('svc2_desc')}
             </p>
             <Link
               href="/contacto?servicio=software"
-              className="btn-primary inline-block text-white px-5 py-2.5 rounded-lg text-sm font-medium tracking-wide transition-all"
+              className="inline-block text-sm border border-white/20 text-white bg-white/[0.06] px-5 py-2.5 rounded-lg font-medium tracking-wide hover:bg-white/[0.12] transition-all duration-200"
             >
               {t('svc2_cta')}
             </Link>
@@ -146,9 +147,9 @@ export default function ServicesSection() {
                 <Image
                   src="/cat/KAISER.png"
                   alt="KAISER"
-                  width={180}
-                  height={54}
-                  className="h-9 md:h-12 w-auto object-contain brightness-0 invert"
+                  width={134}
+                  height={25}
+                  className="brightness-0 invert"
                 />
                 <motion.p
                   className="text-white font-medium text-sm md:text-lg max-w-[200px] md:max-w-[260px] [text-shadow:0_1px_12px_rgba(0,0,0,0.7)]"
@@ -174,9 +175,9 @@ export default function ServicesSection() {
                 <Image
                   src="/cat/PPF.png"
                   alt="PPF"
-                  width={180}
-                  height={54}
-                  className="h-9 md:h-12 w-auto object-contain brightness-0 invert"
+                  width={110}
+                  height={25}
+                  className="brightness-0 invert"
                 />
                 <motion.p
                   className="text-white font-medium text-sm md:text-lg max-w-[200px] md:max-w-[260px] [text-shadow:0_1px_12px_rgba(0,0,0,0.7)]"
@@ -203,7 +204,7 @@ export default function ServicesSection() {
               >
                 <Link
                   href="/productos"
-                  className="bg-white text-[#0A0A0A] px-6 py-3 rounded-lg text-[15px] font-medium tracking-wide hover:bg-white/90 transition-colors"
+                  className="btn-primary text-white px-6 py-3 rounded-lg text-[15px] font-medium tracking-wide transition-all"
                 >
                   {t('video_cta')}
                 </Link>
