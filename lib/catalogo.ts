@@ -90,6 +90,17 @@ export const LINES: LineMeta[] = [
     descKey: 'cat_kaiser_desc',
   },
   {
+    slug: 'krypton',
+    name: 'KRYPTON',
+    tier: 'seguridad',
+    warrantyYears: 10,
+    technology: 'Security Nano Ceramic',
+    image: '/cat/interior/krypton.jpg',
+    heroImage: '/cat/top-KRYPTON.jpg',
+    logo: '/cat/KRYPTON.png',
+    descKey: 'cat_krypton_desc',
+  },
+  {
     slug: 'keramx',
     name: 'KERAMX',
     tier: 'premium',
@@ -110,17 +121,6 @@ export const LINES: LineMeta[] = [
     heroImage: '/cat/top-KARBON.jpg',
     logo: '/cat/KARBON.png',
     descKey: 'cat_karbon_desc',
-  },
-  {
-    slug: 'krypton',
-    name: 'KRYPTON',
-    tier: 'seguridad',
-    warrantyYears: 10,
-    technology: 'Security Nano Ceramic',
-    image: '/cat/interior/krypton.jpg',
-    heroImage: '/cat/top-KRYPTON.jpg',
-    logo: '/cat/KRYPTON.png',
-    descKey: 'cat_krypton_desc',
   },
   {
     slug: 'klar',
@@ -190,7 +190,7 @@ export const LAMINAS: Lamina[] = [
 
   // ─── KRYPTON (Seguridad · Security Nano Ceramic · 10 años) ───
   { sku: 'KS405', slug: 'ks405', line: 'krypton', level: '05', vlt: 5, irr: 95, uv: 99, inStock: true },
-  { sku: 'KS4', slug: 'ks4', line: 'krypton', level: '15', vlt: 15, irr: 95, uv: 99, inStock: true },
+  { sku: 'KS415', slug: 'ks415', line: 'krypton', level: '15', vlt: 15, irr: 95, uv: 99, inStock: true },
   { sku: 'KS435', slug: 'ks435', line: 'krypton', level: '35', vlt: 35, irr: 95, uv: 99, inStock: true },
   { sku: 'KS450', slug: 'ks450', line: 'krypton', level: '50', vlt: 50, irr: 95, uv: 99, inStock: true },
   { sku: 'KS475', slug: 'ks475', line: 'krypton', level: '75', vlt: 71, irr: 95, uv: 99, inStock: true },

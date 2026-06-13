@@ -422,5 +422,14 @@
     "error_name": "Name required",
     "error_email": "Invalid email",
     "close": "Close"
+  },
+  "blog": {
+    "label": "Blog",
+    "headline": "Technical notes & news",
+    "subheadline": "Installation guides, film technology and news from Kristall Film.",
+    "read_more": "Read more",
+    "empty": "No published articles yet.",
+    "back": "Back to blog",
+    "all_articles": "All articles"
   }
 }

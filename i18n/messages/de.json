@@ -422,5 +422,14 @@
     "error_name": "Name erforderlich",
     "error_email": "Ungültige E-Mail",
     "close": "Schließen"
+  },
+  "blog": {
+    "label": "Blog",
+    "headline": "Technische Notizen & Neuigkeiten",
+    "subheadline": "Installationsanleitungen, Folientechnologie und Neuigkeiten von Kristall Film.",
+    "read_more": "Mehr lesen",
+    "empty": "Noch keine veröffentlichten Artikel.",
+    "back": "Zurück zum Blog",
+    "all_articles": "Alle Artikel"
   }
 }

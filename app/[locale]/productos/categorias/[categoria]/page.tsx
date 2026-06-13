@@ -81,7 +81,7 @@ export default async function CategoriaPage({ params }: PageProps) {
           </div>
 
           <p className="text-[11px] uppercase tracking-[0.15em] text-white/45 mb-2 font-medium">{lineTagline}</p>
-          <p className="text-sm text-white/60 max-w-[480px] leading-relaxed">{tp(line.descKey)}</p>
+          <p className="text-base md:text-lg text-white max-w-[480px] leading-relaxed">{tp(line.descKey)}</p>
         </div>
       </section>
 

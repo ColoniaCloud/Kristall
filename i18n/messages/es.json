@@ -422,5 +422,14 @@
     "error_name": "Nombre requerido",
     "error_email": "Email inválido",
     "close": "Cerrar"
+  },
+  "blog": {
+    "label": "Blog",
+    "headline": "Notas técnicas y novedades",
+    "subheadline": "Guías de instalación, tecnología de láminas y novedades de Kristall Film.",
+    "read_more": "Leer más",
+    "empty": "Aún no hay artículos publicados.",
+    "back": "Volver al blog",
+    "all_articles": "Todos los artículos"
   }
 }
