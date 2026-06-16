@@ -33,8 +33,8 @@ export default function PuntoHero() {
 
         {/* Headline */}
         <h1
-          className="font-display font-semibold text-white leading-tight mb-2"
-          style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)' }}
+          className="font-semibold text-white leading-tight mb-2"
+          style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)', fontFamily: 'var(--font-display)' }}
         >
           Suma tu taller como
           <span className="block text-[#CC0000]">Punto Kristall</span>

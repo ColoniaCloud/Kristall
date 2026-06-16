@@ -16,8 +16,8 @@ export default function PuntoCTA() {
         </p>
 
         <h2
-          className="font-display font-medium text-white mb-4"
-          style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)' }}
+          className="font-medium text-white mb-4"
+          style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)', fontFamily: 'var(--font-display)' }}
         >
           Convertite en Punto Kristall
         </h2>
@@ -45,7 +45,7 @@ export default function PuntoCTA() {
         <div className="flex justify-center gap-8 mt-12 flex-wrap border-t border-white/[0.08] pt-10">
           {stats.map(({ value, label }) => (
             <div key={label} className="text-center">
-              <p className="font-display text-2xl font-medium text-white">{value}</p>
+              <p className="text-2xl font-medium text-white" style={{ fontFamily: 'var(--font-display)' }}>{value}</p>
               <p className="text-xs text-white/30 mt-1 uppercase tracking-wider">{label}</p>
             </div>
           ))}

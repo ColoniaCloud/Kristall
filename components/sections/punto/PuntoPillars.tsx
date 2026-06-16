@@ -38,7 +38,7 @@ export default function PuntoPillars() {
         <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-[var(--text-muted)] mb-4">
           Todo lo que recibís como Punto Kristall
         </p>
-        <h2 className="font-display text-3xl font-medium text-[var(--text-primary)] mb-12">
+        <h2 className="text-3xl font-medium text-[var(--text-primary)] mb-12" style={{ fontFamily: 'var(--font-display)' }}>
           Cuatro frentes. Un solo programa.
         </h2>
 
@@ -56,9 +56,10 @@ export default function PuntoPillars() {
                 {tag}
               </span>
               <h3
-                className={`font-display text-2xl font-medium mb-3 ${
+                className={`text-2xl font-medium mb-3 ${
                   dark ? 'text-white' : 'text-[#0A0A0A]'
                 }`}
+                style={{ fontFamily: 'var(--font-display)' }}
               >
                 {title}
               </h3>

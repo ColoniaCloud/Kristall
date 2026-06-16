@@ -127,7 +127,7 @@ export default function PuntoDetalle() {
               <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#E6A800] block mb-2">
                 {tag}
               </span>
-              <h3 className="font-display text-2xl font-medium text-[#0A0A0A] mb-3">
+              <h3 className="text-2xl font-medium text-[#0A0A0A] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
                 {headline}
               </h3>
               <p className="text-sm text-[#5C5C5C] leading-relaxed">{description}</p>
