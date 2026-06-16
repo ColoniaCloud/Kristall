@@ -1,7 +1,24 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Users, ShoppingBag, Megaphone, TrendingUp } from 'lucide-react'
+import {
+  Users,
+  ShoppingBag,
+  Megaphone,
+  TrendingUp,
+  Globe,
+  Zap,
+  Layers,
+  Sun,
+  Activity,
+  MapPin,
+  Monitor,
+  Share2,
+  Tag,
+  ShieldCheck,
+  Package,
+  MessageCircle,
+} from 'lucide-react'
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
@@ -26,30 +43,119 @@ function useInView(threshold = 0.15) {
   return { ref, inView }
 }
 
-const pillars = [
+type Benefit = {
+  icon: React.ElementType
+  label: string
+  description: string
+}
+
+const pillars: {
+  tag: string
+  title: string
+  body: string
+  icon: React.ElementType
+  benefits: Benefit[]
+}[] = [
   {
     tag: 'DEMANDA',
-    title: 'Traemos los clientes',
-    body: 'No esperás que aparezcan. Te los acercamos a la puerta del taller mediante derivación por zona.',
+    title: 'Llegá a clientes que ya están buscando',
+    body: 'Kristall genera demanda de forma permanente y la canaliza al directorio de instaladores certificados. Cuando un cliente busca polarizado en tu zona, te encuentra a vos.',
     icon: Users,
+    benefits: [
+      {
+        icon: Globe,
+        label: 'Red de instaladores certificados',
+        description:
+          'Aparecé en kristallfilm.com como instalador verificado, con tu zona de cobertura y contacto directo.',
+      },
+      {
+        icon: Zap,
+        label: 'Tráfico calificado, sin esfuerzo de captación',
+        description:
+          'El cliente llega al directorio con la decisión casi tomada. Solo necesita elegir instalador.',
+      },
+    ],
   },
   {
     tag: 'CIERRE',
-    title: 'Herramientas de venta',
-    body: 'Todo lo que necesitás para convencer y cerrar en el momento: muestrario, tótem y capacitación.',
+    title: 'Todo para convencer y cerrar en el momento',
+    body: 'El cliente toca el producto, ve la diferencia y decide. Sin fricciones.',
     icon: ShoppingBag,
+    benefits: [
+      {
+        icon: Layers,
+        label: 'Muestrario físico',
+        description: 'Muestras de cada línea para tu mostrador. Sin costo.',
+      },
+      {
+        icon: Sun,
+        label: 'Tótem solar demostrador',
+        description:
+          'Muestra el rechazo de calor en vivo. El cliente lo ve y cierra solo. Disponible para adquirir.',
+      },
+      {
+        icon: Activity,
+        label: 'Medidor solar infrarrojo',
+        description:
+          'Demuestra la performance de cada lámina con datos reales. Disponible para adquirir.',
+      },
+    ],
   },
   {
     tag: 'IMAGEN',
-    title: 'Presencia y marketing',
-    body: 'Tu taller se ve profesional y respaldado por una marca alemana. Listing web, redes y cartelería.',
+    title: 'Tu taller con presencia de marca alemana',
+    body: 'Profesionalizá tu imagen y generá confianza desde el primer contacto.',
     icon: Megaphone,
+    benefits: [
+      {
+        icon: MapPin,
+        label: 'Listing en kristallfilm.com',
+        description:
+          'Tu taller en el directorio oficial con perfil verificado, zona de cobertura y contacto directo.',
+      },
+      {
+        icon: Monitor,
+        label: 'Landing page profesional',
+        description:
+          'Página propia con tu información y servicios, con imagen de marca Kristall.',
+      },
+      {
+        icon: Share2,
+        label: 'Contenido para redes sociales',
+        description: 'Material listo para usar en Instagram y WhatsApp.',
+      },
+      {
+        icon: Tag,
+        label: 'Cartelería de fachada e interior',
+        description:
+          'Señalética que identifica tu taller como instalador certificado Kristall. Bonificada según nivel de certificación.',
+      },
+    ],
   },
   {
     tag: 'LEALTAD',
-    title: 'Respaldo y crecimiento',
-    body: 'No te dejamos solo. Garantía digital, capacitación técnica y soporte WhatsApp permanente.',
+    title: 'Respaldo permanente para crecer',
+    body: 'No te dejamos solos. Soporte técnico, garantía de marca y acceso preferencial.',
     icon: TrendingUp,
+    benefits: [
+      {
+        icon: ShieldCheck,
+        label: 'Garantía digital Kristall',
+        description:
+          'Cada instalación genera automáticamente un certificado de garantía para el cliente final. Genera confianza y diferencia tu servicio.',
+      },
+      {
+        icon: Package,
+        label: 'Acceso prioritario a producto',
+        description:
+          'Los instaladores certificados tienen preferencia en disponibilidad de stock y acceso anticipado a nuevas líneas.',
+      },
+      {
+        icon: MessageCircle,
+        label: 'Soporte WhatsApp',
+        description: 'Ayuda en vivo cuando la necesitás.',
+      },
+    ],
   },
 ]
 
@@ -87,12 +193,14 @@ function PillarCard({
   title,
   body,
   icon: Icon,
+  benefits,
   delay,
 }: {
   tag: string
   title: string
   body: string
   icon: React.ElementType
+  benefits: Benefit[]
   delay: number
 }) {
   const { ref, inView } = useInView(0.1)
@@ -107,6 +215,8 @@ function PillarCard({
         transitionDelay: `${delay}ms`,
       }}
     >
+      <Icon size={20} className="absolute top-5 right-5 text-white/10" />
+
       <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/50 mb-3 block">
         {tag}
       </span>
@@ -116,8 +226,20 @@ function PillarCard({
       >
         {title}
       </h3>
-      <p className="text-base leading-relaxed text-white">{body}</p>
-      <Icon size={32} className="mt-4 text-[#E6A800]/40" />
+      <p className="text-base leading-relaxed text-white/80 mb-6">{body}</p>
+
+      <ul className="flex flex-col gap-3 mt-auto">
+        {benefits.map(({ icon: BIcon, label, description }) => (
+          <li key={label} className="flex items-start gap-2.5">
+            <BIcon size={13} className="text-[#E6A800] mt-[3px] flex-shrink-0" />
+            <p className="text-[13px] text-white/70 leading-snug">
+              <span className="font-semibold text-white/90">{label}</span>
+              {' — '}
+              {description}
+            </p>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
@@ -140,13 +262,14 @@ export default function PuntoPillars() {
         <SectionHeader />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {pillars.map(({ tag, title, body, icon }, i) => (
+          {pillars.map(({ tag, title, body, icon, benefits }, i) => (
             <PillarCard
               key={tag}
               tag={tag}
               title={title}
               body={body}
               icon={icon}
+              benefits={benefits}
               delay={i * 100}
             />
           ))}
