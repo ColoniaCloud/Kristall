@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Layers, ShieldCheck, Sun, BookOpen, Package, Info } from 'lucide-react'
+import { Layers, ShieldCheck, Sun, BookOpen, Info } from 'lucide-react'
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
@@ -39,11 +39,6 @@ const items = [
     icon: BookOpen,
     title: 'Capacitación al equipo',
     body: 'A tu fuerza de ventas: cómo presentar la gama y justificar el precio premium.',
-  },
-  {
-    icon: Package,
-    title: 'Gama completa disponible',
-    body: 'Desde la línea KLAR hasta la premium KERAMX, lista para cada segmento del salón.',
   },
 ]
 
