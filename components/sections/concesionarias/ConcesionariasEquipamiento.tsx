@@ -64,7 +64,7 @@ function HeaderBlock() {
         Lo que dejamos en tu salón
       </h2>
       <p
-        className="text-[16px] text-white leading-relaxed mb-12 transition-all duration-700"
+        className="text-[16px] text-[#5C5C5C] leading-relaxed mb-12 transition-all duration-700"
         style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '160ms' }}
       >
         Equipamos tu concesionaria con todo lo necesario para vender polarizado premium desde
@@ -86,8 +86,8 @@ function ItemCard({ icon: Icon, title, body, delay }: { icon: React.ElementType;
         <Icon size={20} className="text-[#0A0A0A]" />
       </div>
       <div>
-        <p className="text-[16px] font-semibold text-white mb-1.5">{title}</p>
-        <p className="text-[16px] text-white leading-relaxed">{body}</p>
+        <p className="text-[16px] font-semibold text-[#0A0A0A] mb-1.5">{title}</p>
+        <p className="text-[16px] text-[#5C5C5C] leading-relaxed">{body}</p>
       </div>
     </div>
   )
@@ -113,7 +113,7 @@ export default function ConcesionariasEquipamiento() {
           style={{ opacity: noteInView ? 1 : 0, transform: noteInView ? 'translateY(0)' : 'translateY(20px)', transitionDelay: '400ms' }}
         >
           <Info size={15} className="text-[#9A9A9A] flex-shrink-0 mt-0.5" />
-          <p className="text-[16px] text-white italic">
+          <p className="text-[16px] text-[#5C5C5C] italic">
             El tester solar de calor (medidor) se adquiere por separado — es la herramienta de
             cierre más efectiva en el escritorio de venta.
           </p>
