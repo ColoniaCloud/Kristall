@@ -19,6 +19,7 @@ import {
   Package,
   MessageCircle,
 } from 'lucide-react'
+import AnimatedBorderCard from '@/components/common/AnimatedBorderCard'
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
@@ -206,6 +207,7 @@ function PillarCard({
   const { ref, inView } = useInView(0.1)
 
   return (
+    <AnimatedBorderCard borderRadius={16} color="white">
     <div
       ref={ref}
       className="relative rounded-2xl p-7 flex flex-col backdrop-blur-md bg-white/[0.08] border border-white/15 shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-500"
@@ -241,6 +243,7 @@ function PillarCard({
         ))}
       </ul>
     </div>
+    </AnimatedBorderCard>
   )
 }
 

@@ -7,12 +7,14 @@ interface AnimatedBorderCardProps {
   children: React.ReactNode
   className?: string
   borderRadius?: number
+  color?: string
 }
 
 export default function AnimatedBorderCard({
   children,
   className,
   borderRadius = 12,
+  color = '#0A0A0A',
 }: AnimatedBorderCardProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [hovered, setHovered] = useState(false)
@@ -56,7 +58,7 @@ export default function AnimatedBorderCard({
           height="calc(100% - 2px)"
           rx={borderRadius - 1}
           fill="none"
-          stroke="#0A0A0A"
+          stroke={color}
           strokeWidth="1"
           strokeDasharray={perimeter}
           strokeDashoffset={hovered ? 0 : perimeter}
