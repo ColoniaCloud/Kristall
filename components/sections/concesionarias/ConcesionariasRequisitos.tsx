@@ -49,7 +49,7 @@ export default function ConcesionariasRequisitos() {
         {/* Columna izquierda */}
         <div ref={leftRef}>
           <span
-            className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#CC0000] mb-3 block transition-all duration-700"
+            className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#E6A800] mb-3 block transition-all duration-700"
             style={{ opacity: leftInView ? 1 : 0, transform: leftInView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '0ms' }}
           >
             03 · LO QUE PEDIMOS
@@ -61,7 +61,7 @@ export default function ConcesionariasRequisitos() {
             Qué pedimos a cambio
           </h2>
           <p
-            className="text-[15px] text-white/60 leading-relaxed transition-all duration-700"
+            className="text-[16px] text-white leading-relaxed transition-all duration-700"
             style={{ opacity: leftInView ? 1 : 0, transform: leftInView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '160ms' }}
           >
             El alta es ágil y sin obras. Te equipamos el salón, capacitamos a tu equipo y
@@ -75,7 +75,7 @@ export default function ConcesionariasRequisitos() {
           className="backdrop-blur-md bg-white/[0.07] border border-white/15 shadow-[0_4px_24px_rgba(0,0,0,0.3)] rounded-2xl p-6 transition-all duration-500"
           style={{ opacity: rightInView ? 1 : 0, transform: rightInView ? 'translateX(0)' : 'translateX(24px)', transitionDelay: '100ms' }}
         >
-          <p className="text-[15px] font-semibold text-white mb-5">
+          <p className="text-[16px] font-semibold text-white mb-5">
             Compromisos del programa
           </p>
           <ul className="flex flex-col gap-3">
@@ -92,7 +92,7 @@ export default function ConcesionariasRequisitos() {
                 <div className="w-5 h-5 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 mt-0.5">
                   <ChevronRight size={11} className="text-white" />
                 </div>
-                <p className="text-[15px] text-white/70 leading-relaxed">{item}</p>
+                <p className="text-[16px] text-white leading-relaxed">{item}</p>
               </li>
             ))}
           </ul>
