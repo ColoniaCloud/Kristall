@@ -40,7 +40,6 @@ export default function Header() {
     { href: '/nosotros', label: t('about') },
     { href: '/blog', label: t('blog') },
     { href: '/servicios', label: t('services') },
-    { href: '/concesionarias', label: t('concesionarias') },
     { href: '/contacto', label: t('contact') },
   ]
 
