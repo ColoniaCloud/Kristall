@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { Users, ShoppingBag, Megaphone, TrendingUp } from 'lucide-react'
 
 const pillars = [
@@ -31,11 +30,14 @@ const pillars = [
 export default function PuntoPillars() {
   return (
     <section className="relative overflow-hidden py-16 px-10">
-      <Image
-        src="/cat/top-KLAR.jpg"
-        alt=""
-        fill
-        className="absolute inset-0 object-cover object-center"
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: 'url(/cat/top-KLAR.jpg)',
+          backgroundAttachment: 'fixed',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/65 to-black/80" />
 
@@ -65,7 +67,7 @@ export default function PuntoPillars() {
               >
                 {title}
               </h3>
-              <p className="text-sm leading-relaxed text-white/55">{body}</p>
+              <p className="text-base leading-relaxed text-white">{body}</p>
               <Icon size={32} className="mt-4 text-white/20" />
             </div>
           ))}

@@ -20,15 +20,9 @@ export default function PuntoHero() {
             <div className="flex-1 bg-[#CC0000]" />
             <div className="flex-1 bg-[#E6A800]" />
           </div>
-          <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/35">
-            Programa de instaladores · Argentina
+          <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#E6A800]">
+            Programa para instaladores
           </span>
-        </div>
-
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 bg-white/[0.06] border border-white/10 rounded-full px-4 py-1.5 mb-6">
-          <span className="w-2 h-2 rounded-full bg-[#E6A800] animate-pulse" />
-          <span className="text-xs text-white/60">Abierto para talleres</span>
         </div>
 
         {/* Headline */}
@@ -41,7 +35,7 @@ export default function PuntoHero() {
         </h1>
 
         {/* Body */}
-        <p className="text-base text-white/55 max-w-[480px] leading-relaxed mb-10">
+        <p className="text-lg text-white max-w-[480px] leading-relaxed mb-10">
           Cuatro frentes que trabajan para tu taller: te traemos los clientes, te damos las
           herramientas para cerrar, te ponemos en escena y te respaldamos para crecer.
         </p>
