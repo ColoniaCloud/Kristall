@@ -80,10 +80,11 @@ export default function PuntoModal({ onClose }: { onClose: () => void }) {
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+      className="fixed inset-x-0 bottom-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-4 sm:pt-20"
+      style={{ top: '56px' }}
       onClick={e => { if (e.target === overlayRef.current) onClose() }}
     >
-      <div className="bg-white rounded-2xl w-full max-w-lg max-h-[90dvh] overflow-y-auto shadow-2xl">
+      <div className="bg-white rounded-2xl w-full max-w-lg max-h-[calc(100dvh-72px)] overflow-y-auto shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#E4E4E2]">
           <div>
