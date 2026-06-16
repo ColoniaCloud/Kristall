@@ -1,7 +1,20 @@
+'use client'
+
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import { Link } from '@/i18n/routing'
 
 export default function ConcesionariasHero() {
+  const [mounted, setMounted] = useState(false)
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setMounted(true) }, [])
+
+  const item = (delay: number): React.CSSProperties => ({
+    opacity: mounted ? 1 : 0,
+    transform: mounted ? 'translateY(0)' : 'translateY(20px)',
+    transition: `opacity 700ms ease ${delay}ms, transform 700ms ease ${delay}ms`,
+  })
+
   return (
     <section className="relative overflow-hidden bg-[#0A0A0A]">
       <Image
@@ -15,44 +28,41 @@ export default function ConcesionariasHero() {
 
       <div className="relative z-10 max-w-[1160px] mx-auto px-10 pt-20 pb-[72px]">
         {/* Eyebrow */}
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-3 mb-6" style={item(0)}>
           <div className="flex h-[14px] w-6 overflow-hidden rounded-[2px] flex-shrink-0">
             <div className="flex-1 bg-[#1A1A1A]" />
             <div className="flex-1 bg-[#CC0000]" />
             <div className="flex-1 bg-[#E6A800]" />
           </div>
           <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/35">
-            Programa Concesionarias · Argentina
+            Programa para concesionarias
           </span>
         </div>
 
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 bg-[#E6A800]/10 border border-[#E6A800]/20 rounded-full px-4 py-1.5 mb-6">
+        <div
+          className="inline-flex items-center gap-2 bg-[#E6A800]/10 border border-[#E6A800]/20 rounded-full px-4 py-1.5 mb-6"
+          style={item(80)}
+        >
           <span className="w-2 h-2 rounded-full bg-[#E6A800]" />
           <span className="text-xs text-[#E6A800]/80">Canal exclusivo</span>
         </div>
 
         {/* Headline */}
         <h1
-          className="font-semibold leading-tight text-white mb-4"
+          className="font-semibold leading-tight text-white mb-10"
           style={{
             fontFamily: 'var(--font-display)',
             fontSize: 'clamp(2.4rem, 5vw, 4rem)',
+            ...item(160),
           }}
         >
           Sumá más margen
           <span className="block text-[#E6A800]">a cada entrega de 0km.</span>
         </h1>
 
-        {/* Body */}
-        <p className="text-[15px] text-white/55 max-w-[520px] leading-relaxed mb-10">
-          El polarizado es el accesorio de mayor rentabilidad en el momento de máxima decisión
-          de compra. Con Kristall ofrecés tecnología alemana, toda la gama para cada segmento
-          y la garantía digital que pide el cliente.
-        </p>
-
         {/* CTAs */}
-        <div className="flex gap-4 flex-wrap">
+        <div className="flex gap-4 flex-wrap" style={item(260)}>
           <Link
             href="/contacto?canal=concesionarias"
             className="btn-primary text-white px-7 py-3 rounded-lg text-sm font-medium transition-all"
