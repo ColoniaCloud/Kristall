@@ -1,4 +1,8 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
+import PuntoModal from './PuntoModal'
 
 const stats = [
   { value: '5 líneas', label: 'Productos disponibles' },
@@ -8,49 +12,56 @@ const stats = [
 ]
 
 export default function PuntoCTA() {
+  const [open, setOpen] = useState(false)
+
   return (
-    <section className="bg-[#0A0A0A] py-16 px-10">
-      <div className="max-w-[800px] mx-auto text-center">
-        <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/30 mb-4">
-          ¿Listo para sumar tu taller?
-        </p>
+    <>
+      <section className="bg-[#0A0A0A] py-16 px-10">
+        <div className="max-w-[800px] mx-auto text-center">
+          <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/30 mb-4">
+            ¿Listo para sumar tu taller?
+          </p>
 
-        <h2
-          className="font-medium text-white mb-4"
-          style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)', fontFamily: 'var(--font-display)' }}
-        >
-          Convertite en Punto Kristall
-        </h2>
-
-        <p className="text-base text-white/45 leading-relaxed mb-10 max-w-[480px] mx-auto">
-          Completá el formulario y un asesor de Kristall te contacta para explicarte los
-          requisitos y condiciones del programa.
-        </p>
-
-        <div className="flex gap-4 justify-center flex-wrap">
-          <Link
-            href="/contacto?programa=punto-kristall"
-            className="btn-primary text-white px-8 py-4 rounded-lg text-base font-medium transition-all"
+          <h2
+            className="font-medium text-white mb-4"
+            style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)', fontFamily: 'var(--font-display)' }}
           >
-            Quiero ser Punto Kristall
-          </Link>
-          <Link
-            href="/productos"
-            className="border border-white/20 text-white/60 px-8 py-4 rounded-lg text-base hover:text-white hover:border-white/40 transition-all"
-          >
-            Ver productos
-          </Link>
-        </div>
+            Convertite en Punto Kristall
+          </h2>
 
-        <div className="flex justify-center gap-8 mt-12 flex-wrap border-t border-white/[0.08] pt-10">
-          {stats.map(({ value, label }) => (
-            <div key={label} className="text-center">
-              <p className="text-2xl font-medium text-white" style={{ fontFamily: 'var(--font-display)' }}>{value}</p>
-              <p className="text-xs text-white/30 mt-1 uppercase tracking-wider">{label}</p>
-            </div>
-          ))}
+          <p className="text-base text-white/45 leading-relaxed mb-10 max-w-[480px] mx-auto">
+            Completá el formulario y un asesor de Kristall te contacta para explicarte los
+            requisitos y condiciones del programa.
+          </p>
+
+          <div className="flex gap-4 justify-center flex-wrap">
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="btn-primary text-white px-8 py-4 rounded-lg text-base font-medium transition-all"
+            >
+              Quiero ser Punto Kristall
+            </button>
+            <Link
+              href="/productos"
+              className="border border-white/20 text-white/60 px-8 py-4 rounded-lg text-base hover:text-white hover:border-white/40 transition-all"
+            >
+              Ver productos
+            </Link>
+          </div>
+
+          <div className="flex justify-center gap-8 mt-12 flex-wrap border-t border-white/[0.08] pt-10">
+            {stats.map(({ value, label }) => (
+              <div key={label} className="text-center">
+                <p className="text-2xl font-medium text-white" style={{ fontFamily: 'var(--font-display)' }}>{value}</p>
+                <p className="text-xs text-white/30 mt-1 uppercase tracking-wider">{label}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {open && <PuntoModal onClose={() => setOpen(false)} />}
+    </>
   )
 }
