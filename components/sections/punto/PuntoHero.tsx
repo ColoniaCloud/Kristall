@@ -40,23 +40,6 @@ export default function PuntoHero() {
           herramientas para cerrar, te ponemos en escena y te respaldamos para crecer.
         </p>
 
-        {/* Pills */}
-        <div className="flex flex-wrap gap-3">
-          {[
-            { tag: 'DEMANDA', label: 'Te traemos los clientes' },
-            { tag: 'CIERRE', label: 'Herramientas de venta' },
-            { tag: 'IMAGEN', label: 'Presencia y marketing' },
-            { tag: 'LEALTAD', label: 'Respaldo y crecimiento' },
-          ].map(({ tag, label }) => (
-            <div
-              key={tag}
-              className="bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-2.5 flex items-center gap-2"
-            >
-              <span className="text-[11px] uppercase tracking-[0.1em] text-[#E6A800]">{tag}</span>
-              <span className="text-sm text-white/70 font-medium">{label}</span>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   )
