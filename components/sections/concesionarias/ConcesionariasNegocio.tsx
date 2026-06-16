@@ -29,7 +29,7 @@ const steps = [
   {
     num: '02',
     title: 'El cliente elige y lo siente',
-    body: 'Con el medidor de calor comprueba la diferencia al instante y pide su garantía Kristall.',
+    body: 'Con el medidor de calor comprueba la diferencia al instante y compra.',
   },
   {
     num: '03',
