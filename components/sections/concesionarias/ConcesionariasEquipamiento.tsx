@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Layers, ShieldCheck, Sun, BookOpen, Package, Info } from 'lucide-react'
+import { Layers, ShieldCheck, Sun, BookOpen, Info } from 'lucide-react'
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
@@ -40,11 +40,6 @@ const items = [
     title: 'Capacitación al equipo',
     body: 'A tu fuerza de ventas: cómo presentar la gama y justificar el precio premium.',
   },
-  {
-    icon: Package,
-    title: 'Gama completa disponible',
-    body: 'Desde la línea KLAR hasta la premium KERAMX, lista para cada segmento del salón.',
-  },
 ]
 
 function HeaderBlock() {
@@ -52,7 +47,7 @@ function HeaderBlock() {
   return (
     <div ref={ref}>
       <span
-        className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#CC0000] mb-3 block transition-all duration-700"
+        className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#E6A800] mb-3 block transition-all duration-700"
         style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '0ms' }}
       >
         02 · QUÉ APORTAMOS
@@ -64,7 +59,7 @@ function HeaderBlock() {
         Lo que dejamos en tu salón
       </h2>
       <p
-        className="text-[15px] text-[#5C5C5C] leading-relaxed mb-12 transition-all duration-700"
+        className="text-[16px] text-[#5C5C5C] leading-relaxed mb-12 transition-all duration-700"
         style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '160ms' }}
       >
         Equipamos tu concesionaria con todo lo necesario para vender polarizado premium desde
@@ -86,8 +81,8 @@ function ItemCard({ icon: Icon, title, body, delay }: { icon: React.ElementType;
         <Icon size={20} className="text-[#0A0A0A]" />
       </div>
       <div>
-        <p className="text-[15px] font-semibold text-[#0A0A0A] mb-1.5">{title}</p>
-        <p className="text-[15px] text-[#5C5C5C] leading-relaxed">{body}</p>
+        <p className="text-[16px] font-semibold text-[#0A0A0A] mb-1.5">{title}</p>
+        <p className="text-[16px] text-[#5C5C5C] leading-relaxed">{body}</p>
       </div>
     </div>
   )
@@ -113,7 +108,7 @@ export default function ConcesionariasEquipamiento() {
           style={{ opacity: noteInView ? 1 : 0, transform: noteInView ? 'translateY(0)' : 'translateY(20px)', transitionDelay: '400ms' }}
         >
           <Info size={15} className="text-[#9A9A9A] flex-shrink-0 mt-0.5" />
-          <p className="text-[15px] text-[#5C5C5C] italic">
+          <p className="text-[16px] text-[#5C5C5C] italic">
             El tester solar de calor (medidor) se adquiere por separado — es la herramienta de
             cierre más efectiva en el escritorio de venta.
           </p>
