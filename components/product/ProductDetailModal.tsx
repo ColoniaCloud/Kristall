@@ -8,6 +8,7 @@ import { z } from 'zod'
 import { Loader2, CheckCircle, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { getLine, laminaName, overlayOpacity, type Lamina } from '@/lib/catalogo'
+import { trackLead } from '@/lib/analytics'
 
 interface ProductDetailModalProps {
   lamina: Lamina
@@ -58,6 +59,7 @@ export default function ProductDetailModal({ lamina, onClose }: ProductDetailMod
       })
       if (!res.ok) throw new Error('error')
       setStatus('success')
+      trackLead('producto')
     } catch {
       setStatus('error')
     }

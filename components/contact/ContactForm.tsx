@@ -7,6 +7,7 @@ import { z } from 'zod'
 import { Mail, Clock, Loader2, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
+import { trackLead } from '@/lib/analytics'
 
 const SLIDES = [
   '/cat/top-VITRAL.jpg',
@@ -57,6 +58,7 @@ export default function ContactForm() {
       })
       if (!res.ok) throw new Error(t('error_server'))
       setStatus('success')
+      trackLead('contacto')
       reset()
     } catch {
       setErrorMsg(t('error'))

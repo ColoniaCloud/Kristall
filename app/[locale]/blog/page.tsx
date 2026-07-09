@@ -17,11 +17,14 @@ const pageMeta: Record<string, { title: string; description: string }> = {
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const m = pageMeta[locale] ?? pageMeta.es
+  const hasArticles = (await getPublishedArticles(1)).length > 0
   return {
     title: m.title,
     description: m.description,
     alternates: buildAlternates('/blog', locale),
     openGraph: { title: `${m.title} | Kristall Film`, description: m.description, url: `https://kristallfilm.com/${locale}/blog` },
+    // Sin artículos publicados es thin content: se saca de indexación hasta que haya contenido real.
+    ...(hasArticles ? {} : { robots: { index: false, follow: true } }),
   }
 }
 

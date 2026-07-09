@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { X, MessageSquare, User, ShieldCheck } from 'lucide-react'
 import { GridVignetteBackground } from '@/components/ui/vignette-grid-background'
+import { trackLead } from '@/lib/analytics'
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
@@ -55,6 +56,7 @@ function Modal({ onClose }: { onClose: () => void }) {
       })
       if (!res.ok) throw new Error()
       setSent(true)
+      trackLead('propuesta-vidrierias')
     } catch {
       setError('Hubo un error. Intentá de nuevo.')
     } finally {

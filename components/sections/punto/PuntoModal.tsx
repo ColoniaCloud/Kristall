@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { X } from 'lucide-react'
+import { trackLead } from '@/lib/analytics'
 
 type FormData = {
   nombre: string
@@ -69,6 +70,7 @@ export default function PuntoModal({ onClose }: { onClose: () => void }) {
         }),
       })
       setStatus(res.ok ? 'success' : 'error')
+      if (res.ok) trackLead('punto-kristall')
     } catch {
       setStatus('error')
     }

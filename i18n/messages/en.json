@@ -93,7 +93,15 @@
     "cat_ppf_name": "Paint Protection Film",
     "cat_ppf_desc": "Invisible paint protection against impacts, scratches and chemical agents. Thermal self-healing.",
     "cat_vitral_name": "Architectural film",
-    "cat_vitral_desc": "Solar control for commercial and residential glazing. Decorative and privacy options."
+    "cat_vitral_desc": "Solar control for commercial and residential glazing. Decorative and privacy options.",
+    "line_prefix": "Line",
+    "products_heading": "Available products",
+    "product_count": "{n} products",
+    "product_count_one": "{n} product",
+    "view_all_lines": "View all lines",
+    "other_lines": "Other lines",
+    "empty_products": "No products available in this line yet.",
+    "breadcrumb_home": "Home"
   },
   "services": {
     "label": "Software",

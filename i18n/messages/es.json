@@ -93,7 +93,15 @@
     "cat_ppf_name": "Paint Protection Film",
     "cat_ppf_desc": "Protección invisible de pintura contra impactos, rayones y agentes químicos. Auto-reparación térmica.",
     "cat_vitral_name": "Polarizado estructural",
-    "cat_vitral_desc": "Control solar para vidriados comerciales y residenciales. Opciones decorativas y de privacidad."
+    "cat_vitral_desc": "Control solar para vidriados comerciales y residenciales. Opciones decorativas y de privacidad.",
+    "line_prefix": "Línea",
+    "products_heading": "Productos disponibles",
+    "product_count": "{n} productos",
+    "product_count_one": "{n} producto",
+    "view_all_lines": "Ver todas las líneas",
+    "other_lines": "Otras líneas",
+    "empty_products": "No hay productos disponibles en esta línea todavía.",
+    "breadcrumb_home": "Inicio"
   },
   "services": {
     "label": "Software",

@@ -93,7 +93,15 @@
     "cat_ppf_name": "Lackschutzfolie",
     "cat_ppf_desc": "Unsichtbarer Lackschutz gegen Stöße, Kratzer und chemische Einwirkungen. Thermische Selbstheilung.",
     "cat_vitral_name": "Architekturfolie",
-    "cat_vitral_desc": "Sonnenschutz für Gewerbe- und Wohnverglasung. Dekorations- und Sichtschutzoptionen."
+    "cat_vitral_desc": "Sonnenschutz für Gewerbe- und Wohnverglasung. Dekorations- und Sichtschutzoptionen.",
+    "line_prefix": "Linie",
+    "products_heading": "Verfügbare Produkte",
+    "product_count": "{n} Produkte",
+    "product_count_one": "{n} Produkt",
+    "view_all_lines": "Alle Linien ansehen",
+    "other_lines": "Weitere Linien",
+    "empty_products": "In dieser Linie sind noch keine Produkte verfügbar.",
+    "breadcrumb_home": "Startseite"
   },
   "services": {
     "label": "Software",
