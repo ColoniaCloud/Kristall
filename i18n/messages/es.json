@@ -138,7 +138,11 @@
     "link_dashboard": "Dashboard y reportes",
     "link_nosotros": "Nosotros",
     "link_blog": "Blog",
-    "link_contacto": "Contacto"
+    "link_contacto": "Contacto",
+    "col_partners": "Sumate a Kristall",
+    "link_vidrierias": "Vidrierías y aberturas",
+    "link_concesionarias": "Concesionarias",
+    "link_punto_kristall": "Punto Kristall"
   },
   "about": {
     "hero_eyebrow": "Historia de la marca",

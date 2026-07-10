@@ -7,9 +7,9 @@ export default function Footer() {
 
   return (
     <footer className="sticky bottom-0 z-0 mt-auto bg-[#1A1A1A] px-8 py-8 pb-6 md:py-14 md:pb-12">
-      <div className="mx-auto max-w-[1160px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center md:text-left">
+      <div className="mx-auto max-w-[1160px] grid grid-cols-2 lg:grid-cols-5 gap-8 text-center md:text-left">
         {/* Col 1: Branding */}
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <div className="flex items-center justify-center md:justify-start mb-3">
             <Image
               src="/LogoPlano.png"
@@ -75,6 +75,28 @@ export default function Footer() {
             <li>
               <Link href="/contacto" className="text-white/50 hover:text-white transition-colors">
                 {t('link_contacto')}
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Col 5: Sumate a Kristall */}
+        <div>
+          <h3 className="text-white font-medium text-[15px] mb-3">{t('col_partners')}</h3>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <Link href="/propuesta-vidrierias" className="text-white/50 hover:text-white transition-colors">
+                {t('link_vidrierias')}
+              </Link>
+            </li>
+            <li>
+              <Link href="/concesionarias" className="text-white/50 hover:text-white transition-colors">
+                {t('link_concesionarias')}
+              </Link>
+            </li>
+            <li>
+              <Link href="/punto-kristall" className="text-white/50 hover:text-white transition-colors">
+                {t('link_punto_kristall')}
               </Link>
             </li>
           </ul>

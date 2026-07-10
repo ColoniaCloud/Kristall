@@ -138,7 +138,11 @@
     "link_dashboard": "Dashboard & reports",
     "link_nosotros": "About us",
     "link_blog": "Blog",
-    "link_contacto": "Contact"
+    "link_contacto": "Contact",
+    "col_partners": "Partner with Kristall",
+    "link_vidrierias": "Window & door retailers",
+    "link_concesionarias": "Dealerships",
+    "link_punto_kristall": "Punto Kristall"
   },
   "about": {
     "hero_eyebrow": "Brand story",
