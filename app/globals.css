@@ -83,3 +83,68 @@ body {
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
+/* ---------------------------------------------------------------------- */
+/* Tema shadcn escopeado — solo para superficies internas (Panel Cliente y */
+/* Garantías). No toca :root para no pisar las variables del sitio público */
+/* (--accent, --border, etc. ya usadas en Header, LanguageSelector, etc.). */
+/* Usa los nombres "planos" estándar de shadcn (--border, --popover, etc.) */
+/* porque algunos componentes (sonner.tsx) los referencian directo por     */
+/* var(--border)/var(--radius) en vez de las utilities bg-border/rounded-. */
+/* Al vivir bajo la clase .kf-app-theme (nunca :root) no colisiona con las */
+/* variables homónimas del sitio público — solo aplican a sus descendientes.*/
+/* ---------------------------------------------------------------------- */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-heading: var(--font-display);
+  /* Fallbacks = defaults de Tailwind v4 (0.25/0.375/0.5/0.75rem): fuera de
+     .kf-app-theme --radius no existe, y sin fallback estos tokens quedarían
+     inválidos y le sacarían el border-radius a rounded-sm/md/lg/xl en TODO
+     el sitio público (que también usa esas utilities). */
+  --radius-sm: calc(var(--radius, 0.5rem) - 4px);
+  --radius-md: calc(var(--radius, 0.5rem) - 2px);
+  --radius-lg: var(--radius, 0.5rem);
+  --radius-xl: calc(var(--radius, 0.5rem) + 4px);
+}
+
+.kf-app-theme {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --radius: 0.625rem;
+  font-family: var(--font-body);
+}

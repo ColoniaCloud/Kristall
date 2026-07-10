@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link, useRouter, usePathname } from '@/i18n/routing'
+import NextLink from 'next/link'
 import Image from 'next/image'
 import LanguageSelector from '@/components/common/LanguageSelector'
+import NavDropdown from '@/components/layout/NavDropdown'
 import { Menu, X } from 'lucide-react'
 import { useLocale } from 'next-intl'
 
@@ -34,12 +36,31 @@ export default function Header() {
     setMobileOpen(false)
   }
 
-  const navLinks = [
+  interface NavChild {
+    href: string
+    label: string
+    external?: boolean
+  }
+  type NavEntry = { href: string; label: string } | { label: string; children: NavChild[] }
+
+  const navLinks: NavEntry[] = [
     { href: '/', label: t('home') },
-    { href: '/productos', label: t('products') },
+    {
+      label: t('products'),
+      children: [
+        { href: '/productos', label: t('products_catalog') },
+        { href: '/garantia', label: t('products_warranty'), external: true },
+      ],
+    },
     { href: '/nosotros', label: t('about') },
     { href: '/blog', label: t('blog') },
-    { href: '/servicios', label: t('services') },
+    {
+      label: t('services'),
+      children: [
+        { href: '/servicios', label: t('services_info') },
+        { href: '/cliente/ingresar', label: t('services_access'), external: true },
+      ],
+    },
     { href: '/contacto', label: t('contact') },
   ]
 
@@ -56,9 +77,13 @@ export default function Header() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-5">
-            {navLinks.map(link => (
-              <Link key={link.href} href={link.href} className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">{link.label}</Link>
-            ))}
+            {navLinks.map(link =>
+              'children' in link ? (
+                <NavDropdown key={link.label} label={link.label} items={[...link.children]} />
+              ) : (
+                <Link key={link.href} href={link.href} className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">{link.label}</Link>
+              )
+            )}
           </nav>
 
           {/* Desktop right */}
@@ -102,16 +127,45 @@ export default function Header() {
           {/* Content */}
           <div className="flex flex-col flex-1 px-6 pt-6 pb-8 overflow-y-auto">
             <nav className="flex flex-col">
-              {navLinks.map(link => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="py-4 border-b border-[#E4E4E2] text-lg font-medium text-[#0A0A0A] hover:text-[#5C5C5C] transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map(link =>
+                'children' in link ? (
+                  <div key={link.label} className="border-b border-[#E4E4E2] py-4">
+                    <p className="text-lg font-medium text-[#0A0A0A] mb-3">{link.label}</p>
+                    <div className="flex flex-col gap-3 pl-3">
+                      {link.children.map(child =>
+                        child.external ? (
+                          <NextLink
+                            key={child.href}
+                            href={child.href}
+                            onClick={() => setMobileOpen(false)}
+                            className="text-base text-[#5C5C5C] hover:text-[#0A0A0A] transition-colors"
+                          >
+                            {child.label}
+                          </NextLink>
+                        ) : (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            onClick={() => setMobileOpen(false)}
+                            className="text-base text-[#5C5C5C] hover:text-[#0A0A0A] transition-colors"
+                          >
+                            {child.label}
+                          </Link>
+                        )
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="py-4 border-b border-[#E4E4E2] text-lg font-medium text-[#0A0A0A] hover:text-[#5C5C5C] transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
             </nav>
 
             {/* Locale selector */}

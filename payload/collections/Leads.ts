@@ -46,6 +46,7 @@ export const Leads: CollectionConfig = {
         { label: 'Cotización de carrito', value: 'cotizacion' },
         { label: 'Página de software', value: 'software' },
         { label: 'Software', value: 'software-demo' },
+        { label: 'Reclamo de garantía (asistido)', value: 'garantia-asistido' },
       ],
       admin: {
         position: 'sidebar',

@@ -11,7 +11,11 @@
     "close_menu": "Cerrar menú",
     "language": "Idioma",
     "punto_kristall": "Punto Kristall",
-    "concesionarias": "Concesionarias"
+    "concesionarias": "Concesionarias",
+    "products_catalog": "Catálogo",
+    "products_warranty": "Garantías",
+    "services_info": "Información",
+    "services_access": "Acceder"
   },
   "hero": {
     "eyebrow": "Soluciones avanzadas para control solar, seguridad y protección de superficies",

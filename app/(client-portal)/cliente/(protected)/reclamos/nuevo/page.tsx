@@ -1,0 +1,21 @@
+import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
+import { getClientSession } from '@/lib/client-portal/session'
+import { getInstallations } from '@/lib/client-portal/api'
+import ClaimForm from '@/components/client-portal/ClaimForm'
+
+export const metadata: Metadata = { title: 'Nuevo reclamo' }
+
+export default async function NuevoReclamoPage() {
+  const session = await getClientSession()
+  if (!session) redirect('/cliente/ingresar')
+
+  const installations = await getInstallations(session.contactId)
+
+  return (
+    <div className="flex flex-col gap-6">
+      <h1 className="font-heading text-2xl font-semibold">Nuevo reclamo</h1>
+      <ClaimForm installations={installations} />
+    </div>
+  )
+}

@@ -11,7 +11,11 @@
     "close_menu": "Close menu",
     "language": "Language",
     "punto_kristall": "Punto Kristall",
-    "concesionarias": "Dealerships"
+    "concesionarias": "Dealerships",
+    "products_catalog": "Catalog",
+    "products_warranty": "Warranty",
+    "services_info": "Information",
+    "services_access": "Sign in"
   },
   "hero": {
     "eyebrow": "Advanced solutions for solar control, security and surface protection",
