@@ -67,3 +67,29 @@ export async function sendLeadConfirmation(lead: {
     `,
   })
 }
+
+export async function sendWarrantyActivationEmail(params: {
+  to: string
+  recipientName?: string
+  installerCompany: string
+  installationCode: string
+  productName: string
+  activationLink: string
+}) {
+  const resend = getResendClient()
+  const { to, recipientName, installerCompany, installationCode, productName, activationLink } = params
+
+  await resend.emails.send({
+    from: process.env.EMAIL_FROM!,
+    to,
+    subject: `Tu garantía Kristall Film — ${productName}`,
+    html: `
+      <h2>Hola${recipientName ? ` ${recipientName}` : ''},</h2>
+      <p>${installerCompany} te entregó un producto Kristall Film (${productName}) con garantía. Usá este link para activarla o consultar su estado:</p>
+      <p><a href="${activationLink}">${activationLink}</a></p>
+      <p>Tu clave de garantía es: <strong>${installationCode}</strong></p>
+      <br/>
+      <p style="color:#9A9A9A;font-size:12px">Kristall Film — Tecnología alemana de precisión</p>
+    `,
+  })
+}

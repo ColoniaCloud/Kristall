@@ -64,6 +64,12 @@ export interface Installation {
   activatedAt: string | null
   expiresAt: string | null
   roll: { fullRollCode: string; product: { id: string; name: string; sku: string } }
+  /**
+   * Token para armar el link de activación (/garantia/<token>). Pendiente de que el
+   * equipo del CRM lo agregue a esta respuesta (hoy no lo devuelve, ver CLIENT_PORTAL_API.md
+   * y WARRANTY_API.md) — hasta entonces siempre viene undefined en producción.
+   */
+  activationToken?: string
 }
 
 export interface Claim {

@@ -122,6 +122,19 @@ const MOCK_INSTALLATIONS = [
     activatedAt: '2026-06-10T00:00:00.000Z',
     expiresAt: '2027-06-10T00:00:00.000Z',
     roll: { fullRollCode: 'LOT-20260705-0001-R003', product: { id: 'clp1', name: 'KRYPTON 05', sku: 'KR-05' } },
+    // Mock-only: el CRM real todavía no expone este campo (ver comentario en lib/client-portal/api.ts).
+    activationToken: 'mock-active',
+  },
+  {
+    id: 'cli2',
+    installationCode: 'LOT-20260705-0002-R001-I1',
+    status: 'PENDING',
+    assetType: null,
+    assetDescription: null,
+    activatedAt: null,
+    expiresAt: null,
+    roll: { fullRollCode: 'LOT-20260705-0002-R001', product: { id: 'clp2', name: 'KAISER 20', sku: 'KA-20' } },
+    activationToken: 'mock-pending',
   },
 ]
 

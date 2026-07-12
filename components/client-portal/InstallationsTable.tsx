@@ -1,5 +1,6 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import StatusBadge from '@/components/common/StatusBadge'
+import SendWarrantyEmailDialog from '@/components/client-portal/SendWarrantyEmailDialog'
 import { formatDate } from '@/lib/format'
 import type { Installation } from '@/lib/client-portal/api'
 
@@ -17,6 +18,7 @@ export default function InstallationsTable({ installations }: { installations: I
           <TableHead>Estado</TableHead>
           <TableHead>Activada</TableHead>
           <TableHead>Vence</TableHead>
+          <TableHead>Acciones</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -29,6 +31,9 @@ export default function InstallationsTable({ installations }: { installations: I
             </TableCell>
             <TableCell>{formatDate(i.activatedAt)}</TableCell>
             <TableCell>{formatDate(i.expiresAt)}</TableCell>
+            <TableCell>
+              <SendWarrantyEmailDialog installation={i} />
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
