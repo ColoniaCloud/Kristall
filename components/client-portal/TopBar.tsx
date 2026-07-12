@@ -36,7 +36,7 @@ export default function TopBar({ session }: Props) {
             <Menu className="size-5" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-64 p-4">
+        <SheetContent side="left" className="crm-theme w-64 p-4">
           <SheetTitle className="mb-4">Kristall — Panel de Cliente</SheetTitle>
           <NavLinks onNavigate={() => setMobileOpen(false)} />
         </SheetContent>
@@ -51,7 +51,7 @@ export default function TopBar({ session }: Props) {
               <ChevronDown className="size-3.5" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="crm-theme">
             <div className="px-2 py-1.5 text-sm text-muted-foreground">{session.name}</div>
             <DropdownMenuItem onClick={handleLogout} variant="destructive">
               <LogOut className="size-4" />

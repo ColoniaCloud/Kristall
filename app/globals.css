@@ -148,3 +148,129 @@ body {
   --radius: 0.625rem;
   font-family: var(--font-body);
 }
+
+/* ---------------------------------------------------------------------- */
+/* Tema oscuro del Panel CRM de Cliente — escopeado bajo .crm-theme, que   */
+/* se aplica DENTRO de .kf-app-theme (solo en el layout protegido de       */
+/* /cliente, nunca en /cliente/ingresar). Al redeclarar los mismos nombres */
+/* de variable que .kf-app-theme, gana por herencia normal de CSS en ese   */
+/* subárbol sin tocar el login ni el @theme inline de arriba.              */
+/*                                                                          */
+/* Las reglas de abajo son CSS plano (sin @layer): en Tailwind v4 eso les  */
+/* da prioridad sobre cualquier utility (que vive en @layer utilities),    */
+/* así se puede re-tematizar Button/Card/Badge vía sus atributos           */
+/* data-slot/data-variant SIN editar esos componentes (compartidos con     */
+/* /garantia y el resto del sitio público).                                */
+/* ---------------------------------------------------------------------- */
+.crm-theme {
+  --background: oklch(0.22 0.006 285);
+  --foreground: oklch(0.92 0.004 285);
+  --card: oklch(0.27 0.006 285);
+  --card-foreground: oklch(0.92 0.004 285);
+  --popover: oklch(0.30 0.007 285);
+  --popover-foreground: oklch(0.94 0.004 285);
+  --primary: oklch(0.62 0.19 255);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.32 0.006 285);
+  --secondary-foreground: oklch(0.92 0.004 285);
+  --muted: oklch(0.26 0.006 285);
+  --muted-foreground: oklch(0.64 0.008 285);
+  --accent: oklch(0.34 0.010 285);
+  --accent-foreground: oklch(0.95 0.004 285);
+  --destructive: oklch(0.62 0.21 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(0.30 0.006 285);
+  --ring: oklch(0.62 0.19 255 / 50%);
+  --radius: 0.5rem;
+  color-scheme: dark;
+  font-family: var(--font-body);
+}
+
+/* Botón primario: gradiente + relieve táctil */
+.crm-theme [data-slot="button"][data-variant="default"] {
+  background-image: linear-gradient(to bottom, oklch(0.68 0.19 255), oklch(0.58 0.19 255));
+  border-color: oklch(1 0 0 / 12%);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 15%),
+    0 1px 2px oklch(0 0 0 / 40%);
+}
+.crm-theme [data-slot="button"][data-variant="default"]:hover {
+  background-image: linear-gradient(to bottom, oklch(0.72 0.19 255), oklch(0.62 0.19 255));
+}
+.crm-theme [data-slot="button"][data-variant="default"]:active {
+  background-image: linear-gradient(to bottom, oklch(0.56 0.19 255), oklch(0.50 0.19 255));
+  box-shadow: inset 0 1px 2px oklch(0 0 0 / 30%);
+}
+
+/* Botón secundario/outline: relieve sutil sobre gris de panel */
+.crm-theme [data-slot="button"][data-variant="secondary"],
+.crm-theme [data-slot="button"][data-variant="outline"] {
+  background-image: linear-gradient(to bottom, oklch(0.34 0.006 285), oklch(0.28 0.006 285));
+  border-color: oklch(1 0 0 / 8%);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 6%);
+}
+.crm-theme [data-slot="button"][data-variant="secondary"]:hover,
+.crm-theme [data-slot="button"][data-variant="outline"]:hover {
+  background-image: linear-gradient(to bottom, oklch(0.38 0.006 285), oklch(0.32 0.006 285));
+}
+
+/* Cards sin borde: reemplaza el ring-1 ring-foreground/10 de card.tsx por
+   un gradiente vertical sutil como señal de relieve/profundidad. */
+.crm-theme [data-slot="card"] {
+  box-shadow: none;
+  background-image: linear-gradient(180deg, oklch(0.285 0.006 285), oklch(0.255 0.006 285));
+}
+
+/* sheet.tsx hardcodea bg-white junto a bg-popover (misma prioridad de utility
+   que bg-popover) — sin esta regla el menú mobile quedaría blanco dentro del
+   panel oscuro. La clase crm-theme se aplica directo en el propio
+   SheetContent/DropdownMenuContent (portalan fuera del layout protegido), no
+   en un ancestro, así que hace falta el selector combinado (sin espacio)
+   además del descendiente para cubrir ambos casos. */
+.crm-theme [data-slot="sheet-content"],
+[data-slot="sheet-content"].crm-theme {
+  background-color: var(--popover);
+}
+
+/* Mismo caso que sheet-content: dialog.tsx también hardcodea bg-white. */
+.crm-theme [data-slot="dialog-content"],
+[data-slot="dialog-content"].crm-theme {
+  background-color: var(--popover);
+}
+
+/* Sidebar: item activo con el mismo lenguaje de relieve que los botones */
+.crm-theme [data-slot="nav-link"][data-active="true"] {
+  background-image: linear-gradient(180deg, oklch(0.64 0.19 255), oklch(0.56 0.19 255));
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 15%);
+}
+
+/* Remap de StatusBadge (components/common/StatusBadge.tsx): sus 5 combinaciones
+   de clases literales se re-mapean a tonos oscuros legibles. Doble scope
+   (.crm-theme ancestro + [data-slot="badge"]) evita filtrarse a /garantia u
+   otros usos públicos de esas mismas clases (ProductCard, ContactForm, etc). */
+.crm-theme [data-slot="badge"].bg-emerald-50 {
+  background-color: oklch(0.27 0.05 155);
+  color: oklch(0.85 0.12 155);
+  border-color: oklch(0.40 0.08 155);
+}
+.crm-theme [data-slot="badge"].bg-amber-50 {
+  background-color: oklch(0.28 0.06 85);
+  color: oklch(0.85 0.15 85);
+  border-color: oklch(0.42 0.10 85);
+}
+.crm-theme [data-slot="badge"].bg-blue-50 {
+  background-color: oklch(0.27 0.06 255);
+  color: oklch(0.82 0.13 255);
+  border-color: oklch(0.42 0.10 255);
+}
+.crm-theme [data-slot="badge"].bg-red-50 {
+  background-color: oklch(0.28 0.08 25);
+  color: oklch(0.82 0.15 25);
+  border-color: oklch(0.42 0.12 25);
+}
+.crm-theme [data-slot="badge"].bg-neutral-100 {
+  background-color: oklch(0.32 0.006 285);
+  color: oklch(0.75 0.006 285);
+  border-color: oklch(0.42 0.006 285);
+}

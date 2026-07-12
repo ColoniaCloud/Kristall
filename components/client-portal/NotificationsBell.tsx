@@ -58,7 +58,7 @@ export default function NotificationsBell() {
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80">
+      <DropdownMenuContent align="end" className="crm-theme w-80">
         <DropdownMenuLabel>Notificaciones</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {notifications.length === 0 ? (
