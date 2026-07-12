@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Mail, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -16,7 +16,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog'
-import type { Installation } from '@/lib/client-portal/api'
 
 const schema = z.object({
   to: z.string().email('Ingresá un email válido'),
@@ -25,8 +24,19 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>
 
-export default function SendWarrantyEmailDialog({ installation }: { installation: Installation }) {
-  const [open, setOpen] = useState(false)
+export default function SendWarrantyEmailDialog({
+  open,
+  onOpenChange,
+  installationCode,
+  productName,
+  activationToken,
+}: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  installationCode: string
+  productName: string
+  activationToken: string
+}) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
 
@@ -36,20 +46,6 @@ export default function SendWarrantyEmailDialog({ installation }: { installation
     reset,
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) })
-
-  if (!installation.activationToken) {
-    return (
-      <Button
-        variant="outline"
-        size="sm"
-        disabled
-        title="Disponible cuando el CRM habilite el link de activación para este panel"
-      >
-        <Mail className="size-3.5" />
-        Reenviar por mail
-      </Button>
-    )
-  }
 
   const onSubmit = async (data: FormData) => {
     setStatus('loading')
@@ -61,9 +57,9 @@ export default function SendWarrantyEmailDialog({ installation }: { installation
         body: JSON.stringify({
           to: data.to,
           recipientName: data.recipientName,
-          installationCode: installation.installationCode,
-          productName: installation.roll.product.name,
-          activationToken: installation.activationToken,
+          installationCode,
+          productName,
+          activationToken,
         }),
       })
       if (!res.ok) {
@@ -74,7 +70,7 @@ export default function SendWarrantyEmailDialog({ installation }: { installation
       }
       toast.success('Email enviado')
       setStatus('idle')
-      setOpen(false)
+      onOpenChange(false)
       reset()
     } catch {
       setErrorMsg('Error de conexión. Intentá de nuevo.')
@@ -83,17 +79,13 @@ export default function SendWarrantyEmailDialog({ installation }: { installation
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
-        <Mail className="size-3.5" />
-        Reenviar por mail
-      </Button>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="crm-theme">
         <DialogHeader>
-          <DialogTitle>Reenviar garantía por mail</DialogTitle>
+          <DialogTitle>Enviar garantía por mail</DialogTitle>
           <DialogDescription>
-            Le enviamos al cliente su clave de garantía ({installation.installationCode}) y el link para
-            activarla o consultarla.
+            Le enviamos al cliente su clave de garantía ({installationCode}) y el link para activarla o
+            consultarla.
           </DialogDescription>
         </DialogHeader>
 

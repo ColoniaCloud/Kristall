@@ -137,7 +137,7 @@ Devuelve los rollos (`WarrantyRoll`) vendidos a ese cliente, con su lote, produc
     "fullRollCode": "LOT-20260705-0001-R003",
     "status": "IN_USE",
     "lot": { "lotNumber": "LOT-20260705-0001" },
-    "product": { "id": "clp...", "name": "KRYPTON 05", "sku": "KR-05" },
+    "product": { "id": "clp...", "name": "KRYPTON 05", "sku": "KR-05", "warrantyConfig": { "maxInstallations": 1 } },
     "installations": [
       { "id": "cli...", "installationCode": "LOT-...-R003-I1", "status": "ACTIVE", "activatedAt": "2026-06-10T00:00:00.000Z", "expiresAt": "2027-06-10T00:00:00.000Z" }
     ],
@@ -145,7 +145,11 @@ Devuelve los rollos (`WarrantyRoll`) vendidos a ese cliente, con su lote, produc
   }
 ]
 ```
-`status` de rollo: `IN_STOCK | SOLD | IN_USE | EXHAUSTED | VOIDED`.
+`status` de rollo: `IN_STOCK | SOLD | IN_USE | EXHAUSTED | VOIDED`. `product.warrantyConfig` es `null` si el
+producto no tiene configuración — en ese caso asumir `maxInstallations: 15` (default del CRM). Para saber
+cuántos sub-códigos de instalación quedan disponibles en un rollo, comparar `installations.length` (TODAS
+las generadas, no solo activas) contra `maxInstallations` — **no** usar `_count.installations`, que cuenta
+únicamente instalaciones `ACTIVE` (ver sección 4.8).
 
 ### 4.3 `GET /api/portal/v1/contacts/:contactId/installations` — Instalaciones de garantía
 
@@ -214,12 +218,12 @@ notificaciones del CRM).
 
 ```json
 [
-  { "id": "cln...", "type": "NEW_PURCHASE", "title": "Nueva compra confirmada", "message": "Se confirmó tu compra #1042 por un total de $150000.", "read": false, "createdAt": "2026-07-09T00:00:00.000Z" },
+  { "id": "cln...", "type": "NEW_PURCHASE", "title": "Nueva compra registrada", "message": "Se registró tu compra #1042 por un total de $150000.", "read": false, "createdAt": "2026-07-09T00:00:00.000Z" },
   { "id": "clm...", "type": "WARRANTY_ACTIVATED", "title": "Garantía activada", "message": "Juan Pérez activó la garantía LOT-...-R003-I1.", "read": true, "createdAt": "2026-07-08T00:00:00.000Z" }
 ]
 ```
 
-`type` es `"NEW_PURCHASE"` (una venta suya pasó a `CONFIRMED`, con rollos ya asignados) o
+`type` es `"NEW_PURCHASE"` (se creó una venta suya, con rollos ya asignados automáticamente) o
 `"WARRANTY_ACTIVATED"` (un Usuario activó la garantía de uno de sus rollos). Se generan
 automáticamente — no hay forma de crearlas manualmente vía API.
 
@@ -227,6 +231,40 @@ automáticamente — no hay forma de crearlas manualmente vía API.
 
 **Response `200`:** `{ "ok": true }`. **Errores:** `404` si la notificación no existe o no pertenece a
 ese `contactId`.
+
+### 4.8 `POST /api/portal/v1/contacts/:contactId/rolls/:fullRollCode/installations` — Generar un sub-código
+
+Para el caso en que el Cliente compra un rollo grande y lo corta para instalarlo en varios vehículos de
+sus propios clientes: cada corte necesita su propio código de activación (`WarrantyInstallation`)
+independiente, hasta el máximo configurado en el producto (`maxInstallations`, default 15 si el
+producto no tiene configuración explícita). La primera instalación (`-I1`) ya existe desde que se
+vendió el rollo — este endpoint es para generar la segunda, tercera, etc.
+
+No lleva body — no hace falta ningún dato del vehículo/cliente final todavía (eso se carga después,
+cuando ese cliente final abre su link y activa la garantía, igual que con la instalación original).
+
+**Response `201`:**
+```json
+{
+  "id": "cli...",
+  "installationNumber": 2,
+  "installationCode": "LOT-20260705-0001-R003-I2",
+  "activationToken": "clx9y8z7...",
+  "status": "PENDING",
+  "rollStatus": "SOLD"
+}
+```
+Con `activationToken` armás el link para el cliente final: `https://tu-sitio.com/garantia/<token>`
+— mismo mecanismo que la sección 2 de `WARRANTY_API.md`. `rollStatus` es el estado del rollo **después**
+de esta operación (`SOLD | IN_USE | EXHAUSTED`) — si viene `EXHAUSTED`, esta era la última instalación
+disponible; podés actualizar el estado del botón en tu UI sin necesidad de volver a pedir `/stock`.
+
+**Errores:**
+- `404 { "error": "Rollo no encontrado" }` — el `fullRollCode` no existe, o no fue vendido a ese `contactId` (mismo error genérico en ambos casos, para no facilitar enumeración).
+- `400 { "error": "Este rollo ya no admite más instalaciones" }` — se alcanzó `maxInstallations`, o el rollo está `VOIDED`. El rollo pasa a `status: "EXHAUSTED"` automáticamente cuando se genera la última instalación permitida.
+
+Cada sub-código generado dispara una notificación a los administradores del CRM (visible en
+`/warranty-claims`), igual que un reclamo.
 
 ---
 

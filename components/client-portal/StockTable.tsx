@@ -1,5 +1,6 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import StatusBadge from '@/components/common/StatusBadge'
+import CreateInstallationAction from '@/components/client-portal/CreateInstallationAction'
 import type { StockRoll } from '@/lib/client-portal/api'
 
 export default function StockTable({ rolls }: { rolls: StockRoll[] }) {
@@ -15,7 +16,8 @@ export default function StockTable({ rolls }: { rolls: StockRoll[] }) {
           <TableHead>Producto</TableHead>
           <TableHead>Lote</TableHead>
           <TableHead>Estado</TableHead>
-          <TableHead>Instalaciones</TableHead>
+          <TableHead>Instalaciones activas</TableHead>
+          <TableHead>Acciones</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -30,6 +32,9 @@ export default function StockTable({ rolls }: { rolls: StockRoll[] }) {
               <StatusBadge status={r.status} />
             </TableCell>
             <TableCell>{r._count.installations}</TableCell>
+            <TableCell>
+              <CreateInstallationAction roll={r} />
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

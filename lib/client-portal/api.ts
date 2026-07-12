@@ -44,7 +44,18 @@ export interface StockRoll {
   fullRollCode: string
   status: RollStatus
   lot: { lotNumber: string }
-  product: { id: string; name: string; sku: string }
+  product: {
+    id: string
+    name: string
+    sku: string
+    /** null si el producto no tiene WarrantyConfig — en ese caso asumir 15 (default del CRM). */
+    warrantyConfig: { maxInstallations: number } | null
+  }
+  /**
+   * TODAS las instalaciones generadas sobre este rollo (no solo las ACTIVE). Usar
+   * `installations.length` vs `product.warrantyConfig.maxInstallations` para saber cuántos
+   * sub-códigos quedan disponibles — `_count.installations` de abajo cuenta otra cosa.
+   */
   installations: {
     id: string
     installationCode: string
@@ -52,6 +63,7 @@ export interface StockRoll {
     activatedAt: string | null
     expiresAt: string | null
   }[]
+  /** Cuenta SOLO instalaciones ACTIVE (activadas por el cliente final) — no usar para cupo. */
   _count: { installations: number }
 }
 
@@ -64,12 +76,18 @@ export interface Installation {
   activatedAt: string | null
   expiresAt: string | null
   roll: { fullRollCode: string; product: { id: string; name: string; sku: string } }
-  /**
-   * Token para armar el link de activación (/garantia/<token>). Pendiente de que el
-   * equipo del CRM lo agregue a esta respuesta (hoy no lo devuelve, ver CLIENT_PORTAL_API.md
-   * y WARRANTY_API.md) — hasta entonces siempre viene undefined en producción.
-   */
-  activationToken?: string
+}
+
+/** Response de POST .../rolls/:fullRollCode/installations (sección 4.8 de CLIENT_PORTAL_API.md). */
+export interface CreatedInstallation {
+  id: string
+  installationNumber: number
+  installationCode: string
+  /** Token para armar el link /garantia/<token> — solo se entrega acá, en el momento de creación. */
+  activationToken: string
+  status: string
+  /** Estado del ROLLO (no de la instalación) después de esta operación. */
+  rollStatus: RollStatus
 }
 
 export interface Claim {
@@ -107,6 +125,14 @@ export function getStock(contactId: string) {
 
 export function getInstallations(contactId: string) {
   return callCrmApi<Installation[]>(`/api/portal/v1/contacts/${contactId}/installations`, { apiKey: KEY() })
+}
+
+/** Genera un nuevo sub-código de instalación (#2, #3, ...) sobre un rollo ya vendido a ese contacto. */
+export function createRollInstallation(contactId: string, fullRollCode: string) {
+  return callCrmApi<CreatedInstallation>(
+    `/api/portal/v1/contacts/${contactId}/rolls/${fullRollCode}/installations`,
+    { method: 'POST', apiKey: KEY() }
+  )
 }
 
 export function getClaims(contactId: string) {

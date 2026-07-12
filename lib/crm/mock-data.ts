@@ -95,7 +95,9 @@ const MOCK_STOCK = [
     fullRollCode: 'LOT-20260705-0001-R003',
     status: 'IN_USE',
     lot: { lotNumber: 'LOT-20260705-0001' },
-    product: { id: 'clp1', name: 'KRYPTON 05', sku: 'KR-05' },
+    // maxInstallations: 1 a propósito — ya tiene 1 instalación generada, para probar el
+    // camino de "este rollo ya no admite más instalaciones" sin necesitar estado mutable.
+    product: { id: 'clp1', name: 'KRYPTON 05', sku: 'KR-05', warrantyConfig: { maxInstallations: 1 } },
     installations: [
       { id: 'cli1', installationCode: 'LOT-20260705-0001-R003-I1', status: 'ACTIVE', activatedAt: '2026-06-10T00:00:00.000Z', expiresAt: '2027-06-10T00:00:00.000Z' },
     ],
@@ -106,7 +108,8 @@ const MOCK_STOCK = [
     fullRollCode: 'LOT-20260705-0002-R001',
     status: 'SOLD',
     lot: { lotNumber: 'LOT-20260705-0002' },
-    product: { id: 'clp2', name: 'KAISER 20', sku: 'KA-20' },
+    // maxInstallations: 3 con 0 generadas — para probar el camino exitoso de creación.
+    product: { id: 'clp2', name: 'KAISER 20', sku: 'KA-20', warrantyConfig: { maxInstallations: 3 } },
     installations: [],
     _count: { installations: 0 },
   },
@@ -122,8 +125,6 @@ const MOCK_INSTALLATIONS = [
     activatedAt: '2026-06-10T00:00:00.000Z',
     expiresAt: '2027-06-10T00:00:00.000Z',
     roll: { fullRollCode: 'LOT-20260705-0001-R003', product: { id: 'clp1', name: 'KRYPTON 05', sku: 'KR-05' } },
-    // Mock-only: el CRM real todavía no expone este campo (ver comentario en lib/client-portal/api.ts).
-    activationToken: 'mock-active',
   },
   {
     id: 'cli2',
@@ -134,7 +135,6 @@ const MOCK_INSTALLATIONS = [
     activatedAt: null,
     expiresAt: null,
     roll: { fullRollCode: 'LOT-20260705-0002-R001', product: { id: 'clp2', name: 'KAISER 20', sku: 'KA-20' } },
-    activationToken: 'mock-pending',
   },
 ]
 
@@ -205,6 +205,33 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
 
   m = match(path, /^\/api\/portal\/v1\/contacts\/([^/]+)\/stock$/)
   if (m && method === 'GET') return { status: 200, data: m[1] === MOCK_CONTACT_ID ? MOCK_STOCK : [] }
+
+  m = match(path, /^\/api\/portal\/v1\/contacts\/([^/]+)\/rolls\/([^/]+)\/installations$/)
+  if (m && method === 'POST') {
+    if (m[1] !== MOCK_CONTACT_ID) return { status: 404, data: { error: 'Cliente no encontrado' } }
+    const roll = MOCK_STOCK.find((r) => r.fullRollCode === m![2])
+    if (!roll) return { status: 404, data: { error: 'Rollo no encontrado' } }
+    if (roll.status === 'VOIDED' || roll.status === 'EXHAUSTED') {
+      return { status: 400, data: { error: 'Este rollo ya no admite más instalaciones' } }
+    }
+    const max = roll.product.warrantyConfig?.maxInstallations ?? 15
+    if (roll.installations.length >= max) {
+      return { status: 400, data: { error: 'Este rollo ya no admite más instalaciones' } }
+    }
+    const installationNumber = roll.installations.length + 1
+    const willBeExhausted = installationNumber >= max
+    return {
+      status: 201,
+      data: {
+        id: `cli-mock-${installationNumber}`,
+        installationNumber,
+        installationCode: `${roll.fullRollCode}-I${installationNumber}`,
+        activationToken: `mock-created-${roll.id}-${installationNumber}`,
+        status: 'PENDING',
+        rollStatus: willBeExhausted ? 'EXHAUSTED' : 'IN_USE',
+      },
+    }
+  }
 
   m = match(path, /^\/api\/portal\/v1\/contacts\/([^/]+)\/installations$/)
   if (m && method === 'GET') return { status: 200, data: m[1] === MOCK_CONTACT_ID ? MOCK_INSTALLATIONS : [] }
