@@ -30,7 +30,7 @@ export default function AboutValues() {
             >
               01
             </div>
-            <div className="text-[15px] font-medium text-white mb-2">{t('values_1_title')}</div>
+            <div className="text-[16px] font-medium text-white mb-2">{t('values_1_title')}</div>
             <div className="text-sm text-white/45 leading-relaxed">
               {t('values_1_body')}
             </div>
@@ -39,7 +39,7 @@ export default function AboutValues() {
           {/* Card 02 */}
           <div className="bg-white border border-[#E4E4E2] rounded-2xl p-6 shadow-[var(--shadow-card)]">
             <RefreshCw size={18} className="text-[#9A9A9A] mb-3" />
-            <div className="text-[15px] font-medium text-[#0A0A0A] mb-2">{t('values_2_title')}</div>
+            <div className="text-[16px] font-medium text-[#0A0A0A] mb-2">{t('values_2_title')}</div>
             <div className="text-sm text-[#5C5C5C] leading-relaxed">
               {t('values_2_body')}
             </div>
@@ -48,7 +48,7 @@ export default function AboutValues() {
           {/* Card 03 */}
           <div className="md:col-span-2 bg-white border border-[#E4E4E2] rounded-2xl p-6 shadow-[var(--shadow-card)]">
             <Eye size={18} className="text-[#9A9A9A] mb-3" />
-            <div className="text-[15px] font-medium text-[#0A0A0A] mb-2">{t('values_3_title')}</div>
+            <div className="text-[16px] font-medium text-[#0A0A0A] mb-2">{t('values_3_title')}</div>
             <div className="text-sm text-[#5C5C5C] leading-relaxed">
               {t('values_3_body')}
             </div>

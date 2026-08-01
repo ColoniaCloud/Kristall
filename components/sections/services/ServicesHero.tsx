@@ -19,7 +19,7 @@ export default function ServicesHero() {
       <div className="relative z-10 max-w-[1160px] mx-auto">
         <div className="flex items-center gap-2.5">
           <GermanyFlag />
-          <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/50">
+          <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-white/50">
             {t('hero_eyebrow')}
           </span>
         </div>
@@ -28,14 +28,14 @@ export default function ServicesHero() {
           className="font-[var(--font-display)] text-white max-w-[500px] mt-4 mb-4 leading-[1.1]"
           style={{
             fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(2.2rem, 4vw, 3.2rem)',
+              fontSize: 'clamp(2.325rem, 4vw, 3.2rem)',
             fontWeight: 600,
           }}
         >
           {t('hero_headline')}
         </h1>
 
-        <p className="text-[15px] text-white/55 max-w-[420px] leading-relaxed">
+        <p className="text-[16px] text-white/55 max-w-[420px] leading-relaxed">
           {t('hero_body')}
         </p>
 
@@ -47,7 +47,7 @@ export default function ServicesHero() {
             >
               {t('hero_stat1_value')}
             </div>
-            <div className="text-[11px] text-white/45 mt-1">
+            <div className="text-[12px] text-white/45 mt-1">
               {t('hero_stat1_label')}
             </div>
           </div>
@@ -58,7 +58,7 @@ export default function ServicesHero() {
             >
               {t('hero_stat2_value')}
             </div>
-            <div className="text-[11px] text-white/45 mt-1">
+            <div className="text-[12px] text-white/45 mt-1">
               {t('hero_stat2_label')}
             </div>
           </div>

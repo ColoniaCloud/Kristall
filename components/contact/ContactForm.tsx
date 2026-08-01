@@ -86,13 +86,13 @@ export default function ContactForm() {
             className="text-[#0A0A0A] mb-4 leading-tight"
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(2rem, 3vw, 2.8rem)',
+              fontSize: 'clamp(2.125rem, 3vw, 2.8rem)',
               fontWeight: 500,
             }}
           >
             {t('headline')}
           </h1>
-          <p className="text-[15px] text-[#5C5C5C] leading-relaxed mb-8">
+          <p className="text-[16px] text-[#5C5C5C] leading-relaxed mb-8">
             {t('body')}
           </p>
 
@@ -104,7 +104,7 @@ export default function ContactForm() {
               >
                 <Icon size={16} className="text-[#9A9A9A] mt-0.5 flex-shrink-0" />
                 <div>
-                  <div className="text-[11px] font-medium uppercase tracking-[0.08em] text-[#9A9A9A] mb-0.5">
+                  <div className="text-[12px] font-medium uppercase tracking-[0.08em] text-[#9A9A9A] mb-0.5">
                     {t(labelKey)}
                   </div>
                   <div className="text-sm font-medium text-[#0A0A0A]">{t(valueKey)}</div>                </div>
@@ -144,7 +144,7 @@ export default function ContactForm() {
           {status === 'success' ? (
             <div className="bg-[#F0FFF4] border border-green-200 rounded-xl p-6 text-center">
               <CheckCircle size={20} className="text-green-500 mx-auto mb-2" />
-              <div className="text-[15px] font-medium text-[#0A0A0A] mb-1">{t('success_title')}</div>
+              <div className="text-[16px] font-medium text-[#0A0A0A] mb-1">{t('success_title')}</div>
               <div className="text-sm text-[#5C5C5C]">{t('success_body')}</div>
             </div>
           ) : (
@@ -217,7 +217,7 @@ export default function ContactForm() {
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="btn-primary w-full text-white px-6 py-3 rounded-lg text-[15px] font-medium transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                className="btn-primary w-full text-white px-6 py-3 rounded-lg text-[16px] font-medium transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {status === 'loading' ? (
                   <>

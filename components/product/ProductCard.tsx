@@ -55,7 +55,7 @@ export default function ProductCard({ lamina, href }: ProductCardProps) {
       {/* Cuerpo */}
       <div className="flex flex-col flex-1 p-4">
         <div className="flex items-center justify-between mb-3">
-          <p className="text-[15px] font-medium text-[#0A0A0A]" style={{ fontFamily: 'var(--font-display)' }}>{name}</p>
+          <p className="text-[16px] font-medium text-[#0A0A0A]" style={{ fontFamily: 'var(--font-display)' }}>{name}</p>
           {!lamina.inStock && (
             <span className="text-[10px] bg-amber-50 border border-amber-200 text-amber-600 rounded px-2 py-0.5">{t('coming_soon')}</span>
           )}

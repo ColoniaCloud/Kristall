@@ -37,7 +37,7 @@ export default function PuntoHero() {
             <div className="flex-1 bg-[#CC0000]" />
             <div className="flex-1 bg-[#E6A800]" />
           </div>
-          <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#E6A800]">
+          <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800]">
             Programa para instaladores
           </span>
         </div>
@@ -46,7 +46,7 @@ export default function PuntoHero() {
         <h1
           className="font-semibold text-white leading-tight mb-2 transition-all duration-700"
           style={{
-            fontSize: 'clamp(2.4rem, 5vw, 4rem)',
+            fontSize: 'clamp(2.525rem, 5vw, 4rem)',
             fontFamily: 'var(--font-display)',
             opacity: loaded ? 1 : 0,
             transform: loaded ? 'translateY(0)' : 'translateY(16px)',

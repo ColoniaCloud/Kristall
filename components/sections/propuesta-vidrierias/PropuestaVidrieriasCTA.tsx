@@ -95,7 +95,7 @@ function Modal({ onClose }: { onClose: () => void }) {
           </div>
         ) : (
           <>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-white/30 mb-2">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.1em] text-white/30 mb-2">
               PROPUESTA VIDRIERÍAS
             </p>
             <h3
@@ -116,7 +116,7 @@ function Modal({ onClose }: { onClose: () => void }) {
                   value={form.nombre}
                   onChange={(e) => setForm((f) => ({ ...f, nombre: e.target.value }))}
                   placeholder="Tu nombre o empresa"
-                  className="w-full px-3.5 py-2.5 bg-white/[0.06] border border-white/10 rounded-lg text-[15px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
+                  className="w-full px-3.5 py-2.5 bg-white/[0.06] border border-white/10 rounded-lg text-[16px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
                 />
               </div>
               <div>
@@ -129,7 +129,7 @@ function Modal({ onClose }: { onClose: () => void }) {
                   value={form.email}
                   onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                   placeholder="tu@empresa.com"
-                  className="w-full px-3.5 py-2.5 bg-white/[0.06] border border-white/10 rounded-lg text-[15px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
+                  className="w-full px-3.5 py-2.5 bg-white/[0.06] border border-white/10 rounded-lg text-[16px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
                 />
               </div>
               <div>
@@ -141,7 +141,7 @@ function Modal({ onClose }: { onClose: () => void }) {
                   value={form.telefono}
                   onChange={(e) => setForm((f) => ({ ...f, telefono: e.target.value }))}
                   placeholder="+54 11 0000-0000"
-                  className="w-full px-3.5 py-2.5 bg-white/[0.06] border border-white/10 rounded-lg text-[15px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
+                  className="w-full px-3.5 py-2.5 bg-white/[0.06] border border-white/10 rounded-lg text-[16px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
                 />
               </div>
 
@@ -196,7 +196,7 @@ export default function PropuestaVidrieriasCTA() {
           </div>
 
           <span
-            className="text-[11px] font-semibold uppercase tracking-[0.15em] text-white/30 mb-4 block transition-all duration-700"
+            className="text-[12px] font-semibold uppercase tracking-[0.15em] text-white/30 mb-4 block transition-all duration-700"
             style={{
               opacity: inView ? 1 : 0,
               transform: inView ? 'translateY(0)' : 'translateY(12px)',
@@ -210,7 +210,7 @@ export default function PropuestaVidrieriasCTA() {
             className="font-medium text-white mb-4 leading-tight transition-all duration-700"
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(2rem, 3.5vw, 3rem)',
+              fontSize: 'clamp(2.125rem, 3.5vw, 3rem)',
               opacity: inView ? 1 : 0,
               transform: inView ? 'translateY(0)' : 'translateY(12px)',
               transitionDelay: '120ms',
@@ -220,14 +220,14 @@ export default function PropuestaVidrieriasCTA() {
           </h2>
           
           <p
-            className="text-[15px] text-white/50 leading-relaxed mb-12 max-w-[620px] mx-auto transition-all duration-700"
+            className="text-[16px] text-white/50 leading-relaxed mb-12 max-w-[620px] mx-auto transition-all duration-700"
             style={{
               opacity: inView ? 1 : 0,
               transform: inView ? 'translateY(0)' : 'translateY(12px)',
               transitionDelay: '180ms',
             }}
           >
-            Sin inversión obligatoria para empezar. En una reunión rápida definimos el modelo que más te conviene y arrancamos de inmediato.
+            En una reunión breve analizamos tu empresa, definimos el modelo que mejor encaja y te mostramos cómo incorporar Kristall como una nueva unidad de negocio rentable y diferenciadora.
           </p>
 
           {/* Contact details grid from PDF */}
@@ -241,7 +241,7 @@ export default function PropuestaVidrieriasCTA() {
           >
             {/* WHATSAPP */}
             <a
-              href="https://wa.me/5491169721983"
+              href="https://wa.me/5491160484312"
               target="_blank"
               rel="noopener noreferrer"
               className="backdrop-blur-md bg-white/[0.03] border border-white/5 rounded-xl p-5 hover:bg-white/[0.06] hover:border-white/10 transition-all group cursor-pointer"
@@ -250,8 +250,8 @@ export default function PropuestaVidrieriasCTA() {
                 <MessageSquare className="w-4 h-4 text-[#E6A800]" />
                 <span className="text-[10px] font-bold uppercase tracking-wider">WHATSAPP</span>
               </div>
-              <p className="text-white text-[15px] font-semibold group-hover:text-[#E6A800] transition-colors">
-                +54 9 11 6972-1983
+              <p className="text-white text-[16px] font-semibold group-hover:text-[#E6A800] transition-colors">
+                +54 9 11 6048-4312
               </p>
             </a>
 
@@ -261,10 +261,10 @@ export default function PropuestaVidrieriasCTA() {
                 <User className="w-4 h-4 text-[#CC0000]" />
                 <span className="text-[10px] font-bold uppercase tracking-wider">REPRESENTANTE</span>
               </div>
-              <p className="text-white text-[15px] font-semibold">
-                Carlos Arrua
+              <p className="text-white text-[16px] font-semibold">
+                Carlos Arrúa
               </p>
-              <p className="text-[11px] text-white/40">Kristall AR</p>
+              <p className="text-[12px] text-white/40">Representante Kristall</p>
             </div>
 
             {/* MARCA */}
@@ -273,7 +273,7 @@ export default function PropuestaVidrieriasCTA() {
                 <ShieldCheck className="w-4 h-4 text-white/60" />
                 <span className="text-[10px] font-bold uppercase tracking-wider">MARCA</span>
               </div>
-              <p className="text-white text-[15px] font-semibold">
+              <p className="text-white text-[16px] font-semibold">
                 Kristall Window Films
               </p>
             </div>

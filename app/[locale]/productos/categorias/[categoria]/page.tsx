@@ -102,11 +102,11 @@ export default async function CategoriaPage({ params }: PageProps) {
 
         <div className="relative z-10 h-full flex flex-col justify-end pb-12 px-10 max-w-[1160px] mx-auto">
           <div className="flex items-center gap-2 mb-4">
-            <Link href="/productos" className="text-[11px] text-white/40 hover:text-white/70 transition-colors uppercase tracking-widest">
+            <Link href="/productos" className="text-[12px] text-white/40 hover:text-white/70 transition-colors uppercase tracking-widest">
               {tp('label')}
             </Link>
-            <span className="text-white/25 text-[11px]">/</span>
-            <span className="text-[11px] text-white/60 uppercase tracking-widest">{line.name}</span>
+            <span className="text-white/25 text-[12px]">/</span>
+            <span className="text-[12px] text-white/60 uppercase tracking-widest">{line.name}</span>
           </div>
 
           <div className="relative w-32 h-16 md:w-56 md:h-28 mb-4">
@@ -118,7 +118,7 @@ export default async function CategoriaPage({ params }: PageProps) {
             <span className="block md:inline md:ml-2 text-white/50 font-normal text-sm md:text-lg">— {line.technology}</span>
           </h1>
 
-          <p className="text-[11px] uppercase tracking-[0.15em] text-white/45 mb-2 font-medium">{lineTagline}</p>
+          <p className="text-[12px] uppercase tracking-[0.15em] text-white/45 mb-2 font-medium">{lineTagline}</p>
           <p className="text-base md:text-lg text-white max-w-[480px] leading-relaxed">{tp(line.descKey)}</p>
         </div>
       </section>

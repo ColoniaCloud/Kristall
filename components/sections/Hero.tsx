@@ -53,7 +53,7 @@ export default function Hero() {
         className="font-medium tracking-tight max-w-[520px] mt-5 mb-4 text-white"
         style={{ 
           fontFamily: 'var(--font-display)', 
-          fontSize: 'clamp(2.2rem, 4vw, 3.7rem)',
+          fontSize: 'clamp(2.325rem, 4vw, 3.7rem)',
           fontWeight: 600,
           letterSpacing: '-0.02em'
         }}
@@ -80,13 +80,13 @@ export default function Hero() {
       >
         <Link
           href="/productos"
-          className="bg-white text-[#0A0A0A] px-6 py-3 rounded-lg text-[15px] font-medium tracking-wide hover:bg-white/90 transition-opacity"
+          className="bg-white text-[#0A0A0A] px-6 py-3 rounded-lg text-[16px] font-medium tracking-wide hover:bg-white/90 transition-opacity"
         >
           {t('cta_primary')}
         </Link>
         <Link
           href="/contacto"
-          className="border border-white/50 text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:bg-[#0A0A0A] hover:border-[#0A0A0A] hover:text-white transition-all duration-200"
+          className="border border-white/50 text-white px-6 py-3 rounded-lg text-[16px] font-medium hover:bg-[#0A0A0A] hover:border-[#0A0A0A] hover:text-white transition-all duration-200"
         >
           {t('cta_secondary')}
         </Link>

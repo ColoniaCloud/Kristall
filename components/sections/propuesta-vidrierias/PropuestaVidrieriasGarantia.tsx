@@ -41,9 +41,6 @@ export default function PropuestaVidrieriasGarantia() {
             transform: leftInView ? 'translateY(0)' : 'translateY(15px)',
           }}
         >
-          <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#CC0000] mb-3 block">
-            03 · Respaldo de marca
-          </span>
           <h2
             className="text-3xl md:text-4xl font-medium text-[#0A0A0A] mb-5 leading-tight"
             style={{ fontFamily: 'var(--font-display)' }}
@@ -51,20 +48,20 @@ export default function PropuestaVidrieriasGarantia() {
             Cada instalación con garantía digital Kristall.
           </h2>
           <p className="text-base text-[#5C5C5C] leading-relaxed mb-6">
-            Cada trabajo realizado con film Kristall genera un certificado de garantía digital de manera automática. Tu cliente lo recibe directamente por email y vos quedás plenamente respaldado por la marca oficial en cada venta.
+            Cada instalación original Kristall genera automáticamente un Certificado Digital de Instalación. Ese documento registra el trabajo realizado, los metros instalados y la cobertura asociada, y se envía al cliente final para reforzar la confianza y la trazabilidad.
           </p>
           <div className="flex flex-col gap-3 text-sm text-[#5C5C5C]">
             <div className="flex items-center gap-3">
               <div className="w-5 h-5 rounded-full bg-[#CC0000]/10 flex items-center justify-center text-[#CC0000] flex-shrink-0">
                 <span className="text-xs font-bold">✓</span>
               </div>
-              <p>Respaldo tecnológico de origen alemán.</p>
+              <p>Protege el respaldo de garantía y evita que el cliente quede sin verificación.</p>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-5 h-5 rounded-full bg-[#CC0000]/10 flex items-center justify-center text-[#CC0000] flex-shrink-0">
                 <span className="text-xs font-bold">✓</span>
               </div>
-              <p>Protege la reputación y confianza de tu vidriería.</p>
+              <p>Fortalece la reputación de tu empresa y la diferencia frente a la competencia.</p>
             </div>
           </div>
         </div>
@@ -91,14 +88,14 @@ export default function PropuestaVidrieriasGarantia() {
                 >
                   GARANTÍA DIGITAL KRISTALL
                 </h3>
-                <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#9A9A9A]">
+                <span className="text-[12px] font-semibold uppercase tracking-[0.1em] text-[#9A9A9A]">
                   COBERTURA DE PRECISIÓN
                 </span>
               </div>
             </div>
 
             <p className="text-sm text-[#5C5C5C] leading-relaxed mb-6">
-              El cliente final recibe su certificado por email con los datos de la instalación, el producto y la cobertura. Vos como socio Kristall quedás asociado a cada garantía emitida — lo que te brinda trazabilidad total y respaldo de marca en cada trabajo.
+              El cliente final recibe su certificado por email con los datos de la instalación, el producto y la cobertura. Vos como socio Kristall quedás asociado a cada garantía emitida, lo que te aporta trazabilidad total y un respaldo de marca visible en cada trabajo.
             </p>
 
             <div className="border-t border-[--border] pt-6 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">

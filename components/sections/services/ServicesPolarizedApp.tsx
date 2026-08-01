@@ -34,20 +34,20 @@ export default function ServicesPolarizedApp() {
 
         {/* Columna derecha — contenido */}
         <div>
-          <div className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/40 mb-4">
+          <div className="text-[12px] font-medium uppercase tracking-[0.1em] text-white/40 mb-4">
             {t('app_label')}
           </div>
           <h2
             className="text-white mb-4 leading-tight"
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.8rem, 3vw, 2.6rem)',
+              fontSize: 'clamp(1.925rem, 3vw, 2.6rem)',
               fontWeight: 500,
             }}
           >
             {t('app_headline')}
           </h2>
-          <p className="text-[15px] text-white/55 leading-relaxed mb-8">
+          <p className="text-[16px] text-white/55 leading-relaxed mb-8">
             {t('app_body')}
           </p>
 
@@ -58,7 +58,7 @@ export default function ServicesPolarizedApp() {
                 className="bg-white/5 border border-white/8 rounded-xl p-4"
               >
                 <Icon size={16} className="text-white/40 mb-2" />
-                <div className="text-[15px] font-medium text-white mb-1">{title}</div>
+                <div className="text-[16px] font-medium text-white mb-1">{title}</div>
                 <div className="text-sm text-white/45 leading-relaxed">{desc}</div>
               </div>
             ))}
@@ -66,7 +66,7 @@ export default function ServicesPolarizedApp() {
 
           <button
             type="button"
-              className="border border-white/25 text-white px-6 py-3 rounded-lg text-[15px] hover:bg-white hover:text-[#0A0A0A] transition-all"
+              className="border border-white/25 text-white px-6 py-3 rounded-lg text-[16px] hover:bg-white hover:text-[#0A0A0A] transition-all"
           >
             {t('app_cta')}
           </button>

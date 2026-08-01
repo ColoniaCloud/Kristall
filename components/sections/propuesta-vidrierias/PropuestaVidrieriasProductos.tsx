@@ -30,50 +30,50 @@ export default function PropuestaVidrieriasProductos() {
   const { ref: arqRef, inView: arqInView } = useInView(0.05)
   const { ref: diffRef, inView: diffInView } = useInView(0.1)
 
-  const automotor = [
+  const beneficios = [
     {
-      name: 'HP05 / HP15',
-      type: 'Film Solar Básico',
-      desc: 'Control de luz y privacidad. Ideal para el cliente que busca polarizado estándar a buen precio.',
-      badge: 'ENTRADA',
+      name: 'Línea completa de films',
+      type: 'Control solar, seguridad y decoración',
+      desc: 'Accedé a toda la gama Kristall para presentar soluciones premium con claridad y profesionalismo.',
+      badge: 'GAMA',
       badgeColor: 'bg-white/10 text-white/80 border-white/20',
     },
     {
-      name: 'IR0590 / IR1590 / IR8080',
-      type: 'Film Infrarrojo IR',
-      desc: 'Bloqueo de calor por tecnología infrarroja. Mayor confort térmico sin oscurecer el vidrio.',
-      badge: 'PERFORMANCE',
+      name: 'Certificación de instaladores',
+      type: 'Capacitación y estándar Kristall',
+      desc: 'Si ya contás con equipo propio, lo capacitamos y certificamos para que cada trabajo se ejecute con el mismo nivel de calidad.',
+      badge: 'CERTIFICACIÓN',
       badgeColor: 'bg-[#CC0000]/10 text-[#FF4D4D] border-[#CC0000]/20',
     },
     {
-      name: 'HT05100 / HT15100',
-      type: 'Film Cerámico HT',
-      desc: 'Tecnología cerámica de alta gama. Bloqueo térmico e infrarrojo superior sin interferencia de señal.',
-      badge: 'PREMIUM',
+      name: 'Red de instaladores certificados',
+      type: 'Sin necesidad de armar tu propio equipo',
+      desc: 'Si todavía no ofrecés este servicio, ponemos a disposición nuestra red para ejecutar cada trabajo con respaldo de la marca.',
+      badge: 'RED',
       badgeColor: 'bg-[#CC0000]/10 text-[#FF4D4D] border-[#CC0000]/20',
     },
     {
-      name: 'TPU-PC150',
-      type: 'Protección de Pintura PPF',
-      desc: 'Film de poliuretano para protección total de carrocería. Alta demanda en vehículos nuevos y de alta gama.',
-      badge: 'ALTA GAMA',
+      name: 'Herramientas para vender más',
+      type: 'Demostradores y material comercial',
+      desc: 'Disponés de tótem demostrador solar, medidor infrarrojo y material comercial personalizado para reforzar tus ventas.',
+      badge: 'VENTA',
       badgeColor: 'bg-[#CC0000]/15 text-[#FF4D4D] border-[#CC0000]/30',
     },
   ]
 
-  const arquitectura = [
+  const soporte = [
     {
-      name: 'HSF15100',
-      type: 'Film Cerámico HSF — Arquitectura',
-      desc: 'Film de alta performance para ventanas de edificios, oficinas y locales comerciales. Control solar, privacidad y reducción de temperatura interior.',
-      badge: 'ARQUITECTURA',
+      name: 'Garantía Digital Kristall',
+      type: 'Certificado automático para cada instalación',
+      desc: 'Cada trabajo recibe un Certificado Digital de Instalación que registra la obra y acompaña la garantía del cliente final.',
+      badge: 'GARANTÍA',
       badgeColor: 'bg-[#E6A800]/15 text-[#E6A800] border-[#E6A800]/30',
     },
     {
-      name: 'IR Series — Architectural',
-      type: 'Film Infrarrojo para Vidrios',
-      desc: 'Aplicación en aberturas residenciales y comerciales. Compatible con vidrio simple y DVH. Ideal para especificación en proyectos de obra.',
-      badge: 'PROYECTOS',
+      name: 'Soporte técnico y comercial',
+      type: 'Acompañamiento antes, durante y después',
+      desc: 'Nuestro equipo te acompaña en cada etapa para que puedas vender más, resolver dudas y sostener la relación con tus clientes.',
+      badge: 'SOPORTE',
       badgeColor: 'bg-[#E6A800]/15 text-[#E6A800] border-[#E6A800]/30',
     },
   ]
@@ -103,17 +103,14 @@ export default function PropuestaVidrieriasProductos() {
             transform: headerInView ? 'translateY(0)' : 'translateY(15px)',
           }}
         >
-          <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#CC0000] mb-3 block">
-            02 · Línea de productos
-          </span>
           <h2
             className="text-3xl md:text-4xl font-medium text-white mb-4"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            Film para cada tipo de proyecto.
+            Qué recibís como socio Kristall.
           </h2>
-          <p className="text-base text-white/60 leading-relaxed max-w-[650px]">
-            Kristall tiene línea automotor y línea arquitectura. Como vidriería o empresa de aberturas, podés ofrecer ambas — para autos de tus clientes y para los vidrios de sus obras o locales.
+          <p className="text-base text-white/60 leading-relaxed max-w-[680px]">
+            El programa reúne producto, capacitación, herramientas de venta y respaldo digital para que tu empresa pueda ofrecer soluciones premium de control solar y seguridad con la confianza de la marca.
           </p>
         </div>
 
@@ -122,11 +119,11 @@ export default function PropuestaVidrieriasProductos() {
           <h3
             className="text-white text-sm font-semibold uppercase tracking-wider mb-6 flex items-center gap-2 text-white/50"
           >
-            <span>LÍNEA AUTOMOTOR</span>
+            <span>LO QUE RECIBÍS</span>
             <div className="h-px bg-white/10 flex-1" />
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {automotor.map((prod, i) => (
+            {beneficios.map((prod, i) => (
               <div
                 key={prod.name}
                 className="backdrop-blur-md bg-white/[0.05] border border-white/10 rounded-xl p-6 transition-all duration-500 hover:bg-white/[0.08] hover:border-white/20"
@@ -156,11 +153,11 @@ export default function PropuestaVidrieriasProductos() {
           <h3
             className="text-white text-sm font-semibold uppercase tracking-wider mb-6 flex items-center gap-2 text-[#E6A800]/70"
           >
-            <span>LÍNEA ARQUITECTURA</span>
+            <span>RESPALDO Y SOPORTE</span>
             <div className="h-px bg-[#E6A800]/10 flex-1" />
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {arquitectura.map((prod, i) => (
+            {soporte.map((prod, i) => (
               <div
                 key={prod.name}
                 className="backdrop-blur-md bg-black/40 border border-[#E6A800]/25 rounded-xl p-6 transition-all duration-500 hover:bg-black/55 hover:border-[#E6A800]/45"
@@ -203,11 +200,11 @@ export default function PropuestaVidrieriasProductos() {
               className="text-white text-lg font-medium mb-2 uppercase tracking-wide flex items-center gap-2"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              <span>Film para arquitectura: La Oportunidad Diferencial</span>
+              <span>El certificado digital marca la diferencia</span>
               <Sparkles className="w-4 h-4 text-[#E6A800]" />
             </h4>
             <p className="text-sm text-white/70 leading-relaxed">
-              El mercado de film para edificios y locales comerciales en Argentina está subdesarrollado. Una vidriería con contactos en estudios de arquitectura tiene acceso directo a proyectos de alto volumen que ningún taller automotor puede alcanzar. Kristall te acompaña con presentaciones técnicas y muestras para especificación.
+              Cuando un cliente no recibe el Certificado Digital de Instalación Kristall, pierde la posibilidad de verificar su garantía y el respaldo que corresponde a una instalación original. Esto protege al cliente, fortalece a cada socio y diferencia tu propuesta en el mercado.
             </p>
           </div>
         </div>

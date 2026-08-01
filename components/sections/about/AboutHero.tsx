@@ -25,7 +25,7 @@ export default function AboutHero() {
             <span className="w-4 h-[3px] rounded-sm bg-[#CC0000]" />
             <span className="w-4 h-[3px] rounded-sm bg-[#E6A800]" />
           </div>
-          <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/35">
+          <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-white/35">
             {t('hero_eyebrow')}
           </span>
         </div>
@@ -34,14 +34,14 @@ export default function AboutHero() {
           className="text-white leading-tight mb-4"
           style={{
             fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(2.4rem, 4vw, 3.7rem)',
+              fontSize: 'clamp(2.525rem, 4vw, 3.7rem)',
             fontWeight: 500,
           }}
         >
           {t('hero_headline')}
         </h1>
 
-        <p className="text-sm md:text-[15px] text-white/80 max-w-[440px] leading-relaxed">
+        <p className="text-sm md:text-[16px] text-white/80 max-w-[440px] leading-relaxed">
           {t('hero_body')}
         </p>
       </div>

@@ -77,11 +77,11 @@ function Modal({ onClose }: { onClose: () => void }) {
             <p className="text-white font-medium mb-2" style={{ fontFamily: 'var(--font-display)' }}>
               ¡Solicitud enviada!
             </p>
-            <p className="text-[15px] text-white/50">Te contactamos a la brevedad para coordinar la reunión.</p>
+            <p className="text-[16px] text-white/50">Te contactamos a la brevedad para coordinar la reunión.</p>
           </div>
         ) : (
           <>
-            <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/30 mb-2">
+            <p className="text-[12px] font-medium uppercase tracking-[0.1em] text-white/30 mb-2">
               PROGRAMA CONCESIONARIAS
             </p>
             <h3
@@ -101,7 +101,7 @@ function Modal({ onClose }: { onClose: () => void }) {
                   value={form.nombre}
                   onChange={(e) => setForm(f => ({ ...f, nombre: e.target.value }))}
                   placeholder="Tu nombre"
-                  className="w-full px-3.5 py-2.5 bg-white/[0.06] border border-white/10 rounded-lg text-[15px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
+                  className="w-full px-3.5 py-2.5 bg-white/[0.06] border border-white/10 rounded-lg text-[16px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
                 />
               </div>
               <div>
@@ -113,7 +113,7 @@ function Modal({ onClose }: { onClose: () => void }) {
                   value={form.email}
                   onChange={(e) => setForm(f => ({ ...f, email: e.target.value }))}
                   placeholder="tu@concesionaria.com"
-                  className="w-full px-3.5 py-2.5 bg-white/[0.06] border border-white/10 rounded-lg text-[15px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
+                  className="w-full px-3.5 py-2.5 bg-white/[0.06] border border-white/10 rounded-lg text-[16px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
                 />
               </div>
               <div>
@@ -125,7 +125,7 @@ function Modal({ onClose }: { onClose: () => void }) {
                   value={form.telefono}
                   onChange={(e) => setForm(f => ({ ...f, telefono: e.target.value }))}
                   placeholder="+54 11 0000-0000"
-                  className="w-full px-3.5 py-2.5 bg-white/[0.06] border border-white/10 rounded-lg text-[15px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
+                  className="w-full px-3.5 py-2.5 bg-white/[0.06] border border-white/10 rounded-lg text-[16px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
                 />
               </div>
 
@@ -166,7 +166,7 @@ export default function ConcesionariasCTA() {
           className="relative z-10 max-w-[640px] mx-auto text-center"
         >
           <span
-            className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/30 mb-4 block transition-all duration-700"
+            className="text-[12px] font-medium uppercase tracking-[0.1em] text-white/30 mb-4 block transition-all duration-700"
             style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '0ms' }}
           >
             EL PRÓXIMO PASO
@@ -175,7 +175,7 @@ export default function ConcesionariasCTA() {
             className="font-medium text-white mb-4 leading-tight transition-all duration-700"
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.8rem, 3vw, 2.8rem)',
+              fontSize: 'clamp(1.925rem, 3vw, 2.8rem)',
               opacity: inView ? 1 : 0,
               transform: inView ? 'translateY(0)' : 'translateY(12px)',
               transitionDelay: '80ms',
@@ -184,7 +184,7 @@ export default function ConcesionariasCTA() {
             Sumá Kristall a tu salón y empezá a capturar ese margen.
           </h2>
           <p
-            className="text-[15px] text-white/50 leading-relaxed mb-10 transition-all duration-700"
+            className="text-[16px] text-white/50 leading-relaxed mb-10 transition-all duration-700"
             style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '160ms' }}
           >
             Te equipamos el salón, capacitamos a tu equipo y coordinamos con tu instalador.

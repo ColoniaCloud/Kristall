@@ -155,7 +155,7 @@ function Breadcrumb({ label, className }: { label: string; className?: string })
   return (
     <Link
       href="/blog"
-      className={`text-[11px] uppercase tracking-[0.15em] transition-colors ${className ?? ''}`}
+      className={`text-[12px] uppercase tracking-[0.15em] transition-colors ${className ?? ''}`}
     >
       {label}
     </Link>

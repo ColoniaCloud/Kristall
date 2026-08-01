@@ -204,7 +204,7 @@ export default function ServicesSection() {
               >
                 <Link
                   href="/productos"
-                  className="btn-primary text-white px-6 py-3 rounded-lg text-[15px] font-medium tracking-wide transition-all"
+                  className="btn-primary text-white px-6 py-3 rounded-lg text-[16px] font-medium tracking-wide transition-all"
                 >
                   {t('video_cta')}
                 </Link>

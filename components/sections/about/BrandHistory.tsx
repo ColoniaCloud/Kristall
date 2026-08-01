@@ -13,7 +13,7 @@ export default function BrandHistory() {
             className="font-medium text-[#0A0A0A] leading-tight"
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.6rem, 3vw, 2.2rem)',
+              fontSize: 'clamp(1.725rem, 3vw, 2.2rem)',
               fontWeight: 500,
             }}
           >

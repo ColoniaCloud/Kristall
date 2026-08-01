@@ -81,8 +81,8 @@ function BenefitItem({
         <Icon size={18} className="text-white" />
       </div>
       <div>
-        <p className="text-[15px] font-semibold text-[#0A0A0A] mb-1">{title}</p>
-        <p className="text-[15px] text-[#5C5C5C] leading-relaxed">{description}</p>
+        <p className="text-[16px] font-semibold text-[#0A0A0A] mb-1">{title}</p>
+        <p className="text-[16px] text-[#5C5C5C] leading-relaxed">{description}</p>
       </div>
     </div>
   )
@@ -96,13 +96,13 @@ export default function PuntoDetalle() {
         {/* DEMANDA */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           <BlockLeft>
-            <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#E6A800] block mb-2">
+            <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] block mb-2">
               DEMANDA
             </span>
             <h3 className="text-2xl font-medium text-[#0A0A0A] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
               Traemos los clientes a tu puerta
             </h3>
-            <p className="text-[15px] text-[#5C5C5C] leading-relaxed">
+            <p className="text-[16px] text-[#5C5C5C] leading-relaxed">
               No esperás que aparezcan. Derivamos clientes de tu zona directo a tu taller.
             </p>
           </BlockLeft>
@@ -125,13 +125,13 @@ export default function PuntoDetalle() {
         {/* CIERRE */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           <BlockLeft>
-            <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#E6A800] block mb-2">
+            <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] block mb-2">
               CIERRE
             </span>
             <h3 className="text-2xl font-medium text-[#0A0A0A] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
               Todo para convencer y cerrar en el momento
             </h3>
-            <p className="text-[15px] text-[#5C5C5C] leading-relaxed">
+            <p className="text-[16px] text-[#5C5C5C] leading-relaxed">
               El cliente llega, toca el producto, ve la diferencia y cierra. Sin fricciones.
             </p>
           </BlockLeft>
@@ -160,13 +160,13 @@ export default function PuntoDetalle() {
         {/* IMAGEN */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           <BlockLeft>
-            <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#E6A800] block mb-2">
+            <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] block mb-2">
               IMAGEN
             </span>
             <h3 className="text-2xl font-medium text-[#0A0A0A] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
               Tu taller con presencia de marca alemana
             </h3>
-            <p className="text-[15px] text-[#5C5C5C] leading-relaxed">
+            <p className="text-[16px] text-[#5C5C5C] leading-relaxed">
               Profesionalizá tu imagen y generá confianza desde el primer contacto.
             </p>
           </BlockLeft>
@@ -201,13 +201,13 @@ export default function PuntoDetalle() {
         {/* LEALTAD */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           <BlockLeft>
-            <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#E6A800] block mb-2">
+            <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] block mb-2">
               LEALTAD
             </span>
             <h3 className="text-2xl font-medium text-[#0A0A0A] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
               Respaldo permanente para crecer
             </h3>
-            <p className="text-[15px] text-[#5C5C5C] leading-relaxed">
+            <p className="text-[16px] text-[#5C5C5C] leading-relaxed">
               No te dejamos solo. Soporte técnico, garantía de marca y capacitación continua.
             </p>
           </BlockLeft>

@@ -26,7 +26,7 @@ export default function AboutCertifications() {
                 <Icon size={16} className="text-[#9A9A9A]" />
               </div>
               <div className="text-sm font-medium mb-1 text-[#0A0A0A]">{t(nameKey as Parameters<typeof t>[0])}</div>
-              <div className="text-[11px] text-[#9A9A9A] leading-relaxed">{t(bodyKey as Parameters<typeof t>[0])}</div>
+              <div className="text-[12px] text-[#9A9A9A] leading-relaxed">{t(bodyKey as Parameters<typeof t>[0])}</div>
             </div>
           ))}
         </div>

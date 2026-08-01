@@ -26,7 +26,7 @@ export default function AboutLayers() {
                 className={`${l.bg} ${l.text} rounded-lg px-4 py-3 flex justify-between items-center`}
               >
                 <span className="text-xs font-medium">{l.name}</span>
-                <span className="text-[11px] opacity-60">{l.func}</span>
+                <span className="text-[12px] opacity-60">{l.func}</span>
               </div>
             ))}
           </div>

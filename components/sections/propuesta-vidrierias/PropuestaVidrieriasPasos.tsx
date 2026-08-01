@@ -31,22 +31,22 @@ export default function PropuestaVidrieriasPasos() {
     {
       num: '01',
       title: 'Reunión inicial',
-      desc: 'Presentamos los tres modelos y definimos cuál aplica mejor a tu operación y estructura actual.',
+      desc: 'Analizamos tu empresa y definimos si el mejor camino es certificar tu equipo, incorporar el servicio o abrir canal de arquitectura.',
     },
     {
       num: '02',
-      title: 'Activación',
-      desc: 'Según el modelo elegido: alta como revendedor, acuerdo de servicio, o presentación a estudios.',
+      title: 'Activación del programa',
+      desc: 'Acordamos el modelo de trabajo, la capacitación y la forma de operar para que empieces con claridad.',
     },
     {
       num: '03',
-      title: 'Primera venta',
-      desc: 'Te acompañamos y asesoramos en el primer trabajo para asegurar la calidad y la experiencia del cliente.',
+      title: 'Primera instalación',
+      desc: 'Te acompañamos en el primer proyecto para asegurar la calidad del trabajo y la emisión del Certificado Digital.',
     },
     {
       num: '04',
-      title: 'Escalás',
-      desc: 'Con resultados reales, definimos cómo crecer: más volumen, más modelos activos, arquitectura.',
+      title: 'Escalás con respaldo',
+      desc: 'Con resultados reales, sumás volumen y expandís tu oferta con la confianza de la marca Kristall.',
     },
   ]
 
@@ -75,17 +75,14 @@ export default function PropuestaVidrieriasPasos() {
             transform: headerInView ? 'translateY(0)' : 'translateY(12px)',
           }}
         >
-          <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#CC0000] mb-3 block">
-            04 · Cómo arrancamos
-          </span>
           <h2
             className="text-3xl md:text-4xl font-medium text-white mb-4"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            Cuatro pasos para activar el canal.
+            Cuatro pasos para activar tu negocio como socio Kristall.
           </h2>
-          <p className="text-base text-white/60 leading-relaxed max-w-[600px]">
-            Sin burocracia. Definís cómo querés operar y en la primera reunión ya tenés claro el modelo que más te conviene.
+          <p className="text-base text-white/60 leading-relaxed max-w-[680px]">
+            El proceso es simple y rápido: definís cómo querés operar, activás el programa y empezás a vender con respaldo técnico, comercial y garantía digital.
           </p>
         </div>
 

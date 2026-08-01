@@ -107,7 +107,7 @@ export default async function BlogPage({ params }: PageProps) {
                   {/* Cuerpo */}
                   <div className="flex flex-1 flex-col p-5">
                     {date && (
-                      <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-[var(--text-muted)] mb-2">
+                      <p className="text-[12px] font-medium uppercase tracking-[0.1em] text-[var(--text-muted)] mb-2">
                         {date}
                       </p>
                     )}

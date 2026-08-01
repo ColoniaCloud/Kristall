@@ -81,7 +81,7 @@ export default function ProductsHero() {
           className="font-medium text-white mb-3 max-w-[520px]"
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2rem, 4vw, 3rem)',
+            fontSize: 'clamp(2.125rem, 4vw, 3rem)',
             fontWeight: 500,
             letterSpacing: '-0.02em',
           }}

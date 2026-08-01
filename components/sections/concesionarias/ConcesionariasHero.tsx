@@ -34,7 +34,7 @@ export default function ConcesionariasHero() {
             <div className="flex-1 bg-[#CC0000]" />
             <div className="flex-1 bg-[#E6A800]" />
           </div>
-          <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/35">
+          <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-white/35">
             Programa para concesionarias
           </span>
         </div>
@@ -53,7 +53,7 @@ export default function ConcesionariasHero() {
           className="font-semibold leading-tight text-white mb-10"
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.4rem, 5vw, 4rem)',
+            fontSize: 'clamp(2.525rem, 5vw, 4rem)',
             ...item(160),
           }}
         >

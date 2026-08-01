@@ -10,6 +10,30 @@
 
 @import "tailwindcss";
 
+/* Escala tipográfica levemente ampliada respecto al default de Tailwind v4,
+   para dar más aire al texto en todo el sitio público. Solo font-size/line-
+   height — no toca la escala de spacing/radius. */
+@theme {
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.0625rem;
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.3125rem;
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.5625rem;
+  --text-lg: 1.1875rem;
+  --text-lg--line-height: 1.8125rem;
+  --text-xl: 1.3125rem;
+  --text-xl--line-height: 1.8125rem;
+  --text-2xl: 1.5625rem;
+  --text-2xl--line-height: 2.0625rem;
+  --text-3xl: 1.9375rem;
+  --text-3xl--line-height: 2.3125rem;
+  --text-4xl: 2.3125rem;
+  --text-4xl--line-height: 2.5625rem;
+  --text-5xl: 3.0625rem;
+  --text-5xl--line-height: 1;
+}
+
 :root {
   --bg: #F2F2F0;
   --surface: #FFFFFF;

@@ -18,13 +18,13 @@ export default function PuntoCTA() {
     <>
       <section className="bg-[#0A0A0A] py-16 px-10">
         <div className="max-w-[800px] mx-auto text-center">
-          <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/30 mb-4">
+          <p className="text-[12px] font-medium uppercase tracking-[0.1em] text-white/30 mb-4">
             ¿Listo para sumar tu taller?
           </p>
 
           <h2
             className="font-medium text-white mb-4"
-            style={{ fontSize: 'clamp(1.8rem, 3vw, 2.8rem)', fontFamily: 'var(--font-display)' }}
+            style={{ fontSize: 'clamp(1.925rem, 3vw, 2.8rem)', fontFamily: 'var(--font-display)' }}
           >
             Convertite en Punto Kristall
           </h2>

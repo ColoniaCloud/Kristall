@@ -26,7 +26,7 @@ export default function Footer() {
 
         {/* Col 2: Productos */}
         <div>
-          <h3 className="text-white font-medium text-[15px] mb-3">{t('col_products')}</h3>
+          <h3 className="text-white font-medium text-[16px] mb-3">{t('col_products')}</h3>
           <ul className="space-y-2 text-sm">
             <li>
               <Link href="/productos" className="text-white/50 hover:text-white transition-colors">{t('link_polarizado')}</Link>
@@ -45,7 +45,7 @@ export default function Footer() {
 
         {/* Col 3: Software */}
         <div>
-          <h3 className="text-white font-medium text-[15px] mb-3">{t('col_services')}</h3>
+          <h3 className="text-white font-medium text-[16px] mb-3">{t('col_services')}</h3>
           <ul className="space-y-2 text-sm">
             <li>
               <Link href="/servicios" className="text-white/50 hover:text-white transition-colors">
@@ -60,7 +60,7 @@ export default function Footer() {
 
         {/* Col 4: Empresa */}
         <div>
-          <h3 className="text-white font-medium text-[15px] mb-3">{t('col_company')}</h3>
+          <h3 className="text-white font-medium text-[16px] mb-3">{t('col_company')}</h3>
           <ul className="space-y-2 text-sm">
             <li>
               <Link href="/nosotros" className="text-white/50 hover:text-white transition-colors">
@@ -82,7 +82,7 @@ export default function Footer() {
 
         {/* Col 5: Sumate a Kristall */}
         <div>
-          <h3 className="text-white font-medium text-[15px] mb-3">{t('col_partners')}</h3>
+          <h3 className="text-white font-medium text-[16px] mb-3">{t('col_partners')}</h3>
           <ul className="space-y-2 text-sm">
             <li>
               <Link href="/propuesta-vidrierias" className="text-white/50 hover:text-white transition-colors">

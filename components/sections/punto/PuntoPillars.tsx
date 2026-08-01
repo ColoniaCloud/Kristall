@@ -165,7 +165,7 @@ function SectionHeader() {
   return (
     <div ref={ref}>
       <p
-        className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/40 mb-4 transition-all duration-700"
+        className="text-[12px] font-medium uppercase tracking-[0.1em] text-white/40 mb-4 transition-all duration-700"
         style={{
           opacity: inView ? 1 : 0,
           transform: inView ? 'translateY(0)' : 'translateY(12px)',
@@ -219,7 +219,7 @@ function PillarCard({
     >
       <Icon size={20} className="absolute top-5 right-5 text-white/10" />
 
-      <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-white/50 mb-3 block">
+      <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-white/50 mb-3 block">
         {tag}
       </span>
       <h3

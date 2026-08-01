@@ -7,7 +7,7 @@ import { SlidersHorizontal, X } from 'lucide-react'
 import ProductCard from '@/components/product/ProductCard'
 import { LAMINAS, LINE_ORDER, getLine, type Lamina } from '@/lib/catalogo'
 
-const btnBase = 'px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors'
+const btnBase = 'px-2.5 py-1 rounded-md text-[12px] font-medium transition-colors'
 const btnActive = 'bg-[#0A0A0A] text-white'
 const btnInactive = 'bg-[#F2F2F0] text-[#5C5C5C] hover:bg-[#E8E8E6]'
 const catBtn = (active: boolean) =>
@@ -78,7 +78,7 @@ export default function ProductsClient() {
   const filterContent = (
     <div className="flex flex-col gap-5">
       <div>
-        <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A] block mb-2">{t('filter_linea')}</span>
+        <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A] block mb-2">{t('filter_linea')}</span>
         <div className="flex flex-wrap gap-2">
           <button onClick={() => setActiveCategory('all')} className={catBtn(activeCategory === 'all')}>
             {t('filter_todas')}
@@ -91,7 +91,7 @@ export default function ProductsClient() {
         </div>
       </div>
       <div>
-        <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A] block mb-2">{t('filter_vlt')}</span>
+        <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A] block mb-2">{t('filter_vlt')}</span>
         <div className="flex flex-wrap gap-1.5">
           {VLT_OPTIONS.map((opt) => (
             <button key={opt.value} onClick={() => setActiveVLT(opt.value)} className={`${btnBase} ${activeVLT === opt.value ? btnActive : btnInactive}`}>
@@ -101,7 +101,7 @@ export default function ProductsClient() {
         </div>
       </div>
       <div>
-        <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A] block mb-2">{t('filter_uv')}</span>
+        <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A] block mb-2">{t('filter_uv')}</span>
         <div className="flex flex-wrap gap-1.5">
           {UV_OPTIONS.map((opt) => (
             <button key={opt.value} onClick={() => setActiveUV(opt.value)} className={`${btnBase} ${activeUV === opt.value ? btnActive : btnInactive}`}>
@@ -130,7 +130,7 @@ export default function ProductsClient() {
       <div className="hidden md:block bg-white border-b border-[#E4E4E2] sticky top-[56px] z-40">
         <div className="px-10 py-3 max-w-[1160px] mx-auto flex flex-col gap-2">
           <div className="flex items-center flex-wrap gap-2">
-            <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A] mr-1">{t('filter_linea')}</span>
+            <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A] mr-1">{t('filter_linea')}</span>
             <button onClick={() => setActiveCategory('all')} className={catBtn(activeCategory === 'all')}>
               {t('filter_todas')}
             </button>
@@ -141,21 +141,21 @@ export default function ProductsClient() {
             ))}
           </div>
           <div className="flex items-center flex-wrap gap-2">
-            <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A] mr-1">{t('filter_vlt')}</span>
+            <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A] mr-1">{t('filter_vlt')}</span>
             {VLT_OPTIONS.map((opt) => (
               <button key={opt.value} onClick={() => setActiveVLT(opt.value)} className={`${btnBase} ${activeVLT === opt.value ? btnActive : btnInactive}`}>
                 {opt.label}
               </button>
             ))}
             <div className="w-px h-4 bg-[#E4E4E2] mx-2" />
-            <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A] mr-1">{t('filter_uv')}</span>
+            <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A] mr-1">{t('filter_uv')}</span>
             {UV_OPTIONS.map((opt) => (
               <button key={opt.value} onClick={() => setActiveUV(opt.value)} className={`${btnBase} ${activeUV === opt.value ? btnActive : btnInactive}`}>
                 {opt.label}
               </button>
             ))}
           </div>
-          <p className="text-[11px] text-[#9A9A9A]">
+          <p className="text-[12px] text-[#9A9A9A]">
             {totalFiltered === 1 ? t('filter_count_one') : t('filter_count_other', { count: totalFiltered })}
           </p>
         </div>

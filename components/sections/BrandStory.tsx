@@ -35,7 +35,7 @@ export default function BrandStory() {
           >
             {t('title')}
           </h3>
-          <p className="text-[15px] text-[#5C5C5C] leading-relaxed">
+          <p className="text-[16px] text-[#5C5C5C] leading-relaxed">
             {t('body')}
           </p>
         </>
@@ -106,7 +106,7 @@ export default function BrandStory() {
           <div className="p-4">
             <Link
               href="/contacto"
-              className="btn-primary block w-full text-white text-[15px] font-medium text-center py-3 rounded-lg transition-all"
+              className="btn-primary block w-full text-white text-[16px] font-medium text-center py-3 rounded-lg transition-all"
             >
               {t('contact_btn')}
             </Link>

@@ -109,7 +109,7 @@ export default function ProductDetailModal({ lamina, onClose }: ProductDetailMod
         </div>
 
         <div className="p-5">
-          <p className="text-[11px] uppercase tracking-widest text-[#9A9A9A] mb-1">{t('detail_label')}</p>
+          <p className="text-[12px] uppercase tracking-widest text-[#9A9A9A] mb-1">{t('detail_label')}</p>
           <h3 className="text-lg font-medium text-[#0A0A0A] mb-4" style={{ fontFamily: 'var(--font-display)' }}>{name}</h3>
 
           {/* Tabla de datos */}
@@ -129,7 +129,7 @@ export default function ProductDetailModal({ lamina, onClose }: ProductDetailMod
           {status === 'success' ? (
             <div className="bg-[#F0FFF4] border border-green-200 rounded-xl p-5 text-center">
               <CheckCircle size={20} className="text-green-500 mx-auto mb-2" />
-              <div className="text-[15px] font-medium text-[#0A0A0A] mb-1">{t('success_title')}</div>
+              <div className="text-[16px] font-medium text-[#0A0A0A] mb-1">{t('success_title')}</div>
               <div className="text-sm text-[#5C5C5C]">{t('success_body')}</div>
             </div>
           ) : (
@@ -157,7 +157,7 @@ export default function ProductDetailModal({ lamina, onClose }: ProductDetailMod
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="btn-primary w-full text-white px-6 py-3 rounded-lg text-[15px] font-medium transition-all disabled:opacity-50 flex items-center justify-center gap-2 mt-4"
+                className="btn-primary w-full text-white px-6 py-3 rounded-lg text-[16px] font-medium transition-all disabled:opacity-50 flex items-center justify-center gap-2 mt-4"
               >
                 {status === 'loading' ? (
                   <>

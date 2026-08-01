@@ -43,7 +43,7 @@ function HeaderBlock() {
   return (
     <div ref={ref}>
       <span
-        className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#E6A800] mb-3 block transition-all duration-700"
+        className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] mb-3 block transition-all duration-700"
         style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '0ms' }}
       >
         01 · EL NEGOCIO
@@ -55,7 +55,7 @@ function HeaderBlock() {
         Más margen, sin cambiar tu operación
       </h2>
       <p
-        className="text-[16px] text-white leading-relaxed mb-12 max-w-[600px] transition-all duration-700"
+        className="text-[17px] text-white leading-relaxed mb-12 max-w-[600px] transition-all duration-700"
         style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '160ms' }}
       >
         Tu instalador tercerizado sigue colocando como hasta hoy. La diferencia es que ahora
@@ -81,8 +81,8 @@ function StepCard({ num, title, body, delay }: { num: string; title: string; bod
         >
           {num}
         </span>
-        <p className="text-[16px] font-semibold text-white mb-2">{title}</p>
-        <p className="text-[16px] text-white leading-relaxed">{body}</p>
+        <p className="text-[17px] font-semibold text-white mb-2">{title}</p>
+        <p className="text-[17px] text-white leading-relaxed">{body}</p>
       </div>
     </AnimatedBorderCard>
   )
@@ -108,7 +108,7 @@ function CalloutBlock() {
             Más margen{' '}
             <span className="text-[#E6A800]">en cada auto.</span>
           </p>
-          <p className="text-[16px] text-white leading-relaxed">
+          <p className="text-[17px] text-white leading-relaxed">
             El posicionamiento premium alemán y las herramientas de demostración justifican un
             mejor precio de venta. Eso es más margen para tu concesionaria en cada 0km que
             sale del salón.
