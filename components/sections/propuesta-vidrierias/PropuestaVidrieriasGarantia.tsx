@@ -35,7 +35,7 @@ export default function PropuestaVidrieriasGarantia() {
         {/* Left Column (Text) */}
         <div
           ref={leftRef}
-          className="md:col-span-6 transition-all duration-700"
+          className="md:col-span-6 transition-all duration-1000"
           style={{
             opacity: leftInView ? 1 : 0,
             transform: leftInView ? 'translateY(0)' : 'translateY(15px)',
@@ -48,7 +48,7 @@ export default function PropuestaVidrieriasGarantia() {
             Cada instalación con garantía digital Kristall.
           </h2>
           <p className="text-base text-[#5C5C5C] leading-relaxed mb-6">
-            Cada instalación original Kristall genera automáticamente un Certificado Digital de Instalación. Ese documento registra el trabajo realizado, los metros instalados y la cobertura asociada, y se envía al cliente final para reforzar la confianza y la trazabilidad.
+            Cada instalación original Kristall genera automáticamente un Certificado Digital de Instalación. Ese documento registra el trabajo realizado, los metros instalados y la cobertura asociada, queda disponible para consulta en el sistema Kristall y se envía al cliente final para reforzar la confianza y la trazabilidad.
           </p>
           <div className="flex flex-col gap-3 text-sm text-[#5C5C5C]">
             <div className="flex items-center gap-3">
@@ -69,7 +69,7 @@ export default function PropuestaVidrieriasGarantia() {
         {/* Right Column (Glass Card / Mock Certificate Box) */}
         <div
           ref={rightRef}
-          className="md:col-span-6 transition-all duration-700"
+          className="md:col-span-6 transition-all duration-1000"
           style={{
             opacity: rightInView ? 1 : 0,
             transform: rightInView ? 'translateX(0)' : 'translateX(24px)',

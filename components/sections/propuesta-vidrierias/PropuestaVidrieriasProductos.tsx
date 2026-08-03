@@ -34,7 +34,7 @@ export default function PropuestaVidrieriasProductos() {
     {
       name: 'Línea completa de films',
       type: 'Control solar, seguridad y decoración',
-      desc: 'Accedé a toda la gama Kristall para presentar soluciones premium con claridad y profesionalismo.',
+      desc: 'Accedé a toda la gama Kristall para control solar, seguridad y decoración, junto con muestrarios profesionales para presentar cada solución con claridad y profesionalismo.',
       badge: 'GAMA',
       badgeColor: 'bg-white/10 text-white/80 border-white/20',
     },
@@ -55,7 +55,7 @@ export default function PropuestaVidrieriasProductos() {
     {
       name: 'Herramientas para vender más',
       type: 'Demostradores y material comercial',
-      desc: 'Disponés de tótem demostrador solar, medidor infrarrojo y material comercial personalizado para reforzar tus ventas.',
+      desc: 'Disponés de tótem demostrador solar, medidor infrarrojo y material comercial personalizado para reforzar tus ventas. Estas herramientas pueden adquirirse por separado o bonificarse según el volumen de compra.',
       badge: 'VENTA',
       badgeColor: 'bg-[#CC0000]/15 text-[#FF4D4D] border-[#CC0000]/30',
     },
@@ -72,7 +72,7 @@ export default function PropuestaVidrieriasProductos() {
     {
       name: 'Soporte técnico y comercial',
       type: 'Acompañamiento antes, durante y después',
-      desc: 'Nuestro equipo te acompaña en cada etapa para que puedas vender más, resolver dudas y sostener la relación con tus clientes.',
+      desc: 'Nuestro equipo te acompaña en cada etapa para que puedas vender más, resolver dudas y sostener la relación con tus clientes. No solo proveemos film: trabajamos para ayudarte a vender más.',
       badge: 'SOPORTE',
       badgeColor: 'bg-[#E6A800]/15 text-[#E6A800] border-[#E6A800]/30',
     },
@@ -97,7 +97,7 @@ export default function PropuestaVidrieriasProductos() {
         {/* Header Block */}
         <div
           ref={headerRef}
-          className="mb-16 transition-all duration-700"
+          className="mb-16 transition-all duration-1000"
           style={{
             opacity: headerInView ? 1 : 0,
             transform: headerInView ? 'translateY(0)' : 'translateY(15px)',
@@ -126,7 +126,7 @@ export default function PropuestaVidrieriasProductos() {
             {beneficios.map((prod, i) => (
               <div
                 key={prod.name}
-                className="backdrop-blur-md bg-white/[0.05] border border-white/10 rounded-xl p-6 transition-all duration-500 hover:bg-white/[0.08] hover:border-white/20"
+                className="backdrop-blur-md bg-white/[0.05] border border-white/10 rounded-xl p-6 transition-all duration-700 hover:bg-white/[0.08] hover:border-white/20"
                 style={{
                   opacity: autoInView ? 1 : 0,
                   transform: autoInView ? 'translateY(0)' : 'translateY(20px)',
@@ -160,7 +160,7 @@ export default function PropuestaVidrieriasProductos() {
             {soporte.map((prod, i) => (
               <div
                 key={prod.name}
-                className="backdrop-blur-md bg-black/40 border border-[#E6A800]/25 rounded-xl p-6 transition-all duration-500 hover:bg-black/55 hover:border-[#E6A800]/45"
+                className="backdrop-blur-md bg-black/40 border border-[#E6A800]/25 rounded-xl p-6 transition-all duration-700 hover:bg-black/55 hover:border-[#E6A800]/45"
                 style={{
                   opacity: arqInView ? 1 : 0,
                   transform: arqInView ? 'translateY(0)' : 'translateY(20px)',
@@ -185,7 +185,7 @@ export default function PropuestaVidrieriasProductos() {
         {/* CALLOUT CARD: OPORTUNIDAD DIFERENCIAL */}
         <div
           ref={diffRef}
-          className="backdrop-blur-md bg-gradient-to-r from-[#E6A800]/10 to-transparent border border-[#E6A800]/20 rounded-xl p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start transition-all duration-500"
+          className="backdrop-blur-md bg-gradient-to-r from-[#E6A800]/10 to-transparent border border-[#E6A800]/20 rounded-xl p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start transition-all duration-700"
           style={{
             opacity: diffInView ? 1 : 0,
             transform: diffInView ? 'translateY(0)' : 'translateY(20px)',

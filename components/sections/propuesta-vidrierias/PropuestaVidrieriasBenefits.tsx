@@ -49,7 +49,7 @@ export default function PropuestaVidrieriasBenefits() {
           {benefits.map((benefit, index) => (
             <div
               key={benefit}
-              className="group rounded-[20px] border border-[--border] bg-[#FAFAF8] p-5 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.08)]"
+              className="group rounded-[20px] border border-[--border] bg-[#FAFAF8] p-5 transition-all duration-700 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.08)]"
               style={{
                 opacity: inView ? 1 : 0,
                 transform: inView ? 'translateY(0)' : 'translateY(24px)',
@@ -76,7 +76,7 @@ export default function PropuestaVidrieriasBenefits() {
                 marginTop: index === 0 ? 0 : `${index * 20}px`,
                 opacity: inView ? 1 : 0,
                 transform: inView ? 'translateY(0)' : 'translateY(24px)',
-                transition: `opacity 500ms ease ${index * 90}ms, transform 500ms ease ${index * 90}ms`,
+                transition: `opacity 700ms ease ${index * 90}ms, transform 700ms ease ${index * 90}ms`,
               }}
             >
               <div className="flex items-start gap-3">

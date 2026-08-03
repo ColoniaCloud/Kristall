@@ -23,7 +23,7 @@ export default function PropuestaVidrieriasHero() {
         if (next >= words.length) window.clearInterval(interval)
         return next
       })
-    }, 110)
+    }, 150)
 
     return () => window.clearInterval(interval)
   }, [mounted])
@@ -31,7 +31,7 @@ export default function PropuestaVidrieriasHero() {
   const item = (delay: number): React.CSSProperties => ({
     opacity: mounted ? 1 : 0,
     transform: mounted ? 'translateY(0)' : 'translateY(20px)',
-    transition: `opacity 700ms ease ${delay}ms, transform 700ms ease ${delay}ms`,
+    transition: `opacity 1000ms ease ${delay}ms, transform 1000ms ease ${delay}ms`,
   })
 
   const introPoints = [
@@ -82,7 +82,7 @@ export default function PropuestaVidrieriasHero() {
                 {titleWords.map((word, index) => (
                   <span
                     key={`${word}-${index}`}
-                    className={`mr-2 inline-block transition-all duration-700 ${index < visibleWords ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'}`}
+                    className={`mr-2 inline-block transition-all duration-1000 ${index < visibleWords ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'}`}
                   >
                     {word}
                   </span>

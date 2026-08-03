@@ -104,7 +104,7 @@ function ModelCard({ model, index, cardsInView }: { model: Model; index: number;
 
   return (
     <div
-      className="grid gap-6 rounded-xl border border-[--border] bg-white p-6 shadow-[var(--shadow-card)] transition-all duration-500 md:grid-cols-[280px_1fr] md:p-8"
+      className="grid gap-6 rounded-xl border border-[--border] bg-white p-6 shadow-[var(--shadow-card)] transition-all duration-700 md:grid-cols-[280px_1fr] md:p-8"
       style={{
         opacity: cardsInView ? 1 : 0,
         transform: cardsInView ? 'translateY(0)' : 'translateY(24px)',
@@ -117,7 +117,7 @@ function ModelCard({ model, index, cardsInView }: { model: Model; index: number;
         style={{
           opacity: cardsInView ? 1 : 0,
           transform: cardsInView ? 'scale(1)' : 'scale(0.95)',
-          transition: `opacity 700ms ease ${index * 120 + 120}ms, transform 700ms ease ${index * 120 + 120}ms`,
+          transition: `opacity 1000ms ease ${index * 120 + 120}ms, transform 1000ms ease ${index * 120 + 120}ms`,
         }}
       >
         <Image
@@ -143,7 +143,7 @@ function ModelCard({ model, index, cardsInView }: { model: Model; index: number;
             fontFamily: 'var(--font-display)',
             opacity: cardsInView ? 1 : 0,
             transform: cardsInView ? 'translateX(0)' : 'translateX(-18px)',
-            transition: `opacity 600ms ease ${index * 120 + 150}ms, transform 600ms ease ${index * 120 + 150}ms`,
+            transition: `opacity 850ms ease ${index * 120 + 150}ms, transform 850ms ease ${index * 120 + 150}ms`,
           }}
         >
           {model.title}
@@ -153,7 +153,7 @@ function ModelCard({ model, index, cardsInView }: { model: Model; index: number;
           style={{
             opacity: cardsInView ? 1 : 0,
             transform: cardsInView ? 'translateY(0)' : 'translateY(16px)',
-            transition: `opacity 650ms ease ${index * 120 + 380}ms, transform 650ms ease ${index * 120 + 380}ms`,
+            transition: `opacity 900ms ease ${index * 120 + 380}ms, transform 900ms ease ${index * 120 + 380}ms`,
           }}
         >
           {model.intro.split('\n').map((paragraph) => (
@@ -190,7 +190,7 @@ export default function PropuestaVidrieriasModelos() {
         {/* Section Header */}
         <div
           ref={headerRef}
-          className="mb-12 transition-all duration-700"
+          className="mb-12 transition-all duration-1000"
           style={{
             opacity: headerInView ? 1 : 0,
             transform: headerInView ? 'translateY(0)' : 'translateY(15px)',
