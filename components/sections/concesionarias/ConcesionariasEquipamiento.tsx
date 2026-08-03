@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Layers, ShieldCheck, Sun, BookOpen, Info } from 'lucide-react'
+import { Layers, ShieldCheck, Sun, BookOpen, Gauge, Info } from 'lucide-react'
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null)
@@ -38,7 +38,12 @@ const items = [
   {
     icon: BookOpen,
     title: 'Capacitación al equipo',
-    body: 'A tu fuerza de ventas: cómo presentar la gama y justificar el precio premium.',
+    body: 'A tu fuerza de ventas, de forma presencial o por videollamada: cómo presentar la gama y justificar el precio premium.',
+  },
+  {
+    icon: Gauge,
+    title: 'Medidor solar infrarrojo',
+    body: 'Demuestra la performance de cada lámina con datos reales.',
   },
 ]
 
@@ -47,19 +52,19 @@ function HeaderBlock() {
   return (
     <div ref={ref}>
       <span
-        className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] mb-3 block transition-all duration-700"
+        className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] mb-3 block transition-all duration-1000"
         style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '0ms' }}
       >
         02 · QUÉ APORTAMOS
       </span>
       <h2
-        className="text-3xl font-medium text-[#0A0A0A] mb-3 transition-all duration-700"
+        className="text-3xl font-medium text-[#0A0A0A] mb-3 transition-all duration-1000"
         style={{ fontFamily: 'var(--font-display)', opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '80ms' }}
       >
         Lo que dejamos en tu salón
       </h2>
       <p
-        className="text-[17px] text-[#5C5C5C] leading-relaxed mb-12 transition-all duration-700"
+        className="text-[17px] text-[#5C5C5C] leading-relaxed mb-12 transition-all duration-1000"
         style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '160ms' }}
       >
         Equipamos tu concesionaria con todo lo necesario para vender polarizado premium desde
@@ -74,7 +79,7 @@ function ItemCard({ icon: Icon, title, body, delay }: { icon: React.ElementType;
   return (
     <div
       ref={ref}
-      className="bg-white border border-[#E4E4E2] rounded-2xl p-6 flex items-start gap-4 shadow-[var(--shadow-card)] transition-all duration-500"
+      className="bg-white border border-[#E4E4E2] rounded-2xl p-6 flex items-start gap-4 shadow-[var(--shadow-card)] transition-all duration-700"
       style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(20px)', transitionDelay: `${delay}ms` }}
     >
       <div className="w-11 h-11 rounded-xl bg-[#E6A800] flex items-center justify-center flex-shrink-0">
@@ -96,7 +101,7 @@ export default function ConcesionariasEquipamiento() {
       <div className="max-w-[1160px] mx-auto">
         <HeaderBlock />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {items.map(({ icon, title, body }, i) => (
             <ItemCard key={title} icon={icon} title={title} body={body} delay={i * 80} />
           ))}
@@ -104,13 +109,13 @@ export default function ConcesionariasEquipamiento() {
 
         <div
           ref={noteRef}
-          className="mt-6 bg-[#F2F2F0] border border-[#E4E4E2] rounded-xl p-4 flex items-start gap-3 transition-all duration-500"
-          style={{ opacity: noteInView ? 1 : 0, transform: noteInView ? 'translateY(0)' : 'translateY(20px)', transitionDelay: '400ms' }}
+          className="mt-6 bg-[#F2F2F0] border border-[#E4E4E2] rounded-xl p-4 flex items-start gap-3 transition-all duration-1000"
+          style={{ opacity: noteInView ? 1 : 0, transform: noteInView ? 'translateY(0)' : 'translateY(20px)', transitionDelay: '480ms' }}
         >
           <Info size={15} className="text-[#9A9A9A] flex-shrink-0 mt-0.5" />
           <p className="text-[17px] text-[#5C5C5C] italic">
-            El tester solar de calor (medidor) se adquiere por separado — es la herramienta de
-            cierre más efectiva en el escritorio de venta.
+            El tótem y el medidor infrarrojo se adquieren por separado — son las herramientas de
+            cierre más efectivas en el escritorio de venta.
           </p>
         </div>
       </div>

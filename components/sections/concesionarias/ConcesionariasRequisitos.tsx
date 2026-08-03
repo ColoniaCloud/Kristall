@@ -20,10 +20,10 @@ function useInView(threshold = 0.15) {
 }
 
 const compromisos = [
-  'Adoptar Kristall como lámina de tu salón',
+  'Adoptar Kristall como lámina de tu salón, sin exclusividad',
   'Ofrecer el polarizado en la venta del 0km',
-  'Que tu instalador tercerizado trabaje con lámina Kristall',
-  'Activar la garantía digital cruzada en el sistema',
+  'Que tu instalador habitual trabaje con lámina Kristall',
+  'Activar la garantía digital en el sistema (por nombre y modelo en 0km)',
   'Usar las herramientas de cierre (tótem, medidor, muestrario)',
   'Mantener la experiencia premium con el cliente',
 ]
@@ -49,19 +49,19 @@ export default function ConcesionariasRequisitos() {
         {/* Columna izquierda */}
         <div ref={leftRef}>
           <span
-            className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] mb-3 block transition-all duration-700"
+            className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] mb-3 block transition-all duration-1000"
             style={{ opacity: leftInView ? 1 : 0, transform: leftInView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '0ms' }}
           >
             03 · LO QUE PEDIMOS
           </span>
           <h2
-            className="text-3xl font-medium text-white mb-4 transition-all duration-700"
+            className="text-3xl font-medium text-white mb-4 transition-all duration-1000"
             style={{ fontFamily: 'var(--font-display)', opacity: leftInView ? 1 : 0, transform: leftInView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '80ms' }}
           >
             Qué pedimos a cambio
           </h2>
           <p
-            className="text-[17px] text-white leading-relaxed transition-all duration-700"
+            className="text-[17px] text-white leading-relaxed transition-all duration-1000"
             style={{ opacity: leftInView ? 1 : 0, transform: leftInView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '160ms' }}
           >
             El alta es ágil y sin obras. Te equipamos el salón, capacitamos a tu equipo y
@@ -72,7 +72,7 @@ export default function ConcesionariasRequisitos() {
         {/* Columna derecha — glass card */}
         <div
           ref={rightRef}
-          className="backdrop-blur-md bg-white/[0.07] border border-white/15 shadow-[0_4px_24px_rgba(0,0,0,0.3)] rounded-2xl p-6 transition-all duration-500"
+          className="backdrop-blur-md bg-white/[0.07] border border-white/15 shadow-[0_4px_24px_rgba(0,0,0,0.3)] rounded-2xl p-6 transition-all duration-700"
           style={{ opacity: rightInView ? 1 : 0, transform: rightInView ? 'translateX(0)' : 'translateX(24px)', transitionDelay: '100ms' }}
         >
           <p className="text-[17px] font-semibold text-white mb-5">
@@ -82,7 +82,7 @@ export default function ConcesionariasRequisitos() {
             {compromisos.map((item, i) => (
               <li
                 key={item}
-                className="flex items-start gap-3 transition-all duration-500"
+                className="flex items-start gap-3 transition-all duration-700"
                 style={{
                   opacity: rightInView ? 1 : 0,
                   transform: rightInView ? 'translateY(0)' : 'translateY(10px)',

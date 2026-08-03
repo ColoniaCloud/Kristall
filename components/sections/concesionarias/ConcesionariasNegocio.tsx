@@ -28,13 +28,13 @@ const steps = [
   },
   {
     num: '02',
-    title: 'El cliente elige y lo siente',
+    title: 'El cliente lo siente y elige',
     body: 'Con el medidor de calor comprueba la diferencia al instante y compra.',
   },
   {
     num: '03',
     title: 'Tu instalador coloca',
-    body: 'Tu tercerizado instala con lámina Kristall. Vos capturás el margen del upsell, sin sumar tareas.',
+    body: 'Tu instalador habitual instala Kristall. Vos activás la garantía digital en el sistema con los datos del vehículo y de tu cliente, y capturás el margen adicional premium en cada entrega.',
   },
 ]
 
@@ -43,22 +43,22 @@ function HeaderBlock() {
   return (
     <div ref={ref}>
       <span
-        className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] mb-3 block transition-all duration-700"
+        className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] mb-3 block transition-all duration-1000"
         style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '0ms' }}
       >
         01 · EL NEGOCIO
       </span>
       <h2
-        className="text-3xl font-medium text-white mb-3 transition-all duration-700"
+        className="text-3xl font-medium text-white mb-3 transition-all duration-1000"
         style={{ fontFamily: 'var(--font-display)', opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '80ms' }}
       >
         Más margen, sin cambiar tu operación
       </h2>
       <p
-        className="text-[17px] text-white leading-relaxed mb-12 max-w-[600px] transition-all duration-700"
+        className="text-[17px] text-white leading-relaxed mb-12 max-w-[600px] transition-all duration-1000"
         style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '160ms' }}
       >
-        Tu instalador tercerizado sigue colocando como hasta hoy. La diferencia es que ahora
+        Tu instalador habitual sigue colocando como hasta hoy. La diferencia es que ahora
         trabaja con lámina Kristall: el cliente pide la marca y su garantía digital, y vos
         capturás un upsell premium en cada entrega.
       </p>
@@ -72,7 +72,7 @@ function StepCard({ num, title, body, delay }: { num: string; title: string; bod
     <AnimatedBorderCard borderRadius={16} color="white">
       <div
         ref={ref}
-        className="relative rounded-2xl p-6 flex flex-col h-full backdrop-blur-md bg-white/[0.07] border border-white/15 shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-500"
+        className="relative rounded-2xl p-6 flex flex-col h-full backdrop-blur-md bg-white/[0.07] border border-white/15 shadow-[0_4px_24px_rgba(0,0,0,0.3)] transition-all duration-700"
         style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(24px)', transitionDelay: `${delay}ms` }}
       >
         <span
@@ -94,7 +94,7 @@ function CalloutBlock() {
     <AnimatedBorderCard borderRadius={16} color="white">
       <div
         ref={ref}
-        className="relative rounded-2xl p-6 flex items-start gap-5 backdrop-blur-md bg-white/[0.06] border border-white/10 transition-all duration-500"
+        className="relative rounded-2xl p-6 flex items-start gap-5 backdrop-blur-md bg-white/[0.06] border border-white/10 transition-all duration-700"
         style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(24px)', transitionDelay: '200ms' }}
       >
         <div className="w-12 h-12 rounded-xl bg-[#E6A800] flex items-center justify-center flex-shrink-0">

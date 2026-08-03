@@ -12,7 +12,7 @@ export default function ConcesionariasHero() {
   const item = (delay: number): React.CSSProperties => ({
     opacity: mounted ? 1 : 0,
     transform: mounted ? 'translateY(0)' : 'translateY(20px)',
-    transition: `opacity 700ms ease ${delay}ms, transform 700ms ease ${delay}ms`,
+    transition: `opacity 1000ms ease ${delay}ms, transform 1000ms ease ${delay}ms`,
   })
 
   return (
@@ -45,7 +45,7 @@ export default function ConcesionariasHero() {
           style={item(80)}
         >
           <span className="w-2 h-2 rounded-full bg-[#E6A800]" />
-          <span className="text-xs text-[#E6A800]/80">Canal exclusivo</span>
+          <span className="text-xs text-[#E6A800]/80">Sin exclusividad</span>
         </div>
 
         {/* Headline */}
