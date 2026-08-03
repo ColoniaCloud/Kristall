@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import ServicesHero from '@/components/sections/services/ServicesHero'
 import ServicesPolarizedApp from '@/components/sections/services/ServicesPolarizedApp'
 import ServicesCTA from '@/components/sections/services/ServicesCTA'
-import { buildAlternates } from '@/lib/seo'
+import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
 
 const pageMeta: Record<string, { title: string; description: string }> = {
   es: { title: 'Software para instaladores', description: 'Descubrí Polarized, la app de cálculo de Kristall Film para instaladores profesionales de láminas automotrices. Herramienta gratuita y precisa.' },
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: m.title,
     description: m.description,
     alternates: buildAlternates('/servicios', locale),
-    openGraph: { title: `${m.title} | Kristall Film`, description: m.description, url: `https://kristallfilm.com/${locale}/servicios` },
+    openGraph: { title: `${m.title} | Kristall Film`, description: m.description, url: `https://kristallfilm.com/${locale}/servicios`, images: [DEFAULT_OG_IMAGE] },
   }
 }
 

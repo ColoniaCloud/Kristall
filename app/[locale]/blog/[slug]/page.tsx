@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { Link } from '@/i18n/routing'
-import { buildAlternates } from '@/lib/seo'
+import { buildAlternates, BASE } from '@/lib/seo'
 import {
   getArticleBySlug,
   getPublishedArticles,
@@ -67,14 +67,42 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: 'article',
       url: `https://kristallfilm.com/${locale}/blog/${slug}`,
       publishedTime: article.publishedAt ?? undefined,
-      images: image ? [{ url: image }] : undefined,
+      images: image
+        ? [{ url: image, width: 1200, height: 630, alt: title }]
+        : [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Kristall Film — láminas de tecnología alemana' }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: image ? [image] : undefined,
+      images: [image ?? '/og-default.jpg'],
     },
+  }
+}
+
+function blogPostingLd(article: Article, locale: string, slug: string, loc: BlogLocale) {
+  const title = article.meta?.title || localized(article, 'title', loc)
+  const description = article.meta?.description || localized(article, 'excerpt', loc)
+  const image = seoImageUrl(article)
+  const absoluteImage = image ? (image.startsWith('http') ? image : `${BASE}${image}`) : `${BASE}/og-default.jpg`
+  const url = `https://kristallfilm.com/${locale}/blog/${slug}`
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    image: absoluteImage,
+    datePublished: article.publishedAt ?? undefined,
+    dateModified: (article.updatedAt as string | undefined) ?? article.publishedAt ?? undefined,
+    author: article.author
+      ? { '@type': 'Person', name: article.author }
+      : { '@type': 'Organization', name: 'Kristall Film' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Kristall Film',
+      logo: { '@type': 'ImageObject', url: 'https://kristallfilm.com/LogoPlano.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
   }
 }
 
@@ -90,9 +118,14 @@ export default async function ArticuloPage({ params }: PageProps) {
   const cover = coverMedia(article)
   const date = formatDate(article.publishedAt, locale)
   const content = localizedContent(article, loc) as ComponentProps<typeof RichText>['data'] | null
+  const jsonLd = blogPostingLd(article, locale, slug, loc)
 
   return (
     <article className="min-h-screen bg-[var(--bg)]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* HERO */}
       {cover?.url ? (
         <header className="relative h-[44vh] min-h-[300px] md:h-[58vh] w-full overflow-hidden">

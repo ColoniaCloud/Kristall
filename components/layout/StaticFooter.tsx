@@ -87,7 +87,7 @@ export default function StaticFooter() {
           <h3 className="text-white font-medium text-[16px] mb-3">Sumate a Kristall</h3>
           <ul className="space-y-2 text-sm">
             <li>
-              <Link href="/propuesta-vidrierias" className="text-white/50 hover:text-white transition-colors">
+              <Link href="/propuesta-aberturas" className="text-white/50 hover:text-white transition-colors">
                 Propuesta Aberturas
               </Link>
             </li>

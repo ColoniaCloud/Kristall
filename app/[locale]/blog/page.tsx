@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/routing'
-import { buildAlternates } from '@/lib/seo'
+import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
 import { getPublishedArticles, localized, coverMedia, type BlogLocale } from '@/lib/blog'
 
 // Blog: contenido del CMS, revalidado periódicamente (ISR).
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: m.title,
     description: m.description,
     alternates: buildAlternates('/blog', locale),
-    openGraph: { title: `${m.title} | Kristall Film`, description: m.description, url: `https://kristallfilm.com/${locale}/blog` },
+    openGraph: { title: `${m.title} | Kristall Film`, description: m.description, url: `https://kristallfilm.com/${locale}/blog`, images: [DEFAULT_OG_IMAGE] },
     // Sin artículos publicados es thin content: se saca de indexación hasta que haya contenido real.
     ...(hasArticles ? {} : { robots: { index: false, follow: true } }),
   }

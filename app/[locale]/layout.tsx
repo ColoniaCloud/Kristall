@@ -5,6 +5,7 @@ import { routing } from '@/i18n/routing'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import WhatsAppFloatingButton from '@/components/layout/WhatsAppFloatingButton'
+import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import type { Metadata } from 'next'
 
 const organizationLd = {
@@ -77,6 +78,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       alternateLocale: Object.values(localeMeta)
         .filter(m => m.locale !== meta.locale)
         .map(m => m.locale),
+      // Next.js no hace deep-merge de `openGraph` entre segmentos: si este layout
+      // define `openGraph` sin `images`, se pierde el default del layout raíz
+      // (app/layout.tsx) para TODA página bajo [locale] que no declare el suyo propio.
+      images: [{ url: '/og-default.jpg', width: 1200, height: 630, alt: 'Kristall Film — láminas de tecnología alemana' }],
     },
   }
 }
@@ -110,6 +115,7 @@ export default async function LocaleLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }}
         />
+        <GoogleAnalytics />
       </body>
     </html>
   )

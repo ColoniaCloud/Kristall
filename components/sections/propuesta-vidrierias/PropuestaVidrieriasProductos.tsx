@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Home, Sparkles } from 'lucide-react'
 
 function useInView(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null)
@@ -28,7 +27,6 @@ export default function PropuestaVidrieriasProductos() {
   const { ref: headerRef, inView: headerInView } = useInView(0.2)
   const { ref: autoRef, inView: autoInView } = useInView(0.05)
   const { ref: arqRef, inView: arqInView } = useInView(0.05)
-  const { ref: diffRef, inView: diffInView } = useInView(0.1)
 
   const beneficios = [
     {
@@ -172,33 +170,6 @@ export default function PropuestaVidrieriasProductos() {
                 <p className="text-sm text-white/70 leading-relaxed">{prod.desc}</p>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* CALLOUT CARD: OPORTUNIDAD DIFERENCIAL */}
-        <div
-          ref={diffRef}
-          className="backdrop-blur-md bg-gradient-to-r from-[#E6A800]/10 to-transparent border border-[#E6A800]/20 rounded-xl p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start transition-all duration-700"
-          style={{
-            opacity: diffInView ? 1 : 0,
-            transform: diffInView ? 'translateY(0)' : 'translateY(20px)',
-            transitionDelay: '150ms',
-          }}
-        >
-          <div className="w-12 h-12 rounded-xl bg-[#E6A800] flex items-center justify-center flex-shrink-0">
-            <Home className="text-[#0A0A0A] w-5 h-5" />
-          </div>
-          <div>
-            <h4
-              className="text-white text-lg font-medium mb-2 uppercase tracking-wide flex items-center gap-2"
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
-              <span>El certificado digital marca la diferencia</span>
-              <Sparkles className="w-4 h-4 text-[#E6A800]" />
-            </h4>
-            <p className="text-sm text-white/70 leading-relaxed">
-              Cuando un cliente no recibe el Certificado Digital de Instalación Kristall, pierde la posibilidad de verificar su garantía y el respaldo que corresponde a una instalación original. Esto protege al cliente, fortalece a cada socio y diferencia tu propuesta en el mercado.
-            </p>
           </div>
         </div>
 

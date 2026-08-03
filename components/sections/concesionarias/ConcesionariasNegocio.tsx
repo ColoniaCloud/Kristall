@@ -60,7 +60,7 @@ function HeaderBlock() {
       >
         Tu instalador habitual sigue colocando como hasta hoy. La diferencia es que ahora
         trabaja con lámina Kristall: el cliente pide la marca y su garantía digital, y vos
-        capturás un upsell premium en cada entrega.
+        capturás ese margen adicional premium en cada entrega.
       </p>
     </div>
   )

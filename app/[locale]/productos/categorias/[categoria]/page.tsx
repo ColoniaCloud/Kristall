@@ -58,6 +58,7 @@ function productLd(lamina: Lamina, line: NonNullable<ReturnType<typeof getLine>>
     '@type': 'Product',
     name: laminaName(lamina),
     sku: lamina.sku,
+    image: `${BASE}${line.image}`,
     brand: { '@type': 'Brand', name: 'Kristall Film' },
     category: line.name,
     ...(additionalProperty.length > 0 && { additionalProperty }),

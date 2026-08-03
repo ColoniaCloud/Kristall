@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import ContactForm from '@/components/contact/ContactForm'
-import { buildAlternates } from '@/lib/seo'
+import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
 
 const pageMeta: Record<string, { title: string; description: string }> = {
   es: { title: 'Contacto', description: 'Ponete en contacto con el equipo de Kristall Film. Asesoramiento en láminas automotrices, arquitectónicas y PPF. Respondemos a la brevedad.' },
@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: m.title,
     description: m.description,
     alternates: buildAlternates('/contacto', locale),
-    openGraph: { title: `${m.title} | Kristall Film`, description: m.description, url: `https://kristallfilm.com/${locale}/contacto` },
+    openGraph: { title: `${m.title} | Kristall Film`, description: m.description, url: `https://kristallfilm.com/${locale}/contacto`, images: [DEFAULT_OG_IMAGE] },
   }
 }
 
