@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import WhatsAppFloatingButton from '@/components/layout/WhatsAppFloatingButton'
 import type { Metadata } from 'next'
 
 const organizationLd = {
@@ -99,6 +100,7 @@ export default async function LocaleLayout({
               "descubre" al llegar al final (efecto cortina / parallax). */}
           <main className="relative z-10 flex-1 bg-[var(--bg)]">{children}</main>
           <Footer />
+          <WhatsAppFloatingButton />
         </NextIntlClientProvider>
         <script
           type="application/ld+json"
