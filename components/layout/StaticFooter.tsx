@@ -88,7 +88,7 @@ export default function StaticFooter() {
           <ul className="space-y-2 text-sm">
             <li>
               <Link href="/propuesta-vidrierias" className="text-white/50 hover:text-white transition-colors">
-                Vidrierías y aberturas
+                Propuesta Aberturas
               </Link>
             </li>
             <li>

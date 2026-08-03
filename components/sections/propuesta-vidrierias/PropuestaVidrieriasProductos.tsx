@@ -63,13 +63,6 @@ export default function PropuestaVidrieriasProductos() {
 
   const soporte = [
     {
-      name: 'Garantía Digital Kristall',
-      type: 'Certificado automático para cada instalación',
-      desc: 'Cada trabajo recibe un Certificado Digital de Instalación que registra la obra y acompaña la garantía del cliente final.',
-      badge: 'GARANTÍA',
-      badgeColor: 'bg-[#E6A800]/15 text-[#E6A800] border-[#E6A800]/30',
-    },
-    {
       name: 'Soporte técnico y comercial',
       type: 'Acompañamiento antes, durante y después',
       desc: 'Nuestro equipo te acompaña en cada etapa para que puedas vender más, resolver dudas y sostener la relación con tus clientes. No solo proveemos film: trabajamos para ayudarte a vender más.',
@@ -156,7 +149,7 @@ export default function PropuestaVidrieriasProductos() {
             <span>RESPALDO Y SOPORTE</span>
             <div className="h-px bg-[#E6A800]/10 flex-1" />
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             {soporte.map((prod, i) => (
               <div
                 key={prod.name}

@@ -51,7 +51,7 @@ function ContactForm() {
           email: form.email,
           phone: form.telefono,
           source: 'propuesta-vidrierias',
-          message: 'Solicitud de reunión comercial desde página de propuesta para vidrierías y aberturas.',
+          message: 'Solicitud de reunión comercial desde página de propuesta de aberturas.',
         }),
       })
       if (!res.ok) throw new Error()
@@ -79,7 +79,7 @@ function ContactForm() {
       ) : (
         <>
           <p className="text-[12px] font-semibold uppercase tracking-[0.1em] text-white/30 mb-2">
-            PROPUESTA VIDRIERÍAS
+            PROPUESTA ABERTURAS
           </p>
           <h3
             className="text-xl font-medium text-white mb-6"

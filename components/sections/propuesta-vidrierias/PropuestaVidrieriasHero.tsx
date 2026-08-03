@@ -49,7 +49,7 @@ export default function PropuestaVidrieriasHero() {
         <div className="absolute inset-0">
           <Image
             src="/builds.jpg"
-            alt="Vidrierías y Aberturas"
+            alt="Propuesta Aberturas"
             fill
             className="absolute inset-0 object-cover object-center opacity-25"
             priority
@@ -67,7 +67,7 @@ export default function PropuestaVidrieriasHero() {
                   <div className="flex-1 bg-[#E6A800]" />
                 </div>
                 <span className="text-[12px] font-semibold uppercase tracking-[0.15em] text-[#E6A800]">
-                  Para vidrierías y empresas de aberturas
+                  Para empresas de aberturas
                 </span>
               </div>
 
@@ -126,7 +126,7 @@ export default function PropuestaVidrieriasHero() {
             <div className="relative min-h-[320px] lg:min-h-[560px] rounded-[28px] overflow-hidden border border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.35)]" style={item(250)}>
               <Image
                 src="/builds.jpg"
-                alt="Soluciones Kristall para vidrierías"
+                alt="Soluciones Kristall para aberturas"
                 fill
                 className="object-cover object-center"
               />
