@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { getClientSession } from '@/lib/client-portal/session'
+import { getClientSession, levelOf } from '@/lib/client-portal/session'
 import { getInstallations } from '@/lib/client-portal/api'
 import InstallationsTable from '@/components/client-portal/InstallationsTable'
 
@@ -9,6 +9,7 @@ export const metadata: Metadata = { title: 'Instalaciones' }
 export default async function InstalacionesPage() {
   const session = await getClientSession()
   if (!session) redirect('/cliente/ingresar')
+  if (levelOf(session) !== 'INSTALLER') redirect('/cliente/dashboard')
 
   const installations = await getInstallations(session.contactId)
 

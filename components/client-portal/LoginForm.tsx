@@ -42,7 +42,7 @@ export default function LoginForm() {
         const body = await res.json().catch(() => ({}))
         setErrorMsg(
           res.status === 401
-            ? 'Email o contraseña incorrectos. Si todavía no tenés acceso, contactate con Kristall para que te lo habiliten.'
+            ? 'Email o contraseña incorrectos. Si nunca creaste tu contraseña, activá tu cuenta.'
             : (body.error ?? 'Error al iniciar sesión')
         )
         setStatus('error')
@@ -76,9 +76,14 @@ export default function LoginForm() {
       </Button>
 
       <p className="text-center text-sm text-muted-foreground">
-        ¿No tenés acceso todavía?{' '}
-        <Link href="/es/contacto" className="underline hover:text-foreground">
-          Contactate con Kristall
+        <Link href="/cliente/recuperar" className="underline hover:text-foreground">
+          Olvidé mi contraseña
+        </Link>
+      </p>
+      <p className="text-center text-sm text-muted-foreground">
+        ¿Primera vez?{' '}
+        <Link href="/cliente/activar" className="underline hover:text-foreground">
+          Activá tu cuenta
         </Link>
       </p>
     </form>

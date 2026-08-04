@@ -153,6 +153,47 @@ const MOCK_NOTIFICATIONS = [
   { id: 'clm1', type: 'WARRANTY_ACTIVATED', title: 'Garantía activada', message: 'Juan Pérez activó la garantía LOT-20260705-0001-R003-I1.', read: true, createdAt: '2026-07-08T00:00:00.000Z' },
 ]
 
+/**
+ * Cuenta corriente (sección 4.9). Incluye a propósito los casos molestos:
+ * un plan de cuotas con una vencida y otra parcial, y un sobrepago que deja el
+ * saldo momentáneamente en negativo (saldo a favor).
+ */
+const MOCK_ACCOUNT = {
+  summary: {
+    balance: 690000,
+    totalInvoiced: 1450000,
+    totalPaid: 760000,
+    overdueAmount: 120000,
+    nextDueDate: '2026-08-15T12:00:00.000Z',
+  },
+  entries: [
+    { id: 'clz1', date: '2026-04-24T00:00:00.000Z', type: 'SALE', description: 'Compra #1011', debit: 300000, credit: 0, balance: 300000, saleId: 'clz1' },
+    { id: 'clp1', date: '2026-05-03T00:00:00.000Z', type: 'PAYMENT', description: 'Pago compra #1011', debit: 0, credit: 310000, balance: -10000, saleId: 'clz1' },
+    { id: 'cla1', date: '2026-05-10T00:00:00.000Z', type: 'ADJUSTMENT', description: 'Nota de crédito por devolución', debit: 0, credit: 0, balance: -10000 },
+    { id: 'clz2', date: '2026-06-01T00:00:00.000Z', type: 'SALE', description: 'Compra #1042', debit: 1150000, credit: 0, balance: 1140000, saleId: 'clz2' },
+    { id: 'clp2', date: '2026-06-20T00:00:00.000Z', type: 'PAYMENT', description: 'Pago compra #1042', debit: 0, credit: 450000, balance: 690000, saleId: 'clz2' },
+  ],
+  plans: [
+    {
+      id: 'clplan1',
+      saleId: 'clz2',
+      saleNumber: 1042,
+      installmentCount: 4,
+      frequency: 'MONTHLY',
+      financedTotal: 1150000,
+      status: 'ACTIVE',
+      installments: [
+        { id: 'cli1', number: 1, dueDate: '2026-06-15T12:00:00.000Z', amount: 287500, paid: 287500, remaining: 0, status: 'PAID' },
+        { id: 'cli2', number: 2, dueDate: '2026-07-15T12:00:00.000Z', amount: 287500, paid: 162500, remaining: 125000, status: 'OVERDUE' },
+        { id: 'cli3', number: 3, dueDate: '2026-08-15T12:00:00.000Z', amount: 287500, paid: 0, remaining: 287500, status: 'PENDING' },
+        { id: 'cli4', number: 4, dueDate: '2026-09-15T12:00:00.000Z', amount: 287500, paid: 0, remaining: 287500, status: 'PENDING' },
+      ],
+      nextDue: { id: 'cli2', number: 2, dueDate: '2026-07-15T12:00:00.000Z', amount: 287500, paid: 162500, remaining: 125000, status: 'OVERDUE' },
+      overdueCount: 1,
+    },
+  ],
+}
+
 function match(path: string, pattern: RegExp): RegExpMatchArray | null {
   return path.match(pattern)
 }
@@ -193,9 +234,63 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
   if (path === '/api/portal/v1/auth/login' && method === 'POST') {
     const { email, password } = (body ?? {}) as { email?: string; password?: string }
     if (email && password) {
-      return { status: 200, data: { contactId: MOCK_CONTACT_ID, name: MOCK_CONTACT.name, company: MOCK_CONTACT.company } }
+      // Con un email que empiece en "basic" se loguea como nivel BASIC, para
+      // poder probar el Panel Clientes sin las secciones de instalador.
+      const accessLevel = email.startsWith('basic') ? 'BASIC' : 'INSTALLER'
+      return {
+        status: 200,
+        data: { contactId: MOCK_CONTACT_ID, name: MOCK_CONTACT.name, company: MOCK_CONTACT.company, accessLevel },
+      }
     }
     return { status: 401, data: { error: 'Credenciales inválidas' } }
+  }
+
+  // Alta de cuenta. Token de prueba: "mock-token" (cualquier otro da 404).
+  if (path === '/api/portal/v1/auth/request-activation' && method === 'POST') {
+    const { email } = (body ?? {}) as { email?: string }
+    if (email === 'activa@ejemplo.com') {
+      return { status: 200, data: { found: true, alreadyActive: true, message: 'Esta cuenta ya está activa. Iniciá sesión, o usá «Olvidé mi contraseña».' } }
+    }
+    if (email?.endsWith('@ejemplo.com')) {
+      return { status: 200, data: { found: true, alreadyActive: false, message: 'Encontramos tu cuenta. Te mandamos un mail para que crees tu contraseña.' } }
+    }
+    return { status: 200, data: { found: false, message: 'No encontramos una cuenta de cliente con ese email. Escribinos y lo damos de alta.' } }
+  }
+
+  m = match(path, /^\/api\/portal\/v1\/auth\/activate$/)
+  if (m && method === 'GET') return { status: 404, data: { error: 'El link no es válido.' } }
+  if (path.startsWith('/api/portal/v1/auth/activate?') && method === 'GET') {
+    const token = new URLSearchParams(path.split('?')[1]).get('token')
+    if (token === 'mock-token') {
+      return { status: 200, data: { valid: true, email: 'juan@example.com', name: MOCK_CONTACT.name, company: MOCK_CONTACT.company, whatsapp: '1125835244' } }
+    }
+    if (token === 'mock-token-sin-wsp') {
+      return { status: 200, data: { valid: true, email: 'nuevo@example.com', name: 'Cliente Nuevo', company: null, whatsapp: null } }
+    }
+    return { status: 404, data: { error: 'El link no es válido.' } }
+  }
+  if (path === '/api/portal/v1/auth/activate' && method === 'POST') {
+    const { token, password } = (body ?? {}) as { token?: string; password?: string }
+    if (!token?.startsWith('mock-token')) return { status: 404, data: { error: 'El link no es válido.' } }
+    if (!password || password.length < 8) return { status: 400, data: { error: 'Datos inválidos' } }
+    return { status: 200, data: { contactId: MOCK_CONTACT_ID, name: MOCK_CONTACT.name, company: MOCK_CONTACT.company, accessLevel: 'BASIC' } }
+  }
+
+  // Recuperación de contraseña. Respuesta genérica a propósito.
+  if (path === '/api/portal/v1/auth/request-reset' && method === 'POST') {
+    return { status: 200, data: { message: 'Si ese email tiene una cuenta, te mandamos un link para cambiar la contraseña.' } }
+  }
+  if (path.startsWith('/api/portal/v1/auth/reset?') && method === 'GET') {
+    const token = new URLSearchParams(path.split('?')[1]).get('token')
+    return token === 'mock-token'
+      ? { status: 200, data: { valid: true, email: 'juan@example.com' } }
+      : { status: 404, data: { error: 'El link no es válido.' } }
+  }
+  if (path === '/api/portal/v1/auth/reset' && method === 'POST') {
+    const { token, password } = (body ?? {}) as { token?: string; password?: string }
+    if (token !== 'mock-token') return { status: 404, data: { error: 'El link no es válido.' } }
+    if (!password || password.length < 8) return { status: 400, data: { error: 'Datos inválidos' } }
+    return { status: 200, data: { ok: true, message: 'Listo. Ya podés iniciar sesión.' } }
   }
 
   m = match(path, /^\/api\/portal\/v1\/contacts\/([^/]+)$/)
@@ -245,6 +340,13 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
 
   m = match(path, /^\/api\/portal\/v1\/contacts\/([^/]+)\/notifications\/([^/]+)\/read$/)
   if (m && method === 'PATCH') return { status: 200, data: { ok: true } }
+
+  m = match(path, /^\/api\/portal\/v1\/contacts\/([^/]+)\/account$/)
+  if (m && method === 'GET') {
+    return m[1] === MOCK_CONTACT_ID
+      ? { status: 200, data: MOCK_ACCOUNT }
+      : { status: 404, data: { error: 'Cliente no encontrado' } }
+  }
 
   return { status: 404, data: { error: `Mock no implementado para ${method} ${path}` } }
 }

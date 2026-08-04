@@ -3,12 +3,16 @@
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { CLIENT_NAV_ITEMS } from './nav-items'
+import { navItemsFor } from './nav-items'
+import type { AccessLevel } from '@/lib/client-portal/session'
 
 export default function NavLinks({
+  level,
   onNavigate,
   collapsed = false,
 }: {
+  /** Decide qué secciones se muestran. El CRM igual valida el nivel por su cuenta. */
+  level: AccessLevel
   onNavigate?: () => void
   collapsed?: boolean
 }) {
@@ -16,7 +20,7 @@ export default function NavLinks({
 
   return (
     <nav className="flex flex-col gap-1">
-      {CLIENT_NAV_ITEMS.map(({ href, label, icon: Icon }) => {
+      {navItemsFor(level).map(({ href, label, icon: Icon }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`)
         return (
           <Link

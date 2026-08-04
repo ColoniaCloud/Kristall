@@ -5,8 +5,9 @@ import Image from 'next/image'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import NavLinks from './NavLinks'
+import type { AccessLevel } from '@/lib/client-portal/session'
 
-export default function Sidebar() {
+export default function Sidebar({ level }: { level: AccessLevel }) {
   const [collapsed, setCollapsed] = useState(false)
 
   return (
@@ -51,7 +52,7 @@ export default function Sidebar() {
         </button>
       </div>
 
-      <NavLinks collapsed={collapsed} />
+      <NavLinks level={level} collapsed={collapsed} />
     </aside>
   )
 }

@@ -107,12 +107,149 @@ export interface Notification {
   createdAt: string
 }
 
+export type AccessLevel = 'BASIC' | 'INSTALLER'
+
+export interface LoginResult {
+  contactId: string
+  name: string
+  company: string
+  /** Ausente en respuestas del CRM anteriores a agosto 2026; tratar como BASIC. */
+  accessLevel?: AccessLevel
+}
+
 export function loginClient(email: string, password: string) {
-  return callCrmApi<{ contactId: string; name: string; company: string }>('/api/portal/v1/auth/login', {
+  return callCrmApi<LoginResult>('/api/portal/v1/auth/login', {
     method: 'POST',
     apiKey: KEY(),
     body: { email, password },
   })
+}
+
+// ─── Alta de cuenta y recuperación de contraseña ─────────────────────────────
+//
+// El CRM es el dueño de las credenciales: acá solo se hace de puente. Los
+// tokens viajan en la URL del mail que manda el CRM y se validan contra él.
+
+export interface RequestActivationResult {
+  found: boolean
+  alreadyActive?: boolean
+  message: string
+}
+
+/** Paso 1 del alta: el Cliente pone su email y el CRM le manda el link. */
+export function requestActivation(email: string) {
+  return callCrmApi<RequestActivationResult>('/api/portal/v1/auth/request-activation', {
+    method: 'POST',
+    apiKey: KEY(),
+    body: { email },
+  })
+}
+
+export interface ActivationTokenInfo {
+  valid: true
+  email: string
+  name: string
+  company: string | null
+  /** El que ya tiene el CRM, para preguntar si sigue vigente. null = pedirlo. */
+  whatsapp: string | null
+}
+
+/** Valida el link antes de mostrar el formulario. */
+export function verifyActivationToken(token: string) {
+  return callCrmApi<ActivationTokenInfo>(
+    `/api/portal/v1/auth/activate?token=${encodeURIComponent(token)}`,
+    { apiKey: KEY() }
+  )
+}
+
+/** Paso 2 del alta: crea la cuenta con la contraseña que eligió el Cliente. */
+export function activateAccount(input: { token: string; password: string; whatsapp?: string }) {
+  return callCrmApi<LoginResult>('/api/portal/v1/auth/activate', {
+    method: 'POST',
+    apiKey: KEY(),
+    body: input,
+  })
+}
+
+export function requestPasswordReset(email: string) {
+  return callCrmApi<{ message: string }>('/api/portal/v1/auth/request-reset', {
+    method: 'POST',
+    apiKey: KEY(),
+    body: { email },
+  })
+}
+
+export function verifyResetToken(token: string) {
+  return callCrmApi<{ valid: true; email: string }>(
+    `/api/portal/v1/auth/reset?token=${encodeURIComponent(token)}`,
+    { apiKey: KEY() }
+  )
+}
+
+/** No devuelve sesión a propósito: después de cambiarla, el Cliente entra por el login normal. */
+export function resetPassword(input: { token: string; password: string }) {
+  return callCrmApi<{ ok: true; message: string }>('/api/portal/v1/auth/reset', {
+    method: 'POST',
+    apiKey: KEY(),
+    body: input,
+  })
+}
+
+// ─── Cuenta corriente ────────────────────────────────────────────────────────
+
+export type InstallmentStatus = 'PENDING' | 'PARTIAL' | 'PAID' | 'OVERDUE'
+
+export interface AccountEntry {
+  id: string
+  date: string
+  type: 'SALE' | 'PAYMENT' | 'ADJUSTMENT'
+  description: string
+  debit: number
+  credit: number
+  /** Saldo acumulado hasta este movimiento inclusive. Negativo = saldo a favor. */
+  balance: number
+  saleId?: string
+}
+
+export interface AccountInstallment {
+  id: string
+  number: number
+  dueDate: string
+  amount: number
+  paid: number
+  remaining: number
+  status: InstallmentStatus
+}
+
+export interface AccountPlan {
+  id: string
+  saleId: string
+  saleNumber: number
+  installmentCount: number
+  frequency: 'WEEKLY' | 'BIWEEKLY' | 'MONTHLY' | 'CUSTOM'
+  financedTotal: number
+  status: 'ACTIVE' | 'CANCELLED' | 'COMPLETED'
+  installments: AccountInstallment[]
+  nextDue: AccountInstallment | null
+  overdueCount: number
+}
+
+export interface ClientAccount {
+  summary: {
+    /** Negativo = saldo a favor del cliente. */
+    balance: number
+    totalInvoiced: number
+    totalPaid: number
+    overdueAmount: number
+    nextDueDate: string | null
+  }
+  entries: AccountEntry[]
+  /** Vacío si ninguna compra se financió en cuotas — es el caso más común. */
+  plans: AccountPlan[]
+}
+
+export function getAccount(contactId: string) {
+  return callCrmApi<ClientAccount>(`/api/portal/v1/contacts/${contactId}/account`, { apiKey: KEY() })
 }
 
 export function getContact(contactId: string) {

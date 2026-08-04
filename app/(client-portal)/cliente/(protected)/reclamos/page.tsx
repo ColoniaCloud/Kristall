@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
-import { getClientSession } from '@/lib/client-portal/session'
+import { getClientSession, levelOf } from '@/lib/client-portal/session'
 import { getClaims } from '@/lib/client-portal/api'
 import ClaimsTable from '@/components/client-portal/ClaimsTable'
 import { Button } from '@/components/ui/button'
@@ -12,6 +12,7 @@ export const metadata: Metadata = { title: 'Reclamos' }
 export default async function ReclamosPage() {
   const session = await getClientSession()
   if (!session) redirect('/cliente/ingresar')
+  if (levelOf(session) !== 'INSTALLER') redirect('/cliente/dashboard')
 
   const claims = await getClaims(session.contactId)
 

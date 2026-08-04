@@ -19,6 +19,28 @@ tipo de contacto distinto, hoy sin uso para este portal) y leads no tienen acces
 
 ---
 
+## 0. Dos niveles de acceso (leer antes que nada)
+
+Desde agosto 2026 el portal tiene **dos niveles**, y cada cuenta (`ClientPortalAccount`) tiene el suyo
+en el campo `accessLevel`, que viene en la respuesta del login:
+
+| Nivel | Nombre para el usuario | Qué puede ver |
+|---|---|---|
+| `BASIC` | **Panel Clientes** | Perfil, compras, **cuenta corriente** (sección 4.9) y notificaciones |
+| `INSTALLER` | **Portal Instalador** | Todo lo anterior **más** stock de rollos, instalaciones, reclamos y generación de sub-códigos |
+
+- **`BASIC` es el default.** Cualquier Cliente que active su cuenta (sección 3.1) lo obtiene solo, sin
+  intervención de nadie.
+- **`INSTALLER` lo habilita a mano un operador** desde la ficha del contacto en el CRM. No hay forma de
+  pedirlo por API.
+
+**El CRM verifica el nivel de su lado.** Los endpoints marcados como *(nivel INSTALLER)* devuelven
+`403 { "error": "Este cliente no tiene habilitado el portal de instalador" }` si la cuenta es `BASIC`,
+está deshabilitada, o el contacto no tiene cuenta de portal. No alcanza con esconder los botones en tu
+frontend — llamar igual devuelve 403.
+
+---
+
 ## 1. Modelo de confianza (leer antes de integrar)
 
 - Esta API se llama **exclusivamente desde tu backend**, nunca desde el navegador del cliente final.
@@ -53,20 +75,96 @@ POST /api/portal/v1/auth/login
 ```
 Body: `{ "email": "juan@example.com", "password": "..." }`.
 
-- **200** `{ "contactId": "cly...", "name": "Juan Pérez", "company": "Vidriería Sur" }` — credenciales
-  correctas. Guardá `contactId` en tu propia sesión para ese usuario; no hace falta volver a llamar
-  a este endpoint hasta que la sesión expire de tu lado.
+- **200** `{ "contactId": "cly...", "name": "Juan Pérez", "company": "Vidriería Sur", "accessLevel": "BASIC" }`
+  — credenciales correctas. Guardá `contactId` **y `accessLevel`** en tu propia sesión para ese usuario;
+  no hace falta volver a llamar a este endpoint hasta que la sesión expire de tu lado. Con `accessLevel`
+  armás el menú (ver sección 0); el CRM igual lo revalida en cada endpoint de instalador.
 - **401** `{ "error": "Credenciales inválidas" }` — email no existe, contraseña incorrecta, o el acceso
   fue deshabilitado por un admin. El error es intencionalmente genérico (no distingue el motivo) para
   no facilitar enumeración de cuentas.
 - **429** — se superó el límite de 5 intentos / 15 min por combinación de tu key + ese email. Frená ahí
   tu propio formulario de login (no reintentes automáticamente).
 
-**El Cliente no puede crear su propia cuenta.** Solo existe si un admin de Kristall se la configuró
-manualmente desde la ficha del contacto en el CRM (sección "Acceso al Portal"). Si un usuario de tu
-sitio dice "no tengo cuenta" o el login le da `401` siempre, el siguiente paso es que contacte a
-Kristall para que un admin le habilite el acceso — no hay un flujo de alta automática que puedas
-ofrecerle vos.
+**Si el login devuelve `401` siempre, el Cliente probablemente todavía no activó su cuenta** — mandalo
+al flujo de la sección 3.1.
+
+---
+
+## 3.1 Alta de cuenta (autoservicio, dos pasos)
+
+Cualquier Cliente cargado en el CRM puede darse de alta solo, sin que un admin intervenga. Lo único
+que necesita es que su email esté en la ficha del CRM.
+
+### Paso 1 — pedir el mail de activación
+
+```
+POST /api/portal/v1/auth/request-activation
+```
+Body: `{ "email": "juan@example.com" }`.
+
+- **200** `{ "found": true, "alreadyActive": false, "message": "..." }` — se encontró la ficha y se
+  mandó el mail. Mostrá el `message` tal cual.
+- **200** `{ "found": true, "alreadyActive": true, "message": "..." }` — ya tiene cuenta activa;
+  mandalo a iniciar sesión o a recuperar la contraseña.
+- **200** `{ "found": false, "message": "..." }` — ese email no corresponde a ningún Cliente. Solo
+  cuentan los contactos de tipo `CLIENT`: un Lead con el mismo email **no** califica.
+- **409** — hay más de una ficha de Cliente con ese email; hay que resolverlo con Kristall a mano.
+- **429** — máximo 3 pedidos cada 15 min por email.
+- **503** — el servidor de mail no está configurado.
+
+> **Nota de seguridad:** a diferencia del resto de la API, este endpoint **confirma si un email
+> pertenece a un cliente de Kristall**. Es deliberado: el flujo pedido muestra "encontramos tu cuenta"
+> en pantalla. El límite de 3 intentos cada 15 minutos es lo que impide barrer una lista de emails.
+
+### Paso 2 — validar el link y crear la contraseña
+
+El mail lleva a `https://<tu-sitio>/cliente/activar/<token>`. El token dura **24 h** y sirve una sola vez.
+
+```
+GET /api/portal/v1/auth/activate?token=<token>
+```
+- **200** `{ "valid": true, "email": "...", "name": "Juan Pérez", "company": "...", "whatsapp": "1125835244" }`
+- **404** `{ "error": "El link no es válido." }` · **410** — ya usado o vencido.
+
+`whatsapp` es el número que el CRM ya tiene cargado, o `null`. Usalo para preguntar *"¿este número
+sigue siendo el tuyo?"* en vez de pedirlo en blanco. Si viene `null`, pedilo.
+
+```
+POST /api/portal/v1/auth/activate
+```
+Body: `{ "token": "...", "password": "min 8 caracteres", "whatsapp": "1155667788" }` (`whatsapp` opcional).
+
+- **200** `{ "contactId": "cly...", "name": "...", "company": "...", "accessLevel": "BASIC" }` — cuenta
+  creada. Podés abrir la sesión directamente con esto, sin pasar por el login.
+- **400** — contraseña de menos de 8 caracteres. **404 / 410** — token inválido, usado o vencido.
+- **409** — ese email ya lo usa otra cuenta del portal.
+
+> **El WhatsApp que manda el Cliente NO pisa el de la ficha del CRM.** Se guarda aparte, en su cuenta
+> del portal, y si difiere del que ya había se le avisa a un operador para que decida cuál vale. El de
+> la ficha puede ser el del local y este el personal.
+
+La cuenta siempre queda en nivel **`BASIC`**. El nivel `INSTALLER` no se puede obtener por API.
+
+---
+
+## 3.2 Recuperación de contraseña
+
+```
+POST /api/portal/v1/auth/request-reset
+```
+Body: `{ "email": "..." }`. **Siempre 200** con el mismo mensaje, exista o no la cuenta — a diferencia
+del alta, acá no se confirma si el email está registrado. **429** si se superan 3 pedidos cada 15 min.
+
+El mail lleva a `https://<tu-sitio>/cliente/nueva-clave/<token>`. Ese token dura **1 hora**.
+
+```
+GET  /api/portal/v1/auth/reset?token=<token>   → 200 { "valid": true, "email": "..." }
+POST /api/portal/v1/auth/reset                 → body { "token": "...", "password": "min 8" }
+```
+
+El `POST` responde **200** `{ "ok": true, "message": "..." }` y **no abre sesión** a propósito: después
+de cambiarla, el Cliente inicia sesión por el camino normal. Así el link del mail, por sí solo, nunca
+alcanza para quedar adentro de la cuenta.
 
 ### Flujo de vinculación (alternativa/complemento al login)
 
@@ -126,7 +224,7 @@ Todos los endpoints de esta sección requieren el header `x-api-key`.
 
 **Errores:** `404 { "error": "Cliente no encontrado" }` (no existe o no es tipo `CLIENT`).
 
-### 4.2 `GET /api/portal/v1/contacts/:contactId/stock` — Rollos/garantías compradas
+### 4.2 `GET /api/portal/v1/contacts/:contactId/stock` — Rollos/garantías compradas *(nivel INSTALLER)*
 
 Devuelve los rollos (`WarrantyRoll`) vendidos a ese cliente, con su lote, producto e instalaciones.
 
@@ -151,7 +249,7 @@ cuántos sub-códigos de instalación quedan disponibles en un rollo, comparar `
 las generadas, no solo activas) contra `maxInstallations` — **no** usar `_count.installations`, que cuenta
 únicamente instalaciones `ACTIVE` (ver sección 4.8).
 
-### 4.3 `GET /api/portal/v1/contacts/:contactId/installations` — Instalaciones de garantía
+### 4.3 `GET /api/portal/v1/contacts/:contactId/installations` — Instalaciones de garantía *(nivel INSTALLER)*
 
 ```json
 [
@@ -168,7 +266,7 @@ las generadas, no solo activas) contra `maxInstallations` — **no** usar `_coun
 ]
 ```
 
-### 4.4 `GET /api/portal/v1/contacts/:contactId/claims` — Historial de reclamos
+### 4.4 `GET /api/portal/v1/contacts/:contactId/claims` — Historial de reclamos *(nivel INSTALLER)*
 
 ```json
 [
@@ -176,7 +274,7 @@ las generadas, no solo activas) contra `maxInstallations` — **no** usar `_coun
 ]
 ```
 
-### 4.5 `POST /api/portal/v1/contacts/:contactId/claims` — Crear un reclamo
+### 4.5 `POST /api/portal/v1/contacts/:contactId/claims` — Crear un reclamo *(nivel INSTALLER)*
 
 A diferencia de la API pública de garantías, acá **no hace falta repetir el email/DNI de la
 activación** — la pertenencia del reclamo se verifica porque la instalación tiene que pertenecer a un
@@ -232,7 +330,7 @@ automáticamente — no hay forma de crearlas manualmente vía API.
 **Response `200`:** `{ "ok": true }`. **Errores:** `404` si la notificación no existe o no pertenece a
 ese `contactId`.
 
-### 4.8 `POST /api/portal/v1/contacts/:contactId/rolls/:fullRollCode/installations` — Generar un sub-código
+### 4.8 `POST /api/portal/v1/contacts/:contactId/rolls/:fullRollCode/installations` — Generar un sub-código *(nivel INSTALLER)*
 
 Para el caso en que el Cliente compra un rollo grande y lo corta para instalarlo en varios vehículos de
 sus propios clientes: cada corte necesita su propio código de activación (`WarrantyInstallation`)
@@ -266,6 +364,67 @@ disponible; podés actualizar el estado del botón en tu UI sin necesidad de vol
 Cada sub-código generado dispara una notificación a los administradores del CRM (visible en
 `/warranty-claims`), igual que un reclamo.
 
+### 4.9 `GET /api/portal/v1/contacts/:contactId/account` — Cuenta corriente
+
+El corazón del **Panel Clientes**. Disponible en nivel `BASIC`.
+
+```json
+{
+  "summary": {
+    "balance": 2480199,
+    "totalInvoiced": 7236200,
+    "totalPaid": 4756001,
+    "overdueAmount": 0,
+    "nextDueDate": null
+  },
+  "entries": [
+    { "id": "clz...", "date": "2026-04-24T15:56:01.406Z", "type": "SALE",
+      "description": "Compra #11", "debit": 420000, "credit": 0, "balance": 420000, "saleId": "clz..." },
+    { "id": "clp...", "date": "2026-05-03T00:00:00.000Z", "type": "PAYMENT",
+      "description": "Pago compra #11", "debit": 0, "credit": 420001, "balance": -1, "saleId": "clz..." }
+  ],
+  "plans": [
+    {
+      "id": "clx...", "saleId": "clz...", "saleNumber": 43,
+      "installmentCount": 6, "frequency": "MONTHLY", "financedTotal": 3136200,
+      "status": "ACTIVE",
+      "installments": [
+        { "id": "cli...", "number": 1, "dueDate": "2026-09-15T00:00:00.000Z",
+          "amount": 522700, "paid": 522700, "remaining": 0, "status": "PAID" }
+      ],
+      "nextDue": { "id": "cli...", "number": 2, "dueDate": "...", "amount": 522700, "paid": 0, "remaining": 522700, "status": "PENDING" },
+      "overdueCount": 0
+    }
+  ]
+}
+```
+
+**`entries`** son los movimientos ordenados por fecha, con `balance` corrido hasta ese renglón
+inclusive. `type` es `"SALE"` (suma deuda), `"PAYMENT"` (la resta) o `"ADJUSTMENT"` (nota de crédito,
+devolución, ajuste — puede ir para cualquier lado). `saleId` viene solo si el movimiento corresponde a
+una venta, para que puedas linkearlo.
+
+**`balance` puede ser negativo**, y significa **saldo a favor del cliente** (pagó de más o tiene una
+nota de crédito). Mostralo como tal, no como deuda cero.
+
+**`plans`** son los planes de cuotas, y es un array porque un Cliente puede tener varias compras
+financiadas al mismo tiempo. Solo vienen los que no están cancelados.
+
+- `status` del plan: `"ACTIVE"` (quedan cuotas por pagar), `"COMPLETED"` (está todo pago) o
+  `"CANCELLED"`. **`COMPLETED` se calcula**, no lo decide nadie a mano.
+- `status` de cada cuota: `"PENDING" | "PARTIAL" | "PAID" | "OVERDUE"`. Una cuota pagada **nunca** es
+  `OVERDUE`, aunque su vencimiento ya haya pasado.
+- `nextDue` es la primera cuota impaga, o `null` si está todo pago.
+
+**Un plan es opcional.** La mayoría de las compras se cobran al contado o con pagos sueltos sin
+cronograma: en ese caso `plans` viene vacío y `entries` igual muestra todo. Que no haya plan no
+significa que falte información.
+
+> **Cómo se calcula el saldo:** siempre `ventas − pagos ± ajustes`, ignorando las ventas anuladas.
+> **Nunca depende de las cuotas.** Si un plan estuviera mal armado, el saldo sigue siendo correcto.
+> Es el mismo cálculo que ve el operador en el CRM, a propósito: si los números no coincidieran, el
+> panel dejaría de servir.
+
 ---
 
 ## 5. Errores comunes a todos los endpoints
@@ -273,8 +432,9 @@ Cada sub-código generado dispara una notificación a los administradores del CR
 | Código | Cuándo |
 |---|---|
 | `401` | Falta `x-api-key`, es inválida, o fue revocada. |
+| `403` | La cuenta es `BASIC` y el endpoint pide nivel `INSTALLER` (ver sección 0). |
 | `404` | El `contactId` no existe, o existe pero no es de tipo `CLIENT`. |
-| `429` | Se superó el límite de 300 requests/minuto para tu key (o el límite de intentos de login). |
+| `429` | Se superó el límite de 300 requests/minuto para tu key (o el límite de intentos de login, alta o recuperación). |
 | `500` | Error interno del CRM — reintentar más tarde. |
 
 ---

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { getClientSession } from '@/lib/client-portal/session'
+import { getClientSession, levelOf } from '@/lib/client-portal/session'
 import { getInstallations } from '@/lib/client-portal/api'
 import ClaimForm from '@/components/client-portal/ClaimForm'
 
@@ -9,6 +9,7 @@ export const metadata: Metadata = { title: 'Nuevo reclamo' }
 export default async function NuevoReclamoPage() {
   const session = await getClientSession()
   if (!session) redirect('/cliente/ingresar')
+  if (levelOf(session) !== 'INSTALLER') redirect('/cliente/dashboard')
 
   const installations = await getInstallations(session.contactId)
 

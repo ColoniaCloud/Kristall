@@ -13,12 +13,15 @@ import {
 } from '@/components/ui/dropdown-menu'
 import NavLinks from './NavLinks'
 import NotificationsBell from './NotificationsBell'
+import type { AccessLevel } from '@/lib/client-portal/session'
 
 interface Props {
   session: { name: string; company: string }
+  /** Para el menú del celular; mismo criterio que el Sidebar de escritorio. */
+  level: AccessLevel
 }
 
-export default function TopBar({ session }: Props) {
+export default function TopBar({ session, level }: Props) {
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
 
@@ -38,7 +41,7 @@ export default function TopBar({ session }: Props) {
         </SheetTrigger>
         <SheetContent side="left" className="crm-theme w-64 p-4">
           <SheetTitle className="mb-4">Kristall — Panel de Cliente</SheetTitle>
-          <NavLinks onNavigate={() => setMobileOpen(false)} />
+          <NavLinks level={level} onNavigate={() => setMobileOpen(false)} />
         </SheetContent>
       </Sheet>
 

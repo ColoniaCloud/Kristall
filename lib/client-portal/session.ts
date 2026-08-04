@@ -4,10 +4,31 @@ import { createSessionToken, readSessionToken } from '@/lib/session'
 export const CLIENT_SESSION_COOKIE = 'kf_client_session'
 const MAX_AGE_SECONDS = 60 * 60 * 12 // 12h
 
+/**
+ * Nivel de acceso del Cliente, tal como lo devuelve el CRM al iniciar sesión.
+ *
+ * `BASIC` — "Panel Clientes": compras, cuenta corriente y notificaciones.
+ * `INSTALLER` — suma stock, instalaciones y reclamos. Lo habilita un operador
+ * del CRM a mano; no se puede pedir desde acá.
+ */
+export type AccessLevel = 'BASIC' | 'INSTALLER'
+
 export interface ClientSession {
   contactId: string
   name: string
   company: string
+  /**
+   * Sirve para armar el menú. NO es la barrera de seguridad: el CRM revalida el
+   * nivel en cada endpoint de instalador y responde 403 si no corresponde.
+   * Opcional porque las sesiones emitidas antes de agosto 2026 no lo traen —
+   * en ese caso se asume `BASIC`, que es lo restrictivo.
+   */
+  accessLevel?: AccessLevel
+}
+
+/** Nivel efectivo de una sesión, tratando las viejas sin nivel como BASIC. */
+export function levelOf(session: ClientSession | null): AccessLevel {
+  return session?.accessLevel === 'INSTALLER' ? 'INSTALLER' : 'BASIC'
 }
 
 export function buildClientSessionCookie(data: ClientSession) {
