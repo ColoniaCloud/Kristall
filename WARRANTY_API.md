@@ -32,19 +32,24 @@ stock hasta que se instala y se le activa la garantía. Cuatro conceptos:
 
 ### Cómo se genera el token (importante — leer antes de diseñar el flujo)
 
-El sitio externo **no crea garantías nuevas**. Los tokens de activación se generan automáticamente
-dentro del CRM cuando se confirma una venta: se asigna el rollo `IN_STOCK` más antiguo (FIFO) al
-ítem vendido y se crea **una única** instalación en estado `PENDING` (`installationNumber = 1`) con
-un `activationToken` recién generado. Ese token es el que el vendedor le entrega al cliente/taller
-(actualmente se copia manualmente desde la ficha del cliente en el CRM — no hay email/SMS automático
-ni generación de PDF/QR en este momento; si el sitio externo necesita un QR, debe generarlo él mismo
-a partir de la URL `https://tu-sitio.com/garantia/<token>`).
+El sitio externo **no crea garantías nuevas** por sí mismo. Los tokens de activación se generan
+automáticamente dentro del CRM **al confirmar la venta** (no al crearla): una venta nace `PENDING` y no
+mueve stock ni asigna rollos hasta que alguien la confirma. Recién ahí se asigna el rollo (por orden de
+prioridad: la unidad trazada concreta si el ítem vendido apunta a una, si no un rollo ya consignado en el
+Punto de Reventa del propio comprador, y si no el `IN_STOCK` más antiguo por FIFO — ver `confirmSale` y
+`linkRollToSaleItem`) y se crea la primera instalación en estado `PENDING` (`installationNumber = 1`) con
+un `activationToken` recién generado.
 
-**Limitación conocida:** hoy solo existe un slot de instalación por rollo (`installationNumber = 1`),
-aunque el modelo tiene un campo `maxInstallations` en `WarrantyConfig` pensado para permitir varias
-instalaciones por rollo (ej. un rollo grande usado en varios vehículos). No existe ningún endpoint —
-público ni interno — para crear instalaciones adicionales sobre un rollo ya existente. Si el negocio
-necesita eso, hay que pedir que se agregue en el CRM antes de que el sitio externo pueda ofrecerlo.
+Ese token es el que el vendedor le entrega al cliente/taller: se muestra dentro del CRM (en la ficha de
+la venta y en la del cliente) y **se copia a mano**. No hay email/SMS automático ni generación de PDF/QR
+en este momento; si el sitio externo necesita un QR, debe generarlo él mismo a partir de la URL
+`https://tu-sitio.com/garantia/<token>`.
+
+**Múltiples instalaciones por rollo:** cuando un Cliente (instalador/distribuidor, ej. Kristall) compra
+un rollo grande y lo corta para varios vehículos, puede generar sus propios sub-códigos (instalación #2,
+#3, etc., hasta `maxInstallations`) sin pasar por el CRM — ver la sección 4.8 de `CLIENT_PORTAL_API.md`.
+Eso vive en la API de Portal de Clientes, no en esta, porque requiere saber a qué Cliente pertenece el
+rollo (login del Cliente, sección 3 de `CLIENT_PORTAL_API.md`).
 
 ### Ciclo de vida (estados)
 
@@ -120,7 +125,8 @@ o instalación.
 ## 3. Autenticación de la API pública
 
 - Header: `x-api-key: wapi_<48 caracteres hex>`.
-- La key se genera **dentro del CRM** por un usuario `SUPERADMIN`, desde `/warranty-claims/api-clients`.
+- La key se genera **dentro del CRM** por un usuario `SUPERADMIN`, desde `/settings` → sección
+  **"API Keys de Garantías"**.
   Se muestra **una sola vez** en el momento de creación — pedile la key al equipo del CRM, no hay forma
   de recuperarla después si se pierde (habría que revocar y generar una nueva).
 - Cada key pertenece a un "partner" (ej. un taller o el propio sitio de activación) y se puede revocar
@@ -484,7 +490,7 @@ para tu dominio.
   datos, no asumas que podés prellenarlos.
 - La key de API se identifica por nombre de partner y se puede revocar; si tu sitio empieza a recibir
   `401` de forma repentina, lo primero a chequear es si la key fue revocada desde
-  `/warranty-claims/api-clients` en el CRM (visible solo para rol `SUPERADMIN`).
+  `/settings` en el CRM (visible solo para rol `SUPERADMIN`).
 
 ---
 

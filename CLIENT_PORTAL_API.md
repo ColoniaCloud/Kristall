@@ -58,7 +58,8 @@ frontend — llamar igual devuelve 403.
 ## 2. Autenticación
 
 - Header: `x-api-key: capi_<48 caracteres hex>`.
-- La key se genera **dentro del CRM** por un usuario `SUPERADMIN`, desde `/client-portal`. Se muestra
+- La key se genera **dentro del CRM** por un usuario `SUPERADMIN`, desde `/settings` → sección
+  **"API Keys del Portal de Clientes"**. Se muestra
   **una sola vez** en el momento de creación — si se pierde, hay que revocarla y generar una nueva.
 - Cada key pertenece a una integración (normalmente vas a tener una sola, para tu sitio) y se puede
   revocar sin afectar otras integraciones (ej. la de garantías, que usa un mecanismo separado).
@@ -235,7 +236,8 @@ Devuelve los rollos (`WarrantyRoll`) vendidos a ese cliente, con su lote, produc
     "fullRollCode": "LOT-20260705-0001-R003",
     "status": "IN_USE",
     "lot": { "lotNumber": "LOT-20260705-0001" },
-    "product": { "id": "clp...", "name": "KRYPTON 05", "sku": "KR-05", "warrantyConfig": { "maxInstallations": 1 } },
+    "product": { "id": "clp...", "name": "KRYPTON 05", "sku": "KR-05", "category": "AUTOMOTIVE", "warrantyConfig": { "maxInstallations": 1 } },
+    "currentLocation": { "id": "clx...", "type": "PUNTO_REVENTA", "name": "Punto de Reventa - Kristall", "contactId": "cly..." },
     "installations": [
       { "id": "cli...", "installationCode": "LOT-...-R003-I1", "status": "ACTIVE", "activatedAt": "2026-06-10T00:00:00.000Z", "expiresAt": "2027-06-10T00:00:00.000Z" }
     ],
@@ -248,6 +250,14 @@ producto no tiene configuración — en ese caso asumir `maxInstallations: 15` (
 cuántos sub-códigos de instalación quedan disponibles en un rollo, comparar `installations.length` (TODAS
 las generadas, no solo activas) contra `maxInstallations` — **no** usar `_count.installations`, que cuenta
 únicamente instalaciones `ACTIVE` (ver sección 4.8).
+
+**`currentLocation`** (agregado agosto 2026, campo aditivo — no rompe integraciones existentes que lo
+ignoren) — es **información de trazabilidad interna, no de stock disponible**. Como todo rollo que llega
+por esta API ya fue vendido a este Cliente (`saleItemId` no nulo), `currentLocation` refleja la **última
+ubicación física conocida antes de la venta** (ej. si se vendió desde el propio Punto de Reventa del
+Cliente, para ahorrar logística — ver sección 4.8) y **no se actualiza después de vendido**. Puede venir
+`null` en rollos vendidos antes de que existiera este sistema de ubicaciones. No lo uses para calcular
+qué puede instalar el Cliente — para eso alcanza con que el rollo aparezca en esta lista.
 
 ### 4.3 `GET /api/portal/v1/contacts/:contactId/installations` — Instalaciones de garantía *(nivel INSTALLER)*
 
