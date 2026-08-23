@@ -1,25 +1,18 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
-import { SlidersHorizontal, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import ProductCard from '@/components/product/ProductCard'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { PRODUCTOS, LINEAS, lineaLogoSrc, type Producto } from '@/lib/catalogo'
-
-const btnBase = 'px-2.5 py-1 rounded-md text-[12px] font-medium transition-colors'
-const btnActive = 'bg-[#0A0A0A] text-white'
-const btnInactive = 'bg-[#F2F2F0] text-[#5C5C5C] hover:bg-[#E8E8E6]'
-const catBtn = (active: boolean) =>
-  `px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${
-    active
-      ? 'bg-[#0A0A0A] text-white border-[#0A0A0A]'
-      : 'bg-white border-[#E4E4E2] text-[#5C5C5C] hover:border-[#0A0A0A]'
-  }`
+import { useState } from 'react'
 
 // Valores reales presentes en el catálogo (orden ascendente)
 const VLT_VALUES = [...new Set(PRODUCTOS.map((p) => p.vlt).filter((v): v is number => v != null))].sort((a, b) => a - b)
 const UV_VALUES = [...new Set(PRODUCTOS.map((p) => p.uvr).filter((v): v is number => v != null))].sort((a, b) => a - b)
+
+const selectTrigger = 'bg-[#F2F2F0] border-transparent text-xs font-medium data-placeholder:text-[#5C5C5C]'
 
 export default function ProductsClient() {
   const t = useTranslations('products_page')
@@ -28,7 +21,6 @@ export default function ProductsClient() {
   const [activeLinea, setActiveLinea] = useState('all')
   const [activeVLT, setActiveVLT] = useState('all')
   const [activeUV, setActiveUV] = useState('all')
-  const [modalOpen, setModalOpen] = useState(false)
 
   const VLT_OPTIONS = [
     { label: t('filter_todos'), value: 'all' },
@@ -63,7 +55,6 @@ export default function ProductsClient() {
   }
 
   const hasActiveFilters = activeLinea !== 'all' || activeVLT !== 'all' || activeUV !== 'all'
-  const activeFilterCount = [activeLinea !== 'all', activeVLT !== 'all', activeUV !== 'all'].filter(Boolean).length
 
   const sections = LINEAS
     .map((linea) => ({ linea, items: linea.productos.filter(matchesFilters) }))
@@ -71,123 +62,71 @@ export default function ProductsClient() {
 
   const totalFiltered = sections.reduce((sum, s) => sum + s.items.length, 0)
 
-  const filterContent = (
-    <div className="flex flex-col gap-5">
-      <div>
-        <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A] block mb-2">{t('filter_linea')}</span>
-        <div className="flex flex-wrap gap-2">
-          <button onClick={() => setActiveLinea('all')} className={catBtn(activeLinea === 'all')}>
-            {t('filter_todas')}
-          </button>
-          {LINEAS.map((linea) => (
-            <button key={linea.slug} onClick={() => setActiveLinea(linea.slug)} className={catBtn(activeLinea === linea.slug)}>
-              {linea.nombre}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div>
-        <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A] block mb-2">{t('filter_vlt')}</span>
-        <div className="flex flex-wrap gap-1.5">
-          {VLT_OPTIONS.map((opt) => (
-            <button key={opt.value} onClick={() => setActiveVLT(opt.value)} className={`${btnBase} ${activeVLT === opt.value ? btnActive : btnInactive}`}>
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div>
-        <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A] block mb-2">{t('filter_uv')}</span>
-        <div className="flex flex-wrap gap-1.5">
-          {UV_OPTIONS.map((opt) => (
-            <button key={opt.value} onClick={() => setActiveUV(opt.value)} className={`${btnBase} ${activeUV === opt.value ? btnActive : btnInactive}`}>
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-
   return (
     <div>
-      {/* Mobile: botón Filtrar */}
-      <div className="md:hidden bg-white border-b border-[#E4E4E2] px-4 py-3 sticky top-[56px] z-40">
-        <button
-          onClick={() => setModalOpen(true)}
-          className="w-full flex items-center justify-center gap-2 bg-[#0A0A0A] text-white py-2.5 rounded-lg text-sm font-medium"
-        >
-          <SlidersHorizontal size={14} />
-          {hasActiveFilters ? `Filtros activos (${activeFilterCount})` : 'Filtrar'}
-        </button>
-      </div>
+      {/* Barra de filtros — un select por criterio, misma fila en cualquier tamaño de pantalla */}
+      <div className="bg-white border-b border-[#E4E4E2] sticky top-[56px] z-40">
+        <div className="px-4 md:px-10 py-3 max-w-[1160px] mx-auto flex flex-col gap-2">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-1.5">
+              <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A]">{t('filter_linea')}</span>
+              <Select value={activeLinea} onValueChange={setActiveLinea}>
+                <SelectTrigger size="sm" className={`${selectTrigger} min-w-[130px]`}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t('filter_todas')}</SelectItem>
+                  {LINEAS.map((linea) => (
+                    <SelectItem key={linea.slug} value={linea.slug}>{linea.nombre}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-      {/* Desktop: barra de filtros */}
-      <div className="hidden md:block bg-white border-b border-[#E4E4E2] sticky top-[56px] z-40">
-        <div className="px-10 py-3 max-w-[1160px] mx-auto flex flex-col gap-2">
-          <div className="flex items-center flex-wrap gap-2">
-            <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A] mr-1">{t('filter_linea')}</span>
-            <button onClick={() => setActiveLinea('all')} className={catBtn(activeLinea === 'all')}>
-              {t('filter_todas')}
-            </button>
-            {LINEAS.map((linea) => (
-              <button key={linea.slug} onClick={() => setActiveLinea(linea.slug)} className={catBtn(activeLinea === linea.slug)}>
-                {linea.nombre}
+            <div className="flex items-center gap-1.5">
+              <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A]">{t('filter_vlt')}</span>
+              <Select value={activeVLT} onValueChange={setActiveVLT}>
+                <SelectTrigger size="sm" className={`${selectTrigger} min-w-[90px]`}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {VLT_OPTIONS.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex items-center gap-1.5">
+              <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A]">{t('filter_uv')}</span>
+              <Select value={activeUV} onValueChange={setActiveUV}>
+                <SelectTrigger size="sm" className={`${selectTrigger} min-w-[90px]`}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {UV_OPTIONS.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="flex items-center gap-1 text-xs text-[#9A9A9A] hover:text-[#0A0A0A] transition-colors"
+              >
+                <X size={12} />
+                {t('filter_clear')}
               </button>
-            ))}
-          </div>
-          <div className="flex items-center flex-wrap gap-2">
-            <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A] mr-1">{t('filter_vlt')}</span>
-            {VLT_OPTIONS.map((opt) => (
-              <button key={opt.value} onClick={() => setActiveVLT(opt.value)} className={`${btnBase} ${activeVLT === opt.value ? btnActive : btnInactive}`}>
-                {opt.label}
-              </button>
-            ))}
-            <div className="w-px h-4 bg-[#E4E4E2] mx-2" />
-            <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A] mr-1">{t('filter_uv')}</span>
-            {UV_OPTIONS.map((opt) => (
-              <button key={opt.value} onClick={() => setActiveUV(opt.value)} className={`${btnBase} ${activeUV === opt.value ? btnActive : btnInactive}`}>
-                {opt.label}
-              </button>
-            ))}
+            )}
           </div>
           <p className="text-[12px] text-[#9A9A9A]">
             {totalFiltered === 1 ? t('filter_count_one') : t('filter_count_other', { count: totalFiltered })}
           </p>
         </div>
       </div>
-
-      {/* Modal de filtros (mobile) */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 md:hidden flex flex-col justify-end">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setModalOpen(false)} />
-          <div className="relative bg-white rounded-t-2xl px-6 pt-5 pb-8 max-h-[85vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-5">
-              <h3 className="text-base font-medium text-[#0A0A0A]">Filtros</h3>
-              <button onClick={() => setModalOpen(false)} className="text-[#9A9A9A] hover:text-[#0A0A0A] transition-colors">
-                <X size={20} />
-              </button>
-            </div>
-            {filterContent}
-            <div className="flex gap-3 mt-6">
-              {hasActiveFilters && (
-                <button
-                  onClick={() => { clearFilters(); setModalOpen(false) }}
-                  className="flex-1 py-2.5 border border-[#E4E4E2] rounded-lg text-sm text-[#5C5C5C]"
-                >
-                  {t('filter_clear')}
-                </button>
-              )}
-              <button
-                onClick={() => setModalOpen(false)}
-                className="flex-1 py-2.5 bg-[#0A0A0A] text-white rounded-lg text-sm font-medium"
-              >
-                Ver {totalFiltered} producto{totalFiltered !== 1 ? 's' : ''}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Secciones por línea */}
       <div className="px-4 md:px-10 py-8 md:py-12 max-w-[1160px] mx-auto">
