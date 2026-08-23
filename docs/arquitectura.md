@@ -1,7 +1,9 @@
 # Kristall Film — Architecture
 
 ## Rol del agente
-Sos el desarrollador principal de Kristall Film. Este documento es tu fuente de verdad. Antes de escribir cualquier código, leé la sección relevante. No improvises decisiones de arquitectura — si algo no está acá, preguntá antes de asumir.
+Sos el desarrollador principal de Kristall Film. Este documento es tu fuente de verdad para el sitio de marca (home, catálogo, blog, contacto). Antes de escribir cualquier código, leé la sección relevante. No improvises decisiones de arquitectura — si algo no está acá, preguntá antes de asumir.
+
+Este documento **no cubre** el Panel de Cliente (`/cliente/*`) ni las Garantías públicas (`/garantia/*`) — son superficies aparte que le piden datos en vivo al CRM externo (`crm-polarizados`). Su contrato está en `CLIENT_PORTAL_API.md` y `WARRANTY_API.md`, en la raíz de este repo. El `CLAUDE.md` en la raíz del monorepo (`POLARIZADOS/CLAUDE.md`, un nivel arriba de `kristall-web/`) explica cómo se relacionan los dos proyectos.
 
 ---
 
@@ -27,80 +29,72 @@ Sos el desarrollador principal de Kristall Film. Este documento es tu fuente de 
 ## Estructura de carpetas
 
 ```
-kristall-film/
+kristall-web/
 ├── payload.config.ts
+├── middleware.ts                  # HTTPS + redirects de slugs viejos + next-intl
+├── data/
+│   └── catalogo.json              # Generado por scripts/sync-catalogo.mjs — no editar a mano
+├── scripts/
+│   └── sync-catalogo.mjs          # Google Sheets → data/catalogo.json (corre en `prebuild`)
 ├── app/
-│   ├── [locale]/                  # Routing por idioma
+│   ├── [locale]/                  # Routing por idioma (es/en/de)
 │   │   ├── layout.tsx
 │   │   ├── page.tsx               # Home
 │   │   ├── productos/
-│   │   │   ├── page.tsx           # Catálogo
-│   │   │   └── [slug]/page.tsx    # Detalle
+│   │   │   ├── page.tsx           # Catálogo completo con filtros
+│   │   │   ├── [nicho]/page.tsx   # /productos/autos · /productos/arquitectura
+│   │   │   └── lineas/[linea]/page.tsx  # Detalle de línea (ej. /productos/lineas/kaiser)
 │   │   ├── servicios/page.tsx
 │   │   ├── nosotros/page.tsx
 │   │   ├── blog/
 │   │   │   ├── page.tsx
 │   │   │   └── [slug]/page.tsx
-│   │   ├── carrito/page.tsx
+│   │   ├── carrito/                # Cotización — sin checkout, ver sección "Catálogo y carrito"
+│   │   │   ├── page.tsx
+│   │   │   └── CarritoClient.tsx
+│   │   ├── concesionarias/, propuesta-aberturas/, punto-kristall/
 │   │   └── contacto/page.tsx
+│   ├── (client-portal)/cliente/**  # Fuera de alcance de este doc — ver CLIENT_PORTAL_API.md
+│   ├── (warranty)/garantia/**      # Fuera de alcance de este doc — ver WARRANTY_API.md
 │   ├── (payload)/
 │   │   └── admin/[[...segments]]/page.tsx
+│   ├── sitemap.ts · robots.ts
 │   └── api/
-│       ├── [...payload]/route.ts
-│       ├── leads/route.ts
-│       └── crm-sync/route.ts
+│       ├── [...slug]/route.ts     # REST de Payload (lo usa el admin)
+│       ├── leads/route.ts         # Contacto + consulta de producto + cotización de carrito
+│       ├── portal/**              # Puente al CRM — ver CLIENT_PORTAL_API.md
+│       └── garantia/**            # Puente al CRM — ver WARRANTY_API.md
 ├── components/
 │   ├── layout/
-│   │   ├── Header.tsx
-│   │   ├── Footer.tsx
-│   │   └── Navigation.tsx
+│   │   ├── Header.tsx             # Incluye el ícono + contador del carrito
+│   │   └── Footer.tsx
 │   ├── sections/
-│   │   ├── Hero.tsx
-│   │   ├── BrandStory.tsx
-│   │   ├── ProductsGrid.tsx
-│   │   ├── ServicesSection.tsx
-│   │   ├── StatsRow.tsx
-│   │   ├── BlogPreview.tsx
-│   │   └── ContactCTA.tsx
+│   │   ├── Hero.tsx, BrandStory.tsx, ProductsGrid.tsx, ServicesSection.tsx, StatsRow.tsx, ContactCTA.tsx
 │   ├── product/
-│   │   ├── ProductCard.tsx
-│   │   ├── ProductDetail.tsx
-│   │   ├── ProductFilter.tsx
-│   │   └── AddToCart.tsx
+│   │   ├── ProductCard.tsx        # Tile del grid — recibe un Producto
+│   │   ├── ProductDetailModal.tsx # Ficha técnica + AddToCartControl + consulta rápida
+│   │   ├── ProductsClient.tsx     # Filtros de /productos (línea, VLT, UV)
+│   │   └── CategoryCard.tsx       # Tile de línea (home y /productos/[nicho])
 │   ├── cart/
-│   │   ├── CartDrawer.tsx
-│   │   ├── CartItem.tsx
-│   │   └── QuoteForm.tsx
+│   │   ├── AddToCartControl.tsx   # Selector de cantidad (rollos) + agregar
+│   │   ├── CartDrawer.tsx, CartItem.tsx, QuoteModal.tsx
 │   └── common/
-│       ├── GermanFlag.tsx
-│       ├── LocaleSwitcher.tsx
-│       └── SchemaMarkup.tsx
 ├── payload/
 │   └── collections/
-│       ├── Products.ts
-│       ├── Articles.ts
-│       ├── Leads.ts
-│       ├── Orders.ts
-│       ├── Dealers.ts
-│       └── Users.ts
+│       ├── Products.ts    # SIN USO por el sitio público desde este refactor — ver nota abajo
+│       ├── Articles.ts, Leads.ts, Orders.ts, Dealers.ts, Media.ts, Users.ts
 ├── i18n/
 │   ├── routing.ts
-│   └── messages/
-│       ├── es.json
-│       ├── en.json
-│       └── de.json
+│   └── messages/{es,en,de}.json
 ├── lib/
-│   ├── crm.ts
-│   ├── cloudinary.ts
-│   ├── resend.ts
-│   └── utils.ts
+│   ├── catalogo.ts     # Lee data/catalogo.json — única fuente del catálogo para la UI
+│   ├── cart.ts          # Store zustand del carrito de cotización (persist en localStorage)
+│   ├── crm/api.ts       # Único punto de fetch al CRM externo (Panel Cliente + Garantías)
+│   ├── resend.ts, rate-limit.ts, seo.ts, blog.ts, session.ts, utils.ts
 ├── types/
-│   ├── product.ts
-│   ├── cart.ts
-│   └── payload-types.ts
+│   └── payload-types.ts # Generado por Payload — no editar a mano
 └── docs/
-    ├── architecture.md            # Este archivo
-    └── cms-schema.md
+    └── arquitectura.md  # Este archivo
 ```
 
 ---
@@ -186,34 +180,92 @@ className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#9A9A9A]"
 ### Routing i18n
 
 ```
-/                    → redirect → /es
-/es                  → Home (español, default)
-/en                  → Home (inglés)
-/de                  → Home (alemán)
-/es/productos        → Catálogo
-/es/productos/[slug] → Detalle de producto
-/es/servicios        → Servicios
-/es/nosotros         → Nosotros
-/es/blog             → Blog
-/es/blog/[slug]      → Artículo
-/es/carrito          → Carrito + cotización
-/es/contacto         → Contacto
-/admin               → Payload CMS admin (sin locale)
+/                              → redirect → /es
+/es · /en · /de                → Home
+/es/productos                  → Catálogo completo, con filtros por línea/VLT/UV
+/es/productos/autos            → Landing del nicho "autos" (líneas de esa familia)
+/es/productos/arquitectura     → Landing del nicho "arquitectura"
+/es/productos/lineas/[linea]   → Detalle de línea, ej. /es/productos/lineas/kaiser
+/es/servicios                  → Servicios (Polarized App)
+/es/nosotros                   → Nosotros
+/es/blog · /es/blog/[slug]     → Blog
+/es/carrito                    → Carrito de cotización (noindex — ver "Catálogo y carrito")
+/es/contacto                   → Contacto
+/admin                         → Payload CMS admin (sin locale)
+/cliente/* · /garantia/*       → Fuera de este doc, ver CLIENT_PORTAL_API.md / WARRANTY_API.md
 ```
+
+`/productos/categorias/*` (la URL vieja de línea, indexada antes de este refactor) ya no existe como
+página: `middleware.ts` la redirige 301 a `/productos/lineas/*`, salvo `vitral` — esa línea se retiró
+del catálogo y redirige a `/productos/arquitectura`.
 
 ### Middleware
 
-```ts
-// middleware.ts — en la raíz del proyecto
-import createMiddleware from 'next-intl/middleware'
-import { routing } from './i18n/routing'
+`middleware.ts` resuelve, en este orden: forzado de HTTPS en producción → redirect del slug viejo de
+`propuesta-aberturas` → redirect de `/productos/categorias/*` → si la ruta es `/cliente/*` o
+`/garantia/*`, se saltea `next-intl` (son superficies de un solo idioma) → para todo lo demás, corre
+`next-intl` normal. El código completo y actualizado está en `middleware.ts`, en la raíz del repo —
+no lo dupliques acá, léelo directamente para no trabajar con una copia desactualizada.
 
-export default createMiddleware(routing)
+---
 
-export const config = {
-  matcher: ['/((?!admin|api|_next|_vercel|.*\\..*).*)']
-}
+## Catálogo y carrito de cotización
+
+### El catálogo no vive en Payload
+
+La colección `products` de Payload existe en el schema pero **el sitio público no la lee** — ningún
+componente ni ruta hace `collection: 'products'`. Sigue teniendo **27 filas** de una carga vieja
+(modelo pre-refactor: SKU, tier, variantes con precio) que nadie borró. Decisión tomada: se deja
+como está, dormida — no vale el riesgo de tocarla. Payload corre con `push: true`, así que sacarla
+del `payload.config.ts` sin respaldo antes se llevaría la tabla puesta; si en algún momento hace
+falta liberar ese espacio, exportar primero.
+
+El catálogo real sale de una planilla de Google Sheets que gestiona el equipo comercial (columnas:
+Categoría, Subcategoría, Línea, Código Kristall, Código China, VLT, UVR, IR, Garantía, Thickness,
+Stock).
+
 ```
+Google Sheets (fuente de verdad)
+  → scripts/sync-catalogo.mjs   (fetch CSV, valida, escribe)
+  → data/catalogo.json           (commiteado — no editar a mano)
+  → lib/catalogo.ts              (tipos + helpers que usa toda la UI)
+```
+
+El script corre solo antes de cada build (`prebuild` en `package.json`), así que cada deploy sale con
+el catálogo del momento. También se puede correr a mano: `pnpm catalogo:sync` (reescribe el JSON) o
+`pnpm catalogo:check` (valida sin escribir, pensado para CI). Si la descarga falla pero ya hay un JSON
+commiteado, el build sigue con ese y solo avisa; si los datos SÍ se descargan pero no validan (código
+duplicado, línea sin categoría, número no parseable), el build se corta — un dato roto nunca llega a
+producción.
+
+**Modelo:** cada fila de la planilla es un `Producto` (código, línea, nicho, categoría, VLT/UVR/IR,
+garantía, espesor). `lib/catalogo.ts` los agrupa en `Linea` (todos los productos que comparten
+"Línea") preservando el orden de la planilla. Dos cosas son editoriales, no vienen de la planilla, y
+viven en `lib/catalogo.ts`:
+
+- `DESC_KEY_BY_SLUG` — a qué clave de i18n (`products.cat_*_desc`) apunta la descripción de cada línea.
+- `ASSET_SLUG_OVERRIDES` — 4 líneas de nombre compuesto (`keram-x`, `kreflect-silver`, `kwhite-matte`,
+  `kdecor-stripe`) cuyo archivo de imagen quedó con un nombre más corto que el slug.
+
+Si aparece una línea nueva en la planilla sin su `descKey`, `lib/catalogo.ts` tira un error explícito
+al importarse — no se puede compilar con una línea muda.
+
+**Imágenes:** `lineaLogoSrc(slug)` y `lineaDestacadaSrc(slug)` arman la ruta desde el slug (o su
+override). Los logos van en `public/Productos/logo-linea/{slug}.svg` (wordmark en negro sólido —
+la UI le aplica `brightness-0 invert` para mostrarlo en blanco sobre foto), las fotos destacadas en
+`public/Productos/destacadas/{slug}.png`. Si el archivo no existe todavía, `next/image` cae a un 404
+silencioso — no rompe el build, pero conviene revisar visualmente después de subir assets nuevos.
+
+### Carrito de cotización — no es un e-commerce
+
+No hay checkout ni precios. `lib/cart.ts` es un store de zustand con `persist` en `localStorage`
+(`skipHydration: true` + un `rehydrate()` manual en `Header.tsx`, para que el primer render en
+cliente coincida con el del servidor y no dispare un warning de hidratación). El flujo: el usuario
+suma productos con cantidad (en rollos) desde `ProductDetailModal` → `AddToCartControl.tsx`, ve el
+resumen en el drawer del header (`CartDrawer.tsx`) o en `/carrito`, y al pedir la cotización
+(`QuoteModal.tsx`) se manda un `POST /api/leads` con `source: 'cotizacion'` y el detalle de productos
+en `cartItems`. Ese payload queda guardado en Payload (`Leads.cartItems`, con `codigo`) y se manda por
+mail vía Resend — `/api/leads` tiene rate limit (8 cada 10 min por IP).
 
 ---
 
@@ -231,79 +283,45 @@ export const routing = defineRouting({
 
 ### Estructura de mensajes
 
+Los namespaces reales viven en `i18n/messages/{es,en,de}.json` (deben tener exactamente las mismas
+claves en los tres archivos — no hay fallback automático). Los relevantes para catálogo y carrito:
+
 ```json
 {
-  "nav": {
-    "products": "",
-    "services": "",
-    "about": "",
-    "blog": "",
-    "contact": "",
-    "quote": ""
-  },
-  "hero": {
-    "eyebrow": "",
-    "headline": "",
-    "subheadline": "",
-    "cta_primary": "",
-    "cta_secondary": ""
-  },
   "products": {
-    "title": "",
-    "filter_all": "",
-    "filter_vehicular": "",
-    "filter_architecture": "",
-    "filter_ppf": "",
-    "add_to_cart": "",
-    "view_detail": ""
+    "nicho_autos": "", "nicho_autos_desc": "",
+    "nicho_arquitectura": "", "nicho_arquitectura_desc": "",
+    "cat_kaiser_desc": "", "cat_klass_desc": "", "...": "una _desc por línea, ver lib/catalogo.ts"
+  },
+  "product_modal": {
+    "categoria_standard": "", "categoria_premium": "",
+    "technology_label": "", "warranty_label": "", "warranty_years": "{n} años",
+    "spec_thickness": "", "thickness_hint_ply": "", "thickness_hint_mil": "",
+    "code_label": ""
   },
   "cart": {
-    "title": "",
-    "empty": "",
-    "request_quote": "",
-    "form_name": "",
-    "form_company": "",
-    "form_email": "",
-    "form_phone": "",
-    "form_message": "",
-    "submit": "",
-    "success": ""
-  },
-  "contact": {
-    "title": "",
-    "subtitle": "",
-    "submit": "",
-    "success": ""
+    "title": "", "add_to_cart": "", "added": "", "quantity_rollos": "",
+    "empty_title": "", "request_quote": "",
+    "quote_title": "", "quote_submit": "", "quote_success": ""
   }
 }
 ```
+
+No inventes una clave nueva sin agregarla a los tres archivos: usarla sin definirla revienta con
+`MISSING_MESSAGE` al generar esa página — pasó durante este mismo refactor (`products.nicho_autos_desc`
+quedó en el namespace equivocado) y solo se vio corriendo `pnpm build` completo, no con `tsc`.
 
 ---
 
 ## Variables de entorno
 
-```env
-# App
-NEXT_PUBLIC_SITE_URL=
-
-# Payload CMS
-PAYLOAD_SECRET=
-DATABASE_URI=
-
-# Cloudinary
-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
-
-# Email
-RESEND_API_KEY=
-EMAIL_FROM=noreply@kristallfilm.com
-EMAIL_LEADS_TO=ventas@kristallfilm.com
-
-# CRM Dr Polarizados
-CRM_API_URL=
-CRM_API_KEY=
-```
+La lista completa y actualizada vive en `.env.example`, en la raíz del repo — no la dupliques acá.
+Grupos, a alto nivel: sitio público (`NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_GA_ID`), Payload
+(`PAYLOAD_SECRET`, `DATABASE_URI`), Cloudinary, Resend, y el puente al CRM externo
+(`CRM_BASE_URL`, `CRM_WARRANTY_API_KEY`, `CRM_CLIENT_PORTAL_API_KEY`, `SESSION_SECRET`, `CRM_MOCK`) —
+este último grupo se explica en `CLIENT_PORTAL_API.md` y `WARRANTY_API.md`. El catálogo (esta sección)
+no usa ninguna env var propia: `scripts/sync-catalogo.mjs` apunta a una planilla pública fija, salvo
+que se pise con `CATALOGO_SHEET_ID`.
 
 ---
 

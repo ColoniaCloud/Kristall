@@ -7,15 +7,26 @@ import NextLink from 'next/link'
 import Image from 'next/image'
 import LanguageSelector from '@/components/common/LanguageSelector'
 import NavDropdown from '@/components/layout/NavDropdown'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, ShoppingCart } from 'lucide-react'
 import { useLocale } from 'next-intl'
+import { useCart } from '@/lib/cart'
+import CartDrawer from '@/components/cart/CartDrawer'
 
 export default function Header() {
   const t = useTranslations('nav')
+  const tCart = useTranslations('cart')
   const [mobileOpen, setMobileOpen] = useState(false)
   const pathname = usePathname()
   const locale = useLocale() as 'es' | 'en' | 'de'
   const router = useRouter()
+  const openCart = useCart((s) => s.openCart)
+  const cartCount = useCart((s) => s.items.reduce((acc, i) => acc + i.quantity, 0))
+
+  useEffect(() => {
+    // El store se hidrata a mano (skipHydration) para que el primer render en
+    // cliente coincida con el del servidor y no dispare un warning de hidratación.
+    useCart.persist.rehydrate()
+  }, [])
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -89,11 +100,37 @@ export default function Header() {
           {/* Desktop right */}
           <div className="hidden md:flex items-center gap-4">
             <LanguageSelector />
+            <button
+              type="button"
+              onClick={openCart}
+              aria-label={tCart('open_cart')}
+              className="relative w-8 h-8 flex items-center justify-center text-[var(--text-primary)] hover:text-[var(--text-secondary)] transition-colors"
+            >
+              <ShoppingCart size={18} />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#0A0A0A] text-white text-[9px] flex items-center justify-center font-medium tabular-nums">
+                  {cartCount}
+                </span>
+              )}
+            </button>
             <Link href="/contacto" className="btn-primary text-white px-4 py-1.5 rounded-lg text-xs font-medium tracking-wide transition-all">{t('quote')}</Link>
           </div>
 
           {/* Mobile right */}
           <div className="flex md:hidden items-center gap-3">
+            <button
+              type="button"
+              onClick={openCart}
+              aria-label={tCart('open_cart')}
+              className="relative w-8 h-8 flex items-center justify-center text-[var(--text-primary)]"
+            >
+              <ShoppingCart size={19} />
+              {cartCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#0A0A0A] text-white text-[9px] flex items-center justify-center font-medium tabular-nums">
+                  {cartCount}
+                </span>
+              )}
+            </button>
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
@@ -202,6 +239,8 @@ export default function Header() {
           </div>
         </div>
       )}
+
+      <CartDrawer />
     </>
   )
 }

@@ -1,0 +1,454 @@
+{
+  "_comentario": "Generado por scripts/sync-catalogo.mjs desde Google Sheets. No editar a mano.",
+  "generadoEl": "2026-08-23T10:43:13.522Z",
+  "productos": [
+    {
+      "codigo": "KLS05",
+      "linea": "Klass",
+      "lineaSlug": "klass",
+      "nicho": "autos",
+      "categoria": "standard",
+      "tecnologia": "Dyed",
+      "vlt": 5,
+      "uvr": 33,
+      "ir": 20,
+      "garantiaAnios": 3,
+      "espesor": {
+        "valor": 1,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KLS15",
+      "linea": "Klass",
+      "lineaSlug": "klass",
+      "nicho": "autos",
+      "categoria": "standard",
+      "tecnologia": "Dyed",
+      "vlt": 15,
+      "uvr": 92,
+      "ir": 20,
+      "garantiaAnios": 3,
+      "espesor": {
+        "valor": 1,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KTX05",
+      "linea": "Kortex",
+      "lineaSlug": "kortex",
+      "nicho": "autos",
+      "categoria": "standard",
+      "tecnologia": "Dyed",
+      "vlt": 5,
+      "uvr": 99,
+      "ir": 73,
+      "garantiaAnios": 3,
+      "espesor": {
+        "valor": 1,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KTX20",
+      "linea": "Kortex",
+      "lineaSlug": "kortex",
+      "nicho": "autos",
+      "categoria": "standard",
+      "tecnologia": "Dyed",
+      "vlt": 20,
+      "uvr": 92,
+      "ir": 58,
+      "garantiaAnios": 3,
+      "espesor": {
+        "valor": 1,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KRN05",
+      "linea": "Kron",
+      "lineaSlug": "kron",
+      "nicho": "autos",
+      "categoria": "standard",
+      "tecnologia": "Dyed",
+      "vlt": 5,
+      "uvr": 99,
+      "ir": 11,
+      "garantiaAnios": 3,
+      "espesor": {
+        "valor": 1,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KRN15",
+      "linea": "Kron",
+      "lineaSlug": "kron",
+      "nicho": "autos",
+      "categoria": "standard",
+      "tecnologia": "Dyed",
+      "vlt": 15,
+      "uvr": 99,
+      "ir": 11,
+      "garantiaAnios": 3,
+      "espesor": {
+        "valor": 1,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KRN50",
+      "linea": "Kron",
+      "lineaSlug": "kron",
+      "nicho": "autos",
+      "categoria": "standard",
+      "tecnologia": "Dyed",
+      "vlt": 50,
+      "uvr": 99,
+      "ir": 11,
+      "garantiaAnios": 3,
+      "espesor": {
+        "valor": 1,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KPRO05",
+      "linea": "Klar",
+      "lineaSlug": "klar",
+      "nicho": "autos",
+      "categoria": "standard",
+      "tecnologia": "Dyed",
+      "vlt": 5,
+      "uvr": 99,
+      "ir": 73,
+      "garantiaAnios": 3,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KPRO15",
+      "linea": "Klar",
+      "lineaSlug": "klar",
+      "nicho": "autos",
+      "categoria": "standard",
+      "tecnologia": "Dyed",
+      "vlt": 15,
+      "uvr": 92,
+      "ir": 58,
+      "garantiaAnios": 3,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KRY05",
+      "linea": "Kryon",
+      "lineaSlug": "kryon",
+      "nicho": "autos",
+      "categoria": "standard",
+      "tecnologia": "Nano Ceramic",
+      "vlt": 5,
+      "uvr": 99,
+      "ir": 90,
+      "garantiaAnios": 5,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KRY15",
+      "linea": "Kryon",
+      "lineaSlug": "kryon",
+      "nicho": "autos",
+      "categoria": "standard",
+      "tecnologia": "Nano Ceramic",
+      "vlt": 15,
+      "uvr": 90,
+      "ir": 90,
+      "garantiaAnios": 5,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KRY80",
+      "linea": "Kryon",
+      "lineaSlug": "kryon",
+      "nicho": "autos",
+      "categoria": "standard",
+      "tecnologia": "Nano Ceramic",
+      "vlt": 80,
+      "uvr": 99,
+      "ir": 80,
+      "garantiaAnios": 5,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KRE15",
+      "linea": "Kore",
+      "lineaSlug": "kore",
+      "nicho": "autos",
+      "categoria": "premium",
+      "tecnologia": "Dyed + Sputtering",
+      "vlt": 15,
+      "uvr": 99,
+      "ir": 23,
+      "garantiaAnios": 5,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KRE05",
+      "linea": "Kore",
+      "lineaSlug": "kore",
+      "nicho": "autos",
+      "categoria": "premium",
+      "tecnologia": "Dyed + Sputtering",
+      "vlt": 5,
+      "uvr": 99,
+      "ir": 25,
+      "garantiaAnios": 5,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KRB05",
+      "linea": "Karbon",
+      "lineaSlug": "karbon",
+      "nicho": "autos",
+      "categoria": "premium",
+      "tecnologia": "Nano Carbon",
+      "vlt": 5,
+      "uvr": 99,
+      "ir": 86,
+      "garantiaAnios": 10,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KRB15",
+      "linea": "Karbon",
+      "lineaSlug": "karbon",
+      "nicho": "autos",
+      "categoria": "premium",
+      "tecnologia": "Nano Carbon",
+      "vlt": 15,
+      "uvr": 99,
+      "ir": 73,
+      "garantiaAnios": 10,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KNCE05",
+      "linea": "Keram X",
+      "lineaSlug": "keram-x",
+      "nicho": "autos",
+      "categoria": "premium",
+      "tecnologia": "Nano Ceramic",
+      "vlt": 5,
+      "uvr": 99,
+      "ir": 95,
+      "garantiaAnios": 10,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KNCE15",
+      "linea": "Keram X",
+      "lineaSlug": "keram-x",
+      "nicho": "autos",
+      "categoria": "premium",
+      "tecnologia": "Nano Ceramic",
+      "vlt": 15,
+      "uvr": 99,
+      "ir": 95,
+      "garantiaAnios": 10,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KS4-15",
+      "linea": "Krypton",
+      "lineaSlug": "krypton",
+      "nicho": "autos",
+      "categoria": "premium",
+      "tecnologia": "Seguridad",
+      "vlt": 15,
+      "uvr": 99,
+      "ir": 95,
+      "garantiaAnios": 10,
+      "espesor": {
+        "valor": 4,
+        "unidad": "mil"
+      }
+    },
+    {
+      "codigo": "TPUKX",
+      "linea": "PPF",
+      "lineaSlug": "ppf",
+      "nicho": "autos",
+      "categoria": "premium",
+      "tecnologia": "TPU Self-healing",
+      "vlt": null,
+      "uvr": null,
+      "ir": null,
+      "garantiaAnios": 15,
+      "espesor": {
+        "valor": 7.5,
+        "unidad": "mil"
+      }
+    },
+    {
+      "codigo": "KSR70",
+      "linea": "Kaiser",
+      "lineaSlug": "kaiser",
+      "nicho": "arquitectura",
+      "categoria": "premium",
+      "tecnologia": "Arq Nano ceramic + sputtering",
+      "vlt": 70,
+      "uvr": 99,
+      "ir": 98,
+      "garantiaAnios": 10,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KRF05S",
+      "linea": "KReflect Silver",
+      "lineaSlug": "kreflect-silver",
+      "nicho": "arquitectura",
+      "categoria": "premium",
+      "tecnologia": "Arquitectura Espejado",
+      "vlt": 5,
+      "uvr": 99,
+      "ir": 90,
+      "garantiaAnios": 6,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KRF15S",
+      "linea": "KReflect Silver",
+      "lineaSlug": "kreflect-silver",
+      "nicho": "arquitectura",
+      "categoria": "premium",
+      "tecnologia": "Arquitectura Espejado",
+      "vlt": 15,
+      "uvr": 99,
+      "ir": 88,
+      "garantiaAnios": 6,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KLR08",
+      "linea": "Klear",
+      "lineaSlug": "klear",
+      "nicho": "arquitectura",
+      "categoria": "premium",
+      "tecnologia": "Arquitectura Seguridad",
+      "vlt": 90,
+      "uvr": 25,
+      "ir": 11,
+      "garantiaAnios": 6,
+      "espesor": {
+        "valor": 8,
+        "unidad": "mil"
+      }
+    },
+    {
+      "codigo": "KLR12",
+      "linea": "Klear",
+      "lineaSlug": "klear",
+      "nicho": "arquitectura",
+      "categoria": "premium",
+      "tecnologia": "Arquitectura Seguridad",
+      "vlt": 90,
+      "uvr": 25,
+      "ir": 11,
+      "garantiaAnios": 6,
+      "espesor": {
+        "valor": 12,
+        "unidad": "mil"
+      }
+    },
+    {
+      "codigo": "KNG01",
+      "linea": "KNight",
+      "lineaSlug": "knight",
+      "nicho": "arquitectura",
+      "categoria": "premium",
+      "tecnologia": "Black out Mate",
+      "vlt": null,
+      "uvr": 99,
+      "ir": null,
+      "garantiaAnios": 6,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KWM01",
+      "linea": "KWhite Matte",
+      "lineaSlug": "kwhite-matte",
+      "nicho": "arquitectura",
+      "categoria": "premium",
+      "tecnologia": "Frost Blanco",
+      "vlt": 15,
+      "uvr": 99,
+      "ir": null,
+      "garantiaAnios": 6,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    },
+    {
+      "codigo": "KDS01",
+      "linea": "KDecor Stripe",
+      "lineaSlug": "kdecor-stripe",
+      "nicho": "arquitectura",
+      "categoria": "premium",
+      "tecnologia": "Arquitectura Decoracion",
+      "vlt": null,
+      "uvr": 99,
+      "ir": null,
+      "garantiaAnios": 6,
+      "espesor": {
+        "valor": 2,
+        "unidad": "ply"
+      }
+    }
+  ]
+}

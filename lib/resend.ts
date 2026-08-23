@@ -25,11 +25,13 @@ export async function sendLeadNotification(lead: {
   phone?: string
   message: string
   source: string
-  cartItems?: { productName: string; quantity: number }[]
+  cartItems?: { productName: string; codigo?: string; quantity?: number }[]
 }) {
   const resend = getResendClient()
   const itemsHtml = lead.cartItems?.length
-    ? `<h3>Productos solicitados:</h3><ul>${lead.cartItems.map(i => `<li>${i.productName} × ${i.quantity}</li>`).join('')}</ul>`
+    ? `<h3>Productos solicitados:</h3><ul>${lead.cartItems
+        .map((i) => `<li>${i.productName}${i.codigo ? ` (${i.codigo})` : ''} × ${i.quantity ?? 1}</li>`)
+        .join('')}</ul>`
     : ''
 
   await resend.emails.send({

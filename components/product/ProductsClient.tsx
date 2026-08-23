@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { SlidersHorizontal, X } from 'lucide-react'
 import ProductCard from '@/components/product/ProductCard'
-import { LAMINAS, LINE_ORDER, getLine, type Lamina } from '@/lib/catalogo'
+import { PRODUCTOS, LINEAS, lineaLogoSrc, type Producto } from '@/lib/catalogo'
 
 const btnBase = 'px-2.5 py-1 rounded-md text-[12px] font-medium transition-colors'
 const btnActive = 'bg-[#0A0A0A] text-white'
@@ -18,14 +18,14 @@ const catBtn = (active: boolean) =>
   }`
 
 // Valores reales presentes en el catálogo (orden ascendente)
-const VLT_VALUES = [...new Set(LAMINAS.map((l) => l.vlt).filter((v): v is number => v != null))].sort((a, b) => a - b)
-const UV_VALUES = [...new Set(LAMINAS.map((l) => l.uv).filter((v): v is number => v != null))].sort((a, b) => a - b)
+const VLT_VALUES = [...new Set(PRODUCTOS.map((p) => p.vlt).filter((v): v is number => v != null))].sort((a, b) => a - b)
+const UV_VALUES = [...new Set(PRODUCTOS.map((p) => p.uvr).filter((v): v is number => v != null))].sort((a, b) => a - b)
 
 export default function ProductsClient() {
   const t = useTranslations('products_page')
   const tp = useTranslations('products')
   const tm = useTranslations('product_modal')
-  const [activeCategory, setActiveCategory] = useState('all')
+  const [activeLinea, setActiveLinea] = useState('all')
   const [activeVLT, setActiveVLT] = useState('all')
   const [activeUV, setActiveUV] = useState('all')
   const [modalOpen, setModalOpen] = useState(false)
@@ -42,36 +42,32 @@ export default function ProductsClient() {
     { label: t('filter_sin_uv'), value: 'none' },
   ]
 
-  const matchesFilters = (p: Lamina) => {
-    const catOk = activeCategory === 'all' || p.line === activeCategory
+  const matchesFilters = (p: Producto) => {
+    const lineaOk = activeLinea === 'all' || p.lineaSlug === activeLinea
     const vltOk = activeVLT === 'all' ? true : activeVLT === 'none' ? p.vlt == null : String(p.vlt) === activeVLT
-    const uvOk = activeUV === 'all' ? true : activeUV === 'none' ? p.uv == null : String(p.uv) === activeUV
-    return catOk && vltOk && uvOk
+    const uvOk = activeUV === 'all' ? true : activeUV === 'none' ? p.uvr == null : String(p.uvr) === activeUV
+    return lineaOk && vltOk && uvOk
   }
 
   const clearFilters = () => {
-    setActiveCategory('all')
+    setActiveLinea('all')
     setActiveVLT('all')
     setActiveUV('all')
   }
 
   const lineTagline = (slug: string) => {
-    const line = getLine(slug)
-    if (!line) return ''
-    const tier = tm(`tier_${line.tier}`)
-    return line.warrantyYears ? `${tier} · ${tm('warranty_years', { n: line.warrantyYears })}` : tier
+    const linea = LINEAS.find((l) => l.slug === slug)
+    if (!linea) return ''
+    const categoria = tm(`categoria_${linea.categoria}`)
+    return linea.garantiaAnios ? `${categoria} · ${tm('warranty_years', { n: linea.garantiaAnios })}` : categoria
   }
 
-  const hasActiveFilters = activeCategory !== 'all' || activeVLT !== 'all' || activeUV !== 'all'
-  const activeFilterCount = [activeCategory !== 'all', activeVLT !== 'all', activeUV !== 'all'].filter(Boolean).length
+  const hasActiveFilters = activeLinea !== 'all' || activeVLT !== 'all' || activeUV !== 'all'
+  const activeFilterCount = [activeLinea !== 'all', activeVLT !== 'all', activeUV !== 'all'].filter(Boolean).length
 
-  const sections = LINE_ORDER
-    .map((slug) => ({
-      slug,
-      line: getLine(slug),
-      items: LAMINAS.filter((p) => p.line === slug && matchesFilters(p)),
-    }))
-    .filter((s) => s.line != null && s.items.length > 0)
+  const sections = LINEAS
+    .map((linea) => ({ linea, items: linea.productos.filter(matchesFilters) }))
+    .filter((s) => s.items.length > 0)
 
   const totalFiltered = sections.reduce((sum, s) => sum + s.items.length, 0)
 
@@ -80,12 +76,12 @@ export default function ProductsClient() {
       <div>
         <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A] block mb-2">{t('filter_linea')}</span>
         <div className="flex flex-wrap gap-2">
-          <button onClick={() => setActiveCategory('all')} className={catBtn(activeCategory === 'all')}>
+          <button onClick={() => setActiveLinea('all')} className={catBtn(activeLinea === 'all')}>
             {t('filter_todas')}
           </button>
-          {LINE_ORDER.map((slug) => (
-            <button key={slug} onClick={() => setActiveCategory(slug)} className={catBtn(activeCategory === slug)}>
-              {getLine(slug)?.name}
+          {LINEAS.map((linea) => (
+            <button key={linea.slug} onClick={() => setActiveLinea(linea.slug)} className={catBtn(activeLinea === linea.slug)}>
+              {linea.nombre}
             </button>
           ))}
         </div>
@@ -131,12 +127,12 @@ export default function ProductsClient() {
         <div className="px-10 py-3 max-w-[1160px] mx-auto flex flex-col gap-2">
           <div className="flex items-center flex-wrap gap-2">
             <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A] mr-1">{t('filter_linea')}</span>
-            <button onClick={() => setActiveCategory('all')} className={catBtn(activeCategory === 'all')}>
+            <button onClick={() => setActiveLinea('all')} className={catBtn(activeLinea === 'all')}>
               {t('filter_todas')}
             </button>
-            {LINE_ORDER.map((slug) => (
-              <button key={slug} onClick={() => setActiveCategory(slug)} className={catBtn(activeCategory === slug)}>
-                {getLine(slug)?.name}
+            {LINEAS.map((linea) => (
+              <button key={linea.slug} onClick={() => setActiveLinea(linea.slug)} className={catBtn(activeLinea === linea.slug)}>
+                {linea.nombre}
               </button>
             ))}
           </div>
@@ -207,20 +203,20 @@ export default function ProductsClient() {
           </div>
         ) : (
           <div className="space-y-16">
-            {sections.map(({ slug, line, items }) => (
-              <section key={slug}>
+            {sections.map(({ linea, items }) => (
+              <section key={linea.slug}>
                 {/* Header de sección */}
                 <div className="mb-6 pb-6 border-b border-[#E4E4E2]">
                   <div className="relative h-7 w-32 mb-3">
-                    <Image src={line!.logo} alt={line!.name} fill className="object-contain object-left" sizes="128px" />
+                    <Image src={lineaLogoSrc(linea.slug)} alt={linea.nombre} fill className="object-contain object-left" sizes="128px" />
                   </div>
-                  <p className="text-[13px] font-semibold text-[#0A0A0A] mb-2">{lineTagline(slug)}</p>
-                  <p className="text-sm text-[#5C5C5C] max-w-[640px] leading-relaxed">{tp(line!.descKey)}</p>
+                  <p className="text-[13px] font-semibold text-[#0A0A0A] mb-2">{lineTagline(linea.slug)}</p>
+                  <p className="text-sm text-[#5C5C5C] max-w-[640px] leading-relaxed">{tp(linea.descKey)}</p>
                 </div>
                 {/* Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {items.map((p) => (
-                    <ProductCard key={p.sku} lamina={p} />
+                    <ProductCard key={p.codigo} producto={p} />
                   ))}
                 </div>
               </section>

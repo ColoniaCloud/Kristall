@@ -1,259 +1,195 @@
 /**
- * Catálogo Kristall Film — fuente de verdad estática.
+ * Catálogo Kristall Film — capa de lectura sobre data/catalogo.json.
  *
- * Reemplaza a Payload para la exhibición de productos (la tienda online quedó
- * cancelada). Los datos provienen del catálogo PDF 2025
- * (/public/catalogo/kristall-catalogo-2025.pdf) y coinciden 1:1 con lo que
- * había cargado en la base.
+ * data/catalogo.json es generado por scripts/sync-catalogo.mjs a partir de la
+ * planilla de Google Sheets (fuente de verdad del catálogo). NO se edita a
+ * mano: un cambio de producto se hace en la planilla y se sincroniza con
+ * `pnpm catalogo:sync` (corre solo antes de cada build, vía el hook `prebuild`).
  *
- * - Las DESCRIPCIONES por línea NO viven acá: se reutilizan a nivel de sección
- *   vía i18n (products.cat_*_desc) usando `descKey`.
- * - Las etiquetas de tier / garantía se traducen vía i18n (product_modal.*).
+ * Lo que SÍ vive en este archivo es la capa editorial que la planilla no
+ * tiene: a qué clave de i18n apunta la descripción de cada línea, y el orden
+ * en que aparecen en el home. Las descripciones en sí están en
+ * i18n/messages/{es,en,de}.json bajo el namespace `products`.
  */
+import catalogoJson from '@/data/catalogo.json'
 
-export type LineSlug =
-  | 'kaiser'
-  | 'keramx'
-  | 'karbon'
-  | 'krypton'
-  | 'klar'
-  | 'klass'
-  | 'ppf'
-  | 'vitral'
+export type Nicho = 'autos' | 'arquitectura'
+export type Categoria = 'standard' | 'premium'
 
-export type TierKey =
-  | 'estandar'
-  | 'premium'
-  | 'ultra'
-  | 'seguridad'
-  | 'proteccion'
-  | 'arquitectura'
+export const NICHOS: Nicho[] = ['autos', 'arquitectura']
+export const CATEGORIAS: Categoria[] = ['standard', 'premium']
 
-export interface SpecRow {
-  /** Clave i18n bajo product_modal (ej. 'spec_thickness') */
-  labelKey: string
-  /** Valor universal (no se traduce): "7.5 mil", "1.52 × 15 m" */
-  value: string
+export interface Espesor {
+  valor: number
+  unidad: 'ply' | 'mil'
 }
 
-export interface LineMeta {
-  slug: LineSlug
-  /** Nombre de marca, ej. "KARBÖN" */
-  name: string
-  tier: TierKey
-  /** Años de garantía. null = no aplica (VITRAL) */
-  warrantyYears: number | null
-  /** Término técnico de marca (no se traduce) */
-  technology: string
-  /** Foto de fondo de la card de lámina / modal (interior del vehículo). */
-  image: string
-  /** Foto "top" para la card de categoría del home (sin overlay fuerte). */
-  heroImage: string
-  /** Logo de la línea. */
-  logo: string
-  /** Clave i18n de la descripción de la línea (namespace products). */
-  descKey: string
-}
-
-export interface Lamina {
-  sku: string
-  slug: string
-  line: LineSlug
-  /** Designación comercial, ej. "05", "50". null para PPF/VITRAL. */
-  level: string | null
-  /** Transmisión de luz visible (%). null = no aplica. */
+/** Un producto = una fila de la planilla (un código Kristall). */
+export interface Producto {
+  codigo: string
+  linea: string
+  lineaSlug: string
+  nicho: Nicho
+  categoria: Categoria
+  tecnologia: string | null
   vlt: number | null
-  /** Rechazo infrarrojo (%) — se muestra como "IR". */
-  irr: number | null
-  /** Bloqueo UV (%). */
-  uv: number | null
-  inStock: boolean
-  /** Filas extra para productos sin VLT (PPF). */
-  specRows?: SpecRow[]
+  uvr: number | null
+  ir: number | null
+  garantiaAnios: number | null
+  espesor: Espesor | null
+}
+
+/** Una línea = todos los productos que comparten "Linea" en la planilla. */
+export interface Linea {
+  slug: string
+  nombre: string
+  nicho: Nicho
+  categoria: Categoria
+  tecnologia: string
+  garantiaAnios: number | null
+  /** Clave i18n de la descripción (namespace `products`). */
+  descKey: string
+  productos: Producto[]
 }
 
 /**
- * NOTA DE ASSETS: las fotos interiores definitivas viven en
- * /public/cat/interior/{slug}.jpg (una por línea, usadas de fondo bajo el
- * overlay de cada card). Los logos de línea en /public/cat/{NAME}.png.
+ * Clave i18n de descripción por línea. Es editorial (no viene de la
+ * planilla), así que si aparece una línea nueva hay que sumarla acá — el
+ * chequeo de abajo lo hace ruidoso en vez de silencioso.
  */
-export const LINES: LineMeta[] = [
-  {
-    slug: 'kaiser',
-    name: 'KAISER',
-    tier: 'ultra',
-    warrantyYears: 10,
-    technology: 'Sputtering Ceramic',
-    image: '/cat/interior/kaiser.jpg',
-    heroImage: '/cat/top-KERAMX.jpg',
-    logo: '/cat/KAISER.png',
-    descKey: 'cat_kaiser_desc',
-  },
-  {
-    slug: 'krypton',
-    name: 'KRYPTON',
-    tier: 'seguridad',
-    warrantyYears: 10,
-    technology: 'Security Nano Ceramic',
-    image: '/cat/interior/krypton.jpg',
-    heroImage: '/cat/top-KRYPTON.jpg',
-    logo: '/cat/KRYPTON.png',
-    descKey: 'cat_krypton_desc',
-  },
-  {
-    slug: 'keramx',
-    name: 'KERAMX',
-    tier: 'premium',
-    warrantyYears: 10,
-    technology: 'Nano Ceramic',
-    image: '/cat/interior/keramx.jpg',
-    heroImage: '/cat/top-KERAMX.jpg',
-    logo: '/cat/KERAMX.png',
-    descKey: 'cat_keramx_desc',
-  },
-  {
-    slug: 'karbon',
-    name: 'KARBÖN',
-    tier: 'premium',
-    warrantyYears: 5,
-    technology: 'Nano Carbon',
-    image: '/cat/interior/karbon.jpg',
-    heroImage: '/cat/top-KARBON.jpg',
-    logo: '/cat/KARBON.png',
-    descKey: 'cat_karbon_desc',
-  },
-  {
-    slug: 'klar',
-    name: 'KLAR',
-    tier: 'estandar',
-    warrantyYears: 3,
-    technology: 'Estándar 2-ply',
-    image: '/cat/interior/klar.jpg',
-    heroImage: '/cat/top-KLAR.jpg',
-    logo: '/cat/KLAR.png',
-    descKey: 'cat_polarizado_desc',
-  },
-  {
-    slug: 'klass',
-    name: 'KLASS',
-    tier: 'estandar',
-    warrantyYears: 3,
-    technology: 'Estándar 1-ply',
-    image: '/cat/interior/klass.jpg',
-    heroImage: '/cat/top-KLAR.jpg',
-    logo: '/cat/KLASS.png',
-    descKey: 'cat_klass_desc',
-  },
-  {
-    slug: 'ppf',
-    name: 'PPF',
-    tier: 'proteccion',
-    warrantyYears: 15,
-    technology: 'TPU Self-healing',
-    image: '/cat/interior/ppf.jpg',
-    heroImage: '/cat/top-PPF.jpg',
-    logo: '/cat/PPF.png',
-    descKey: 'cat_ppf_desc',
-  },
-  {
-    slug: 'vitral',
-    name: 'VITRAL',
-    tier: 'arquitectura',
-    warrantyYears: null,
-    technology: 'Arquitectura',
-    image: '/cat/interior/vitral.jpg',
-    heroImage: '/cat/top-VITRAL.jpg',
-    logo: '/cat/VITRAL.png',
-    descKey: 'cat_vitral_desc',
-  },
-]
+const DESC_KEY_BY_SLUG: Record<string, string> = {
+  klass: 'cat_klass_desc',
+  kortex: 'cat_kortex_desc',
+  kron: 'cat_kron_desc',
+  klar: 'cat_klar_desc',
+  kryon: 'cat_kryon_desc',
+  kore: 'cat_kore_desc',
+  karbon: 'cat_karbon_desc',
+  'keram-x': 'cat_keramx_desc',
+  krypton: 'cat_krypton_desc',
+  ppf: 'cat_ppf_desc',
+  kaiser: 'cat_kaiser_desc',
+  'kreflect-silver': 'cat_kreflect_silver_desc',
+  klear: 'cat_klear_desc',
+  knight: 'cat_knight_desc',
+  'kwhite-matte': 'cat_kwhite_matte_desc',
+  'kdecor-stripe': 'cat_kdecor_stripe_desc',
+}
 
-export const LAMINAS: Lamina[] = [
-  // ─── KAISER (Ultra · Sputtering Ceramic · 10 años) ───
-  { sku: 'KSNC10', slug: 'ksnc10', line: 'kaiser', level: '10', vlt: 10, irr: 99, uv: 99, inStock: true },
-  { sku: 'KSNC20', slug: 'ksnc20', line: 'kaiser', level: '20', vlt: 20, irr: 99, uv: 99, inStock: true },
-  { sku: 'KSNC40', slug: 'ksnc40', line: 'kaiser', level: '40', vlt: 38, irr: 98, uv: 99, inStock: true },
-  { sku: 'KSNC70', slug: 'ksnc70', line: 'kaiser', level: '70', vlt: 70, irr: 98, uv: 99, inStock: true },
+/** Todos los productos, en el orden de la planilla. */
+export const PRODUCTOS: Producto[] = (catalogoJson as { productos: Producto[] }).productos
 
-  // ─── KERAMX (Premium · Nano Ceramic · 10 años) ───
-  { sku: 'KNCE05', slug: 'knce05', line: 'keramx', level: '05', vlt: 5, irr: 95, uv: 99, inStock: true },
-  { sku: 'KNCE15', slug: 'knce15', line: 'keramx', level: '15', vlt: 15, irr: 95, uv: 99, inStock: true },
-  { sku: 'KNCE35', slug: 'knce35', line: 'keramx', level: '35', vlt: 35, irr: 95, uv: 99, inStock: true },
-  { sku: 'KNCE50', slug: 'knce50', line: 'keramx', level: '50', vlt: 50, irr: 95, uv: 99, inStock: true },
-  { sku: 'KNCE75', slug: 'knce75', line: 'keramx', level: '75', vlt: 75, irr: 95, uv: 99, inStock: true },
+/** Agrupa productos en líneas, preservando el orden de aparición en la planilla. */
+function construirLineas(productos: Producto[]): Linea[] {
+  const orden: string[] = []
+  const porSlug = new Map<string, Producto[]>()
+  for (const p of productos) {
+    if (!porSlug.has(p.lineaSlug)) {
+      orden.push(p.lineaSlug)
+      porSlug.set(p.lineaSlug, [])
+    }
+    porSlug.get(p.lineaSlug)!.push(p)
+  }
 
-  // ─── KARBÖN (Premium · Nano Carbon · 5 años) ───
-  { sku: 'KNCA05', slug: 'knca05', line: 'karbon', level: '05', vlt: 5, irr: 90, uv: 99, inStock: true },
-  { sku: 'KNCA15', slug: 'knca15', line: 'karbon', level: '15', vlt: 15, irr: 90, uv: 99, inStock: true },
-  { sku: 'KNCA35', slug: 'knca35', line: 'karbon', level: '35', vlt: 35, irr: 90, uv: 99, inStock: true },
-  { sku: 'KNCA80', slug: 'knca80', line: 'karbon', level: '80', vlt: 80, irr: 80, uv: 99, inStock: true },
+  const faltantes = orden.filter((slug) => !(slug in DESC_KEY_BY_SLUG))
+  if (faltantes.length) {
+    throw new Error(
+      `lib/catalogo.ts: falta descKey para la(s) línea(s) nueva(s) [${faltantes.join(', ')}]. ` +
+        'Agregalas a DESC_KEY_BY_SLUG y su traducción en i18n/messages/{es,en,de}.json antes de compilar.',
+    )
+  }
 
-  // ─── KRYPTON (Seguridad · Security Nano Ceramic · 10 años) ───
-  { sku: 'KS405', slug: 'ks405', line: 'krypton', level: '05', vlt: 5, irr: 95, uv: 99, inStock: true },
-  { sku: 'KS415', slug: 'ks415', line: 'krypton', level: '15', vlt: 15, irr: 95, uv: 99, inStock: true },
-  { sku: 'KS435', slug: 'ks435', line: 'krypton', level: '35', vlt: 35, irr: 95, uv: 99, inStock: true },
-  { sku: 'KS450', slug: 'ks450', line: 'krypton', level: '50', vlt: 50, irr: 95, uv: 99, inStock: true },
-  { sku: 'KS475', slug: 'ks475', line: 'krypton', level: '75', vlt: 71, irr: 95, uv: 99, inStock: true },
+  return orden.map((slug) => {
+    const productosDeLinea = porSlug.get(slug)!
+    const [primero] = productosDeLinea
+    return {
+      slug,
+      nombre: primero.linea,
+      nicho: primero.nicho,
+      categoria: primero.categoria,
+      tecnologia: primero.tecnologia ?? '',
+      garantiaAnios: primero.garantiaAnios,
+      descKey: DESC_KEY_BY_SLUG[slug],
+      productos: productosDeLinea,
+    }
+  })
+}
 
-  // ─── KLAR (Estándar 2-ply · 3 años) ───
-  { sku: 'KPRO05', slug: 'kpro05', line: 'klar', level: '05', vlt: 5, irr: 73, uv: 99, inStock: true },
-  { sku: 'KPRO15', slug: 'kpro15', line: 'klar', level: '15', vlt: 15, irr: 58, uv: 92, inStock: true },
-  { sku: 'KPRO30', slug: 'kpro30', line: 'klar', level: '30', vlt: 30, irr: 46, uv: 81, inStock: true },
-  { sku: 'KPRO50', slug: 'kpro50', line: 'klar', level: '50', vlt: 46, irr: 20, uv: 56, inStock: true },
+/** Todas las líneas, en el orden de la planilla (autos primero, arquitectura después). */
+export const LINEAS: Linea[] = construirLineas(PRODUCTOS)
 
-  // ─── KLASS (Estándar 1-ply · 3 años) ───
-  { sku: 'KSTD05', slug: 'kstd05', line: 'klass', level: '05', vlt: 5, irr: 20, uv: 99, inStock: true },
-  { sku: 'KSTD20', slug: 'kstd20', line: 'klass', level: '20', vlt: 20, irr: 20, uv: 92, inStock: true },
-  { sku: 'KSTD35', slug: 'kstd35', line: 'klass', level: '35', vlt: 35, irr: 20, uv: 81, inStock: true },
+export const LINEA_SLUGS: string[] = LINEAS.map((l) => l.slug)
 
-  // ─── PPF (Protección · TPU Self-healing · 15 años) ───
-  {
-    sku: 'TPUKX',
-    slug: 'tpukx',
-    line: 'ppf',
-    level: null,
-    vlt: null,
-    irr: null,
-    uv: null,
-    inStock: true,
-    specRows: [
-      { labelKey: 'spec_thickness', value: '7.5 mil' },
-      { labelKey: 'spec_roll', value: '1.52 × 15 m' },
-    ],
-  },
+const LINEA_BY_SLUG: Record<string, Linea> = Object.fromEntries(LINEAS.map((l) => [l.slug, l]))
 
-  // ─── VITRAL (Arquitectura · próximamente) ───
-  { sku: 'VITRAL01', slug: 'vitral01', line: 'vitral', level: null, vlt: null, irr: null, uv: null, inStock: false },
-]
+export const getLinea = (slug: string): Linea | undefined => LINEA_BY_SLUG[slug]
 
-/** Orden de secciones en /productos (premium primero). */
-export const LINE_ORDER: LineSlug[] = LINES.map((l) => l.slug)
+export const lineasPorNicho = (nicho: Nicho): Linea[] => LINEAS.filter((l) => l.nicho === nicho)
 
-const LINE_BY_SLUG: Record<string, LineMeta> = Object.fromEntries(
-  LINES.map((l) => [l.slug, l]),
+export const productosPorLinea = (slug: string): Producto[] => getLinea(slug)?.productos ?? []
+
+const PRODUCTO_BY_CODIGO: Record<string, Producto> = Object.fromEntries(
+  PRODUCTOS.map((p) => [p.codigo, p]),
 )
 
-export const getLine = (slug: string): LineMeta | undefined => LINE_BY_SLUG[slug]
+export const getProducto = (codigo: string): Producto | undefined => PRODUCTO_BY_CODIGO[codigo]
 
-export const laminasByLine = (slug: string): Lamina[] =>
-  LAMINAS.filter((l) => l.line === slug)
+/**
+ * Nombre comercial de un producto, ej. "Klass 15", "Klear 8 mil", "Kaiser".
+ *
+ * Se arma solo con lo que hace falta para distinguirlo de sus hermanos de
+ * línea: si el VLT ya es único dentro de la línea, alcanza con el VLT (la
+ * gran mayoría de los casos). Si dos productos de la misma línea comparten
+ * VLT (p. ej. Klear 8 mil / 12 mil, ambos VLT 90), se agrega el espesor. Si
+ * la línea tiene un solo producto, el nombre de línea alcanza.
+ */
+const NOMBRE_BY_CODIGO: Record<string, string> = (() => {
+  const nombres: Record<string, string> = {}
+  for (const linea of LINEAS) {
+    const { productos } = linea
+    if (productos.length <= 1) {
+      for (const p of productos) nombres[p.codigo] = linea.nombre
+      continue
+    }
+    const vltValores = productos.map((p) => p.vlt)
+    const vltEsUnico = vltValores.every((v) => v != null) && new Set(vltValores).size === productos.length
+    for (const p of productos) {
+      const etiqueta = vltEsUnico
+        ? `${p.vlt}`
+        : p.espesor
+          ? `${p.espesor.valor} ${p.espesor.unidad}`
+          : p.codigo
+      nombres[p.codigo] = `${linea.nombre} ${etiqueta}`
+    }
+  }
+  return nombres
+})()
 
-/** Una lámina representativa por línea (la primera = menor VLT). Para el home. */
-export const representativeByLine = (slug: string): Lamina | undefined =>
-  LAMINAS.find((l) => l.line === slug)
+export const productoNombre = (p: Producto): string => NOMBRE_BY_CODIGO[p.codigo] ?? p.linea
 
-/** Nombre comercial de la lámina, ej. "KLAR 05". */
-export const laminaName = (l: Lamina): string => {
-  const line = getLine(l.line)
-  const base = line?.name ?? l.line.toUpperCase()
-  return l.level ? `${base} ${l.level}` : base
+/**
+ * Rutas de imagen por línea. El archivo se sube con el nombre del slug, en
+ * minúsculas — salvo estas 4 líneas de nombre compuesto, donde el archivo
+ * quedó más corto que el slug (decisión editorial al crear los assets, no
+ * un error). Si una línea nueva no tiene foto subida, el navegador pide un
+ * 404 y next/image cae al layout vacío; no rompe el build.
+ */
+const ASSET_SLUG_OVERRIDES: Record<string, string> = {
+  'keram-x': 'keramx',
+  'kreflect-silver': 'kreflect',
+  'kwhite-matte': 'kwhite',
+  'kdecor-stripe': 'kdecor',
 }
+const assetSlug = (slug: string): string => ASSET_SLUG_OVERRIDES[slug] ?? slug
+
+export const lineaLogoSrc = (slug: string): string => `/Productos/logo-linea/${assetSlug(slug)}.svg`
+export const lineaDestacadaSrc = (slug: string): string => `/Productos/destacadas/${assetSlug(slug)}.png`
 
 /**
  * Opacidad del overlay negro sobre la foto, derivada del VLT.
  * A menor VLT (más polarizado) → overlay más oscuro.
  * Rango acotado a [0.15, 0.85] para que la imagen siempre se lea.
- * Productos sin VLT (PPF/VITRAL) → overlay tenue fijo.
+ * Productos sin VLT (PPF, KNight, KDecor Stripe) → overlay tenue fijo.
  */
 export const overlayOpacity = (vlt: number | null): number => {
   if (vlt == null) return 0.35

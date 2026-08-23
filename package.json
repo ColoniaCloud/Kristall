@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/sync-catalogo.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "catalogo:sync": "node scripts/sync-catalogo.mjs",
+    "catalogo:check": "node scripts/sync-catalogo.mjs --check"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

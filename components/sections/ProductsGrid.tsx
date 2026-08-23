@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/routing'
 import { motion, type Variants } from 'framer-motion'
 import CategoryCard from '@/components/product/CategoryCard'
-import { getLine, type LineMeta } from '@/lib/catalogo'
+import { getLinea, type Linea } from '@/lib/catalogo'
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -29,15 +29,15 @@ const cardVariants: Variants = {
   },
 }
 
-// Orden de exhibición de las categorías en el home.
-const HOME_LINES = ['klass', 'klar', 'karbon', 'keramx', 'krypton', 'kaiser', 'ppf', 'vitral']
+// Orden de exhibición de las líneas en el home.
+const HOME_LINES = ['klass', 'klar', 'karbon', 'keram-x', 'krypton', 'ppf', 'kaiser', 'kreflect-silver']
 
 export default function ProductsGrid() {
   const t = useTranslations('products')
 
   const items = HOME_LINES
-    .map((slug) => getLine(slug))
-    .filter((l): l is LineMeta => l != null)
+    .map((slug) => getLinea(slug))
+    .filter((l): l is Linea => l != null)
 
   return (
     <section className="px-6 pb-8 bg-[#F2F2F0]">
@@ -58,9 +58,9 @@ export default function ProductsGrid() {
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
         >
-          {items.map((line) => (
-            <motion.div key={line.slug} variants={cardVariants} className="h-full">
-              <CategoryCard line={line} />
+          {items.map((linea) => (
+            <motion.div key={linea.slug} variants={cardVariants} className="h-full">
+              <CategoryCard linea={linea} />
             </motion.div>
           ))}
         </motion.div>

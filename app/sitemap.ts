@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-import { LINE_ORDER } from '@/lib/catalogo'
+import { LINEA_SLUGS, NICHOS } from '@/lib/catalogo'
 import { getPublishedArticles } from '@/lib/blog'
 import { BASE, LOCALES } from '@/lib/seo'
 
@@ -41,9 +41,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Category pages × locales
-  for (const slug of LINE_ORDER) {
-    const route = `/productos/categorias/${slug}`
+  // Nicho pages (autos, arquitectura) × locales
+  for (const nicho of NICHOS) {
+    const route = `/productos/${nicho}`
+    const languages = languagesFor(route)
+    for (const locale of LOCALES) {
+      entries.push({
+        url: `${BASE}/${locale}${route}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.8,
+        alternates: { languages },
+      })
+    }
+  }
+
+  // Línea pages × locales
+  for (const slug of LINEA_SLUGS) {
+    const route = `/productos/lineas/${slug}`
     const languages = languagesFor(route)
     for (const locale of LOCALES) {
       entries.push({

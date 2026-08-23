@@ -92,6 +92,11 @@ export const Leads: CollectionConfig = {
           type: 'text',
         },
         {
+          name: 'codigo',
+          type: 'text',
+          label: 'Código Kristall',
+        },
+        {
           name: 'variant',
           type: 'text',
         },
