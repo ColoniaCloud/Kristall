@@ -12,7 +12,20 @@ import { useState } from 'react'
 const VLT_VALUES = [...new Set(PRODUCTOS.map((p) => p.vlt).filter((v): v is number => v != null))].sort((a, b) => a - b)
 const UV_VALUES = [...new Set(PRODUCTOS.map((p) => p.uvr).filter((v): v is number => v != null))].sort((a, b) => a - b)
 
-const selectTrigger = 'bg-[#F2F2F0] border-transparent text-xs font-medium data-placeholder:text-[#5C5C5C]'
+// El sitio público no está envuelto en .kf-app-theme (esa clase es solo del
+// Panel de Cliente y Garantías), así que los tokens que usa Select por default
+// (bg-popover, focus:bg-accent) no resuelven a ningún color ahí. Se pisan acá
+// en vez de tocar components/ui/select.tsx, que sí funciona bien donde hay
+// tema. El color/alto van por `style`, no por className: este navegador tiene
+// prefers-color-scheme:dark, y como el proyecto nunca configuró el modo oscuro
+// por clase, el `dark:bg-input/30` del trigger (con --input indefinido acá)
+// termina ganándole a cualquier bg-* por clase — style inline no compite con
+// eso, gana siempre.
+const selectTrigger = 'w-full border-transparent text-sm font-medium data-placeholder:text-[#5C5C5C]'
+const triggerStyle = { height: 40, backgroundColor: '#F2F2F0' }
+const selectContent = 'border border-white/10'
+const contentStyle = { backgroundColor: '#0A0A0A', color: '#fff' }
+const selectItem = 'focus:bg-white/15 focus:text-white'
 
 export default function ProductsClient() {
   const t = useTranslations('products_page')
@@ -64,53 +77,59 @@ export default function ProductsClient() {
 
   return (
     <div>
-      {/* Barra de filtros — un select por criterio, misma fila en cualquier tamaño de pantalla */}
+      {/* Barra de filtros — los 3 selects reparten el ancho de contenido en una
+          fila en desktop; en mobile se apilan, cada uno a ancho completo. */}
       <div className="bg-white border-b border-[#E4E4E2] sticky top-[56px] z-40">
-        <div className="px-4 md:px-10 py-3 max-w-[1160px] mx-auto flex flex-col gap-2">
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-1.5">
+        <div className="px-4 md:px-10 py-4 max-w-[1160px] mx-auto flex flex-col gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="flex flex-col gap-1.5">
               <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A]">{t('filter_linea')}</span>
               <Select value={activeLinea} onValueChange={setActiveLinea}>
-                <SelectTrigger size="sm" className={`${selectTrigger} min-w-[130px]`}>
+                <SelectTrigger className={selectTrigger} style={triggerStyle}>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{t('filter_todas')}</SelectItem>
+                <SelectContent className={selectContent} style={contentStyle}>
+                  <SelectItem className={selectItem} value="all">{t('filter_todas')}</SelectItem>
                   {LINEAS.map((linea) => (
-                    <SelectItem key={linea.slug} value={linea.slug}>{linea.nombre}</SelectItem>
+                    <SelectItem className={selectItem} key={linea.slug} value={linea.slug}>{linea.nombre}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="flex items-center gap-1.5">
+            <div className="flex flex-col gap-1.5">
               <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A]">{t('filter_vlt')}</span>
               <Select value={activeVLT} onValueChange={setActiveVLT}>
-                <SelectTrigger size="sm" className={`${selectTrigger} min-w-[90px]`}>
+                <SelectTrigger className={selectTrigger} style={triggerStyle}>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className={selectContent} style={contentStyle}>
                   {VLT_OPTIONS.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                    <SelectItem className={selectItem} key={opt.value} value={opt.value}>{opt.label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="flex items-center gap-1.5">
+            <div className="flex flex-col gap-1.5">
               <span className="text-[11px] uppercase tracking-widest text-[#9A9A9A]">{t('filter_uv')}</span>
               <Select value={activeUV} onValueChange={setActiveUV}>
-                <SelectTrigger size="sm" className={`${selectTrigger} min-w-[90px]`}>
+                <SelectTrigger className={selectTrigger} style={triggerStyle}>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className={selectContent} style={contentStyle}>
                   {UV_OPTIONS.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                    <SelectItem className={selectItem} key={opt.value} value={opt.value}>{opt.label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
+          </div>
 
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-[12px] text-[#9A9A9A]">
+              {totalFiltered === 1 ? t('filter_count_one') : t('filter_count_other', { count: totalFiltered })}
+            </p>
             {hasActiveFilters && (
               <button
                 type="button"
@@ -122,9 +141,6 @@ export default function ProductsClient() {
               </button>
             )}
           </div>
-          <p className="text-[12px] text-[#9A9A9A]">
-            {totalFiltered === 1 ? t('filter_count_one') : t('filter_count_other', { count: totalFiltered })}
-          </p>
         </div>
       </div>
 
