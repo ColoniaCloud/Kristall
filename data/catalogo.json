@@ -1,6 +1,6 @@
 {
   "_comentario": "Generado por scripts/sync-catalogo.mjs desde Google Sheets. No editar a mano.",
-  "generadoEl": "2026-08-23T12:55:32.637Z",
+  "generadoEl": "2026-08-24T00:51:48.735Z",
   "productos": [
     {
       "codigo": "KLS05",
@@ -10,7 +10,7 @@
       "categoria": "standard",
       "tecnologia": "Dyed",
       "vlt": 5,
-      "uvr": 33,
+      "uvr": 99,
       "ir": 20,
       "garantiaAnios": 3,
       "espesor": {
