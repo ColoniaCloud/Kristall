@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Loader2, CheckCircle, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { getLinea, productoNombre, lineaDestacadaSrc, lineaLogoSrc, overlayOpacity, type Producto } from '@/lib/catalogo'
+import { getLinea, productoNombre, lineaDestacadaSrc, lineaLogoSrc, type Producto } from '@/lib/catalogo'
 import { trackLead } from '@/lib/analytics'
 import AddToCartControl from '@/components/cart/AddToCartControl'
 
@@ -92,10 +92,9 @@ export default function ProductDetailModal({ producto, onClose }: ProductDetailM
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
 
       <div className="relative z-10 w-full sm:max-w-md bg-white rounded-t-2xl sm:rounded-2xl overflow-hidden shadow-2xl max-h-[92vh] overflow-y-auto">
-        {/* Banner con foto + overlay + logo + categoría */}
+        {/* Banner con foto + logo + categoría */}
         <div className="relative h-40">
           <Image src={lineaDestacadaSrc(producto.lineaSlug)} alt={nombre} fill className="object-cover object-center" sizes="(max-width: 640px) 100vw, 448px" />
-          <div className="absolute inset-0 bg-black" style={{ opacity: overlayOpacity(producto.vlt) }} />
           {linea && (
             <span className="absolute top-3 right-12 text-[10px] uppercase tracking-wider bg-white/90 text-[#0A0A0A] rounded-full px-2.5 py-0.5 font-medium">
               {t(`categoria_${linea.categoria}`)}

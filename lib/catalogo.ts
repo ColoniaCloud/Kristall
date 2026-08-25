@@ -185,14 +185,3 @@ const assetSlug = (slug: string): string => ASSET_SLUG_OVERRIDES[slug] ?? slug
 export const lineaLogoSrc = (slug: string): string => `/Productos/logo-linea/${assetSlug(slug)}.svg`
 export const lineaDestacadaSrc = (slug: string): string => `/Productos/destacadas/${assetSlug(slug)}.png`
 
-/**
- * Opacidad del overlay negro sobre la foto, derivada del VLT.
- * A menor VLT (más polarizado) → overlay más oscuro.
- * Rango acotado a [0.15, 0.85] para que la imagen siempre se lea.
- * Productos sin VLT (PPF, KNight, KDecor Stripe) → overlay tenue fijo.
- */
-export const overlayOpacity = (vlt: number | null): number => {
-  if (vlt == null) return 0.35
-  const raw = ((100 - vlt) / 100) * 0.9
-  return Math.round(Math.min(0.85, Math.max(0.15, raw)) * 100) / 100
-}

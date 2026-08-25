@@ -6,7 +6,7 @@ import { Link } from '@/i18n/routing'
 import { useTranslations } from 'next-intl'
 import AnimatedBorderCard from '@/components/common/AnimatedBorderCard'
 import ProductDetailModal from '@/components/product/ProductDetailModal'
-import { getLinea, productoNombre, lineaDestacadaSrc, lineaLogoSrc, overlayOpacity, type Producto } from '@/lib/catalogo'
+import { getLinea, productoNombre, lineaDestacadaSrc, lineaLogoSrc, type Producto } from '@/lib/catalogo'
 
 export interface ProductCardProps {
   producto: Producto
@@ -30,7 +30,7 @@ export default function ProductCard({ producto, href }: ProductCardProps) {
 
   const inner = (
     <div className="flex flex-col h-full bg-white rounded-xl overflow-hidden border-[0.5px] border-[#E4E4E2] shadow-[0_1px_3px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.04)]">
-      {/* Banner: foto + overlay graduado por VLT + logo + categoría */}
+      {/* Banner: foto + logo + categoría */}
       <div className="relative h-44 flex-shrink-0">
         <Image
           src={lineaDestacadaSrc(producto.lineaSlug)}
@@ -39,7 +39,6 @@ export default function ProductCard({ producto, href }: ProductCardProps) {
           className="object-cover object-center"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
-        <div className="absolute inset-0 bg-black" style={{ opacity: overlayOpacity(producto.vlt) }} />
         {linea && (
           <span className="absolute top-3 right-3 text-[10px] uppercase tracking-wider bg-white/90 text-[#0A0A0A] rounded-full px-2.5 py-0.5 font-medium">
             {t(`categoria_${linea.categoria}`)}
