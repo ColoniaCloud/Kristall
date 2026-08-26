@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { CheckCircle2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { GridVignetteBackground } from '@/components/ui/vignette-grid-background'
 import { trackLead } from '@/lib/analytics'
 
@@ -30,6 +31,7 @@ const recap = [
 type FormState = { nombre: string; email: string; telefono: string }
 
 function ContactForm() {
+  const t = useTranslations('concesionarias_form')
   const [form, setForm] = useState<FormState>({ nombre: '', email: '', telefono: '' })
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
@@ -38,7 +40,7 @@ function ContactForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.nombre.trim() || !form.email.trim()) {
-      setError('Nombre y email son requeridos.')
+      setError(t('error_required'))
       return
     }
     setSending(true)
@@ -59,7 +61,7 @@ function ContactForm() {
       setSent(true)
       trackLead('concesionarias-reunion')
     } catch {
-      setError('Hubo un error. Intentá de nuevo.')
+      setError(t('error_generic'))
     } finally {
       setSending(false)
     }
@@ -73,58 +75,61 @@ function ContactForm() {
             <span className="text-[#E6A800] text-xl">✓</span>
           </div>
           <p className="text-white font-medium mb-2" style={{ fontFamily: 'var(--font-display)' }}>
-            ¡Solicitud enviada!
+            {t('success_title')}
           </p>
-          <p className="text-[16px] text-white/50">Te contactamos a la brevedad para coordinar la reunión.</p>
+          <p className="text-[16px] text-white/50">{t('success_body')}</p>
         </div>
       ) : (
         <>
           <p className="text-[12px] font-medium uppercase tracking-[0.1em] text-white/30 mb-2">
-            PROGRAMA CONCESIONARIAS
+            {t('eyebrow')}
           </p>
           <h3
             className="text-xl font-medium text-white mb-6"
             style={{ fontFamily: 'var(--font-display)' }}
           >
-            Coordinemos una reunión
+            {t('title')}
           </h3>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
-              <label className="block text-[12px] font-medium text-white/50 mb-1.5 uppercase tracking-wide">
-                Nombre *
+              <label htmlFor="concesionarias-nombre" className="block text-[12px] font-medium text-white/50 mb-1.5 uppercase tracking-wide">
+                {t('label_name')} *
               </label>
               <input
+                id="concesionarias-nombre"
                 type="text"
                 required
                 value={form.nombre}
                 onChange={(e) => setForm(f => ({ ...f, nombre: e.target.value }))}
-                placeholder="Tu nombre"
+                placeholder={t('placeholder_name')}
                 className="w-full px-3.5 py-2.5 bg-white/[0.06] border border-white/10 rounded-lg text-[16px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
               />
             </div>
             <div>
-              <label className="block text-[12px] font-medium text-white/50 mb-1.5 uppercase tracking-wide">
-                Email *
+              <label htmlFor="concesionarias-email" className="block text-[12px] font-medium text-white/50 mb-1.5 uppercase tracking-wide">
+                {t('label_email')} *
               </label>
               <input
+                id="concesionarias-email"
                 type="email"
                 required
                 value={form.email}
                 onChange={(e) => setForm(f => ({ ...f, email: e.target.value }))}
-                placeholder="tu@concesionaria.com"
+                placeholder={t('placeholder_email')}
                 className="w-full px-3.5 py-2.5 bg-white/[0.06] border border-white/10 rounded-lg text-[16px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
               />
             </div>
             <div>
-              <label className="block text-[12px] font-medium text-white/50 mb-1.5 uppercase tracking-wide">
-                Teléfono
+              <label htmlFor="concesionarias-telefono" className="block text-[12px] font-medium text-white/50 mb-1.5 uppercase tracking-wide">
+                {t('label_phone')}
               </label>
               <input
+                id="concesionarias-telefono"
                 type="tel"
                 value={form.telefono}
                 onChange={(e) => setForm(f => ({ ...f, telefono: e.target.value }))}
-                placeholder="+54 11 0000-0000"
+                placeholder={t('placeholder_phone')}
                 className="w-full px-3.5 py-2.5 bg-white/[0.06] border border-white/10 rounded-lg text-[16px] text-white placeholder:text-white/25 focus:outline-none focus:border-white/30 transition-colors"
               />
             </div>
@@ -136,7 +141,7 @@ function ContactForm() {
               disabled={sending}
               className="btn-primary text-white px-6 py-3 rounded-lg text-sm font-medium transition-all disabled:opacity-50 mt-2"
             >
-              {sending ? 'Enviando...' : 'Confirmar reunión'}
+              {sending ? t('submitting') : t('submit')}
             </button>
           </form>
         </>

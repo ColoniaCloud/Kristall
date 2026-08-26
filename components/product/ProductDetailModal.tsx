@@ -164,15 +164,18 @@ export default function ProductDetailModal({ producto, onClose }: ProductDetailM
 
               <div className="flex flex-col gap-3">
                 <div>
-                  <input {...register('name')} type="text" placeholder={t('field_name')} className={inputClass} />
+                  <label htmlFor="product-modal-name" className="sr-only">{t('field_name')}</label>
+                  <input {...register('name')} id="product-modal-name" type="text" placeholder={t('field_name')} className={inputClass} />
                   {errors.name && <span className="text-xs text-red-500 mt-1 block">{t('error_name')}</span>}
                 </div>
                 <div>
-                  <input {...register('phone')} type="tel" placeholder={t('field_phone')} className={inputClass} />
+                  <label htmlFor="product-modal-phone" className="sr-only">{t('field_phone')}</label>
+                  <input {...register('phone')} id="product-modal-phone" type="tel" placeholder={t('field_phone')} className={inputClass} />
                   {errors.phone && <span className="text-xs text-red-500 mt-1 block">{t('error_phone')}</span>}
                 </div>
                 <div>
-                  <input {...register('email')} type="email" placeholder={t('field_email')} className={inputClass} />
+                  <label htmlFor="product-modal-email" className="sr-only">{t('field_email')}</label>
+                  <input {...register('email')} id="product-modal-email" type="email" placeholder={t('field_email')} className={inputClass} />
                   {errors.email && <span className="text-xs text-red-500 mt-1 block">{t('error_email')}</span>}
                 </div>
               </div>

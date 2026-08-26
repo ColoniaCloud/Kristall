@@ -114,30 +114,30 @@ export default function QuoteModal({ open, onClose }: QuoteModalProps) {
         ) : (
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-[#0A0A0A]">{tc('field_name')}</label>
-              <input {...register('name')} type="text" placeholder={tc('field_name_placeholder')} className={inputClass} />
+              <label htmlFor="quote-name" className="text-sm font-medium text-[#0A0A0A]">{tc('field_name')}</label>
+              <input {...register('name')} id="quote-name" type="text" placeholder={tc('field_name_placeholder')} className={inputClass} />
               {errors.name && <span className="text-sm text-red-500">{errors.name.message}</span>}
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-[#0A0A0A]">{tc('field_company')}</label>
-              <input {...register('company')} type="text" placeholder={tc('field_company_placeholder')} className={inputClass} />
+              <label htmlFor="quote-company" className="text-sm font-medium text-[#0A0A0A]">{tc('field_company')}</label>
+              <input {...register('company')} id="quote-company" type="text" placeholder={tc('field_company_placeholder')} className={inputClass} />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-[#0A0A0A]">{tc('field_email')}</label>
-              <input {...register('email')} type="email" placeholder={tc('field_email_placeholder')} className={inputClass} />
+              <label htmlFor="quote-email" className="text-sm font-medium text-[#0A0A0A]">{tc('field_email')}</label>
+              <input {...register('email')} id="quote-email" type="email" placeholder={tc('field_email_placeholder')} className={inputClass} />
               {errors.email && <span className="text-sm text-red-500">{errors.email.message}</span>}
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-[#0A0A0A]">{tc('field_phone')}</label>
-              <input {...register('phone')} type="tel" placeholder={tc('field_phone_placeholder')} className={inputClass} />
+              <label htmlFor="quote-phone" className="text-sm font-medium text-[#0A0A0A]">{tc('field_phone')}</label>
+              <input {...register('phone')} id="quote-phone" type="tel" placeholder={tc('field_phone_placeholder')} className={inputClass} />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-[#0A0A0A]">{tc('field_message')}</label>
-              <textarea {...register('message')} rows={3} placeholder={tc('field_message_placeholder')} className={inputClass} />
+              <label htmlFor="quote-message" className="text-sm font-medium text-[#0A0A0A]">{tc('field_message')}</label>
+              <textarea {...register('message')} id="quote-message" rows={3} placeholder={tc('field_message_placeholder')} className={inputClass} />
             </div>
 
             {status === 'error' && (

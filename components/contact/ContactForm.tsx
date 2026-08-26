@@ -150,9 +150,10 @@ export default function ContactForm() {
           ) : (
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-1.5 mb-4">
-                <label className="text-sm font-medium text-[#0A0A0A]">{t('field_name')}</label>
+                <label htmlFor="contact-name" className="text-sm font-medium text-[#0A0A0A]">{t('field_name')}</label>
                 <input
                   {...register('name')}
+                  id="contact-name"
                   type="text"
                   placeholder={t('field_name_placeholder')}
                   className={inputClass}
@@ -163,9 +164,10 @@ export default function ContactForm() {
               </div>
 
               <div className="flex flex-col gap-1.5 mb-4">
-                <label className="text-sm font-medium text-[#0A0A0A]">{t('field_company')}</label>
+                <label htmlFor="contact-company" className="text-sm font-medium text-[#0A0A0A]">{t('field_company')}</label>
                 <input
                   {...register('company')}
+                  id="contact-company"
                   type="text"
                   placeholder={t('field_company_placeholder')}
                   className={inputClass}
@@ -173,9 +175,10 @@ export default function ContactForm() {
               </div>
 
               <div className="flex flex-col gap-1.5 mb-4">
-                <label className="text-sm font-medium text-[#0A0A0A]">{t('field_email')}</label>
+                <label htmlFor="contact-email" className="text-sm font-medium text-[#0A0A0A]">{t('field_email')}</label>
                 <input
                   {...register('email')}
+                  id="contact-email"
                   type="email"
                   placeholder={t('field_email_placeholder')}
                   className={inputClass}
@@ -186,9 +189,10 @@ export default function ContactForm() {
               </div>
 
               <div className="flex flex-col gap-1.5 mb-4">
-                <label className="text-sm font-medium text-[#0A0A0A]">{t('field_phone')}</label>
+                <label htmlFor="contact-phone" className="text-sm font-medium text-[#0A0A0A]">{t('field_phone')}</label>
                 <input
                   {...register('phone')}
+                  id="contact-phone"
                   type="tel"
                   placeholder={t('field_phone_placeholder')}
                   className={inputClass}
@@ -196,9 +200,10 @@ export default function ContactForm() {
               </div>
 
               <div className="flex flex-col gap-1.5 mb-6">
-                <label className="text-sm font-medium text-[#0A0A0A]">{t('field_message')}</label>
+                <label htmlFor="contact-message" className="text-sm font-medium text-[#0A0A0A]">{t('field_message')}</label>
                 <textarea
                   {...register('message')}
+                  id="contact-message"
                   rows={4}
                   placeholder={t('field_message_placeholder')}
                   className={inputClass}

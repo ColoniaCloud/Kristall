@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { trackLead } from '@/lib/analytics'
 
 type FormData = {
@@ -26,6 +27,7 @@ const EMPTY: FormData = {
 type Status = 'idle' | 'sending' | 'success' | 'error'
 
 export default function PuntoModal({ onClose }: { onClose: () => void }) {
+  const t = useTranslations('punto_modal')
   const [form, setForm] = useState<FormData>(EMPTY)
   const [status, setStatus] = useState<Status>('idle')
   const overlayRef = useRef<HTMLDivElement>(null)
@@ -90,16 +92,16 @@ export default function PuntoModal({ onClose }: { onClose: () => void }) {
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#E4E4E2]">
           <div>
-            <p className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800]">Programa Punto Kristall</p>
+            <p className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800]">{t('eyebrow')}</p>
             <h3 className="text-lg font-semibold text-[#0A0A0A] mt-0.5" style={{ fontFamily: 'var(--font-display)' }}>
-              Registrá tu taller
+              {t('title')}
             </h3>
           </div>
           <button
             type="button"
             onClick={onClose}
             className="w-8 h-8 flex items-center justify-center rounded-lg text-[#9A9A9A] hover:text-[#0A0A0A] hover:bg-[#F2F2F0] transition-colors"
-            aria-label="Cerrar"
+            aria-label={t('close_aria')}
           >
             <X size={18} />
           </button>
@@ -112,85 +114,85 @@ export default function PuntoModal({ onClose }: { onClose: () => void }) {
                 <path d="M4 10l5 5 7-8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-            <h4 className="text-base font-semibold text-[#0A0A0A] mb-2">¡Solicitud enviada!</h4>
-            <p className="text-sm text-[#5C5C5C]">Un asesor de Kristall te contactará a la brevedad.</p>
+            <h4 className="text-base font-semibold text-[#0A0A0A] mb-2">{t('success_title')}</h4>
+            <p className="text-sm text-[#5C5C5C]">{t('success_body')}</p>
             <button
               type="button"
               onClick={onClose}
               className="mt-6 px-6 py-2.5 bg-[#0A0A0A] text-white rounded-lg text-sm font-medium hover:opacity-85 transition-opacity"
             >
-              Cerrar
+              {t('close_button')}
             </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="px-6 py-5 flex flex-col gap-4">
             {/* Row: Nombre */}
             <div>
-              <label className={labelCls}>Nombre completo *</label>
-              <input required type="text" placeholder="Tu nombre completo" value={form.nombre} onChange={set('nombre')} className={inputCls} />
+              <label htmlFor="punto-nombre" className={labelCls}>{t('label_name')}</label>
+              <input id="punto-nombre" required type="text" placeholder={t('placeholder_name')} value={form.nombre} onChange={set('nombre')} className={inputCls} />
             </div>
 
             {/* Row: Teléfono + Email */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className={labelCls}>Teléfono *</label>
-                <input required type="tel" placeholder="+54 11 0000-0000" value={form.telefono} onChange={set('telefono')} className={inputCls} />
+                <label htmlFor="punto-telefono" className={labelCls}>{t('label_phone')}</label>
+                <input id="punto-telefono" required type="tel" placeholder={t('placeholder_phone')} value={form.telefono} onChange={set('telefono')} className={inputCls} />
               </div>
               <div>
-                <label className={labelCls}>Email *</label>
-                <input required type="email" placeholder="tu@email.com" value={form.email} onChange={set('email')} className={inputCls} />
+                <label htmlFor="punto-email" className={labelCls}>{t('label_email')}</label>
+                <input id="punto-email" required type="email" placeholder={t('placeholder_email')} value={form.email} onChange={set('email')} className={inputCls} />
               </div>
             </div>
 
             {/* Row: Provincia + Ciudad */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className={labelCls}>Provincia *</label>
-                <input required type="text" placeholder="Buenos Aires" value={form.provincia} onChange={set('provincia')} className={inputCls} />
+                <label htmlFor="punto-provincia" className={labelCls}>{t('label_provincia')}</label>
+                <input id="punto-provincia" required type="text" placeholder={t('placeholder_provincia')} value={form.provincia} onChange={set('provincia')} className={inputCls} />
               </div>
               <div>
-                <label className={labelCls}>Ciudad *</label>
-                <input required type="text" placeholder="CABA" value={form.ciudad} onChange={set('ciudad')} className={inputCls} />
+                <label htmlFor="punto-ciudad" className={labelCls}>{t('label_ciudad')}</label>
+                <input id="punto-ciudad" required type="text" placeholder={t('placeholder_ciudad')} value={form.ciudad} onChange={set('ciudad')} className={inputCls} />
               </div>
             </div>
 
             {/* Nombre del taller */}
             <div>
-              <label className={labelCls}>Nombre del taller *</label>
-              <input required type="text" placeholder="Polarizados Ejemplo" value={form.taller} onChange={set('taller')} className={inputCls} />
+              <label htmlFor="punto-taller" className={labelCls}>{t('label_taller')}</label>
+              <input id="punto-taller" required type="text" placeholder={t('placeholder_taller')} value={form.taller} onChange={set('taller')} className={inputCls} />
             </div>
 
             {/* Flujo */}
             <div>
-              <label className={labelCls}>Flujo aproximado de autos por mes *</label>
-              <input required type="text" placeholder="Ej: 20-30 autos" value={form.flujo} onChange={set('flujo')} className={inputCls} />
+              <label htmlFor="punto-flujo" className={labelCls}>{t('label_flujo')}</label>
+              <input id="punto-flujo" required type="text" placeholder={t('placeholder_flujo')} value={form.flujo} onChange={set('flujo')} className={inputCls} />
             </div>
 
             {/* Separador opcionales */}
             <div className="flex items-center gap-3 pt-1">
               <div className="flex-1 h-px bg-[#E4E4E2]" />
-              <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A]">Opcional</span>
+              <span className="text-[12px] uppercase tracking-widest text-[#9A9A9A]">{t('optional_divider')}</span>
               <div className="flex-1 h-px bg-[#E4E4E2]" />
             </div>
 
             {/* Opcionales */}
             <div className="grid grid-cols-1 gap-3">
               <div>
-                <label className={labelCls}>Instagram</label>
-                <input type="text" placeholder="@tutaller" value={form.instagram} onChange={set('instagram')} className={inputCls} />
+                <label htmlFor="punto-instagram" className={labelCls}>{t('label_instagram')}</label>
+                <input id="punto-instagram" type="text" placeholder={t('placeholder_instagram')} value={form.instagram} onChange={set('instagram')} className={inputCls} />
               </div>
               <div>
-                <label className={labelCls}>Facebook</label>
-                <input type="text" placeholder="facebook.com/tutaller" value={form.facebook} onChange={set('facebook')} className={inputCls} />
+                <label htmlFor="punto-facebook" className={labelCls}>{t('label_facebook')}</label>
+                <input id="punto-facebook" type="text" placeholder={t('placeholder_facebook')} value={form.facebook} onChange={set('facebook')} className={inputCls} />
               </div>
               <div>
-                <label className={labelCls}>Sitio web</label>
-                <input type="url" placeholder="https://tutaller.com" value={form.sitio} onChange={set('sitio')} className={inputCls} />
+                <label htmlFor="punto-sitio" className={labelCls}>{t('label_sitio')}</label>
+                <input id="punto-sitio" type="url" placeholder={t('placeholder_sitio')} value={form.sitio} onChange={set('sitio')} className={inputCls} />
               </div>
             </div>
 
             {status === 'error' && (
-              <p className="text-sm text-[#CC0000]">Hubo un error al enviar. Intentá de nuevo.</p>
+              <p className="text-sm text-[#CC0000]">{t('error')}</p>
             )}
 
             <button
@@ -198,7 +200,7 @@ export default function PuntoModal({ onClose }: { onClose: () => void }) {
               disabled={status === 'sending'}
               className="w-full bg-[#0A0A0A] text-white py-3 rounded-lg text-sm font-medium hover:opacity-85 transition-opacity disabled:opacity-50 mt-1"
             >
-              {status === 'sending' ? 'Enviando...' : 'Enviar solicitud'}
+              {status === 'sending' ? t('submitting') : t('submit')}
             </button>
           </form>
         )}
