@@ -12,6 +12,11 @@ import { ChevronDown } from 'lucide-react'
  * Selector de idioma de la barra superior: bandera + nombre del idioma + chevron,
  * sin fondo ni caja — es un item más de la barra, no un botón.
  * `es` usa la bandera de Argentina (es el mercado, no España).
+ *
+ * Pensado para vivir sobre el fondo negro de `TopBar`: el trigger usa texto
+ * blanco translúcido. El desplegable en sí es un popover claro (fondo
+ * `--surface`) para mantener legibilidad, con `z-[60]` — por encima del header
+ * sticky (`z-50`) para que no quede tapado por el logo al abrirse.
  */
 
 type FlagComponent = (props: { width?: number; height?: number }) => React.JSX.Element
@@ -62,7 +67,7 @@ export default function LanguageSelector() {
         onClick={() => setIsOpen(!isOpen)}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        className="flex items-center gap-1.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+        className="flex items-center gap-1.5 text-white/70 hover:text-white transition-colors"
       >
         <currentLanguage.flag {...FLAG_TRIGGER} />
         <span className="leading-none">{currentLanguage.name}</span>
@@ -72,7 +77,7 @@ export default function LanguageSelector() {
       {isOpen && (
         <div
           role="listbox"
-          className="absolute left-0 mt-2 w-36 rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-lg overflow-hidden z-50"
+          className="absolute left-0 mt-2 w-36 rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-lg overflow-hidden z-[60]"
         >
           {languages.map((language) => (
             <button

@@ -454,6 +454,7 @@
     "error": "There was an error. Please try again.",
     "error_name": "Name required",
     "error_email": "Invalid email",
+    "error_phone": "Phone required (minimum 5 characters)",
     "close": "Close"
   },
   "blog": {

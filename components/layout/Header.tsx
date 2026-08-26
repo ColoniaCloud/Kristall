@@ -12,10 +12,15 @@ import { useLocale } from 'next-intl'
 import { useCart } from '@/lib/cart'
 import CartDrawer from '@/components/cart/CartDrawer'
 
+/** Alto de TopBar (h-8). Cuando el scroll la supera, el header sticky ya la
+ * tapó por completo — ese es el momento exacto de encoger el header. */
+const TOPBAR_HEIGHT = 32
+
 export default function Header() {
   const t = useTranslations('nav')
   const tCart = useTranslations('cart')
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
   const locale = useLocale() as 'es' | 'en' | 'de'
   const router = useRouter()
@@ -26,6 +31,15 @@ export default function Header() {
     // El store se hidrata a mano (skipHydration) para que el primer render en
     // cliente coincida con el del servidor y no dispare un warning de hidratación.
     useCart.persist.rehydrate()
+  }, [])
+
+  useEffect(() => {
+    function handleScroll() {
+      setIsScrolled(window.scrollY > TOPBAR_HEIGHT)
+    }
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   useEffect(() => {
@@ -79,41 +93,49 @@ export default function Header() {
     <>
       <TopBar />
       <header
-        className="sticky top-0 z-50 bg-[var(--surface)] border-b border-[var(--border)]"
+        className={`sticky top-0 z-50 bg-[var(--surface)] border-b border-[var(--border)] transition-[height] duration-300 h-14 ${isScrolled ? 'md:h-14' : 'md:h-[62px]'}`}
         style={{ borderBottomWidth: '0.5px' }}
       >
-        <div className="mx-auto flex h-14 max-w-[1160px] items-center justify-between px-6">
+        <div className="mx-auto flex h-full max-w-[1160px] items-center justify-between px-6">
           <Link href="/" className="flex items-center">
-            <Image src="/LogoPlano.png" alt="Kristall" width={140} height={32} priority className="h-8 w-auto" />
+            <Image
+              src="/LogoPlano.png"
+              alt="Kristall"
+              width={140}
+              height={32}
+              priority
+              className={`w-auto transition-[height] duration-300 h-8 ${isScrolled ? 'md:h-8' : 'md:h-9'}`}
+            />
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-5">
-            {navLinks.map(link =>
-              'children' in link ? (
-                <NavDropdown key={link.label} label={link.label} items={[...link.children]} />
-              ) : (
-                <Link key={link.href} href={link.href} className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">{link.label}</Link>
-              )
-            )}
-          </nav>
-
-          {/* Desktop right */}
-          <div className="hidden md:flex items-center gap-4">
-            <button
-              type="button"
-              onClick={openCart}
-              aria-label={tCart('open_cart')}
-              className="relative w-8 h-8 flex items-center justify-center text-[var(--text-primary)] hover:text-[var(--text-secondary)] transition-colors"
-            >
-              <ShoppingCart size={18} />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#0A0A0A] text-white text-[9px] flex items-center justify-center font-medium tabular-nums">
-                  {cartCount}
-                </span>
+          {/* Desktop: nav pegado contra el carrito/CTA, todo el bloque alineado a la derecha */}
+          <div className="hidden md:flex items-center gap-8">
+            <nav className="flex items-center gap-5">
+              {navLinks.map(link =>
+                'children' in link ? (
+                  <NavDropdown key={link.label} label={link.label} items={[...link.children]} />
+                ) : (
+                  <Link key={link.href} href={link.href} className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">{link.label}</Link>
+                )
               )}
-            </button>
-            <Link href="/contacto" className="btn-primary text-white px-4 py-1.5 rounded-lg text-xs font-medium tracking-wide transition-all">{t('quote')}</Link>
+            </nav>
+
+            <div className="flex items-center gap-4">
+              <button
+                type="button"
+                onClick={openCart}
+                aria-label={tCart('open_cart')}
+                className="relative w-8 h-8 flex items-center justify-center text-[var(--text-primary)] hover:text-[var(--text-secondary)] transition-colors"
+              >
+                <ShoppingCart size={18} />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#0A0A0A] text-white text-[9px] flex items-center justify-center font-medium tabular-nums">
+                    {cartCount}
+                  </span>
+                )}
+              </button>
+              <Link href="/contacto" className="btn-primary text-white px-4 py-1.5 rounded-lg text-xs font-medium tracking-wide transition-all">{t('quote')}</Link>
+            </div>
           </div>
 
           {/* Mobile right */}

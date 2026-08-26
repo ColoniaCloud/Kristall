@@ -29,9 +29,13 @@ export default function HomePage() {
     <>
       {/* Hero + barra de logos ocupan exactamente la primera pantalla.
           100dvh menos lo que hay arriba → los logos quedan pegados al fondo del
-          viewport sin necesidad de scroll. En mobile es solo el header sticky
-          (h-14 = 3.5rem); desde md se suma la TopBar (h-8 = 2rem). */}
-      <div className="flex flex-col h-[calc(100dvh_-_3.5rem)] md:h-[calc(100dvh_-_5.5rem)]">
+          viewport sin necesidad de scroll. Se calcula para el estado inicial
+          (sin scroll, TopBar h-8 = 2rem visible): header h-14 (3.5rem) en
+          mobile, y en desktop el header arranca 10% más alto (h-[62px] ≈
+          3.875rem) hasta que el usuario scrollea y encoge a 3.5rem — pero para
+          entonces el hero ya quedó atrás, así que el cálculo usa el tamaño
+          "en reposo" (sin scroll) de cada breakpoint. */}
+      <div className="flex flex-col h-[calc(100dvh_-_5.5rem)] md:h-[calc(100dvh_-_5.875rem)]">
         <Hero />
         <StatsRow />
       </div>

@@ -6,16 +6,18 @@ import LanguageSelector from '@/components/common/LanguageSelector'
 import SocialIcons from '@/components/common/SocialIcons'
 
 /**
- * Barra fina de una línea por encima del header. No es sticky: scrollea con la
- * página y deja al header pegado arriba.
+ * Barra fina de una línea por encima del header, fondo negro (`--de-black`).
+ * No es sticky: scrollea con la página y deja al header pegado arriba — al
+ * pasar el scroll de su propia altura queda tapada por el header, momento que
+ * usa `Header` para "encoger" a su tamaño de reposo (ver `Header.tsx`).
  *
- * Izquierda: selector de idioma + casilla de contacto según idioma
- * (`topbar.email` en los messages: es → hola@…, en/de → hi@…).
- * Derecha: ubicación + iconos de redes. La dirección solo linkea a Maps en
- * español — en/de no tienen oficina y muestran el texto de `topbar.address`.
+ * Desktop — izquierda: selector de idioma + casilla de contacto según idioma
+ * (`topbar.email` en los messages: es → hola@…, en/de → hi@…). Derecha:
+ * ubicación + iconos de redes. La dirección solo linkea a Maps en español —
+ * en/de no tienen oficina y muestran el texto de `topbar.address`.
  *
- * Se oculta debajo de `md`: en mobile no entra en una línea y el idioma ya está
- * dentro del menú del header.
+ * Mobile — misma barra pero solo con idioma (izquierda) y ubicación
+ * (derecha): mail y redes se ocultan para que entre en una línea de 375px.
  */
 
 /** Dirección de la oficina para el link a Google Maps (solo se usa en `es`). */
@@ -29,42 +31,41 @@ export default function TopBar() {
   const hasOffice = locale === 'es'
 
   return (
-    <div
-      className="hidden md:block bg-[var(--surface)] border-b border-[var(--border)]"
-      style={{ borderBottomWidth: '0.5px' }}
-    >
-      <div className="mx-auto flex h-8 max-w-[1160px] items-center justify-between px-6 text-[11px] text-[var(--text-secondary)]">
-        {/* Izquierda: idioma + mail */}
-        <div className="flex items-center gap-5">
+    <div className="bg-[var(--de-black)] border-b border-white/10">
+      <div className="mx-auto flex h-8 max-w-[1160px] items-center justify-between px-4 md:px-6 text-[11px] text-white/70">
+        {/* Izquierda: idioma (+ mail desde md) */}
+        <div className="flex items-center gap-5 min-w-0">
           <LanguageSelector />
           <a
             href={`mailto:${email}`}
-            className="flex items-center gap-1.5 hover:text-[var(--text-primary)] transition-colors"
+            className="hidden md:flex items-center gap-1.5 hover:text-white transition-colors"
           >
             <Mail className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
             <span className="leading-none">{email}</span>
           </a>
         </div>
 
-        {/* Derecha: ubicación + redes */}
-        <div className="flex items-center gap-5">
+        {/* Derecha: ubicación (+ redes desde md) */}
+        <div className="flex items-center gap-5 min-w-0">
           {hasOffice ? (
             <a
               href={OFFICE_MAPS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 hover:text-[var(--text-primary)] transition-colors"
+              className="flex items-center gap-1.5 min-w-0 hover:text-white transition-colors"
             >
               <MapPin className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-              <span className="leading-none">{t('address')}</span>
+              <span className="leading-none truncate">{t('address')}</span>
             </a>
           ) : (
-            <span className="flex items-center gap-1.5">
+            <span className="flex items-center gap-1.5 min-w-0">
               <MapPin className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-              <span className="leading-none">{t('address')}</span>
+              <span className="leading-none truncate">{t('address')}</span>
             </span>
           )}
-          <SocialIcons size={15} gap={10} href={{ email: `mailto:${email}` }} />
+          <div className="hidden md:block">
+            <SocialIcons size={15} gap={10} href={{ email: `mailto:${email}` }} className="text-white/50" />
+          </div>
         </div>
       </div>
     </div>

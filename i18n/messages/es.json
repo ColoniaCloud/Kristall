@@ -454,6 +454,7 @@
     "error": "Hubo un error al enviar. Intentá de nuevo.",
     "error_name": "Nombre requerido",
     "error_email": "Email inválido",
+    "error_phone": "Teléfono requerido (mínimo 5 caracteres)",
     "close": "Cerrar"
   },
   "blog": {

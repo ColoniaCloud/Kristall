@@ -1,8 +1,39 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+
 const WHATSAPP_NUMBER = '5491160484312'
 const WHATSAPP_MESSAGE = 'Hola! Quiero más información sobre Kristall Film.'
 
+/** Recién se muestra una vez que el usuario empezó a scrollear la página. */
+const SHOW_AFTER_SCROLL = 120
+
 export default function WhatsAppFloatingButton() {
+  const [visible, setVisible] = useState(false)
   const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`
+
+  useEffect(() => {
+    function handleScroll() {
+      const scrollY = window.scrollY
+      const pastThreshold = scrollY > SHOW_AFTER_SCROLL
+      // El footer es `sticky bottom-0` (efecto cortina: `main` se desliza por
+      // encima). Eso lo mantiene "intersecando" el viewport casi todo el
+      // scroll, así que un IntersectionObserver sobre él lo marcaría como
+      // visible de entrada. En su lugar medimos la distancia real al final
+      // del documento contra el alto del propio footer.
+      const footerHeight = document.querySelector('footer')?.getBoundingClientRect().height ?? 0
+      const distanceToBottom = document.documentElement.scrollHeight - scrollY - window.innerHeight
+      const nearFooter = distanceToBottom < footerHeight
+      setVisible(pastThreshold && !nearFooter)
+    }
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
+  }, [])
 
   return (
     <a
@@ -10,9 +41,12 @@ export default function WhatsAppFloatingButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Escribinos por WhatsApp"
-      className="group fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-lg shadow-black/20 transition-transform hover:scale-105 active:scale-95 md:bottom-8 md:right-8"
+      aria-hidden={!visible}
+      tabIndex={visible ? 0 : -1}
+      className={`fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-lg shadow-black/20 transition-[opacity,transform] duration-300 ease-out hover:scale-105 active:scale-95 md:bottom-8 md:right-8 ${
+        visible ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 translate-y-3'
+      }`}
     >
-      <span className="absolute inset-0 -z-10 animate-ping rounded-full bg-[#25D366]/60" />
       <svg
         viewBox="0 0 32 32"
         aria-hidden="true"
