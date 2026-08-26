@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Loader2, CheckCircle, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { getLinea, productoNombre, lineaDestacadaSrc, lineaLogoSrc, type Producto } from '@/lib/catalogo'
+import { getLinea, productoNombre, productoDestacadaSrc, lineaDestacadaSrc, lineaLogoSrc, type Producto } from '@/lib/catalogo'
 import { trackLead } from '@/lib/analytics'
 import AddToCartControl from '@/components/cart/AddToCartControl'
 
@@ -27,6 +27,9 @@ type FormData = z.infer<typeof schema>
 export default function ProductDetailModal({ producto, onClose }: ProductDetailModalProps) {
   const t = useTranslations('product_modal')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  // Todavía no todos los productos tienen su propia foto; si la del
+  // producto da 404, cae a la de línea (ver productoDestacadaSrc).
+  const [imgSrc, setImgSrc] = useState(() => productoDestacadaSrc(producto))
 
   const linea = getLinea(producto.lineaSlug)
   const nombre = productoNombre(producto)
@@ -94,7 +97,14 @@ export default function ProductDetailModal({ producto, onClose }: ProductDetailM
       <div className="relative z-10 w-full sm:max-w-md bg-white rounded-t-2xl sm:rounded-2xl overflow-hidden shadow-2xl max-h-[92vh] overflow-y-auto">
         {/* Banner con foto + logo + categoría */}
         <div className="relative h-40">
-          <Image src={lineaDestacadaSrc(producto.lineaSlug)} alt={nombre} fill className="object-cover object-center" sizes="(max-width: 640px) 100vw, 448px" />
+          <Image
+            src={imgSrc}
+            alt={nombre}
+            fill
+            className="object-cover object-center"
+            sizes="(max-width: 640px) 100vw, 448px"
+            onError={() => setImgSrc(lineaDestacadaSrc(producto.lineaSlug))}
+          />
           {linea && (
             <span className="absolute top-3 right-12 text-[10px] uppercase tracking-wider bg-white/90 text-[#0A0A0A] rounded-full px-2.5 py-0.5 font-medium">
               {t(`categoria_${linea.categoria}`)}

@@ -185,3 +185,12 @@ const assetSlug = (slug: string): string => ASSET_SLUG_OVERRIDES[slug] ?? slug
 export const lineaLogoSrc = (slug: string): string => `/Productos/logo-linea/${assetSlug(slug)}.svg`
 export const lineaDestacadaSrc = (slug: string): string => `/Productos/destacadas/${assetSlug(slug)}.png`
 
+/**
+ * Foto destacada de un producto puntual (una lámina específica, no la línea
+ * entera) — archivo nombrado con su código Kristall en minúsculas, ej.
+ * KLS05 → kls05.png. Todavía no todos los productos tienen la suya (hoy
+ * cubre autos salvo PPF; arquitectura ninguno) — quien la usa debe caer a
+ * lineaDestacadaSrc si esta pega un 404.
+ */
+export const productoDestacadaSrc = (p: Producto): string => `/Productos/destacadas/${p.codigo.toLowerCase()}.png`
+

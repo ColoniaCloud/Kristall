@@ -6,7 +6,7 @@ import { Link } from '@/i18n/routing'
 import { useTranslations } from 'next-intl'
 import AnimatedBorderCard from '@/components/common/AnimatedBorderCard'
 import ProductDetailModal from '@/components/product/ProductDetailModal'
-import { getLinea, productoNombre, lineaDestacadaSrc, lineaLogoSrc, type Producto } from '@/lib/catalogo'
+import { getLinea, productoNombre, productoDestacadaSrc, lineaDestacadaSrc, lineaLogoSrc, type Producto } from '@/lib/catalogo'
 
 export interface ProductCardProps {
   producto: Producto
@@ -17,6 +17,9 @@ export interface ProductCardProps {
 export default function ProductCard({ producto, href }: ProductCardProps) {
   const t = useTranslations('product_modal')
   const [open, setOpen] = useState(false)
+  // Todavía no todos los productos tienen su propia foto (ver
+  // productoDestacadaSrc); si la del producto da 404, cae a la de línea.
+  const [imgSrc, setImgSrc] = useState(() => productoDestacadaSrc(producto))
 
   const linea = getLinea(producto.lineaSlug)
   const nombre = productoNombre(producto)
@@ -33,11 +36,12 @@ export default function ProductCard({ producto, href }: ProductCardProps) {
       {/* Banner: foto + logo + categoría */}
       <div className="relative h-44 flex-shrink-0">
         <Image
-          src={lineaDestacadaSrc(producto.lineaSlug)}
+          src={imgSrc}
           alt={nombre}
           fill
           className="object-cover object-center"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          onError={() => setImgSrc(lineaDestacadaSrc(producto.lineaSlug))}
         />
         {linea && (
           <span className="absolute top-3 right-3 text-[10px] uppercase tracking-wider bg-white/90 text-[#0A0A0A] rounded-full px-2.5 py-0.5 font-medium">
