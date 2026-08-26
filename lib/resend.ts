@@ -1,5 +1,14 @@
 import { Resend } from 'resend'
 
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 let resendClient: Resend | null = null
 
 function getResendClient() {
@@ -30,7 +39,7 @@ export async function sendLeadNotification(lead: {
   const resend = getResendClient()
   const itemsHtml = lead.cartItems?.length
     ? `<h3>Productos solicitados:</h3><ul>${lead.cartItems
-        .map((i) => `<li>${i.productName}${i.codigo ? ` (${i.codigo})` : ''} × ${i.quantity ?? 1}</li>`)
+        .map((i) => `<li>${escapeHtml(i.productName)}${i.codigo ? ` (${escapeHtml(i.codigo)})` : ''} × ${i.quantity ?? 1}</li>`)
         .join('')}</ul>`
     : ''
 
@@ -40,12 +49,12 @@ export async function sendLeadNotification(lead: {
     subject: `Nuevo lead: ${lead.name}${lead.company ? ` — ${lead.company}` : ''}`,
     html: `
       <h2>Nuevo lead recibido — Kristall Film</h2>
-      <p><strong>Nombre:</strong> ${lead.name}</p>
-      <p><strong>Empresa:</strong> ${lead.company || '—'}</p>
-      <p><strong>Email:</strong> ${lead.email}</p>
-      <p><strong>Teléfono:</strong> ${lead.phone || '—'}</p>
-      <p><strong>Fuente:</strong> ${lead.source}</p>
-      <p><strong>Mensaje:</strong> ${lead.message || '—'}</p>
+      <p><strong>Nombre:</strong> ${escapeHtml(lead.name)}</p>
+      <p><strong>Empresa:</strong> ${lead.company ? escapeHtml(lead.company) : '—'}</p>
+      <p><strong>Email:</strong> ${escapeHtml(lead.email)}</p>
+      <p><strong>Teléfono:</strong> ${lead.phone ? escapeHtml(lead.phone) : '—'}</p>
+      <p><strong>Fuente:</strong> ${escapeHtml(lead.source)}</p>
+      <p><strong>Mensaje:</strong> ${lead.message ? escapeHtml(lead.message) : '—'}</p>
       ${itemsHtml}
     `,
   })
@@ -61,7 +70,7 @@ export async function sendLeadConfirmation(lead: {
     to: lead.email,
     subject: 'Recibimos tu consulta — Kristall Film',
     html: `
-      <h2>Hola ${lead.name},</h2>
+      <h2>Hola ${escapeHtml(lead.name)},</h2>
       <p>Recibimos tu consulta y te contactaremos a la brevedad.</p>
       <p>Gracias por tu interés en Kristall Film.</p>
       <br/>

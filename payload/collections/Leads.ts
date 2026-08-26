@@ -47,6 +47,9 @@ export const Leads: CollectionConfig = {
         { label: 'Página de software', value: 'software' },
         { label: 'Software', value: 'software-demo' },
         { label: 'Reclamo de garantía (asistido)', value: 'garantia-asistido' },
+        { label: 'Programa Concesionarias', value: 'concesionarias' },
+        { label: 'Propuesta Aberturas/Vidrierías', value: 'propuesta-vidrierias' },
+        { label: 'Punto Kristall', value: 'punto-kristall' },
       ],
       admin: {
         position: 'sidebar',

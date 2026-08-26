@@ -169,6 +169,7 @@ export default function ProductDetailModal({ producto, onClose }: ProductDetailM
                 </div>
                 <div>
                   <input {...register('phone')} type="tel" placeholder={t('field_phone')} className={inputClass} />
+                  {errors.phone && <span className="text-xs text-red-500 mt-1 block">{t('error_phone')}</span>}
                 </div>
                 <div>
                   <input {...register('email')} type="email" placeholder={t('field_email')} className={inputClass} />

@@ -47,7 +47,13 @@ function ContactForm() {
       const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, canal: 'concesionarias-reunion', type: 'reunion' }),
+        body: JSON.stringify({
+          name: form.nombre,
+          email: form.email,
+          phone: form.telefono,
+          source: 'concesionarias',
+          message: 'Solicitud de reunión desde el programa de concesionarias.',
+        }),
       })
       if (!res.ok) throw new Error()
       setSent(true)

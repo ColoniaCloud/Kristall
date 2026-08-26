@@ -46,8 +46,15 @@ export async function POST(req: NextRequest) {
       },
     })
 
-    await sendLeadNotification({ name, company, email, phone, message, source, cartItems: validCartItems })
-    await sendLeadConfirmation({ name, email })
+    // El lead ya quedó guardado en este punto. Si el envío de los mails
+    // falla (Resend caído, dominio del lead inválido, etc.), no queremos
+    // que el visitante vea un error y reintente generando un lead duplicado.
+    try {
+      await sendLeadNotification({ name, company, email, phone, message, source, cartItems: validCartItems })
+      await sendLeadConfirmation({ name, email })
+    } catch (emailError) {
+      console.error('[API/leads] lead guardado pero falló el envío de email', lead.id, emailError)
+    }
 
     return NextResponse.json({ success: true, id: lead.id })
   } catch (error) {
