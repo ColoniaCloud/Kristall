@@ -34,6 +34,11 @@
     "card3_sku": "PPF",
     "card3_label": "Transparenter Lackschutz"
   },
+  "home_categories": {
+    "automotive_desc": "Sonnenschutz-, Sicht-, Sicherheits- und Infrarot-Folien für mehr Komfort im Fahrzeuginnenraum.",
+    "architectural_desc": "Innenraumfolien für Fenster, Mauerwerk und Strukturen im Allgemeinen. Sonnenschutz, Sicherheit und Dekoration.",
+    "cta_label": "Mehr erfahren"
+  },
   "stats": {
     "years_value": "+15",
     "years_label": "Jahre Technologie",

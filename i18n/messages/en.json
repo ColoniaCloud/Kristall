@@ -34,6 +34,11 @@
     "card3_sku": "PPF",
     "card3_label": "Transparent paint protection"
   },
+  "home_categories": {
+    "automotive_desc": "Sun protection, privacy, security and infrared-rejection films to improve your vehicle's interior comfort.",
+    "architectural_desc": "Interior films for windows, masonry and structures in general. Solar protection, security and decorative options.",
+    "cta_label": "Learn more"
+  },
   "stats": {
     "years_value": "+15",
     "years_label": "Years of technology",

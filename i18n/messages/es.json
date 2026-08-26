@@ -34,6 +34,11 @@
     "card3_sku": "PPF",
     "card3_label": "Protección transparente de pintura"
   },
+  "home_categories": {
+    "automotive_desc": "Láminas de protección solar, privacidad, seguridad y rechazo de infrarrojos para mejorar la calidad del interior de tu vehículo.",
+    "architectural_desc": "Láminas de interior para ventanas, mampostería y estructuras en general. De protección solar, seguridad y decorativas.",
+    "cta_label": "Ver más"
+  },
   "stats": {
     "years_value": "+15",
     "years_label": "Años de tecnología",

@@ -61,7 +61,7 @@ export default function StatsRow() {
   }, [])
 
   return (
-    <div className="bg-white border-b border-[0.5px] border-[#E4E4E2] shrink-0">
+    <div className="bg-[#0A0A0A] border-b border-[0.5px] border-white/10 shrink-0">
       {/* max-w-[1160px]: mismo ancho de contenido que el resto del sitio. El
           overflow-hidden + degradé en los bordes contiene el carrusel dentro
           de ese ancho aunque la tira de logos, duplicada, sea más ancha. */}
@@ -78,7 +78,7 @@ export default function StatsRow() {
             <Link
               key={`${linea.slug}-${i}`}
               href={`/productos/lineas/${linea.slug}`}
-              className="group flex-shrink-0 w-28 sm:w-32 h-16 flex items-center justify-center px-3 transition-all duration-200 hover:bg-[#F2F2F0]"
+              className="group flex-shrink-0 w-28 sm:w-32 h-16 flex items-center justify-center px-3 transition-all duration-200 hover:bg-white/10"
               draggable={false}
               tabIndex={i < LINEAS.length ? 0 : -1}
               aria-hidden={i >= LINEAS.length}
@@ -89,7 +89,7 @@ export default function StatsRow() {
                   alt={linea.nombre}
                   fill
                   sizes="128px"
-                  className="object-contain grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-300 pointer-events-none"
+                  className="object-contain brightness-0 invert opacity-70 group-hover:invert-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none"
                 />
               </div>
             </Link>
