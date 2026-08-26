@@ -344,6 +344,45 @@ className="text-sm font-medium text-[--text-secondary]
 
 ---
 
+### Iconos sociales (`SocialIcons`)
+
+`components/common/SocialIcons.tsx` — fila de iconos de redes que se **rellenan
+deslizándose** con el color institucional de cada marca al hacer hover.
+
+Cada icono son dos capas del mismo glifo sólido: la base en `currentColor` (gris) y,
+encima, la de marca dentro de un contenedor con `overflow-hidden` que pasa de 0 a
+100% de alto en hover. El SVG interno queda anclado al borde opuesto, así que no se
+deforma — el color entra y rellena el vector. Todo es CSS: sin estado, sin efectos,
+usable en Server y Client Components, y respeta `prefers-reduced-motion`.
+
+```tsx
+// Default: LinkedIn · Email · Facebook · Instagram · WhatsApp, 18px, entra desde abajo
+<SocialIcons />
+
+// Barra superior: chico y con el mail según idioma
+<SocialIcons size={15} gap={10} href={{ email: 'mailto:hi@kristallfilms.com' }} />
+
+// Sobre fondo oscuro, solo dos redes, entrando desde la izquierda
+<SocialIcons networks={['instagram', 'whatsapp']} size={20} direction="right" className="text-white/40" />
+```
+
+| Prop | Default | Para qué |
+|---|---|---|
+| `networks` | las 5 | Qué redes y en qué orden |
+| `size` / `gap` | `18` / `12` | Lado del icono y separación, en px |
+| `direction` | `'up'` | Borde por el que entra el color: `up` · `down` · `left` · `right` |
+| `href` | `SOCIAL_LINKS` | Pisa el destino de una o más redes |
+| `label` | nombre de la red | Pisa el `aria-label` |
+| `color` | `SOCIAL_BRAND_COLOR` | Pisa el color institucional |
+| `className` | `text-[var(--text-muted)]` | Color base (se hereda por `currentColor`) |
+
+Colores institucionales: LinkedIn `#0A66C2`, Facebook `#1877F2`, WhatsApp `#25D366`,
+Instagram con su degradé oficial, y Email con el acento de Kristall (`--accent`)
+porque no es una marca de terceros. Los links por defecto viven en `SOCIAL_LINKS`
+dentro del mismo archivo: es el único lugar a tocar para cambiarlos en todo el sitio.
+
+---
+
 ## Colores alemanes — Reglas de uso
 
 Los tres colores de la bandera alemana son **exclusivamente decorativos**:
@@ -447,6 +486,18 @@ Los tres colores de la bandera alemana son **exclusivamente decorativos**:
 ---
 
 ## Componentes de Layout
+
+### Barra superior (`TopBar`)
+
+`components/layout/TopBar.tsx` — franja de una línea (`h-8`) por encima del header,
+oculta debajo de `md`. No es sticky: scrollea con la página y deja el header pegado arriba.
+
+- Izquierda: `LanguageSelector` (bandera 10x7 + idioma + chevron, sin caja ni fondo) y
+  la casilla de contacto según idioma.
+- Derecha: ubicación con icono de Maps y `SocialIcons` a 15px.
+- Los textos salen del namespace `topbar` de los messages: `es` → mail local y dirección
+  con link a Google Maps; `en`/`de` → mail internacional y la leyenda de que no hay
+  oficina (el icono se muestra igual, pero sin link).
 
 ### Header
 

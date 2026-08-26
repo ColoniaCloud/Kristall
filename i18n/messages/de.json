@@ -17,6 +17,10 @@
     "services_info": "Informationen",
     "services_access": "Anmelden"
   },
+  "topbar": {
+    "email": "hi@kristallfilm.com",
+    "address": "No local office — we are one message away"
+  },
   "hero": {
     "eyebrow": "Fortschrittliche Lösungen für Sonnenschutz, Sicherheit und Oberflächenschutz",
     "headline": "Performance für maximalen Komfort",

@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Link, useRouter, usePathname } from '@/i18n/routing'
 import NextLink from 'next/link'
 import Image from 'next/image'
-import LanguageSelector from '@/components/common/LanguageSelector'
+import TopBar from '@/components/layout/TopBar'
 import NavDropdown from '@/components/layout/NavDropdown'
 import { Menu, X, ShoppingCart } from 'lucide-react'
 import { useLocale } from 'next-intl'
@@ -77,6 +77,7 @@ export default function Header() {
 
   return (
     <>
+      <TopBar />
       <header
         className="sticky top-0 z-50 bg-[var(--surface)] border-b border-[var(--border)]"
         style={{ borderBottomWidth: '0.5px' }}
@@ -99,7 +100,6 @@ export default function Header() {
 
           {/* Desktop right */}
           <div className="hidden md:flex items-center gap-4">
-            <LanguageSelector />
             <button
               type="button"
               onClick={openCart}

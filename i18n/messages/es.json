@@ -17,6 +17,10 @@
     "services_info": "Información",
     "services_access": "Acceder"
   },
+  "topbar": {
+    "email": "hola@kristallfilm.com",
+    "address": "Av. Juan B Justo 2918, CABA"
+  },
   "hero": {
     "eyebrow": "Soluciones avanzadas para control solar, seguridad y protección de superficies",
     "headline": "Performance aplicada al confort",

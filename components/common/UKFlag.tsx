@@ -1,6 +1,6 @@
-export default function UKFlag() {
+export default function UKFlag({ width = 20, height = 14 }: { width?: number; height?: number }) {
   return (
-    <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width={width} height={height} viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="20" height="14" fill="#012169" />
       <path d="M0 0L20 14M20 0L0 14" stroke="white" strokeWidth="2.8" />
       <path d="M0 0L20 14M20 0L0 14" stroke="#C8102E" strokeWidth="1.8" />

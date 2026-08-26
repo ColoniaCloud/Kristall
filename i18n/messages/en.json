@@ -17,6 +17,10 @@
     "services_info": "Information",
     "services_access": "Sign in"
   },
+  "topbar": {
+    "email": "hi@kristallfilm.com",
+    "address": "No local office — we are one message away"
+  },
   "hero": {
     "eyebrow": "Advanced solutions for solar control, security and surface protection",
     "headline": "Performance applied to comfort",

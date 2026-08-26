@@ -3,16 +3,28 @@
 import { useState, useRef, useEffect } from 'react'
 import { useRouter, usePathname } from '@/i18n/routing'
 import { useLocale } from 'next-intl'
-import SpainFlag from './SpainFlag'
+import ArgentinaFlag from './ArgentinaFlag'
 import UKFlag from './UKFlag'
 import GermanyFlag from './GermanyFlag'
 import { ChevronDown } from 'lucide-react'
 
-const languages = [
-  { code: 'es' as const, name: 'Español', flag: SpainFlag },
-  { code: 'en' as const, name: 'English', flag: UKFlag },
-  { code: 'de' as const, name: 'Deutsch', flag: GermanyFlag },
+/**
+ * Selector de idioma de la barra superior: bandera + nombre del idioma + chevron,
+ * sin fondo ni caja — es un item más de la barra, no un botón.
+ * `es` usa la bandera de Argentina (es el mercado, no España).
+ */
+
+type FlagComponent = (props: { width?: number; height?: number }) => React.JSX.Element
+
+const languages: { code: 'es' | 'en' | 'de'; name: string; flag: FlagComponent }[] = [
+  { code: 'es', name: 'Español', flag: ArgentinaFlag },
+  { code: 'en', name: 'English', flag: UKFlag },
+  { code: 'de', name: 'Deutsch', flag: GermanyFlag },
 ]
+
+/** Mitad del tamaño histórico (20x14) en el trigger; el desplegable va un punto más grande. */
+const FLAG_TRIGGER = { width: 10, height: 7 }
+const FLAG_MENU = { width: 14, height: 10 }
 
 export default function LanguageSelector() {
   const [isOpen, setIsOpen] = useState(false)
@@ -48,25 +60,33 @@ export default function LanguageSelector() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--border)] transition-colors"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        className="flex items-center gap-1.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
       >
-        <currentLanguage.flag />
-        <ChevronDown className="w-3 h-3 text-[var(--text-secondary)]" />
+        <currentLanguage.flag {...FLAG_TRIGGER} />
+        <span className="leading-none">{currentLanguage.name}</span>
+        <ChevronDown className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-40 rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-lg overflow-hidden z-50">
+        <div
+          role="listbox"
+          className="absolute left-0 mt-2 w-36 rounded-lg border border-[var(--border)] bg-[var(--surface)] shadow-lg overflow-hidden z-50"
+        >
           {languages.map((language) => (
             <button
               key={language.code}
+              role="option"
+              aria-selected={locale === language.code}
               onClick={() => switchLocale(language.code)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm transition-colors ${
+              className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs transition-colors ${
                 locale === language.code
                   ? 'bg-[var(--border)] text-[var(--text-primary)]'
                   : 'text-[var(--text-secondary)] hover:bg-[var(--border)] hover:text-[var(--text-primary)]'
               }`}
             >
-              <language.flag />
+              <language.flag {...FLAG_MENU} />
               <span>{language.name}</span>
             </button>
           ))}
