@@ -1,10 +1,10 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
-import { Link } from '@/i18n/routing'
 import { motion, type Variants } from 'framer-motion'
 import CategoryCard from '@/components/product/CategoryCard'
-import { getLinea, type Linea } from '@/lib/catalogo'
+import CategoryLineMarquee from '@/components/sections/CategoryLineMarquee'
+import TwoLineKicker from '@/components/sections/TwoLineKicker'
+import { lineasPorNicho } from '@/lib/catalogo'
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -29,28 +29,23 @@ const cardVariants: Variants = {
   },
 }
 
-// Orden de exhibición de las líneas en el home.
-const HOME_LINES = ['klass', 'klar', 'karbon', 'keram-x', 'krypton', 'ppf', 'kaiser', 'kreflect-silver']
-
 export default function ProductsGrid() {
-  const t = useTranslations('products')
-
-  const items = HOME_LINES
-    .map((slug) => getLinea(slug))
-    .filter((l): l is Linea => l != null)
+  const autos = lineasPorNicho('autos')
+  const arquitectura = lineasPorNicho('arquitectura')
 
   return (
     <section className="px-6 pb-8 bg-[#F2F2F0]">
       <div className="max-w-[1160px] mx-auto">
-        {/* Header */}
-        <div className="flex justify-between items-baseline mb-6">
-          <div className="section-label">{t('label')}</div>
-          <Link href="/productos" className="text-xs text-[#5C5C5C] hover:text-[#0A0A0A] transition-colors">
-            {t('see_all')} →
-          </Link>
-        </div>
+        <TwoLineKicker
+          className="mb-8"
+          lines={[
+            { text: 'Línea de productos' },
+            { text: 'KRISTALL', bold: true },
+          ]}
+        />
 
-        {/* Grid de líneas */}
+        {/* Automotive */}
+        <CategoryLineMarquee label="Automotive" lineas={autos} />
         <motion.div
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2"
           variants={containerVariants}
@@ -58,12 +53,30 @@ export default function ProductsGrid() {
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
         >
-          {items.map((linea) => (
+          {autos.map((linea) => (
             <motion.div key={linea.slug} variants={cardVariants} className="h-full">
               <CategoryCard linea={linea} />
             </motion.div>
           ))}
         </motion.div>
+
+        {/* Architectural */}
+        <div className="mt-14">
+          <CategoryLineMarquee label="Architectural" lineas={arquitectura} />
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+          >
+            {arquitectura.map((linea) => (
+              <motion.div key={linea.slug} variants={cardVariants} className="h-full">
+                <CategoryCard linea={linea} />
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </div>
     </section>
   )

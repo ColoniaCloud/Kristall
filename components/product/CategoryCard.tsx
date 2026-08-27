@@ -21,15 +21,15 @@ export default function CategoryCard({ linea }: CategoryCardProps) {
 
   return (
     <AnimatedBorderCard borderRadius={12} className="h-full">
-      <Link href={`/productos/lineas/${linea.slug}`} className="block h-full">
+      <Link href={`/productos/lineas/${linea.slug}`} className="block h-full group">
         <div className="flex flex-col h-full bg-white rounded-xl overflow-hidden border-[0.5px] border-[#E4E4E2] shadow-[0_1px_3px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.04)]">
           {/* Banner: foto destacada sin overlay; solo un degradé tenue en la base para el logo */}
-          <div className="relative h-44 flex-shrink-0">
+          <div className="relative h-44 flex-shrink-0 overflow-hidden">
             <Image
               src={lineaDestacadaSrc(linea.slug)}
               alt={linea.nombre}
               fill
-              className="object-cover object-center"
+              className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-110"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
             <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/45 to-transparent" />

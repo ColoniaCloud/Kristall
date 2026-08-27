@@ -5,15 +5,25 @@ import { Shield, Sun, Layers } from 'lucide-react'
 import { motion, type Variants } from 'framer-motion'
 import GermanyFlag from '@/components/common/GermanyFlag'
 import { Link } from '@/i18n/routing'
+import TwoLineKicker from '@/components/sections/TwoLineKicker'
 
 
 const fadeInUpVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
     transition: { duration: 0.5, ease: 'easeOut' }
   }
+}
+
+const fadeInRightVariants: Variants = {
+  hidden: { opacity: 0, x: 40 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.5, ease: 'easeOut' },
+  },
 }
 
 export default function BrandStory() {
@@ -35,7 +45,7 @@ export default function BrandStory() {
           >
             {t('title')}
           </h3>
-          <p className="text-[16px] text-[#5C5C5C] leading-relaxed">
+          <p className="text-[16px] text-[#0A0A0A] leading-relaxed">
             {t('body')}
           </p>
         </>
@@ -70,10 +80,14 @@ export default function BrandStory() {
   return (
     <section className="px-6 py-10 bg-[#F2F2F0]">
       <div className="max-w-[1160px] mx-auto">
-      {/* Label */}
-      <div className="section-label mb-6">
-        {t('label')}
-      </div>
+      {/* Kicker */}
+      <TwoLineKicker
+        className="mb-8"
+        lines={[
+          { text: 'KRISTALL', bold: true },
+          { text: 'WINDOW FILMS' },
+        ]}
+      />
 
       {/* Bento grid 2 columns */}
       <motion.div 
@@ -83,8 +97,8 @@ export default function BrandStory() {
         viewport={{ once: true, margin: "-100px" }}
       >
         {/* Card izquierda */}
-        <motion.div 
-          className="bg-white border border-[0.5px] border-[#E4E4E2] rounded-xl p-6 shadow-[var(--shadow-card)] h-full"
+        <motion.div
+          className="p-6 h-full"
           variants={fadeInUpVariants}
         >
           {mainCards[0].content}
@@ -124,10 +138,10 @@ export default function BrandStory() {
         transition={{ staggerChildren: 0.1, delayChildren: 0.3 }}
       >
         {certCards.map((cert, index) => (
-          <motion.div 
+          <motion.div
             key={index}
-            className="bg-white border border-[0.5px] border-[#E4E4E2] rounded-xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.06)]"
-            variants={fadeInUpVariants}
+            className="rounded-xl p-4 transition-colors duration-300 hover:bg-[#E8E8E5]"
+            variants={fadeInRightVariants}
             whileHover="iconAnim"
           >
             <motion.div
@@ -141,8 +155,8 @@ export default function BrandStory() {
             >
               <cert.icon size={22} className="text-[#9A9A9A]" />
             </motion.div>
-            <h4 className="text-base font-medium mb-1" style={{ fontFamily: 'var(--font-display)' }}>{t(cert.title)}</h4>
-            <p className="text-xs md:text-sm text-[#9A9A9A] leading-relaxed">
+            <h4 className="text-base font-bold mb-1" style={{ fontFamily: 'var(--font-display)' }}>{t(cert.title)}</h4>
+            <p className="text-xs md:text-sm text-[#0A0A0A] leading-relaxed">
               {t(cert.body)}
             </p>
           </motion.div>

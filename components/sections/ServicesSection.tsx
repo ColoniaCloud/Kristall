@@ -15,16 +15,46 @@ const KAISER_IN = 1.5
 const KAISER_OUT = 4.0
 const PPF_IN = 4.0
 
-// Fondo de la columna de software: negro, con grid de líneas finas y un radial
-// negro en el centro (oscurece el centro para que el texto se lea limpio y el
-// grid quede más visible hacia los bordes).
-const promoBg: React.CSSProperties = {
-  backgroundColor: '#0A0A0A',
-  backgroundImage:
-    'radial-gradient(circle at 50% 45%, rgba(0,0,0,0.85) 0%, rgba(10,10,10,0) 55%), ' +
-    'linear-gradient(to right, rgba(255,255,255,0.07) 1px, transparent 1px), ' +
-    'linear-gradient(to bottom, rgba(255,255,255,0.07) 1px, transparent 1px)',
-  backgroundSize: '100% 100%, 26px 26px, 26px 26px',
+const GESTIONA_TEXT =
+  'tus compras, tu stock, tus instalaciones, tus clientes, tu garantía y la garantía de tus clientes, tus ingresos, tu agenda, '
+
+/**
+ * Ticker autoplay (no atado al scroll, a diferencia de CategoryLineMarquee):
+ * misma técnica de scrollLeft + rAF que StatsRow, en bucle constante.
+ */
+function InfiniteTicker({ text }: { text: string }) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const animRef = useRef(0)
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    let pos = 0
+    const speed = 0.5
+    const step = () => {
+      pos += speed
+      const half = el.scrollWidth / 2
+      if (pos >= half) pos = 0
+      el.scrollLeft = pos
+      animRef.current = requestAnimationFrame(step)
+    }
+    animRef.current = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(animRef.current)
+  }, [])
+
+  return (
+    <div
+      ref={scrollRef}
+      className="flex overflow-x-hidden whitespace-nowrap"
+      style={{ scrollbarWidth: 'none' }}
+    >
+      {[0, 1, 2, 3].map((i) => (
+        <span key={i} className="shrink-0 text-xs text-white/80">
+          {text}
+        </span>
+      ))}
+    </div>
+  )
 }
 
 export default function ServicesSection() {
@@ -88,26 +118,23 @@ export default function ServicesSection() {
     <section className="px-6 pb-8 bg-[#F2F2F0]">
       <div className="max-w-[1160px] mx-auto grid grid-cols-1 md:grid-cols-[35fr_65fr] gap-2">
         {/* Columna 1: promoción del software */}
-        <div
-          className="relative rounded-xl overflow-hidden h-[420px] md:h-[520px] flex items-center justify-center p-8"
-          style={promoBg}
-        >
-          <div className="relative z-10 text-center max-w-[340px]">
-            <div className="w-11 h-11 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center mx-auto mb-4">
-              <Monitor size={18} className="text-white/60" />
+        <div className="flex flex-col items-start justify-center h-[420px] md:h-[520px] p-8">
+          <div className="text-left max-w-[340px]">
+            <div className="w-11 h-11 rounded-xl bg-[#0A0A0A] flex items-center justify-center mb-4">
+              <Monitor size={18} className="text-white" />
             </div>
             <h3
-              className="text-xl md:text-2xl font-medium text-white mb-2 tracking-tight"
+              className="text-xl md:text-2xl font-medium text-[#0A0A0A] mb-2 tracking-tight"
               style={{ fontFamily: 'var(--font-display)' }}
             >
               {t('svc2_title')}
             </h3>
-            <p className="text-sm text-white/50 leading-relaxed mb-5">
+            <p className="text-sm text-[#5C5C5C] leading-relaxed mb-5">
               {t('svc2_desc')}
             </p>
             <Link
               href="/contacto?servicio=software"
-              className="inline-block text-sm border border-white/20 text-white bg-white/[0.06] px-5 py-2.5 rounded-lg font-medium tracking-wide hover:bg-white/[0.12] transition-all duration-200"
+              className="btn-primary inline-block text-sm text-white px-5 py-2.5 rounded-lg font-medium tracking-wide transition-all"
             >
               {t('svc2_cta')}
             </Link>
@@ -115,9 +142,13 @@ export default function ServicesSection() {
         </div>
 
         {/* Columna 2: panel de video (Fase A) */}
-        <div
+        <motion.div
           ref={panelRef}
           className="relative rounded-xl overflow-hidden h-[420px] md:h-[520px] bg-[#1A1A1A]"
+          initial={{ opacity: 0, scale: 1.04 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.9, ease: 'easeOut' }}
         >
           {/* Video de fondo */}
           <video
@@ -132,6 +163,14 @@ export default function ServicesSection() {
 
           {/* Overlay negro transparente */}
           <div className="absolute inset-0 bg-black/35 pointer-events-none" />
+
+          {/* "GESTIONA:" + ticker infinito, persistente durante toda la reproducción */}
+          <div className="absolute top-6 right-6 md:top-8 md:right-8 w-[180px] md:w-[200px] text-right">
+            <p className="text-white text-xs font-bold tracking-widest mb-1.5 [text-shadow:0_1px_12px_rgba(0,0,0,0.7)]">
+              GESTIONA:
+            </p>
+            <InfiniteTicker text={GESTIONA_TEXT} />
+          </div>
 
           {/* Overlays animados durante la reproducción */}
           <AnimatePresence>
@@ -211,7 +250,7 @@ export default function ServicesSection() {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

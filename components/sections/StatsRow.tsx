@@ -89,7 +89,7 @@ export default function StatsRow() {
                   alt={linea.nombre}
                   fill
                   sizes="128px"
-                  className="object-contain brightness-0 invert opacity-70 group-hover:invert-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none"
+                  className="object-contain brightness-0 invert opacity-50 group-hover:opacity-100 transition-all duration-300 pointer-events-none"
                 />
               </div>
             </Link>

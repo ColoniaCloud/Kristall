@@ -88,16 +88,16 @@ body {
 /* Eyebrow / section label — estilo global */
 .section-label {
   font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #9A9A9A;
+  letter-spacing: normal;
+  color: #0A0A0A;
 }
 
 @media (min-width: 768px) {
   .section-label {
-    font-size: 14px;
+    font-size: 18px;
   }
 }
 
