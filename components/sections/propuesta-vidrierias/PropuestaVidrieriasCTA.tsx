@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { MessageSquare, User, ShieldCheck } from 'lucide-react'
+import { MessageSquare, ShieldCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { GridVignetteBackground } from '@/components/ui/vignette-grid-background'
 import { trackLead } from '@/lib/analytics'
@@ -226,18 +226,6 @@ export default function PropuestaVidrieriasCTA() {
                 +54 9 11 6048-4312
               </p>
             </a>
-
-            {/* REPRESENTANTE */}
-            <div className="backdrop-blur-md bg-white/[0.03] border border-white/5 rounded-xl p-5">
-              <div className="flex items-center gap-2 mb-2 text-white/40">
-                <User className="w-4 h-4 text-[#CC0000]" />
-                <span className="text-[10px] font-bold uppercase tracking-wider">REPRESENTANTE</span>
-              </div>
-              <p className="text-white text-[16px] font-semibold">
-                Carlos Arrúa
-              </p>
-              <p className="text-[12px] text-white/40">Representante Kristall</p>
-            </div>
 
             {/* MARCA */}
             <div className="backdrop-blur-md bg-white/[0.03] border border-white/5 rounded-xl p-5">
