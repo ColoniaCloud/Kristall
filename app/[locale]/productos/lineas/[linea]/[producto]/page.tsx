@@ -3,6 +3,8 @@ import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/routing'
 import ProductCard from '@/components/product/ProductCard'
 import ProductDetail from '@/components/product/ProductDetail'
+import ExteriorComingSoon from '@/components/sections/ExteriorComingSoon'
+import StatsRow from '@/components/sections/StatsRow'
 import { LINEAS, getLinea, getProductoBySlug, productoSlug, productoNombre } from '@/lib/catalogo'
 import { buildAlternates, productJsonLd, resolveProductImage, BASE } from '@/lib/seo'
 
@@ -136,6 +138,10 @@ export default async function ProductoPage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      {linea.nicho === 'arquitectura' && <ExteriorComingSoon />}
+
+      <StatsRow />
 
       <script
         type="application/ld+json"

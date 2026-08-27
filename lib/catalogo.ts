@@ -100,7 +100,15 @@ function construirLineas(productos: Producto[]): Linea[] {
   }
 
   return orden.map((slug) => {
-    const productosDeLinea = porSlug.get(slug)!
+    // Todo grid de producto se lee de acá: se ordena una sola vez, de más
+    // bajo a más alto VLT, para que la UI nunca tenga que reordenar por su
+    // cuenta. Los que no tienen VLT (seguridad, PPF, decorativos) van al final.
+    const productosDeLinea = [...porSlug.get(slug)!].sort((a, b) => {
+      if (a.vlt == null && b.vlt == null) return 0
+      if (a.vlt == null) return 1
+      if (b.vlt == null) return -1
+      return a.vlt - b.vlt
+    })
     const [primero] = productosDeLinea
     return {
       slug,

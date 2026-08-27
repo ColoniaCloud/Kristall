@@ -3,6 +3,7 @@
 import { motion, type Variants } from 'framer-motion'
 import CategoryCard from '@/components/product/CategoryCard'
 import CategoryLineMarquee from '@/components/sections/CategoryLineMarquee'
+import ExteriorComingSoon from '@/components/sections/ExteriorComingSoon'
 import TwoLineKicker from '@/components/sections/TwoLineKicker'
 import { lineasPorNicho } from '@/lib/catalogo'
 
@@ -34,6 +35,7 @@ export default function ProductsGrid() {
   const arquitectura = lineasPorNicho('arquitectura')
 
   return (
+    <>
     <section className="px-6 pb-8 bg-[#F2F2F0]">
       <div className="max-w-[1160px] mx-auto">
         <TwoLineKicker
@@ -79,5 +81,7 @@ export default function ProductsGrid() {
         </div>
       </div>
     </section>
+    <ExteriorComingSoon />
+    </>
   )
 }

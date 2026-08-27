@@ -4,8 +4,10 @@ import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { X } from 'lucide-react'
 import ProductCard from '@/components/product/ProductCard'
+import CategoryLineMarquee from '@/components/sections/CategoryLineMarquee'
+import ExteriorComingSoon from '@/components/sections/ExteriorComingSoon'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { PRODUCTOS, LINEAS, lineaLogoSrc, type Producto } from '@/lib/catalogo'
+import { PRODUCTOS, LINEAS, lineaLogoSrc, lineasPorNicho, type Linea, type Producto } from '@/lib/catalogo'
 import { useState } from 'react'
 
 // Valores reales presentes en el catálogo (orden ascendente)
@@ -78,7 +80,30 @@ export default function ProductsClient() {
 
   const totalFiltered = sections.reduce((sum, s) => sum + s.items.length, 0)
 
+  const autosSections = sections.filter((s) => s.linea.nicho === 'autos')
+  const arquitecturaSections = sections.filter((s) => s.linea.nicho === 'arquitectura')
+
+  const renderSection = (linea: Linea, items: Producto[]) => (
+    <section key={linea.slug}>
+      {/* Header de sección */}
+      <div className="mb-6 pb-6 border-b border-[#E4E4E2]">
+        <div className="relative h-7 w-32 mb-3">
+          <Image src={lineaLogoSrc(linea.slug)} alt={linea.nombre} fill className="object-contain object-left" sizes="128px" />
+        </div>
+        <p className="text-[13px] font-semibold text-[#0A0A0A] mb-2">{lineTagline(linea.slug)}</p>
+        <p className="text-sm text-[#5C5C5C] max-w-[640px] leading-relaxed">{tp(linea.descKey)}</p>
+      </div>
+      {/* Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {items.map((p) => (
+          <ProductCard key={p.codigo} producto={p} />
+        ))}
+      </div>
+    </section>
+  )
+
   return (
+    <>
     <div>
       {/* Barra de filtros — los 3 selects van siempre en una fila, en cualquier
           tamaño de pantalla. Sin caption aparte: el nombre del filtro (Línea/
@@ -161,28 +186,28 @@ export default function ProductsClient() {
             </button>
           </div>
         ) : (
-          <div className="space-y-16">
-            {sections.map(({ linea, items }) => (
-              <section key={linea.slug}>
-                {/* Header de sección */}
-                <div className="mb-6 pb-6 border-b border-[#E4E4E2]">
-                  <div className="relative h-7 w-32 mb-3">
-                    <Image src={lineaLogoSrc(linea.slug)} alt={linea.nombre} fill className="object-contain object-left" sizes="128px" />
-                  </div>
-                  <p className="text-[13px] font-semibold text-[#0A0A0A] mb-2">{lineTagline(linea.slug)}</p>
-                  <p className="text-sm text-[#5C5C5C] max-w-[640px] leading-relaxed">{tp(linea.descKey)}</p>
+          <div className="flex flex-col gap-16">
+            {autosSections.length > 0 && (
+              <div>
+                <CategoryLineMarquee label="Automotive" lineas={lineasPorNicho('autos')} />
+                <div className="space-y-16 mt-8">
+                  {autosSections.map(({ linea, items }) => renderSection(linea, items))}
                 </div>
-                {/* Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {items.map((p) => (
-                    <ProductCard key={p.codigo} producto={p} />
-                  ))}
+              </div>
+            )}
+            {arquitecturaSections.length > 0 && (
+              <div>
+                <CategoryLineMarquee label="Architectural" lineas={lineasPorNicho('arquitectura')} />
+                <div className="space-y-16 mt-8">
+                  {arquitecturaSections.map(({ linea, items }) => renderSection(linea, items))}
                 </div>
-              </section>
-            ))}
+              </div>
+            )}
           </div>
         )}
       </div>
     </div>
+    {arquitecturaSections.length > 0 && <ExteriorComingSoon />}
+    </>
   )
 }

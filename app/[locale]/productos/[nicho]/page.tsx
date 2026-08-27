@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/routing'
 import CategoryCard from '@/components/product/CategoryCard'
+import ExteriorComingSoon from '@/components/sections/ExteriorComingSoon'
 import { NICHOS, lineasPorNicho, type Nicho } from '@/lib/catalogo'
 import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
 
@@ -68,6 +69,8 @@ export default async function NichoPage({ params }: PageProps) {
           ))}
         </div>
       </section>
+
+      {nicho === 'arquitectura' && <ExteriorComingSoon />}
     </div>
   )
 }

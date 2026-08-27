@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/routing'
 import ProductCard from '@/components/product/ProductCard'
+import ExteriorComingSoon from '@/components/sections/ExteriorComingSoon'
 import { LINEAS, LINEA_SLUGS, getLinea, lineaDestacadaSrc, lineaLogoSrc, type Linea } from '@/lib/catalogo'
 import { buildAlternates, productJsonLd, BASE } from '@/lib/seo'
 
@@ -164,6 +165,8 @@ export default async function LineaPage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      {linea.nicho === 'arquitectura' && <ExteriorComingSoon />}
 
       <script
         type="application/ld+json"
