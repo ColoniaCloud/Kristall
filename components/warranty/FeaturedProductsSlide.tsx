@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { lineaDestacadaSrc } from '@/lib/catalogo'
+import { getLinea, lineaDestacadaSrc } from '@/lib/catalogo'
 
 // Selección curada (autos + arquitectura) de líneas con foto destacada.
 const SLIDES = ['klass', 'krypton', 'kaiser', 'ppf', 'kreflect-silver']
@@ -22,7 +22,7 @@ export default function FeaturedProductsSlide() {
         <Image
           key={slug}
           src={lineaDestacadaSrc(slug)}
-          alt=""
+          alt={`Instalación de lámina Kristall Film ${getLinea(slug)?.nombre ?? slug}`}
           fill
           priority={i === 0}
           sizes="(max-width: 768px) 100vw, 50vw"

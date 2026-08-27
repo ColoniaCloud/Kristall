@@ -59,7 +59,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params
   const meta = localeMeta[locale] ?? localeMeta.es
   return {
-    title: meta.title,
+    // Objeto {default, template} en vez de un string plano: un string acá
+    // "resetea" la cadena de template heredada del layout raíz para TODAS
+    // las páginas hijas (nosotros, blog, productos, ...), que terminan sin
+    // el sufijo " | Kristall Film" en su <title>. Ver auditoría SEO.
+    title: { default: meta.title, template: '%s | Kristall Film' },
     description: meta.description,
     alternates: {
       canonical: `https://kristallfilm.com/${locale}`,

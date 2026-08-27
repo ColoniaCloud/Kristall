@@ -29,7 +29,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params
   const m = pageMeta[locale] ?? pageMeta.es
   return {
-    title: m.title,
+    // absolute: el título ya incluye "Kristall" — evita que el template del
+    // layout ('%s | Kristall Film') lo duplique.
+    title: { absolute: m.title },
     description: m.description,
     alternates: buildAlternates('/propuesta-aberturas', locale),
     openGraph: { title: m.title, description: m.description, url: `https://kristallfilm.com/${locale}/propuesta-aberturas`, images: [DEFAULT_OG_IMAGE] },

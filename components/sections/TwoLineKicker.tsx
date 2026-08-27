@@ -36,7 +36,7 @@ const wordVariants: Variants = {
  */
 export default function TwoLineKicker({ lines, className }: TwoLineKickerProps) {
   return (
-    <motion.div
+    <motion.h2
       className={className}
       variants={containerVariants}
       initial="hidden"
@@ -57,6 +57,6 @@ export default function TwoLineKicker({ lines, className }: TwoLineKickerProps) 
           ))}
         </div>
       ))}
-    </motion.div>
+    </motion.h2>
   )
 }
