@@ -3,8 +3,8 @@ import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/routing'
 import ProductCard from '@/components/product/ProductCard'
-import { LINEAS, LINEA_SLUGS, getLinea, lineaDestacadaSrc, lineaLogoSrc, productoNombre, type Producto, type Linea } from '@/lib/catalogo'
-import { buildAlternates, BASE } from '@/lib/seo'
+import { LINEAS, LINEA_SLUGS, getLinea, lineaDestacadaSrc, lineaLogoSrc, type Linea } from '@/lib/catalogo'
+import { buildAlternates, productJsonLd, BASE } from '@/lib/seo'
 
 export function generateStaticParams() {
   return LINEA_SLUGS.flatMap((slug) =>
@@ -45,25 +45,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-function productLd(p: Producto, linea: Linea) {
-  const additionalProperty = [
-    p.vlt != null && { '@type': 'PropertyValue', name: 'VLT', value: `${p.vlt}%` },
-    p.ir != null && { '@type': 'PropertyValue', name: 'IR Rejection', value: `${p.ir}%` },
-    p.uvr != null && { '@type': 'PropertyValue', name: 'UV Rejection', value: `${p.uvr}%` },
-    p.garantiaAnios != null && { '@type': 'PropertyValue', name: 'Warranty', value: `${p.garantiaAnios} years` },
-  ].filter(Boolean)
-
-  return {
-    '@type': 'Product',
-    name: productoNombre(p),
-    sku: p.codigo,
-    image: `${BASE}${lineaDestacadaSrc(linea.slug)}`,
-    brand: { '@type': 'Brand', name: 'Kristall Film' },
-    category: linea.nombre,
-    ...(additionalProperty.length > 0 && { additionalProperty }),
-  }
-}
-
 interface PageProps {
   params: Promise<{ locale: string; linea: string }>
 }
@@ -91,7 +72,7 @@ export default async function LineaPage({ params }: PageProps) {
           { '@type': 'ListItem', position: 4, name: linea.nombre, item: `${BASE}/${locale}/productos/lineas/${slug}` },
         ],
       },
-      ...productos.map((p) => productLd(p, linea)),
+      ...productos.map((p) => productJsonLd(p, linea, locale)),
     ],
   }
 

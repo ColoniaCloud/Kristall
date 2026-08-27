@@ -124,6 +124,7 @@
     "product_count_one": "{n} Produkt",
     "view_all_lines": "Alle Linien ansehen",
     "other_lines": "Weitere Linien",
+    "other_products_in_line": "Weitere Produkte dieser Linie",
     "empty_products": "In dieser Linie sind noch keine Produkte verfügbar.",
     "breadcrumb_home": "Startseite"
   },
@@ -460,8 +461,7 @@
     "error": "Es ist ein Fehler aufgetreten. Bitte erneut versuchen.",
     "error_name": "Name erforderlich",
     "error_email": "Ungültige E-Mail",
-    "error_phone": "Telefonnummer erforderlich (mind. 5 Zeichen)",
-    "close": "Schließen"
+    "error_phone": "Telefonnummer erforderlich (mind. 5 Zeichen)"
   },
   "blog": {
     "label": "Blog",

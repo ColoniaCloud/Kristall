@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-import { LINEA_SLUGS, NICHOS } from '@/lib/catalogo'
+import { LINEAS, LINEA_SLUGS, NICHOS, productoSlug } from '@/lib/catalogo'
 import { getPublishedArticles } from '@/lib/blog'
 import { BASE, LOCALES } from '@/lib/seo'
 
@@ -68,6 +68,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.8,
         alternates: { languages },
       })
+    }
+  }
+
+  // Producto pages × locales
+  for (const linea of LINEAS) {
+    for (const p of linea.productos) {
+      const route = `/productos/lineas/${linea.slug}/${productoSlug(p)}`
+      const languages = languagesFor(route)
+      for (const locale of LOCALES) {
+        entries.push({
+          url: `${BASE}/${locale}${route}`,
+          lastModified: new Date(),
+          changeFrequency: 'monthly',
+          priority: 0.65,
+          alternates: { languages },
+        })
+      }
     }
   }
 

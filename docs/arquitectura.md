@@ -43,7 +43,9 @@ kristall-web/
 │   │   ├── productos/
 │   │   │   ├── page.tsx           # Catálogo completo con filtros
 │   │   │   ├── [nicho]/page.tsx   # /productos/autos · /productos/arquitectura
-│   │   │   └── lineas/[linea]/page.tsx  # Detalle de línea (ej. /productos/lineas/kaiser)
+│   │   │   └── lineas/[linea]/
+│   │   │       ├── page.tsx             # Detalle de línea (ej. /productos/lineas/kaiser)
+│   │   │       └── [producto]/page.tsx  # Ficha de producto (ej. .../kaiser/kai70) — página real, no modal
 │   │   ├── servicios/page.tsx
 │   │   ├── nosotros/page.tsx
 │   │   ├── blog/
@@ -71,8 +73,8 @@ kristall-web/
 │   ├── sections/
 │   │   ├── Hero.tsx, BrandStory.tsx, ProductsGrid.tsx, ServicesSection.tsx, StatsRow.tsx, ContactCTA.tsx
 │   ├── product/
-│   │   ├── ProductCard.tsx        # Tile del grid — recibe un Producto
-│   │   ├── ProductDetailModal.tsx # Ficha técnica + AddToCartControl + consulta rápida
+│   │   ├── ProductCard.tsx        # Tile del grid — recibe un Producto, linkea a su página de ficha
+│   │   ├── ProductDetail.tsx      # Ficha técnica + AddToCartControl + consulta rápida (contenido de la página de producto, no un modal)
 │   │   ├── ProductsClient.tsx     # Filtros de /productos (línea, VLT, UV)
 │   │   └── CategoryCard.tsx       # Tile de línea (home y /productos/[nicho])
 │   ├── cart/
@@ -186,6 +188,7 @@ className="text-[11px] font-medium uppercase tracking-[0.1em] text-[#9A9A9A]"
 /es/productos/autos            → Landing del nicho "autos" (líneas de esa familia)
 /es/productos/arquitectura     → Landing del nicho "arquitectura"
 /es/productos/lineas/[linea]   → Detalle de línea, ej. /es/productos/lineas/kaiser
+/es/productos/lineas/[linea]/[producto] → Ficha de producto, ej. .../kaiser/kai70 (slug = código en minúsculas)
 /es/servicios                  → Servicios (Polarized App)
 /es/nosotros                   → Nosotros
 /es/blog · /es/blog/[slug]     → Blog
@@ -261,7 +264,8 @@ silencioso — no rompe el build, pero conviene revisar visualmente después de 
 No hay checkout ni precios. `lib/cart.ts` es un store de zustand con `persist` en `localStorage`
 (`skipHydration: true` + un `rehydrate()` manual en `Header.tsx`, para que el primer render en
 cliente coincida con el del servidor y no dispare un warning de hidratación). El flujo: el usuario
-suma productos con cantidad (en rollos) desde `ProductDetailModal` → `AddToCartControl.tsx`, ve el
+suma productos con cantidad (en rollos) desde la página de producto (`ProductDetail.tsx` →
+`AddToCartControl.tsx`), ve el
 resumen en el drawer del header (`CartDrawer.tsx`) o en `/carrito`, y al pedir la cotización
 (`QuoteModal.tsx`) se manda un `POST /api/leads` con `source: 'cotizacion'` y el detalle de productos
 en `cartItems`. Ese payload queda guardado en Payload (`Leads.cartItems`, con `codigo`) y se manda por

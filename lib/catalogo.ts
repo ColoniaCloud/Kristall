@@ -134,6 +134,15 @@ const PRODUCTO_BY_CODIGO: Record<string, Producto> = Object.fromEntries(
 
 export const getProducto = (codigo: string): Producto | undefined => PRODUCTO_BY_CODIGO[codigo]
 
+/** Slug de URL de un producto — su código en minúsculas (ej. KLS05 → kls05). */
+export const productoSlug = (p: Producto): string => p.codigo.toLowerCase()
+
+const PRODUCTO_BY_SLUG: Record<string, Producto> = Object.fromEntries(
+  PRODUCTOS.map((p) => [productoSlug(p), p]),
+)
+
+export const getProductoBySlug = (slug: string): Producto | undefined => PRODUCTO_BY_SLUG[slug.toLowerCase()]
+
 /**
  * Nombre comercial de un producto, ej. "Klass 15", "Klear 8 mil", "Kaiser".
  *
