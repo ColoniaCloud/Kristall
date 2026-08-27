@@ -1,19 +1,10 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
+import { useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/routing'
 import { Monitor } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
-
-type Phase = 'none' | 'kaiser' | 'ppf'
-
-// Marcas de tiempo (segundos del video). El fin del PPF se calcula en runtime
-// como duración − 0.5 para no depender de la duración exacta del archivo.
-const KAISER_IN = 1.5
-const KAISER_OUT = 4.0
-const PPF_IN = 4.0
+import { motion } from 'framer-motion'
 
 const GESTIONA_TEXT =
   'tus compras, tu stock, tus instalaciones, tus clientes, tu garantía y la garantía de tus clientes, tus ingresos, tu agenda, '
@@ -22,7 +13,15 @@ const GESTIONA_TEXT =
  * Ticker autoplay (no atado al scroll, a diferencia de CategoryLineMarquee):
  * misma técnica de scrollLeft + rAF que StatsRow, en bucle constante.
  */
-function InfiniteTicker({ text }: { text: string }) {
+function InfiniteTicker({
+  text,
+  className,
+  style,
+}: {
+  text: string
+  className?: string
+  style?: React.CSSProperties
+}) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const animRef = useRef(0)
 
@@ -49,7 +48,7 @@ function InfiniteTicker({ text }: { text: string }) {
       style={{ scrollbarWidth: 'none' }}
     >
       {[0, 1, 2, 3].map((i) => (
-        <span key={i} className="shrink-0 text-xs text-white/80">
+        <span key={i} className={className} style={style}>
           {text}
         </span>
       ))}
@@ -61,38 +60,19 @@ export default function ServicesSection() {
   const t = useTranslations('services')
   const videoRef = useRef<HTMLVideoElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
-  const [phase, setPhase] = useState<Phase>('none')
-  const [ended, setEnded] = useState(false)
 
   useEffect(() => {
     const video = videoRef.current
     const panel = panelRef.current
     if (!video || !panel) return
 
-    let raf = 0
-    let started = false
-
-    const loop = () => {
-      const tt = video.currentTime
-      const dur = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : 8
-      const ppfOut = dur - 0.5
-      let next: Phase = 'none'
-      if (tt >= KAISER_IN && tt < KAISER_OUT) next = 'kaiser'
-      else if (tt >= PPF_IN && tt < ppfOut) next = 'ppf'
-      setPhase((p) => (p === next ? p : next))
-      raf = requestAnimationFrame(loop)
-    }
-
-    // Arrancamos el video (y el timeline) recién cuando la sección entra en
-    // viewport, para que se vea desde el segundo 0 y no consuma ancho de banda
-    // mientras el usuario está arriba del fold.
+    // Arrancamos el video recién cuando la sección entra en viewport, para
+    // que se vea desde el segundo 0 y no consuma ancho de banda mientras el
+    // usuario está arriba del fold.
     const io = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !started) {
-          started = true
-          try { video.currentTime = 0 } catch {}
+        if (entries[0].isIntersecting) {
           video.play().catch(() => {})
-          raf = requestAnimationFrame(loop)
           io.disconnect()
         }
       },
@@ -100,18 +80,7 @@ export default function ServicesSection() {
     )
     io.observe(panel)
 
-    const onEnded = () => {
-      cancelAnimationFrame(raf)
-      setPhase('none')
-      setEnded(true)
-    }
-    video.addEventListener('ended', onEnded)
-
-    return () => {
-      io.disconnect()
-      cancelAnimationFrame(raf)
-      video.removeEventListener('ended', onEnded)
-    }
+    return () => io.disconnect()
   }, [])
 
   return (
@@ -141,7 +110,7 @@ export default function ServicesSection() {
           </div>
         </div>
 
-        {/* Columna 2: panel de video (Fase A) */}
+        {/* Columna 2: panel de video */}
         <motion.div
           ref={panelRef}
           className="relative rounded-xl overflow-hidden h-[420px] md:h-[520px] bg-[#1A1A1A]"
@@ -156,6 +125,7 @@ export default function ServicesSection() {
             className="absolute inset-0 w-full h-full object-cover"
             src="/cat/video.mp4"
             muted
+            loop
             playsInline
             preload="auto"
             aria-hidden="true"
@@ -164,92 +134,24 @@ export default function ServicesSection() {
           {/* Overlay negro transparente */}
           <div className="absolute inset-0 bg-black/35 pointer-events-none" />
 
-          {/* "GESTIONA:" + ticker infinito, persistente durante toda la reproducción */}
-          <div className="absolute top-6 right-6 md:top-8 md:right-8 w-[180px] md:w-[200px] text-right">
-            <p className="text-white text-xs font-bold tracking-widest mb-1.5 [text-shadow:0_1px_12px_rgba(0,0,0,0.7)]">
-              GESTIONA:
-            </p>
-            <InfiniteTicker text={GESTIONA_TEXT} />
+          {/* "GESTIONA:" + ticker infinito, centrado sobre el video */}
+          <div className="absolute inset-0 flex items-center justify-center px-8">
+            <div className="text-center max-w-[480px] w-full">
+              <p
+                className="text-white text-3xl md:text-5xl mb-3 [text-shadow:0_2px_16px_rgba(0,0,0,0.7)]"
+                style={{ fontFamily: 'var(--font-display)', fontWeight: 700 }}
+              >
+                GESTIONA:
+              </p>
+              <div className="overflow-hidden">
+                <InfiniteTicker
+                  text={GESTIONA_TEXT}
+                  className="shrink-0 font-normal text-lg md:text-2xl text-white/85 [text-shadow:0_2px_12px_rgba(0,0,0,0.7)]"
+                  style={{ fontFamily: 'var(--font-display)' }}
+                />
+              </div>
+            </div>
           </div>
-
-          {/* Overlays animados durante la reproducción */}
-          <AnimatePresence>
-            {phase === 'kaiser' && (
-              <motion.div
-                key="kaiser"
-                className="absolute bottom-6 right-6 md:bottom-8 md:right-8 flex flex-col items-end text-right gap-2"
-                initial={{ opacity: 0, x: 40 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.7, ease: 'easeOut' }}
-              >
-                <Image
-                  src="/cat/KAISER.png"
-                  alt="KAISER"
-                  width={134}
-                  height={25}
-                  className="brightness-0 invert"
-                />
-                <motion.p
-                  className="text-white font-medium text-sm md:text-lg max-w-[200px] md:max-w-[260px] [text-shadow:0_1px_12px_rgba(0,0,0,0.7)]"
-                  style={{ fontFamily: 'var(--font-display)' }}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.35, duration: 0.5 }}
-                >
-                  {t('video_kaiser')}
-                </motion.p>
-              </motion.div>
-            )}
-
-            {phase === 'ppf' && (
-              <motion.div
-                key="ppf"
-                className="absolute top-6 left-6 md:top-8 md:left-8 flex flex-col items-start text-left gap-2"
-                initial={{ opacity: 0, x: -40 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.7, ease: 'easeOut' }}
-              >
-                <Image
-                  src="/cat/PPF.png"
-                  alt="PPF"
-                  width={110}
-                  height={25}
-                  className="brightness-0 invert"
-                />
-                <motion.p
-                  className="text-white font-medium text-sm md:text-lg max-w-[200px] md:max-w-[260px] [text-shadow:0_1px_12px_rgba(0,0,0,0.7)]"
-                  style={{ fontFamily: 'var(--font-display)' }}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.35, duration: 0.5 }}
-                >
-                  {t('video_ppf')}
-                </motion.p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Botón al terminar la reproducción */}
-          <AnimatePresence>
-            {ended && (
-              <motion.div
-                key="cta"
-                className="absolute inset-0 flex items-center justify-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, ease: 'easeOut' }}
-              >
-                <Link
-                  href="/productos"
-                  className="btn-primary text-white px-6 py-3 rounded-lg text-[16px] font-medium tracking-wide transition-all"
-                >
-                  {t('video_cta')}
-                </Link>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </motion.div>
       </div>
     </section>
