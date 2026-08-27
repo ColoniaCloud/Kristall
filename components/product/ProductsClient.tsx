@@ -85,7 +85,13 @@ export default function ProductsClient() {
           VLT/UV) es el primer ítem de cada lista, así que es lo que se ve por
           default en el trigger hasta que se elige un valor. */}
       <div className="bg-white border-b border-[#E4E4E2] sticky top-[56px] z-40">
-        <div className="px-4 md:px-10 py-4 max-w-[1160px] mx-auto flex flex-col gap-3">
+        <div className="px-4 md:px-10 py-5 md:py-6 max-w-[1160px] mx-auto flex flex-col gap-3">
+          <h2
+            className="text-[15px] font-medium text-[#0A0A0A]"
+            style={{ fontFamily: 'var(--font-display)' }}
+          >
+            Filtrar láminas
+          </h2>
           <div className="flex flex-row gap-2 md:gap-3">
             <Select value={activeLinea} onValueChange={setActiveLinea}>
               <SelectTrigger className={selectTrigger} style={triggerStyle}>

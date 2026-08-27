@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import AboutHero from '@/components/sections/about/AboutHero'
 import AboutValues from '@/components/sections/about/AboutValues'
-import AboutTechnology from '@/components/sections/about/AboutTechnology'
 import AboutCTA from '@/components/sections/about/AboutCTA'
 import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
 
@@ -37,7 +36,6 @@ export default function NosotrosPage() {
           sizes="100vw"
         />
       </section>
-      <AboutTechnology />
       <AboutCTA />
     </>
   )

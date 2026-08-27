@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
 import ProductsHero from '@/components/product/ProductsHero'
 import ProductsClient from '@/components/product/ProductsClient'
-import CatalogViewer from '@/components/sections/CatalogViewer'
 
 const pageMeta: Record<string, { title: string; description: string }> = {
   es: { title: 'Productos', description: 'Explorá nuestro catálogo completo de láminas automotrices, arquitectónicas y PPF.' },
@@ -25,7 +24,6 @@ export default function ProductsPage() {
   return (
     <div className="min-h-screen bg-[#F2F2F0]">
       <ProductsHero />
-      <CatalogViewer />
       <ProductsClient />
     </div>
   )
