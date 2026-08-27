@@ -37,7 +37,7 @@ export default function ConcesionariasRequisitos() {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: 'url(/cat/top-KLAR.jpg)',
+          backgroundImage: 'url(/Productos/destacadas/klar.png)',
           backgroundAttachment: 'fixed',
           backgroundSize: 'cover',
           backgroundPosition: 'center',

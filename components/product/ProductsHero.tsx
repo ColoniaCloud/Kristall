@@ -5,12 +5,12 @@ import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 
 const HERO_IMAGES = [
-  '/cat/top-KLAR.jpg',
-  '/cat/top-KARBON.jpg',
-  '/cat/top-KERAMX.jpg',
-  '/cat/top-KRYPTON.jpg',
-  '/cat/top-PPF.jpg',
-  '/cat/top-VITRAL.jpg',
+  { src: '/Productos/destacadas/klar.png', alt: 'Lámina polarizada Kristall Film Klar en vidrio automotriz' },
+  { src: '/cat/top-KARBON.jpg', alt: 'Lámina nanocarbono Kristall Film Karbon en vidrio automotriz' },
+  { src: '/cat/top-KERAMX.jpg', alt: 'Lámina nanocerámica Kristall Film Keram X en vidrio automotriz' },
+  { src: '/cat/top-KRYPTON.jpg', alt: 'Lámina de seguridad Kristall Film Krypton en vidrio automotriz' },
+  { src: '/cat/top-PPF.jpg', alt: 'Film de protección de pintura Kristall Film PPF sobre carrocería' },
+  { src: '/cat/top-VITRAL.jpg', alt: 'Lámina arquitectónica Kristall Film instalada en vidriado' },
 ]
 
 export default function ProductsHero() {
@@ -46,8 +46,8 @@ export default function ProductsHero() {
     <section className="relative min-h-[280px] md:h-[420px] overflow-hidden">
       {/* Imagen actual */}
       <Image
-        src={HERO_IMAGES[current]}
-        alt=""
+        src={HERO_IMAGES[current].src}
+        alt={HERO_IMAGES[current].alt}
         fill
         priority
         className="object-cover object-center"
@@ -60,8 +60,8 @@ export default function ProductsHero() {
         style={{ opacity: transitioning ? 1 : 0 }}
       >
         <Image
-          src={HERO_IMAGES[next]}
-          alt=""
+          src={HERO_IMAGES[next].src}
+          alt={HERO_IMAGES[next].alt}
           fill
           className="object-cover object-center"
           sizes="100vw"

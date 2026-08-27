@@ -38,7 +38,7 @@ export default function ExteriorComingSoon() {
       className="relative overflow-hidden px-6 h-[380px] md:h-[460px] flex items-center"
       style={{ borderTop: '0.5px solid #E4E4E2' }}
     >
-      <Image src="/exterior.jpg" alt="" fill className="object-cover object-center" />
+      <Image src="/exterior.png" alt="" fill className="object-cover object-center" />
 
       {/* Overlay: gradiente horizontal, más opaco a la izquierda (donde va el texto) */}
       <div

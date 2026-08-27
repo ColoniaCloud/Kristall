@@ -10,12 +10,12 @@ import Image from 'next/image'
 import { trackLead } from '@/lib/analytics'
 
 const SLIDES = [
-  '/cat/top-VITRAL.jpg',
-  '/cat/top-PPF.jpg',
-  '/cat/top-KRYPTON.jpg',
-  '/cat/top-KLAR.jpg',
-  '/cat/top-KERAMX.jpg',
-  '/cat/top-KARBON.jpg',
+  { src: '/cat/top-VITRAL.jpg', alt: 'Lámina arquitectónica Kristall Film instalada en vidriado' },
+  { src: '/cat/top-PPF.jpg', alt: 'Film de protección de pintura Kristall Film PPF sobre carrocería' },
+  { src: '/cat/top-KRYPTON.jpg', alt: 'Lámina de seguridad Kristall Film Krypton en vidrio de vehículo' },
+  { src: '/Productos/destacadas/klar.png', alt: 'Lámina polarizada Kristall Film Klar en ventanilla de auto' },
+  { src: '/cat/top-KERAMX.jpg', alt: 'Lámina nanocerámica Kristall Film Keram X en vidrio automotriz' },
+  { src: '/cat/top-KARBON.jpg', alt: 'Lámina nanocarbono Kristall Film Karbon en ventanilla de auto' },
 ]
 
 const schema = z.object({
@@ -114,11 +114,11 @@ export default function ContactForm() {
 
           {/* Slider de imágenes */}
           <div className="mt-4 relative flex-1 min-h-[12rem] rounded-xl overflow-hidden">
-            {SLIDES.map((src, i) => (
+            {SLIDES.map((slide, i) => (
               <Image
-                key={src}
-                src={src}
-                alt=""
+                key={slide.src}
+                src={slide.src}
+                alt={slide.alt}
                 fill
                 className="object-cover transition-opacity duration-700"
                 style={{ opacity: i === slideIndex ? 1 : 0 }}
