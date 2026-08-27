@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { Mail, MapPin } from 'lucide-react'
 import LanguageSelector from '@/components/common/LanguageSelector'
 import SocialIcons from '@/components/common/SocialIcons'
+import { OFFICE_MAPS_URL } from '@/lib/office'
 
 /**
  * Barra fina de una línea por encima del header, fondo negro (`--de-black`).
@@ -19,10 +20,6 @@ import SocialIcons from '@/components/common/SocialIcons'
  * Mobile — misma barra pero solo con idioma (izquierda) y ubicación
  * (derecha): mail y redes se ocultan para que entre en una línea de 375px.
  */
-
-/** Dirección de la oficina para el link a Google Maps (solo se usa en `es`). */
-const OFFICE_MAPS_QUERY = 'Av. Juan B. Justo 2918, CABA, Buenos Aires, Argentina'
-const OFFICE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(OFFICE_MAPS_QUERY)}`
 
 export default function TopBar() {
   const t = useTranslations('topbar')
