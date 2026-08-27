@@ -3,6 +3,7 @@ import Hero from '@/components/sections/Hero'
 import StatsRow from '@/components/sections/StatsRow'
 import HeroCategories from '@/components/sections/HeroCategories'
 import BrandStory from '@/components/sections/BrandStory'
+import ShowRoomComingSoon from '@/components/sections/ShowRoomComingSoon'
 import ProductsGrid from '@/components/sections/ProductsGrid'
 import ServicesSection from '@/components/sections/ServicesSection'
 import ContactCTA from '@/components/sections/ContactCTA'
@@ -32,6 +33,7 @@ export default function HomePage() {
       <StatsRow />
       <HeroCategories />
       <BrandStory />
+      <ShowRoomComingSoon />
       <ProductsGrid />
       <ServicesSection />
       <ContactCTA />

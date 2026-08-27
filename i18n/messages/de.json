@@ -35,6 +35,10 @@
     "card3_sku": "PPF",
     "card3_label": "Transparenter Lackschutz"
   },
+  "showroom_teaser": {
+    "title": "Demnächst: Showroom",
+    "location": "in der Av. Juan B Justo, CABA"
+  },
   "home_categories": {
     "automotive_desc": "Fortschrittliche Lösungen für den Fahrzeugschutz: Sonnenschutz, Sichtschutz, Sicherheit, Infrarot-Rückweisung und PPF für die Lackpflege.",
     "architectural_desc": "Innenraumfolien für architektonische Verglasungen mit Sonnenschutz-, Sicherheits- und Dekorationslösungen.",

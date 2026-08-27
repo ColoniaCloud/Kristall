@@ -35,6 +35,10 @@
     "card3_sku": "PPF",
     "card3_label": "Protección transparente de pintura"
   },
+  "showroom_teaser": {
+    "title": "Próximamente Show Room",
+    "location": "en Av. Juan B Justo, CABA"
+  },
   "home_categories": {
     "automotive_desc": "Soluciones avanzadas para la protección del vehículo: control solar, privacidad, seguridad, rechazo de infrarrojos y PPF para el cuidado de la pintura.",
     "architectural_desc": "Láminas de aplicación interior para vidrios arquitectónicos, con soluciones de protección solar, seguridad y decoración.",

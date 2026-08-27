@@ -35,6 +35,10 @@
     "card3_sku": "PPF",
     "card3_label": "Transparent paint protection"
   },
+  "showroom_teaser": {
+    "title": "Coming soon: Showroom",
+    "location": "at Av. Juan B Justo, CABA"
+  },
   "home_categories": {
     "automotive_desc": "Advanced solutions for vehicle protection: solar control, privacy, security, infrared rejection and PPF for paint care.",
     "architectural_desc": "Interior application films for architectural glass, with solar protection, security and decorative solutions.",

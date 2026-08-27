@@ -3,23 +3,18 @@
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import Image from 'next/image'
 
 export default function ContactCTA() {
   const t = useTranslations('cta')
   const [email, setEmail] = useState('')
 
   return (
-    <section className="relative overflow-hidden px-6 min-h-[50vh] flex items-center" style={{ borderTop: '0.5px solid #E4E4E2' }}>
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <Image
-          src="/futermail.png"
-          fill
-          alt=""
-          className="object-cover object-bottom"
-        />
-      </div>
+    <section className="relative overflow-hidden px-6 min-h-[50vh] flex items-center">
+      {/* Background Image — bg-fixed: queda anclada al viewport, el contenido se desliza sobre ella */}
+      <div
+        className="absolute inset-0 bg-[url('/futermail.png')] bg-cover bg-bottom bg-fixed"
+        aria-hidden="true"
+      />
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/50" />
 
