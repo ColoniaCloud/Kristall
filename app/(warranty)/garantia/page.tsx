@@ -23,7 +23,7 @@ export default function GarantiaLandingPage() {
             <div className="text-center md:text-left">
               <h1 className="font-heading text-2xl font-semibold">Garantía Kristall Film</h1>
               <p className="mt-2 text-sm text-muted-foreground">
-                Activá o consultá la garantía de tu lámina, PPF o vidrio Kristall.
+                Consulta o activa la garantía de tus productos Kristall
               </p>
             </div>
 
