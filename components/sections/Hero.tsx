@@ -59,17 +59,16 @@ export default function Hero() {
       >
         <motion.h1
           variants={itemVariants}
-          className="font-medium tracking-tight mb-6 text-white"
+          className="tracking-tight mb-6 text-white"
           style={{
             fontFamily: 'var(--font-display)',
             fontSize: 'clamp(3.4rem, 6.12vw, 5.44rem)',
-            fontWeight: 600,
             letterSpacing: '-0.02em',
             lineHeight: 1.05,
           }}
         >
-          <span className="block">{t('headline_line1')}</span>
-          <span className="block">{t('headline_line2')}</span>
+          <span className="block" style={{ fontWeight: 600 }}>{t('headline_line1')}</span>
+          <span className="block" style={{ fontWeight: 400 }}>{t('headline_line2')}</span>
         </motion.h1>
 
         {/* Logo + CTAs, misma altura */}

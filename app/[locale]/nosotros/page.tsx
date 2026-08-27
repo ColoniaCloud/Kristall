@@ -3,6 +3,7 @@ import Image from 'next/image'
 import AboutHero from '@/components/sections/about/AboutHero'
 import AboutValues from '@/components/sections/about/AboutValues'
 import AboutCTA from '@/components/sections/about/AboutCTA'
+import StatsRow from '@/components/sections/StatsRow'
 import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
 
 const pageMeta: Record<string, { title: string; description: string }> = {
@@ -37,6 +38,7 @@ export default function NosotrosPage() {
         />
       </section>
       <AboutCTA />
+      <StatsRow />
     </>
   )
 }
