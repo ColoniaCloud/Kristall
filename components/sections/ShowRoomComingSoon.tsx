@@ -48,7 +48,7 @@ export default function ShowRoomComingSoon() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden h-[220px] md:h-[280px] bg-[#1A1A1A]">
+    <section ref={sectionRef} className="relative overflow-hidden mb-8 h-[220px] md:h-[280px] bg-[#1A1A1A]">
       {/* Video de fondo — object-top: recorta desde abajo, donde el clip tiene
           una marca de agua chica que no queremos mostrar. */}
       <video

@@ -60,11 +60,12 @@ export default function ExteriorComingSoon() {
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
         >
-          {words.map((word, i) => (
+          {words.flatMap((word, i) => [
+            i > 0 ? ' ' : null,
             <motion.span key={i} variants={wordVariants} className="inline-block">
-              {word + (i < words.length - 1 ? ' ' : '')}
-            </motion.span>
-          ))}
+              {word}
+            </motion.span>,
+          ])}
         </motion.h2>
 
         <motion.img
