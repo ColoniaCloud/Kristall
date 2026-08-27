@@ -132,7 +132,7 @@ export default function ServicesSection() {
           />
 
           {/* Overlay negro transparente */}
-          <div className="absolute inset-0 bg-black/35 pointer-events-none" />
+          <div className="absolute inset-0 bg-black/55 pointer-events-none" />
 
           {/* "GESTIONA:" + ticker infinito, centrado sobre el video */}
           <div className="absolute inset-0 flex items-center justify-center px-8">

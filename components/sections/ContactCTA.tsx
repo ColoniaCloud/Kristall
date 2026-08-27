@@ -1,28 +1,25 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useState, useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
 
 export default function ContactCTA() {
   const t = useTranslations('cta')
   const [email, setEmail] = useState('')
-  const sectionRef = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
-  const imageY = useTransform(scrollYProgress, [0, 1], ['10%', '-10%'])
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden px-6 min-h-[50vh] flex items-center" style={{ borderTop: '0.5px solid #E4E4E2' }}>
-      {/* Background Image con parallax */}
-      <motion.div className="absolute inset-[-2px]" style={{ y: imageY, transformOrigin: 'center bottom' }}>
+    <section className="relative overflow-hidden px-6 min-h-[50vh] flex items-center" style={{ borderTop: '0.5px solid #E4E4E2' }}>
+      {/* Background Image */}
+      <div className="absolute inset-0">
         <Image
           src="/futermail.png"
           fill
           alt=""
           className="object-cover object-bottom"
         />
-      </motion.div>
+      </div>
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/50" />
 
