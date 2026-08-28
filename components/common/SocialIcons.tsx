@@ -52,10 +52,10 @@ export const SOCIAL_NETWORKS: readonly SocialNetwork[] = [
  * marca; los perfiles sociales hay que confirmarlos antes de publicar.
  */
 export const SOCIAL_LINKS: Record<SocialNetwork, string> = {
-  linkedin: 'https://www.linkedin.com/company/kristallfilm',
+  linkedin: 'https://www.linkedin.com/company/135156381',
   email: 'mailto:hola@kristallfilm.com',
-  facebook: 'https://www.facebook.com/kristallfilm',
-  instagram: 'https://www.instagram.com/kristallfilm',
+  facebook: 'https://www.facebook.com/people/Kristall-Film-Latam/61590712143296/',
+  instagram: 'https://www.instagram.com/kristallfilm.latam',
   whatsapp: 'https://wa.me/5491160484312',
 }
 
