@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
 import ProductsHero from '@/components/product/ProductsHero'
+import CatalogDownloadBar from '@/components/product/CatalogDownloadBar'
 import ProductsClient from '@/components/product/ProductsClient'
 
 const pageMeta: Record<string, { title: string; description: string }> = {
@@ -24,6 +25,7 @@ export default function ProductsPage() {
   return (
     <div className="min-h-screen bg-[#F2F2F0]">
       <ProductsHero />
+      <CatalogDownloadBar />
       <ProductsClient />
     </div>
   )
