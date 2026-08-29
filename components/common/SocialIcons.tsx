@@ -47,15 +47,12 @@ export const SOCIAL_NETWORKS: readonly SocialNetwork[] = [
   'whatsapp',
 ] as const
 
-/**
- * Destinos por defecto. `email` y `whatsapp` apuntan a los canales reales de la
- * marca; los perfiles sociales hay que confirmarlos antes de publicar.
- */
+/** Destinos por defecto: los canales y perfiles reales y confirmados de la marca. */
 export const SOCIAL_LINKS: Record<SocialNetwork, string> = {
   linkedin: 'https://www.linkedin.com/company/135156381',
   email: 'mailto:hola@kristallfilm.com',
   facebook: 'https://www.facebook.com/people/Kristall-Film-Latam/61590712143296/',
-  instagram: 'https://www.instagram.com/kristallfilm.latam',
+  instagram: 'https://www.instagram.com/kristallfilm.la',
   whatsapp: 'https://wa.me/5491160484312',
 }
 
