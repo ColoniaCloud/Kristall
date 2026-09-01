@@ -27,7 +27,7 @@ en el campo `accessLevel`, que viene en la respuesta del login:
 | Nivel | Nombre para el usuario | Qué puede ver |
 |---|---|---|
 | `BASIC` | **Panel Clientes** | Perfil, compras, **cuenta corriente** (sección 4.9) y notificaciones |
-| `INSTALLER` | **Portal Instalador** | Todo lo anterior **más** stock de rollos, instalaciones, reclamos y generación de sub-códigos |
+| `INSTALLER` | **Portal Instalador** | Todo lo anterior **más** stock de rollos, instalaciones, reclamos, generación de sub-códigos y **Mi Taller** (sección 4.10) |
 
 - **`BASIC` es el default.** Cualquier Cliente que active su cuenta (sección 3.1) lo obtiene solo, sin
   intervención de nadie.
@@ -37,7 +37,13 @@ en el campo `accessLevel`, que viene en la respuesta del login:
 **El CRM verifica el nivel de su lado.** Los endpoints marcados como *(nivel INSTALLER)* devuelven
 `403 { "error": "Este cliente no tiene habilitado el portal de instalador" }` si la cuenta es `BASIC`,
 está deshabilitada, o el contacto no tiene cuenta de portal. No alcanza con esconder los botones en tu
-frontend — llamar igual devuelve 403.
+frontend — llamar igual devuelve 403. Vale también para los `GET`, sin excepción.
+
+**Mi Taller (sección 4.10)** es el módulo más grande del nivel `INSTALLER`: son 11 endpoints bajo
+`/workshop/` para que el instalador gestione su propio taller (sus clientes finales, los vehículos de
+esos clientes, las órdenes de trabajo, la agenda y sus cobros). Es información **del instalador**, no
+de Kristall: sus clientes finales no son contactos del CRM y sus cobros no entran en la cuenta
+corriente de la sección 4.9.
 
 ---
 
@@ -484,6 +490,293 @@ significa que falte información.
 > **Nunca depende de las cuotas.** Si un plan estuviera mal armado, el saldo sigue siendo correcto.
 > Es el mismo cálculo que ve el operador en el CRM, a propósito: si los números no coincidieran, el
 > panel dejaría de servir.
+
+
+---
+
+## 4.10 Mi Taller *(nivel INSTALLER)*
+
+Módulo para que el instalador gestione el trabajo de su propio taller: sus clientes finales, los
+vehículos de esos clientes, las órdenes de trabajo, la agenda y lo que le cobra a cada uno. Todo
+cuelga de `/api/portal/v1/contacts/:contactId/workshop/`.
+
+**Nada de esto es de Kristall.** Los clientes finales del instalador no son contactos del CRM, y los
+cobros que registra acá **no tocan la cuenta corriente de la sección 4.9**: son plata entre el
+instalador y su cliente. Son dos libros distintos.
+
+Los 11 endpoints exigen nivel `INSTALLER`, **incluidos los `GET`**. Un `BASIC` recibe `403` en todos.
+
+### Reglas que valen para toda la sección
+
+- **Un id en la URL no autoriza nada.** Cada recurso se busca filtrando además por el `contactId` de
+  la sesión. Pedir la OT de otro taller devuelve **`404`, no `403`**: confirmar que algo existe pero
+  no es tuyo ya es filtrar información. Lo mismo para clientes finales, vehículos y rollos.
+- **`404` significa "no existe o no es tuyo"**, sin distinguir. No intentes deducir cuál de las dos.
+- Las referencias cruzadas se validan: no se puede armar una OT con el cliente final de otro taller,
+  ni con el vehículo de otro cliente, ni consumir un rollo que no te vendieron.
+- Los campos de texto opcionales se mandan como `null`, no como `""`.
+
+### 4.10.1 `GET /workshop/clients` — Clientes finales
+
+Query opcional: `?search=` (busca en nombre, teléfono y email).
+
+```json
+[
+  {
+    "id": "clw...", "name": "Juan del Barrio", "email": "juan@example.com",
+    "phone": "099111222", "dni": null, "address": null, "notes": null,
+    "createdAt": "2026-09-01T12:00:00.000Z", "updatedAt": "2026-09-01T12:00:00.000Z",
+    "_count": { "assets": 2, "workOrders": 5 }
+  }
+]
+```
+
+Máximo 200, ordenados por nombre.
+
+### 4.10.2 `POST /workshop/clients` — Alta de cliente final
+
+**Body:** `{ "name": "Juan del Barrio", "email": null, "phone": "099111222", "dni": null, "address": null, "notes": null }`.
+Solo `name` es obligatorio. **Response `201`** con la ficha.
+
+`email` es opcional pero conviene pedirlo: es a donde va a ir el mail de garantía cuando la OT pase a
+`TERMINADA`.
+
+### 4.10.3 `GET · PATCH · DELETE /workshop/clients/:clientId` — Ficha del cliente final
+
+El `GET` suma `assets` (todos sus vehículos) y `_count.workOrders`.
+
+El `PATCH` acepta cualquier subconjunto de los campos del alta; mandar `{}` da `400`.
+
+El `DELETE` responde **`409`** si el cliente tiene órdenes de trabajo: el historial del taller no se
+tira por un click. Hay que borrar las OT primero, a mano y a conciencia.
+
+### 4.10.4 `GET · POST /workshop/clients/:clientId/assets` — Vehículos del cliente
+
+```json
+[
+  {
+    "id": "cla...", "workshopClientId": "clw...", "type": "VEHICLE",
+    "identifier": "AB 123 CD", "brand": "Toyota", "model": "Corolla", "year": 2022,
+    "color": null, "notes": null, "createdAt": "2026-09-01T12:00:00.000Z",
+    "_count": { "workOrders": 3 }
+  }
+]
+```
+
+`type` es el mismo enum que la cadena de garantías: `VEHICLE | WINDOW | BUILDING | OTHER` (default
+`VEHICLE`). Todos los demás campos son opcionales — `identifier` es la patente, el número de unidad o
+como el instalador llame a esa superficie, y **no es único**: dos clientes pueden traer la misma
+chapa mal tipeada y bloquear eso rompería el alta rápida sin ganar nada.
+
+**No hay `PATCH` ni `DELETE` de vehículos todavía.** Quedó fuera del contrato de esta fase; es una
+adición mecánica cuando la pantalla lo necesite.
+
+### 4.10.5 `GET /workshop/orders` — Listado de órdenes
+
+Query opcional: `?status=`, `?from=`, `?to=`, `?clientId=`.
+
+`status` tiene que ser uno de `PRESUPUESTADA | AGENDADA | EN_PROCESO | TERMINADA | ENTREGADA |
+CANCELADA`; cualquier otro valor da `400`. `from`/`to` son fechas ISO y filtran por **turno**
+(`scheduledAt`), no por fecha de creación — es lo que el instalador tiene en la cabeza cuando
+pregunta "qué tengo esta semana". Las OT sin turno quedan afuera de un rango, a propósito.
+
+```json
+[
+  {
+    "id": "clo...", "orderNumber": 47, "status": "AGENDADA",
+    "scheduledAt": "2026-09-03T14:00:00.000Z", "startedAt": null, "finishedAt": null,
+    "deliveredAt": null, "cancelledAt": null,
+    "priceQuoted": "30000", "priceFinal": null, "currency": "ARS",
+    "createdAt": "2026-09-01T12:00:00.000Z",
+    "workshopClient": { "id": "clw...", "name": "Juan del Barrio", "phone": "099111222" },
+    "asset": { "id": "cla...", "type": "VEHICLE", "identifier": "AB 123 CD", "brand": "Toyota", "model": "Corolla" }
+  }
+]
+```
+
+Máximo 300. **`orderNumber` es secuencial por instalador**, no global: el tipo quiere decir "la OT
+47", no "la 12844". Dos talleres distintos tienen cada uno su OT 1.
+
+### 4.10.6 `POST /workshop/orders` — Alta de OT
+
+**Body:**
+```json
+{
+  "workshopClientId": "clw...",
+  "assetId": "cla...",
+  "scheduledAt": "2026-09-03T14:00:00.000Z",
+  "priceQuoted": 30000,
+  "currency": "ARS",
+  "notes": null,
+  "items": [
+    { "description": "Parabrisas", "productId": "clp...", "rollId": "clr...", "squareMetersUsed": 1.2, "price": 15000 }
+  ]
+}
+```
+
+Solo `workshopClientId` es obligatorio. Detalles que importan:
+
+- **Si mandás `scheduledAt`, la OT nace `AGENDADA`; si no, `PRESUPUESTADA`.** Cargar un turno y
+  dejarla en "presupuestada" sería un estado que no significa nada.
+- `assetId` es opcional (un presupuesto por teléfono se carga sin patente), pero **pasar a
+  `TERMINADA` lo va a exigir**, porque la garantía necesita saber sobre qué se trabajó.
+- En `items`, `squareMetersUsed` son metros **cuadrados**. `rollId` tiene que ser un rollo que te
+  vendieron; si además mandás `productId`, tiene que ser el mismo producto del rollo, o da `400`.
+- Máximo 50 líneas.
+
+**Response `201`** con la ficha completa (formato de 4.10.7).
+
+### 4.10.7 `GET · PATCH /workshop/orders/:orderId` — Ficha de la OT
+
+El `GET` devuelve lo del listado más `notes`, la ficha completa del cliente y del vehículo, y:
+
+```json
+{
+  "items": [
+    { "id": "cli...", "description": "Parabrisas", "squareMetersUsed": "1.2", "price": "15000",
+      "product": { "id": "clp...", "name": "KRYPTON 05", "sku": "KR-05" },
+      "roll": { "id": "clr...", "fullRollCode": "LOT-20260705-0001-R003" } }
+  ],
+  "payments": [
+    { "id": "clp...", "amount": "20000", "currency": "ARS", "method": "efectivo",
+      "reference": null, "notes": null, "paidAt": "2026-09-03T18:00:00.000Z" }
+  ],
+  "warrantyInstallation": { "id": "cli...", "installationCode": "LOT-...-R003-I1", "status": "ACTIVE", "expiresAt": "2027-09-03T00:00:00.000Z" }
+}
+```
+
+`warrantyInstallation` es `null` mientras la OT no haya generado garantía. **No incluye el
+`activationToken`**: para mandarle el link al cliente final está el flujo de garantías, que tiene su
+propio control.
+
+El `PATCH` acepta cualquier subconjunto de los campos del alta más `priceFinal`. Dos cosas:
+
+- **`status` no se puede mandar por acá — da `400`.** El estado se cambia con 4.10.8, porque entrar
+  en `TERMINADA` dispara efectos que tienen que ser transaccionales; un PATCH que pisa la columna los
+  saltearía.
+- Si mandás `items`, **reemplazan a todas las líneas anteriores**, no se hace merge por id. Es lo que
+  espera una pantalla donde el instalador agrega y saca renglones antes de guardar.
+
+Una OT `ENTREGADA` o `CANCELADA` ya no se edita: `409`.
+
+### 4.10.8 `POST /workshop/orders/:orderId/transition` — Cambiar de estado
+
+**Body:** `{ "to": "TERMINADA", "priceFinal": 28000 }`. `priceFinal` es opcional y sirve para cerrar
+el precio en el mismo movimiento.
+
+```
+PRESUPUESTADA ⇄ AGENDADA ⇄ EN_PROCESO ──► TERMINADA ──► ENTREGADA
+      └──────────────┴────────────┴────────► CANCELADA
+```
+
+**La regla en una línea: antes de `TERMINADA` se puede ir y venir libremente; después, es de una sola
+dirección.**
+
+- Ir y venir entre `PRESUPUESTADA`, `AGENDADA` y `EN_PROCESO` está permitido, y también saltear hacia
+  adelante (el que entra sin turno va directo a `EN_PROCESO`). Ninguno de esos estados tiene efectos,
+  así que deshacer un botón mal apretado no rompe nada — y eso pasa todo el tiempo en un teléfono al
+  lado de un auto.
+- **De `TERMINADA` no se vuelve.** Ahí se descuenta material y se genera la garantía. Deshacer eso no
+  es "volver al estado anterior", es una reversión (devolver m², anular una instalación que quizás el
+  cliente final ya activó) y necesita su propia operación pensada.
+- **Una OT `TERMINADA` tampoco se cancela**: cancelar es "esto no pasó", y una vez terminada, pasó.
+- `ENTREGADA` y `CANCELADA` son terminales.
+
+Errores: `409` si la transición no está permitida o si la OT ya está en ese estado; `400` si querés
+terminar una OT sin vehículo cargado (`"Cargá el vehículo antes de terminar la orden"`).
+
+**Los timestamps se sellan la primera vez que se entra a cada estado y no se pisan después**:
+`startedAt`, `finishedAt`, `deliveredAt`, `cancelledAt` son el registro de cuándo pasó cada cosa, no
+un espejo del estado actual. Si alguien vuelve atrás y avanza de nuevo, `startedAt` sigue marcando
+cuándo se empezó de verdad.
+
+> **Estado de la integración con garantías.** Hoy la transición valida el cambio y sella la fecha,
+> pero **todavía no descuenta material ni genera la `WarrantyInstallation` ni manda el mail**: eso es
+> la Fase 4 del plan. Cuando esté, el `TERMINADA` va a hacer las tres cosas en una transacción, y el
+> mail se manda **después** del commit — si falla el envío se reintenta, no revierte la OT.
+
+### 4.10.9 `POST /workshop/orders/:orderId/payments` — Registrar un cobro
+
+**Body:** `{ "amount": 20000, "currency": "ARS", "method": "efectivo", "reference": null, "notes": null, "paidAt": "..." }`.
+Solo `amount` es obligatorio y tiene que ser positivo; `currency` hereda la de la OT y `paidAt` el
+momento actual.
+
+**Response `201`:** `{ "id": "clp...", "amount": "20000", "currency": "ARS", "method": "efectivo", "paidAt": "..." }`.
+
+`409` si la OT está cancelada.
+
+**Recordá: esto no entra en la cuenta corriente de la sección 4.9.** Es lo que el cliente final le
+pagó al instalador, no lo que el instalador le debe a Kristall.
+
+### 4.10.10 `GET /workshop/agenda?from=&to=` — Calendario
+
+`from` y `to` son **obligatorios**, en ISO, y el rango no puede superar **120 días** (`400` en los
+tres casos: si falta alguno, si `to` es anterior a `from`, o si el rango es más largo).
+
+```json
+[
+  {
+    "id": "clo...", "orderNumber": 47, "status": "AGENDADA",
+    "scheduledAt": "2026-09-03T14:00:00.000Z",
+    "workshopClient": { "id": "clw...", "name": "Juan del Barrio", "phone": "099111222" },
+    "asset": { "type": "VEHICLE", "identifier": "AB 123 CD", "brand": "Toyota", "model": "Corolla" }
+  }
+]
+```
+
+**Las canceladas no aparecen**: un turno cancelado libera la franja, que es el punto de cancelarlo.
+
+### 4.10.11 `GET /workshop/stock` — Stock con m² restantes
+
+Los mismos rollos de la sección 4.2, más cuánto queda adentro de cada uno:
+
+```json
+[
+  {
+    "id": "clr...", "fullRollCode": "LOT-20260705-0001-R003", "status": "SOLD",
+    "lot": { "lotNumber": "LOT-20260705-0001" },
+    "product": { "id": "clp...", "name": "KRYPTON 05", "sku": "KR-05", "category": "AUTOMOTIVE",
+                 "width": "1.52", "length": "30", "warrantyConfig": { "maxInstallations": 15 } },
+    "installations": [ { "id": "cli...", "installationCode": "LOT-...-R003-I1", "status": "PENDING", "activatedAt": null, "expiresAt": null } ],
+    "_count": { "installations": 0 },
+    "totalM2": 45.6, "usedM2": 12.5, "remainingM2": 33.1
+  }
+]
+```
+
+- **El sobrante se deriva, no se guarda**: `width × length − Σ(squareMetersUsed)` de las líneas que
+  declararon ese rollo. No hay dos números que puedan discrepar.
+- **Las OT canceladas no cuentan**: una OT cancelada no gastó material, y cancelarla devuelve los m²
+  al rollo.
+- **`totalM2` y `remainingM2` pueden ser `null`**, cuando el producto no tiene `width` y `length`
+  cargados. Es `null` y no `0` a propósito: "no sé cuánto queda" y "no queda nada" son cosas
+  distintas, y mostrar `0` haría creer que el rollo está vacío. `usedM2` siempre es un número.
+
+Es un endpoint aparte y no una extensión de 4.2 a propósito: aquel contrato ya está publicado y
+consumido, y agregarle campos de un módulo que recién arranca lo ataría a este.
+
+### 4.10.12 `GET /workshop/summary` — Números del dashboard
+
+`?from=` y `?to=` acotan el período que se mide; sin ellos se toma **el mes corriente**.
+
+```json
+{
+  "hoy": { "turnos": 3, "enProceso": 1 },
+  "ordenes": { "PRESUPUESTADA": 4, "AGENDADA": 3, "EN_PROCESO": 1, "TERMINADA": 2, "ENTREGADA": 37, "CANCELADA": 2 },
+  "periodo": {
+    "desde": "2026-09-01T00:00:00.000Z", "hasta": "2026-09-30T23:59:59.999Z",
+    "terminadas": 12, "facturado": 340000, "cobrado": 280000, "porCobrar": 60000,
+    "metrosCuadrados": 48.5
+  }
+}
+```
+
+`hoy` y `ordenes` son siempre del momento, no del período. `porCobrar` es **lo facturado del período
+menos lo cobrado del período** — no es la deuda histórica del taller; para eso habría que sumar todo
+desde el principio, y este número es el del mes que se está mirando.
+
+Es un solo endpoint en vez de que el panel pida seis cosas: es la primera pantalla que abre el
+instalador a la mañana, muchas veces con mala señal.
 
 ---
 
