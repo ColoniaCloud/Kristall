@@ -1,6 +1,12 @@
 import { callCrmApi } from '@/lib/crm/api'
 
-const KEY = () => process.env.CRM_WARRANTY_API_KEY
+/** Lanza si falta: sin la key el CRM devuelve 401 y el error se lee como
+ *  "no encontramos esa garantía". Ver la nota en lib/client-portal/api.ts. */
+const KEY = () => {
+  const key = process.env.CRM_WARRANTY_API_KEY
+  if (!key) throw new Error('Missing CRM_WARRANTY_API_KEY')
+  return key
+}
 
 export type AssetType = 'VEHICLE' | 'WINDOW' | 'BUILDING' | 'OTHER'
 export type InstallationStatus = 'PENDING' | 'ACTIVE' | 'EXPIRED' | 'VOIDED'

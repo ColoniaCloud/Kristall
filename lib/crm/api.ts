@@ -15,6 +15,8 @@ export class CrmApiError extends Error {
   }
 }
 
+const CRM_TIMEOUT_MS = 10_000
+
 type CrmMethod = 'GET' | 'POST' | 'PATCH'
 
 interface CallCrmApiOptions {
@@ -44,11 +46,15 @@ export async function callCrmApi<T>(path: string, options: CallCrmApiOptions = {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
   if (options.apiKey) headers['x-api-key'] = options.apiKey
 
+  // Sin timeout, un CRM colgado cuelga las páginas del panel hasta que corte
+  // la plataforma. 10s es holgado para la consulta más pesada (el perfil con
+  // compras y pagos) y corto frente a la paciencia de una persona.
   const res = await fetch(`${baseUrl}${path}`, {
     method,
     headers,
     body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
     cache: 'no-store',
+    signal: AbortSignal.timeout(CRM_TIMEOUT_MS),
   })
 
   const data = await res.json().catch(() => null)

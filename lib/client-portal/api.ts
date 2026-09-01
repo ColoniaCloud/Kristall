@@ -1,6 +1,17 @@
 import { callCrmApi } from '@/lib/crm/api'
 
-const KEY = () => process.env.CRM_CLIENT_PORTAL_API_KEY
+/**
+ * Lanza si falta, en vez de devolver undefined. Con undefined, callCrmApi
+ * simplemente no manda el header `x-api-key`, el CRM responde 401 y LoginForm
+ * mapea cualquier 401 a "Email o contraseña incorrectos": una key mal
+ * configurada se ve como si todos los clientes se equivocaran de contraseña.
+ * Mismo criterio que CRM_BASE_URL y SESSION_SECRET.
+ */
+const KEY = () => {
+  const key = process.env.CRM_CLIENT_PORTAL_API_KEY
+  if (!key) throw new Error('Missing CRM_CLIENT_PORTAL_API_KEY')
+  return key
+}
 
 export type PaymentStatus = 'PAID' | 'PARTIAL' | 'PENDING'
 export type RollStatus = 'IN_STOCK' | 'SOLD' | 'IN_USE' | 'EXHAUSTED' | 'VOIDED'
