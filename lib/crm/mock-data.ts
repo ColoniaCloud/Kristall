@@ -7,6 +7,8 @@
  * Cliente de portal: cualquier email/password loguea como mock-contact-1.
  */
 
+import { getWorkshopMock } from './mock-workshop'
+
 interface MockResponse {
   status: number
   data: unknown
@@ -208,6 +210,12 @@ function match(path: string, pattern: RegExp): RegExpMatchArray | null {
 }
 
 export function getMockResponse(path: string, method: string, body: unknown): MockResponse {
+  // Mi Taller vive en su propio archivo: es un store mutable (altas, cambios de
+  // estado, cobros) y mezclarlo con estas fixtures de solo lectura haria
+  // ilegibles las dos cosas.
+  const taller = getWorkshopMock(path, method, body)
+  if (taller) return taller
+
   // --- Garantías (WARRANTY_API.md) ---
   let m = match(path, /^\/api\/public\/warranty\/([^/]+)$/)
   if (m && method === 'GET') {

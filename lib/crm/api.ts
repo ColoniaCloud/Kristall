@@ -20,7 +20,7 @@ export class CrmApiError extends Error {
 
 const CRM_TIMEOUT_MS = 10_000
 
-type CrmMethod = 'GET' | 'POST' | 'PATCH'
+type CrmMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE'
 
 interface CallCrmApiOptions {
   method?: CrmMethod

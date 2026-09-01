@@ -6,6 +6,7 @@ import {
   ShieldCheck,
   MessageSquareWarning,
   Bell,
+  Wrench,
 } from 'lucide-react'
 import type { AccessLevel } from '@/lib/client-portal/session'
 
@@ -23,6 +24,7 @@ export const CLIENT_NAV_ITEMS = [
   { href: '/cliente/dashboard', label: 'Dashboard', icon: LayoutDashboard, level: 'BASIC' },
   { href: '/cliente/compras', label: 'Compras', icon: ShoppingBag, level: 'BASIC' },
   { href: '/cliente/cuenta', label: 'Cuenta corriente', icon: Wallet, level: 'BASIC' },
+  { href: '/cliente/taller', label: 'Mi Taller', icon: Wrench, level: 'INSTALLER' },
   { href: '/cliente/stock', label: 'Stock', icon: PackageSearch, level: 'INSTALLER' },
   { href: '/cliente/instalaciones', label: 'Instalaciones', icon: ShieldCheck, level: 'INSTALLER' },
   { href: '/cliente/reclamos', label: 'Reclamos', icon: MessageSquareWarning, level: 'INSTALLER' },

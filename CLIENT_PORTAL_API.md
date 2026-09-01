@@ -543,7 +543,9 @@ Solo `name` es obligatorio. **Response `201`** con la ficha.
 
 ### 4.10.3 `GET · PATCH · DELETE /workshop/clients/:clientId` — Ficha del cliente final
 
-El `GET` suma `assets` (todos sus vehículos) y `_count.workOrders`.
+El `GET` suma `assets` (todos sus vehículos, **cada uno con su propio
+`_count.workOrders`**) y el `_count` del cliente. El conteo por vehículo importa: la ficha del
+cliente es donde el instalador mira "¿a este auto ya le hicimos algo?".
 
 El `PATCH` acepta cualquier subconjunto de los campos del alta; mandar `{}` da `400`.
 
@@ -771,9 +773,20 @@ consumido, y agregarle campos de un módulo que recién arranca lo ataría a est
 }
 ```
 
-`hoy` y `ordenes` son siempre del momento, no del período. `porCobrar` es **lo facturado del período
-menos lo cobrado del período** — no es la deuda histórica del taller; para eso habría que sumar todo
-desde el principio, y este número es el del mes que se está mirando.
+`hoy` y `ordenes` son siempre del momento, no del período.
+
+**`facturado`, `cobrado` y `porCobrar` son sobre el mismo conjunto de órdenes**: las que se
+terminaron dentro del período. `cobrado` no es "cuánta plata entró este mes" sino "cuánto se cobró
+contra los trabajos que terminaste este mes" —incluidas las señas tomadas antes de terminarlos— y
+`porCobrar` es la resta: de lo que hiciste este mes, cuánto falta cobrar.
+
+> Esto se corrigió en septiembre 2026, y vale la pena saber por qué. Antes `cobrado` sumaba **todos**
+> los cobros con fecha en el período, vinieran de la orden que vinieran. Con eso, una seña sobre un
+> trabajo que todavía no terminó entraba en `cobrado` sin que su orden entrara en `facturado`, y
+> `porCobrar` daba **negativo**. Un "por cobrar" negativo no significa nada para nadie. Para que la
+> resta tenga sentido, los dos números tienen que ser sobre el mismo conjunto.
+
+`porCobrar` no es la deuda histórica del taller: para eso habría que sumar desde el principio.
 
 Es un solo endpoint en vez de que el panel pida seis cosas: es la primera pantalla que abre el
 instalador a la mañana, muchas veces con mala señal.
