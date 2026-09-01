@@ -51,7 +51,6 @@ export default function CreateInstallationAction({ roll }: { roll: StockRoll }) 
           open={emailOpen}
           onOpenChange={setEmailOpen}
           installationCode={created.installationCode}
-          productName={roll.product.name}
           activationToken={created.activationToken}
         />
       )}

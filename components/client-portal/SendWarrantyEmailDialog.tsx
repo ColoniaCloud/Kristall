@@ -28,13 +28,11 @@ export default function SendWarrantyEmailDialog({
   open,
   onOpenChange,
   installationCode,
-  productName,
   activationToken,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
   installationCode: string
-  productName: string
   activationToken: string
 }) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
@@ -54,11 +52,12 @@ export default function SendWarrantyEmailDialog({
       const res = await fetch('/api/portal/installations/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        // El nombre del producto lo resuelve el servidor contra el CRM: nada del
+        // contenido del mail sale de acá.
         body: JSON.stringify({
           to: data.to,
           recipientName: data.recipientName,
           installationCode,
-          productName,
           activationToken,
         }),
       })

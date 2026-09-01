@@ -90,15 +90,20 @@ export async function sendWarrantyActivationEmail(params: {
   const resend = getResendClient()
   const { to, recipientName, installerCompany, installationCode, productName, activationLink } = params
 
+  // El subject viaja como header, no como HTML: escaparlo mostraría entidades
+  // (&amp;) al cliente. Lo único que hay que sacarle son los saltos de línea.
+  const safeProductName = productName.replace(/[\r\n]+/g, ' ').trim()
+  const link = escapeHtml(activationLink)
+
   await resend.emails.send({
     from: process.env.EMAIL_FROM!,
     to,
-    subject: `Tu garantía Kristall Film — ${productName}`,
+    subject: `Tu garantía Kristall Film — ${safeProductName}`,
     html: `
-      <h2>Hola${recipientName ? ` ${recipientName}` : ''},</h2>
-      <p>${installerCompany} te entregó un producto Kristall Film (${productName}) con garantía. Usá este link para activarla o consultar su estado:</p>
-      <p><a href="${activationLink}">${activationLink}</a></p>
-      <p>Tu clave de garantía es: <strong>${installationCode}</strong></p>
+      <h2>Hola${recipientName ? ` ${escapeHtml(recipientName)}` : ''},</h2>
+      <p>${escapeHtml(installerCompany)} te entregó un producto Kristall Film (${escapeHtml(productName)}) con garantía. Usá este link para activarla o consultar su estado:</p>
+      <p><a href="${link}">${link}</a></p>
+      <p>Tu clave de garantía es: <strong>${escapeHtml(installationCode)}</strong></p>
       <br/>
       <p style="color:#9A9A9A;font-size:12px">Kristall Film — Tecnología alemana de precisión</p>
     `,

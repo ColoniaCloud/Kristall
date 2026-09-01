@@ -315,12 +315,27 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
     }
     const installationNumber = roll.installations.length + 1
     const willBeExhausted = installationNumber >= max
+    const installationCode = `${roll.fullRollCode}-I${installationNumber}`
+    // La instalación recién creada tiene que aparecer también en 4.3: send-email
+    // valida la pertenencia contra esa lista y si no está devuelve 403.
+    if (!MOCK_INSTALLATIONS.some((i) => i.installationCode === installationCode)) {
+      MOCK_INSTALLATIONS.push({
+        id: `cli-mock-${installationNumber}`,
+        installationCode,
+        status: 'PENDING',
+        assetType: null,
+        assetDescription: null,
+        activatedAt: null,
+        expiresAt: null,
+        roll: { fullRollCode: roll.fullRollCode, product: roll.product },
+      })
+    }
     return {
       status: 201,
       data: {
         id: `cli-mock-${installationNumber}`,
         installationNumber,
-        installationCode: `${roll.fullRollCode}-I${installationNumber}`,
+        installationCode,
         activationToken: `mock-created-${roll.id}-${installationNumber}`,
         status: 'PENDING',
         rollStatus: willBeExhausted ? 'EXHAUSTED' : 'IN_USE',
