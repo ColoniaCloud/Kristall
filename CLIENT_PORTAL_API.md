@@ -442,10 +442,17 @@ significa que falte información.
 | Código | Cuándo |
 |---|---|
 | `401` | Falta `x-api-key`, es inválida, o fue revocada. |
-| `403` | La cuenta es `BASIC` y el endpoint pide nivel `INSTALLER` (ver sección 0). |
+| `403` | La cuenta del portal está deshabilitada (`enabled: false`), el contacto no tiene cuenta, o la cuenta es `BASIC` y el endpoint pide nivel `INSTALLER` (ver sección 0). |
 | `404` | El `contactId` no existe, o existe pero no es de tipo `CLIENT`. |
 | `429` | Se superó el límite de 300 requests/minuto para tu key (o el límite de intentos de login, alta o recuperación). |
 | `500` | Error interno del CRM — reintentar más tarde. |
+
+**Sobre el `403` por cuenta deshabilitada** (septiembre 2026) — `enabled: false` es el kill switch del
+admin y corta **todo** el portal, no solo el nivel de instalador: desde este cambio, también los
+endpoints de nivel `BASIC` (perfil, cuenta corriente y notificaciones) responden `403`. Antes solo lo
+verificaban los endpoints de instalador, así que bajar el switch no cerraba la sesión básica hasta que
+venciera del lado de kristall-web. Si tu backend cachea la sesión, tratá este `403` como
+"cerrar sesión y volver a pedir login", no como un error transitorio.
 
 ---
 
