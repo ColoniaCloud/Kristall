@@ -148,9 +148,18 @@ const MOCK_CLAIMS = [
   },
 ]
 
+/**
+ * Versión de credencial del mock. El CRM real la deriva de la contraseña; acá
+ * alcanza con que sea estable, para que la cabecera viaje y el flujo se
+ * ejercite igual en desarrollo.
+ */
+const MOCK_CREDENTIAL_VERSION = 'mock000credver00'
+
 const MOCK_NOTIFICATIONS = [
-  { id: 'cln1', type: 'NEW_PURCHASE', title: 'Nueva compra confirmada', message: 'Se confirmó tu compra #1042 por un total de $150000.', read: false, createdAt: '2026-07-09T00:00:00.000Z' },
-  { id: 'clm1', type: 'WARRANTY_ACTIVATED', title: 'Garantía activada', message: 'Juan Pérez activó la garantía LOT-20260705-0001-R003-I1.', read: true, createdAt: '2026-07-08T00:00:00.000Z' },
+  { id: 'cln1', type: 'NEW_PURCHASE', title: 'Nueva compra confirmada', message: 'Se confirmó tu compra #1042 por un total de $150000.', link: null, read: false, createdAt: '2026-07-09T00:00:00.000Z' },
+  { id: 'clm1', type: 'WARRANTY_ACTIVATED', title: 'Garantía activada', message: 'Juan Pérez activó la garantía LOT-20260705-0001-R003-I1.', link: null, read: true, createdAt: '2026-07-08T00:00:00.000Z' },
+  // El watcher de cuotas del CRM manda el deep link con el ancla ya puesta.
+  { id: 'clo1', type: 'INSTALLMENT_OVERDUE', title: 'Tenés una cuota vencida', message: 'La cuota 2 del plan de la venta #1042 venció el 05/07/2026.', link: '/cliente/cuenta#cuota-inst2', read: false, createdAt: '2026-07-10T00:00:00.000Z' },
 ]
 
 /**
@@ -239,7 +248,7 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
       const accessLevel = email.startsWith('basic') ? 'BASIC' : 'INSTALLER'
       return {
         status: 200,
-        data: { contactId: MOCK_CONTACT_ID, name: MOCK_CONTACT.name, company: MOCK_CONTACT.company, accessLevel },
+        data: { contactId: MOCK_CONTACT_ID, name: MOCK_CONTACT.name, company: MOCK_CONTACT.company, accessLevel, credentialVersion: MOCK_CREDENTIAL_VERSION },
       }
     }
     return { status: 401, data: { error: 'Credenciales inválidas' } }
@@ -273,7 +282,7 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
     const { token, password } = (body ?? {}) as { token?: string; password?: string }
     if (!token?.startsWith('mock-token')) return { status: 404, data: { error: 'El link no es válido.' } }
     if (!password || password.length < 8) return { status: 400, data: { error: 'Datos inválidos' } }
-    return { status: 200, data: { contactId: MOCK_CONTACT_ID, name: MOCK_CONTACT.name, company: MOCK_CONTACT.company, accessLevel: 'BASIC' } }
+    return { status: 200, data: { contactId: MOCK_CONTACT_ID, name: MOCK_CONTACT.name, company: MOCK_CONTACT.company, accessLevel: 'BASIC', credentialVersion: MOCK_CREDENTIAL_VERSION } }
   }
 
   // Recuperación de contraseña. Respuesta genérica a propósito.

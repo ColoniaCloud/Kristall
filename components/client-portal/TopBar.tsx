@@ -16,7 +16,7 @@ import NotificationsBell from './NotificationsBell'
 import type { AccessLevel } from '@/lib/client-portal/session'
 
 interface Props {
-  session: { name: string; company: string }
+  session: { name: string; company: string | null }
   /** Para el menú del celular; mismo criterio que el Sidebar de escritorio. */
   level: AccessLevel
 }
@@ -50,7 +50,7 @@ export default function TopBar({ session, level }: Props) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="gap-2">
-              <span className="max-w-[140px] truncate">{session.company}</span>
+              <span className="max-w-[140px] truncate">{session.company ?? session.name}</span>
               <ChevronDown className="size-3.5" />
             </Button>
           </DropdownMenuTrigger>

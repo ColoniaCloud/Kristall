@@ -76,7 +76,9 @@ export async function POST(request: NextRequest) {
       to,
       recipientName:
         typeof recipientName === 'string' ? recipientName.slice(0, MAX_RECIPIENT_NAME) : undefined,
-      installerCompany: session.company,
+      // Sin razón social se firma con el nombre del Cliente: el mail al usuario
+      // final dice quién le instaló la lámina y no puede quedar en blanco.
+      installerCompany: session.company ?? session.name,
       // Del CRM, no del body.
       installationCode: installation.installationCode,
       productName: installation.roll.product.name,

@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
       name: result.name,
       company: result.company,
       accessLevel: result.accessLevel ?? 'BASIC',
+      credentialVersion: result.credentialVersion,
     })
     const response = NextResponse.json({ name: result.name, company: result.company })
     response.cookies.set(cookie.name, cookie.value, cookie.options)

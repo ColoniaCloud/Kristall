@@ -67,6 +67,24 @@ frontend — llamar igual devuelve 403.
   endpoint.
 - Rate limit: 300 requests/minuto por key. Si se excede, `429 { "error": "Demasiadas solicitudes" }`.
 
+### `x-portal-credential-version` (sesiones)
+
+Todos los endpoints de la sección 4 (los que van bajo `/contacts/:contactId/`) aceptan además una
+cabecera opcional:
+
+```
+x-portal-credential-version: <el valor que devolvió el login>
+```
+
+Es la huella de la contraseña con la que se abrió la sesión. Si el Cliente cambió la contraseña
+después, el CRM responde **401** `{ "error": "La sesión venció porque se cambió la contraseña" }` y
+tu sesión deja de valer en ese mismo momento, en vez de sobrevivir hasta que expire tu cookie.
+
+- **Mandala siempre.** Sin ella, el CRM acepta el pedido igual (por compatibilidad con las sesiones
+  emitidas antes de septiembre 2026), pero un cambio de contraseña no corta nada.
+- **Tratá el 401 distinto del 403**: 401 es "esta sesión no vale más, cerrala y pedí login de nuevo";
+  403 es "esta cuenta no tiene ese permiso".
+
 ---
 
 ## 3. Login del Cliente
@@ -76,10 +94,15 @@ POST /api/portal/v1/auth/login
 ```
 Body: `{ "email": "juan@example.com", "password": "..." }`.
 
-- **200** `{ "contactId": "cly...", "name": "Juan Pérez", "company": "Vidriería Sur", "accessLevel": "BASIC" }`
-  — credenciales correctas. Guardá `contactId` **y `accessLevel`** en tu propia sesión para ese usuario;
-  no hace falta volver a llamar a este endpoint hasta que la sesión expire de tu lado. Con `accessLevel`
-  armás el menú (ver sección 0); el CRM igual lo revalida en cada endpoint de instalador.
+- **200** `{ "contactId": "cly...", "name": "Juan Pérez", "company": "Vidriería Sur", "accessLevel": "BASIC",
+  "credentialVersion": "a1b2c3d4e5f60718" }` — credenciales correctas. Guardá `contactId`,
+  `accessLevel` **y `credentialVersion`** en tu propia sesión para ese usuario; no hace falta volver a
+  llamar a este endpoint hasta que la sesión expire de tu lado. Con `accessLevel` armás el menú (ver
+  sección 0); el CRM igual lo revalida en cada endpoint de instalador. `credentialVersion` va de
+  vuelta en la cabecera `x-portal-credential-version` (sección 2).
+
+  `company` puede ser `null`: es una columna opcional de la ficha del CRM y los clientes particulares
+  no la tienen cargada.
 - **401** `{ "error": "Credenciales inválidas" }` — email no existe, contraseña incorrecta, o el acceso
   fue deshabilitado por un admin. El error es intencionalmente genérico (no distingue el motivo) para
   no facilitar enumeración de cuentas.
@@ -109,13 +132,21 @@ Body: `{ "email": "juan@example.com" }`.
   mandalo a iniciar sesión o a recuperar la contraseña.
 - **200** `{ "found": false, "message": "..." }` — ese email no corresponde a ningún Cliente. Solo
   cuentan los contactos de tipo `CLIENT`: un Lead con el mismo email **no** califica.
-- **409** — hay más de una ficha de Cliente con ese email; hay que resolverlo con Kristall a mano.
-- **429** — máximo 3 pedidos cada 15 min por email.
+- **409** `{ "error": "Hay más de una ficha con ese email. Contactanos para resolverlo." }` — hay más
+  de una ficha de Cliente con ese email; hay que resolverlo con Kristall a mano. *(Hasta septiembre
+  2026 este caso devolvía `{ found, message }` en vez de `{ error }`, y era el único 4xx de la API
+  que no seguía la convención.)*
+- **429** — dos límites distintos: máximo **3 pedidos cada 15 min por email** (contra insistir sobre
+  una misma dirección) y **40 cada 15 min en total por key** (contra barrer una lista).
 - **503** — el servidor de mail no está configurado.
+- **502** `{ "error": "..." }` — se encontró la cuenta pero falló el envío del mail. Mostrá el `error`
+  y nada más: la respuesta del CRM puede traer campos de diagnóstico pensados para quien opera el
+  sistema, no para el navegador.
 
 > **Nota de seguridad:** a diferencia del resto de la API, este endpoint **confirma si un email
 > pertenece a un cliente de Kristall**. Es deliberado: el flujo pedido muestra "encontramos tu cuenta"
-> en pantalla. El límite de 3 intentos cada 15 minutos es lo que impide barrer una lista de emails.
+> en pantalla. Lo que frena la enumeración es el tope **global por key**, no el de 3 por email: quien
+> barre una lista prueba direcciones distintas y nunca toca el límite por email.
 
 ### Paso 2 — validar el link y crear la contraseña
 
@@ -312,7 +343,12 @@ rollo vendido a ese `contactId` (ya lo garantiza tu login).
 
 **Errores:**
 - `404 { "error": "Instalación no encontrada" }` — no existe, o no pertenece a ese `contactId`.
-- `400 { "error": "Esta garantía no está activa" }` — la instalación está `PENDING`, `EXPIRED` o `VOIDED`.
+- `400 { "error": "Esta garantía no está activa" }` — la instalación está `PENDING` o `VOIDED`.
+- `400 { "error": "Esta garantía ya venció" }` — figura `ACTIVE` pero su `expiresAt` ya pasó. Es un
+  error aparte porque **`EXPIRED` se calcula, no se persiste**: no hay proceso que escriba ese estado
+  en la base, así que una garantía vencida sigue diciendo `ACTIVE` en el campo `status` que devuelven
+  4.2 y 4.3. Si escondés el botón de reclamo mirando solo `status`, mostralo también según
+  `expiresAt`.
 - `400` con detalle de zod si falta algún campo requerido o el email es inválido.
 
 El reclamo queda con `channel: "CLIENT_PORTAL_API"` y dispara una notificación a los administradores
@@ -325,14 +361,29 @@ notificaciones del CRM).
 
 ```json
 [
-  { "id": "cln...", "type": "NEW_PURCHASE", "title": "Nueva compra registrada", "message": "Se registró tu compra #1042 por un total de $150000.", "read": false, "createdAt": "2026-07-09T00:00:00.000Z" },
-  { "id": "clm...", "type": "WARRANTY_ACTIVATED", "title": "Garantía activada", "message": "Juan Pérez activó la garantía LOT-...-R003-I1.", "read": true, "createdAt": "2026-07-08T00:00:00.000Z" }
+  { "id": "cln...", "type": "NEW_PURCHASE", "title": "Nueva compra registrada", "message": "Se registró tu compra #1042 por un total de $150000.", "link": null, "read": false, "createdAt": "2026-07-09T00:00:00.000Z" },
+  { "id": "clm...", "type": "WARRANTY_ACTIVATED", "title": "Garantía activada", "message": "Juan Pérez activó la garantía LOT-...-R003-I1.", "link": null, "read": true, "createdAt": "2026-07-08T00:00:00.000Z" },
+  { "id": "clo...", "type": "INSTALLMENT_OVERDUE", "title": "Tenés una cuota vencida", "message": "La cuota 2 del plan de la venta #1042 venció el 05/07/2026.", "link": "/cliente/cuenta#cuota-cli123", "read": false, "createdAt": "2026-07-10T00:00:00.000Z" }
 ]
 ```
 
-`type` es `"NEW_PURCHASE"` (se creó una venta suya, con rollos ya asignados automáticamente) o
-`"WARRANTY_ACTIVATED"` (un Usuario activó la garantía de uno de sus rollos). Se generan
-automáticamente — no hay forma de crearlas manualmente vía API.
+`type` puede ser:
+
+| `type` | Cuándo |
+|---|---|
+| `NEW_PURCHASE` | Se creó una venta suya, con rollos ya asignados automáticamente. |
+| `WARRANTY_ACTIVATED` | Un Usuario activó la garantía de uno de sus rollos. |
+| `INSTALLMENT_OVERDUE` | Una cuota de su plan de pagos venció. La genera un proceso del CRM que corre cada 6 h y no repite el aviso de una misma cuota. |
+
+Se generan automáticamente — no hay forma de crearlas manualmente vía API. **Tratá `type` como un
+string abierto:** si aparece uno que tu versión no conoce, mostrá `title` y `message` igual en vez de
+descartar la notificación.
+
+`link` es una ruta **interna de tu propio sitio**, ya armada, o `null` si la notificación es solo
+informativa. El CRM la escribe asumiendo las rutas del Panel de Cliente — por ejemplo
+`/cliente/cuenta#cuota-<id>`, cuyo ancla existe en la vista de cuenta corriente. Antes de usarla,
+verificá que empiece con `/` y no con `//`: es un valor que viene de otro sistema y no tiene por qué
+poder sacar al usuario de tu dominio.
 
 ### 4.7 `PATCH /api/portal/v1/contacts/:contactId/notifications/:id/read` — Marcar como leída
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Check } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -34,6 +35,18 @@ export default function NotificationsList({ initial }: { initial: Notification[]
           <div>
             <p className={n.read ? 'text-sm text-muted-foreground' : 'text-sm font-medium'}>{n.title}</p>
             <p className="mt-0.5 text-sm text-muted-foreground">{n.message}</p>
+            {/* El CRM manda el destino ya armado — p. ej. la cuota vencida que
+                originó el aviso, con el ancla puesta en la cuenta corriente.
+                Solo se siguen rutas internas: el link viene del CRM, pero un
+                `//otro-sitio` o un `javascript:` no tiene por qué salir de acá. */}
+            {n.link?.startsWith('/') && !n.link.startsWith('//') && (
+              <Link
+                href={n.link}
+                className="mt-1 inline-block text-sm font-medium text-primary underline"
+              >
+                Ver detalle
+              </Link>
+            )}
             <p className="mt-1 text-xs text-muted-foreground">{new Date(n.createdAt).toLocaleString('es-AR')}</p>
           </div>
           {!n.read && (

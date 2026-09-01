@@ -1,0 +1,10 @@
+# CLIENT_PORTAL_API.md y WARRANTY_API.md son ESPEJOS: la misma documentación
+# existe en crm-polarizados, que es donde vive el código que implementa esos
+# contratos. Un cambio de contrato se hace en los dos archivos.
+#
+# Ese espejo era inverificable en Windows: este repo los tenía con CRLF y el CRM
+# con LF, así que un `diff` pelado reportaba las 458 líneas como distintas
+# aunque el contenido fuera idéntico, y había que acordarse de usar
+# `diff --strip-trailing-cr`. Forzando LF acá, un `diff` normal alcanza.
+CLIENT_PORTAL_API.md text eol=lf
+WARRANTY_API.md text eol=lf

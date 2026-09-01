@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { getClientSession } from '@/lib/client-portal/session'
 import { getAccount } from '@/lib/client-portal/api'
+import { loadPortalData } from '@/lib/client-portal/guard'
 import AccountStatement from '@/components/client-portal/AccountStatement'
 
 export const metadata: Metadata = { title: 'Cuenta corriente' }
@@ -10,7 +11,7 @@ export default async function CuentaPage() {
   const session = await getClientSession()
   if (!session) redirect('/cliente/ingresar')
 
-  const account = await getAccount(session.contactId)
+  const account = await loadPortalData(() => getAccount(session.contactId))
 
   return (
     <div className="flex flex-col gap-8">

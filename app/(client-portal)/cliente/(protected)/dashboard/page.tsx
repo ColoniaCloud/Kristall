@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { AlertTriangle, CalendarClock } from 'lucide-react'
 import { getClientSession } from '@/lib/client-portal/session'
 import { getContact, getAccount } from '@/lib/client-portal/api'
+import { loadPortalData } from '@/lib/client-portal/guard'
 import StatCards from '@/components/client-portal/StatCards'
 import PurchasesTable from '@/components/client-portal/PurchasesTable'
 import { formatCurrency, formatDate } from '@/lib/format'
@@ -15,8 +16,8 @@ export default async function DashboardPage() {
   if (!session) redirect('/cliente/ingresar')
 
   const [contact, account] = await Promise.all([
-    getContact(session.contactId),
-    getAccount(session.contactId),
+    loadPortalData(() => getContact(session.contactId)),
+    loadPortalData(() => getAccount(session.contactId)),
   ])
 
   const { overdueAmount, nextDueDate } = account.summary
@@ -25,7 +26,9 @@ export default async function DashboardPage() {
     <div className="flex flex-col gap-6">
       <div>
         <h1 className="font-heading text-2xl font-semibold">Hola, {contact.firstName}</h1>
-        <p className="text-sm text-muted-foreground">{contact.company}</p>
+        {/* `company` es null para los clientes sin razón social; sin esto el
+            renglón quedaba vacío debajo del saludo. */}
+        {contact.company && <p className="text-sm text-muted-foreground">{contact.company}</p>}
       </div>
 
       {/* Lo primero que tiene que ver es si hay algo vencido. */}

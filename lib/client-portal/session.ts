@@ -16,7 +16,8 @@ export type AccessLevel = 'BASIC' | 'INSTALLER'
 export interface ClientSession {
   contactId: string
   name: string
-  company: string
+  /** null cuando el Cliente no tiene razón social cargada — es lo normal en particulares. */
+  company: string | null
   /**
    * Sirve para armar el menú. NO es la barrera de seguridad: el CRM revalida el
    * nivel en cada endpoint de instalador y responde 403 si no corresponde.
@@ -24,6 +25,15 @@ export interface ClientSession {
    * en ese caso se asume `BASIC`, que es lo restrictivo.
    */
   accessLevel?: AccessLevel
+  /**
+   * Huella de la contraseña con la que se emitió esta sesión. Viaja en cada
+   * llamada al CRM (`x-portal-credential-version`) y el CRM la compara con la
+   * contraseña vigente: si el Cliente la cambió, esta sesión queda muerta al
+   * instante en vez de seguir válida hasta que venza.
+   * Opcional por lo mismo que `accessLevel`: las sesiones emitidas antes de
+   * setiembre 2026 no la traen, y el CRM las acepta hasta que venzan.
+   */
+  credentialVersion?: string
 }
 
 /** Nivel efectivo de una sesión, tratando las viejas sin nivel como BASIC. */

@@ -34,17 +34,24 @@ export interface Payment {
   saleNumber: string
 }
 
+/**
+ * Ficha del Cliente. Ojo con los `| null`: en el CRM son columnas opcionales del
+ * `Contact` y llegan como `null`, no como cadena vacía. Estaban tipadas como
+ * `string` a secas, así que TypeScript dejaba pasar `contact.company.charAt(0)`
+ * y el botón del menú se quedaba sin letra para cualquier cliente sin razón
+ * social cargada.
+ */
 export interface ClientContact {
   id: string
   firstName: string
   lastName: string
   name: string
-  company: string
-  email: string
-  phone: string
-  address: string
-  city: string
-  state: string
+  company: string | null
+  email: string | null
+  phone: string | null
+  address: string | null
+  city: string | null
+  state: string | null
   purchases: Purchase[]
   payments: Payment[]
   balance: number
@@ -111,9 +118,20 @@ export interface Claim {
 
 export interface Notification {
   id: string
-  type: 'NEW_PURCHASE' | 'WARRANTY_ACTIVATED'
+  /**
+   * `INSTALLMENT_OVERDUE` lo genera el watcher de cuotas del CRM
+   * (lib/overdue-installments.ts) y faltaba en este tipo.
+   */
+  type: 'NEW_PURCHASE' | 'WARRANTY_ACTIVATED' | 'INSTALLMENT_OVERDUE'
   title: string
   message: string
+  /**
+   * Destino dentro del panel, ya en formato de ruta local — p. ej.
+   * `/cliente/cuenta#cuota-<id>`, cuya ancla existe en AccountStatement. `null`
+   * cuando la notificación es solo informativa. El CRM lo venía mandando y se
+   * descartaba al serializar.
+   */
+  link: string | null
   read: boolean
   createdAt: string
 }
@@ -123,9 +141,16 @@ export type AccessLevel = 'BASIC' | 'INSTALLER'
 export interface LoginResult {
   contactId: string
   name: string
-  company: string
+  company: string | null
   /** Ausente en respuestas del CRM anteriores a agosto 2026; tratar como BASIC. */
   accessLevel?: AccessLevel
+  /**
+   * Huella de la contraseña con la que se abre la sesión. Se guarda en la cookie
+   * y se manda de vuelta en cada llamada: es lo que permite que un cambio de
+   * contraseña mate las sesiones vivas. Ausente en respuestas del CRM
+   * anteriores a setiembre 2026.
+   */
+  credentialVersion?: string
 }
 
 export function loginClient(email: string, password: string) {
@@ -259,32 +284,60 @@ export interface ClientAccount {
   plans: AccountPlan[]
 }
 
+/**
+ * Opciones de las llamadas hechas EN NOMBRE del Cliente logueado.
+ * `portalSession` adjunta la versión de credencial de la cookie — ver
+ * lib/crm/api.ts.
+ *
+ * Todos los segmentos van con `encodeURIComponent`: Next decodifica los params
+ * ANTES de dárselos al route handler, así que un `%2F` en la URL del navegador
+ * llega acá como `/` y se reinyecta como separador de path en la llamada al
+ * CRM, con la api key adjunta. Los tokens de activación y reset ya lo hacían
+ * bien; el resto no, y era inconsistencia, no criterio.
+ */
+const SESSION = () => ({ apiKey: KEY(), portalSession: true }) as const
+
 export function getAccount(contactId: string) {
-  return callCrmApi<ClientAccount>(`/api/portal/v1/contacts/${contactId}/account`, { apiKey: KEY() })
+  return callCrmApi<ClientAccount>(
+    `/api/portal/v1/contacts/${encodeURIComponent(contactId)}/account`,
+    SESSION()
+  )
 }
 
 export function getContact(contactId: string) {
-  return callCrmApi<ClientContact>(`/api/portal/v1/contacts/${contactId}`, { apiKey: KEY() })
+  return callCrmApi<ClientContact>(
+    `/api/portal/v1/contacts/${encodeURIComponent(contactId)}`,
+    SESSION()
+  )
 }
 
 export function getStock(contactId: string) {
-  return callCrmApi<StockRoll[]>(`/api/portal/v1/contacts/${contactId}/stock`, { apiKey: KEY() })
+  return callCrmApi<StockRoll[]>(
+    `/api/portal/v1/contacts/${encodeURIComponent(contactId)}/stock`,
+    SESSION()
+  )
 }
 
 export function getInstallations(contactId: string) {
-  return callCrmApi<Installation[]>(`/api/portal/v1/contacts/${contactId}/installations`, { apiKey: KEY() })
+  return callCrmApi<Installation[]>(
+    `/api/portal/v1/contacts/${encodeURIComponent(contactId)}/installations`,
+    SESSION()
+  )
 }
 
 /** Genera un nuevo sub-código de instalación (#2, #3, ...) sobre un rollo ya vendido a ese contacto. */
 export function createRollInstallation(contactId: string, fullRollCode: string) {
   return callCrmApi<CreatedInstallation>(
-    `/api/portal/v1/contacts/${contactId}/rolls/${fullRollCode}/installations`,
-    { method: 'POST', apiKey: KEY() }
+    `/api/portal/v1/contacts/${encodeURIComponent(contactId)}/rolls/${encodeURIComponent(fullRollCode)}/installations`,
+    { method: 'POST', ...SESSION() }
   )
 }
 
 export function getClaims(contactId: string) {
-  return callCrmApi<Claim[]>(`/api/portal/v1/contacts/${contactId}/claims`, { apiKey: KEY() })
+  return callCrmApi<Claim[]>(
+    `/api/portal/v1/contacts/${encodeURIComponent(contactId)}/claims`,
+    SESSION()
+  )
 }
 
 export interface CreateClaimInput {
@@ -296,20 +349,22 @@ export interface CreateClaimInput {
 }
 
 export function createClaim(contactId: string, input: CreateClaimInput) {
-  return callCrmApi<{ id: string; status: string }>(`/api/portal/v1/contacts/${contactId}/claims`, {
-    method: 'POST',
-    apiKey: KEY(),
-    body: input,
-  })
+  return callCrmApi<{ id: string; status: string }>(
+    `/api/portal/v1/contacts/${encodeURIComponent(contactId)}/claims`,
+    { method: 'POST', ...SESSION(), body: input }
+  )
 }
 
 export function getNotifications(contactId: string) {
-  return callCrmApi<Notification[]>(`/api/portal/v1/contacts/${contactId}/notifications`, { apiKey: KEY() })
+  return callCrmApi<Notification[]>(
+    `/api/portal/v1/contacts/${encodeURIComponent(contactId)}/notifications`,
+    SESSION()
+  )
 }
 
 export function markNotificationRead(contactId: string, notificationId: string) {
   return callCrmApi<{ ok: boolean }>(
-    `/api/portal/v1/contacts/${contactId}/notifications/${notificationId}/read`,
-    { method: 'PATCH', apiKey: KEY() }
+    `/api/portal/v1/contacts/${encodeURIComponent(contactId)}/notifications/${encodeURIComponent(notificationId)}/read`,
+    { method: 'PATCH', ...SESSION() }
   )
 }

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import { getClientSession, levelOf } from '@/lib/client-portal/session'
 import { getClaims } from '@/lib/client-portal/api'
+import { loadPortalData } from '@/lib/client-portal/guard'
 import ClaimsTable from '@/components/client-portal/ClaimsTable'
 import { Button } from '@/components/ui/button'
 
@@ -14,7 +15,7 @@ export default async function ReclamosPage() {
   if (!session) redirect('/cliente/ingresar')
   if (levelOf(session) !== 'INSTALLER') redirect('/cliente/dashboard')
 
-  const claims = await getClaims(session.contactId)
+  const claims = await loadPortalData(() => getClaims(session.contactId))
 
   return (
     <div className="flex flex-col gap-6">

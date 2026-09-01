@@ -18,8 +18,8 @@ export default function SetPasswordForm({ token, onSkip }: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (password.length < 6) {
-      setErrorMsg('La contraseña debe tener al menos 6 caracteres')
+    if (password.length < 8) {
+      setErrorMsg('La contraseña debe tener al menos 8 caracteres')
       setStatus('error')
       return
     }
@@ -60,7 +60,7 @@ export default function SetPasswordForm({ token, onSkip }: Props) {
     <form onSubmit={handleSubmit} className="flex flex-col gap-3">
       <Input
         type="password"
-        placeholder="Elegí una contraseña (mínimo 6 caracteres)"
+        placeholder="Elegí una contraseña (mínimo 8 caracteres)"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />

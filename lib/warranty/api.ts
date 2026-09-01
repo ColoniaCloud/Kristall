@@ -8,6 +8,10 @@ const KEY = () => {
   return key
 }
 
+// Los tokens se interpolan con encodeURIComponent: Next decodifica los
+// segmentos de la URL antes de entregarlos, así que un `%2F` llegaría acá como
+// `/` y se reinyectaría como separador de path en la llamada al CRM — con la
+// api key adjunta.
 export type AssetType = 'VEHICLE' | 'WINDOW' | 'BUILDING' | 'OTHER'
 export type InstallationStatus = 'PENDING' | 'ACTIVE' | 'EXPIRED' | 'VOIDED'
 
@@ -25,7 +29,7 @@ export interface WarrantyStatus {
 
 /** GET /api/public/warranty/:token — sin key, es el único endpoint público. */
 export function getStatus(token: string) {
-  return callCrmApi<WarrantyStatus>(`/api/public/warranty/${token}`)
+  return callCrmApi<WarrantyStatus>(`/api/public/warranty/${encodeURIComponent(token)}`)
 }
 
 export interface ActivateInput {
@@ -41,7 +45,7 @@ export interface ActivateInput {
 }
 
 export function activate(token: string, input: ActivateInput) {
-  return callCrmApi<{ activated: true; expiresAt: string }>(`/api/public/warranty/${token}/activate`, {
+  return callCrmApi<{ activated: true; expiresAt: string }>(`/api/public/warranty/${encodeURIComponent(token)}/activate`, {
     method: 'POST',
     apiKey: KEY(),
     body: input,
@@ -66,7 +70,7 @@ export function createClaim(input: CreateWarrantyClaimInput) {
 }
 
 export function setPassword(token: string, password: string) {
-  return callCrmApi<{ ok: true }>(`/api/public/warranty/${token}/set-password`, {
+  return callCrmApi<{ ok: true }>(`/api/public/warranty/${encodeURIComponent(token)}/set-password`, {
     method: 'POST',
     apiKey: KEY(),
     body: { password },

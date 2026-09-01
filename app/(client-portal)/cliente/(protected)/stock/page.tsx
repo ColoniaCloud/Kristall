@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { getClientSession, levelOf } from '@/lib/client-portal/session'
 import { getStock } from '@/lib/client-portal/api'
+import { loadPortalData } from '@/lib/client-portal/guard'
 import StockTable from '@/components/client-portal/StockTable'
 
 export const metadata: Metadata = { title: 'Stock' }
@@ -14,7 +15,7 @@ export default async function StockPage() {
   // con el 403 del CRM.
   if (levelOf(session) !== 'INSTALLER') redirect('/cliente/dashboard')
 
-  const rolls = await getStock(session.contactId)
+  const rolls = await loadPortalData(() => getStock(session.contactId))
 
   return (
     <div className="flex flex-col gap-6">

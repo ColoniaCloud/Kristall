@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { getClientSession, levelOf } from '@/lib/client-portal/session'
 import { getInstallations } from '@/lib/client-portal/api'
+import { loadPortalData } from '@/lib/client-portal/guard'
 import InstallationsTable from '@/components/client-portal/InstallationsTable'
 
 export const metadata: Metadata = { title: 'Instalaciones' }
@@ -11,7 +12,7 @@ export default async function InstalacionesPage() {
   if (!session) redirect('/cliente/ingresar')
   if (levelOf(session) !== 'INSTALLER') redirect('/cliente/dashboard')
 
-  const installations = await getInstallations(session.contactId)
+  const installations = await loadPortalData(() => getInstallations(session.contactId))
 
   return (
     <div className="flex flex-col gap-6">

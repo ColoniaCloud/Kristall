@@ -13,8 +13,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
   const { password } = await request.json()
 
-  if (!password || password.length < 6) {
-    return NextResponse.json({ error: 'La contraseña debe tener al menos 6 caracteres' }, { status: 400 })
+  // 8, igual que el portal de clientes y que el propio CRM. Estaba en 6 de los
+  // dos lados y era el único mínimo distinto del sistema.
+  if (!password || password.length < 8) {
+    return NextResponse.json({ error: 'La contraseña debe tener al menos 8 caracteres' }, { status: 400 })
   }
 
   try {

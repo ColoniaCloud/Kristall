@@ -22,7 +22,7 @@ stock hasta que se instala y se le activa la garantía. Cuatro conceptos:
    producto con garantía configurada entra a stock (orden de compra recibida, ajuste manual de
    stock, o alta de unidades). Ejemplo de código: `LOT-20260705-0001-R003`.
 2. **Instalación (`WarrantyInstallation`)** — un "slot" de uso de ese rollo, identificado por un
-   `activationToken` (string opaco tipo cuid, ej. `clx1a2b3c4d5e6f7g8h9`) y un `installationCode`
+   `activationToken` (string opaco de 64 caracteres hex, ej. `9f2c...`) y un `installationCode`
    legible (ej. `LOT-20260705-0001-R003-I1`). **Este es el identificador que usa el sitio externo**:
    el token va en la URL que recibe el cliente/taller (ej. `https://tu-sitio.com/garantia/<token>`).
 3. **Activación** — el taller o el cliente final completa un formulario con los datos del vehículo/obra
@@ -71,7 +71,7 @@ pero la API igual va a devolver `status: "EXPIRED"` si ya venció.
 
 | Campo | Tipo | Notas |
 |---|---|---|
-| `activationToken` | string | Identificador público, va en la URL. Único. |
+| `activationToken` | string | Identificador público, va en la URL. Único. Desde septiembre 2026 son 64 caracteres hex (32 bytes aleatorios); los emitidos antes son cuid de ~25 caracteres y siguen siendo válidos. Tratalo como opaco y no asumas largo fijo. |
 | `installationCode` | string | Código legible, ej. `LOT-...-R003-I1`. Único, informativo. |
 | `status` | enum `PENDING \| ACTIVE \| EXPIRED \| VOIDED` | `EXPIRED` es calculado, no persistido. |
 | `assetType` | enum `VEHICLE \| WINDOW \| BUILDING \| OTHER` | Requerido para activar. |
@@ -142,17 +142,26 @@ o instalación.
 
 ## 4. CORS
 
-Los 3 endpoints públicos responden con headers CORS y soportan `OPTIONS` (preflight):
+**Solo `GET /api/public/warranty/:token` responde con headers CORS y soporta `OPTIONS`:**
 
 ```
 Access-Control-Allow-Origin: <WARRANTY_PUBLIC_CORS_ORIGIN o "*" si no está configurado>
-Access-Control-Allow-Methods: GET, POST, OPTIONS
-Access-Control-Allow-Headers: Content-Type, x-api-key
+Access-Control-Allow-Methods: GET, OPTIONS
+Access-Control-Allow-Headers: Content-Type
+Vary: Origin
 ```
 
-Si vas a llamar `GET /api/public/warranty/:token` directo desde el navegador del sitio externo (el
-único caso permitido sin key), pedile al equipo del CRM que configure `WARRANTY_PUBLIC_CORS_ORIGIN`
-con el dominio exacto de tu sitio si necesitás restringir el origen (por defecto permite cualquiera).
+Es el único endpoint que se puede llamar directo desde el navegador: es de lectura, no lleva key y
+devuelve la proyección pública. Si necesitás restringir el origen, pedile al equipo del CRM que
+configure `WARRANTY_PUBLIC_CORS_ORIGIN` con el dominio exacto de tu sitio (por defecto permite
+cualquiera).
+
+**Los otros cuatro (`activate`, `set-password`, `login`, `claims`) ya no mandan headers CORS**
+(cambio de septiembre 2026). Son server-to-server: se llaman desde tu backend, que es donde vive la
+`x-api-key`, y ahí CORS no interviene. Antes respondían `Allow-Origin: *`, lo que permitía llamarlos
+desde el navegador de cualquier sitio — en particular `login`, que era fuerza bruta distribuida
+gratis contra el rate limit por IP de tu propio sitio. Si tu integración le pegaba a alguno de estos
+desde el navegador, movela al backend.
 
 ---
 
@@ -336,11 +345,19 @@ curl -X POST https://tu-crm.com/api/public/warranty/claims \
 - Conocer el `token` en la URL ya prueba que es el dueño de esa garantía — no hace falta ningún otro
   dato para setearla.
 
-**Body:** `{ "password": "..." }` (mínimo 6 caracteres).
+**Body:** `{ "password": "..." }` (mínimo **8** caracteres — eran 6 hasta septiembre 2026, el único
+mínimo distinto del resto del sistema).
 
 **Response `200`:** `{ "ok": true }`.
 
-**Errores:** `401` (key inválida), `404` (token no encontrado), `400` (contraseña muy corta).
+**Errores:** `401` (key inválida), `404` (token no encontrado), `400` (contraseña muy corta), y
+`400` si la garantía no está vigente: `"Esta garantía todavía no fue activada"` (`PENDING`),
+`"Esta garantía ya venció"` o `"Esta garantía no está activa"` (`VOIDED`). Antes no se miraba el
+estado y se le podía poner contraseña a cualquier instalación.
+
+Volver a llamarlo **pisa** la contraseña anterior sin pedir la vieja, y eso es a propósito: el
+`activationToken` es la llave de esa garantía y la UI le dice al Usuario que guarde el link, así que
+volver a entrar por el link es su único camino de recuperación.
 
 ```bash
 curl -X POST https://tu-crm.com/api/public/warranty/TOKEN_AQUI/set-password \
@@ -477,10 +494,12 @@ para tu dominio.
   dentro del CRM por un operador con acceso a la base, o no se puede hacer en absoluto salvo que se
   agregue un endpoint nuevo. Si el formulario de tu sitio es propenso a errores de tipeo, considerá una
   pantalla de confirmación antes del submit final.
-- **Rate limiting:** los endpoints públicos de garantía (`/api/public/warranty/*`) no tienen límite de
-  tasa dedicado en el CRM más allá de requerir `x-api-key` en los de escritura. Si tu sitio expone
-  formularios públicos, agregá tu propio rate-limiting/anti-bot (captcha, etc.) en tu backend antes de
-  reenviar al CRM, especialmente en el formulario de activación.
+- **Rate limiting:** desde septiembre 2026 el CRM limita `GET /api/public/warranty/:token` a 60
+  consultas por minuto y por IP (`429`), y `POST .../login` a 5 intentos cada 15 minutos por
+  `installationCode` — ahora normalizado a minúsculas, porque MySQL compara sin distinguir
+  mayúsculas y cambiarle la caja al código abría una tanda nueva de intentos. `activate`,
+  `set-password` y `claims` **no** tienen límite propio: si tu sitio expone esos formularios, poné tu
+  propio rate-limiting/anti-bot (captcha, etc.) en tu backend antes de reenviar al CRM.
 - **`assetType` inválido produce un 500, no un 400.** Validá el enum estrictamente en tu formulario
   antes de enviarlo (`VEHICLE`, `WINDOW`, `BUILDING`, `OTHER`, en mayúsculas exactas).
 - El endpoint de estado (`GET .../:token`) **no devuelve** `clientName`/`clientEmail`/`clientDni` — si

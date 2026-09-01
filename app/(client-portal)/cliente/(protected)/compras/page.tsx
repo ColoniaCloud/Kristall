@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { getClientSession } from '@/lib/client-portal/session'
 import { getContact } from '@/lib/client-portal/api'
+import { loadPortalData } from '@/lib/client-portal/guard'
 import PurchasesTable from '@/components/client-portal/PurchasesTable'
 import PaymentsTable from '@/components/client-portal/PaymentsTable'
 import { formatCurrency } from '@/lib/format'
@@ -12,7 +13,7 @@ export default async function ComprasPage() {
   const session = await getClientSession()
   if (!session) redirect('/cliente/ingresar')
 
-  const contact = await getContact(session.contactId)
+  const contact = await loadPortalData(() => getContact(session.contactId))
 
   return (
     <div className="flex flex-col gap-8">
