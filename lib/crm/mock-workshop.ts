@@ -94,6 +94,9 @@ interface MockOrden {
   createdAt: string
   items: MockLinea[]
   payments: MockCobro[]
+  /** La garantía principal, cuando la orden ya se terminó. */
+  warrantyInstallationCode?: string
+  warrantyExpiresAt?: string
 }
 
 /** Rollos del mock de stock, con medidas, para poder calcular m². */
@@ -174,6 +177,9 @@ interface MockStore {
 }
 
 const g = globalThis as unknown as { __workshopMock?: MockStore }
+
+/** Cuántos sub-códigos ya emitió cada rollo, para poder agotarlo. */
+const garantiasEmitidas = new Map<string, number>()
 
 const semillaClientes: MockCliente[] = [
   {
@@ -278,17 +284,31 @@ function detalle(o: MockOrden) {
       roll: i.rollId ? { id: i.rollId, fullRollCode: ROLLOS.find((r) => r.id === i.rollId)?.fullRollCode ?? i.rollId } : null,
     })),
     payments: o.payments,
-    warrantyInstallation: null,
+    warrantyInstallation: o.warrantyInstallationCode
+      ? {
+          id: `cli-${o.warrantyInstallationCode}`,
+          installationCode: o.warrantyInstallationCode,
+          status: 'ACTIVE',
+          expiresAt: o.warrantyExpiresAt ?? null,
+        }
+      : null,
   }
 }
 
 function stock() {
-  return ROLLOS.map((r) => {
-    const usado = ordenes
-      .filter((o) => o.status !== 'CANCELADA')
+  const sumar = (estados: Estado[], rollId: string) =>
+    ordenes
+      .filter((o) => estados.includes(o.status))
       .flatMap((o) => o.items)
-      .filter((i) => i.rollId === r.id)
+      .filter((i) => i.rollId === rollId)
       .reduce((s, i) => s + Number(i.squareMetersUsed ?? 0), 0)
+  const redondear = (n: number) => Math.round(n * 100) / 100
+
+  return ROLLOS.map((r) => {
+    // Consumido = lo que ya se cortó. Reservado = lo comprometido y sin cortar.
+    // Mismo criterio que getWorkshopStock en el CRM.
+    const usado = sumar(['TERMINADA', 'ENTREGADA'], r.id)
+    const reservado = sumar(['PRESUPUESTADA', 'AGENDADA', 'EN_PROCESO'], r.id)
     const total =
       r.product.width && r.product.length
         ? Number(r.product.width) * Number(r.product.length)
@@ -296,10 +316,68 @@ function stock() {
     return {
       ...r,
       totalM2: total,
-      usedM2: Math.round(usado * 100) / 100,
-      remainingM2: total === null ? null : Math.round((total - usado) * 100) / 100,
+      usedM2: redondear(usado),
+      reservedM2: redondear(reservado),
+      remainingM2: total === null ? null : redondear(total - usado),
+      availableM2: total === null ? null : redondear(total - usado - reservado),
     }
   })
+}
+
+/**
+ * Los efectos de terminar una orden: una garantía por cada rollo usado, y el
+ * mail. Replica lo que hace el CRM (src/lib/workshop-warranty.ts) para que la
+ * pantalla se pueda probar sin él — incluidos los casos feos, que son los que
+ * importa ver: el rollo agotado y el cliente sin email.
+ */
+function terminar(o: MockOrden) {
+  const porRollo = new Map<string, number>()
+  for (const i of o.items) {
+    if (!i.rollId) continue
+    porRollo.set(i.rollId, (porRollo.get(i.rollId) ?? 0) + Number(i.squareMetersUsed ?? 0))
+  }
+  const ordenados = [...porRollo.entries()].sort((a, b) => b[1] - a[1])
+
+  const garantias: { installationCode: string; fullRollCode: string; expiresAt: string }[] = []
+  const problemas: { fullRollCode: string; motivo: string }[] = []
+
+  const vence = new Date()
+  vence.setFullYear(vence.getFullYear() + 1)
+
+  for (const [rollId] of ordenados) {
+    const rollo = ROLLOS.find((r) => r.id === rollId)
+    if (!rollo) {
+      problemas.push({ fullRollCode: rollId, motivo: 'El rollo ya no figura como tuyo' })
+      continue
+    }
+    const max = rollo.product.warrantyConfig?.maxInstallations ?? 15
+    const usadas = garantiasEmitidas.get(rollo.id) ?? 0
+    if (usadas >= max) {
+      problemas.push({ fullRollCode: rollo.fullRollCode, motivo: 'El rollo no admite más instalaciones' })
+      continue
+    }
+    garantiasEmitidas.set(rollo.id, usadas + 1)
+    garantias.push({
+      installationCode: `${rollo.fullRollCode}-I${usadas + 1}`,
+      fullRollCode: rollo.fullRollCode,
+      expiresAt: vence.toISOString(),
+    })
+  }
+
+  if (garantias.length > 0) {
+    o.warrantyInstallationCode = garantias[0].installationCode
+    o.warrantyExpiresAt = garantias[0].expiresAt
+  }
+
+  const cliente = clientes.find((c) => c.id === o.workshopClientId)
+  const mail =
+    garantias.length === 0
+      ? { enviado: false, motivo: 'No se generó ninguna garantía' }
+      : cliente?.email
+        ? { enviado: true }
+        : { enviado: false, motivo: 'El cliente no tiene email cargado' }
+
+  return { garantias, problemas, mail }
 }
 
 // ─── Router ──────────────────────────────────────────────────────────────────
@@ -457,7 +535,9 @@ export function getWorkshopMock(path: string, method: string, body: unknown): Re
     if (to === 'ENTREGADA' && !o.deliveredAt) o.deliveredAt = ahora
     if (to === 'CANCELADA' && !o.cancelledAt) o.cancelledAt = ahora
     if (b.priceFinal != null) o.priceFinal = String(b.priceFinal)
-    return { status: 200, data: detalle(o) }
+
+    if (to !== 'TERMINADA') return { status: 200, data: detalle(o) }
+    return { status: 200, data: { ...detalle(o), efectos: terminar(o) } }
   }
 
   r = ruta.match(/^\/orders\/([^/]+)\/payments$/)
@@ -472,6 +552,24 @@ export function getWorkshopMock(path: string, method: string, body: unknown): Re
     }
     o.payments.unshift(pago)
     return { status: 201, data: pago }
+  }
+
+  r = ruta.match(/^\/orders\/([^/]+)\/warranty-email$/)
+  if (r && method === 'POST') {
+    const o = ordenes.find((x) => x.id === r![1])
+    if (!o) return noEncontrado('Orden')
+    if (!o.warrantyInstallationCode) {
+      return { status: 409, data: { error: 'Esta orden todavía no generó ninguna garantía' } }
+    }
+    const cliente = clientes.find((c) => c.id === o.workshopClientId)
+    const destinatario = (b.email as string) ?? cliente?.email
+    if (!destinatario) {
+      return {
+        status: 400,
+        data: { error: 'Este cliente no tiene email cargado. Cargalo o escribí uno acá.' },
+      }
+    }
+    return { status: 200, data: { enviado: true, destinatario } }
   }
 
   if (ruta === '/agenda' && method === 'GET') {

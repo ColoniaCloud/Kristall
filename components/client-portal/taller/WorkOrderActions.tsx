@@ -15,7 +15,11 @@ import {
   DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog'
-import type { WorkOrderDetail, WorkOrderStatus } from '@/lib/client-portal/workshop'
+import type {
+  WorkOrderDetail,
+  WorkOrderStatus,
+  EfectosDeTerminar,
+} from '@/lib/client-portal/workshop'
 import { toNumber } from '@/lib/client-portal/taller-format'
 
 /**
@@ -55,6 +59,46 @@ function accionesDe(status: WorkOrderStatus): Accion[] {
   }
 }
 
+/**
+ * Le cuenta al instalador qué pasó al terminar.
+ *
+ * Terminar una orden dispara tres cosas invisibles —se genera la garantía, se
+ * activa, se manda el mail— y cualquiera de ellas puede no salir. Que la
+ * pantalla se limpie sin decir nada sería lo peor: el instalador se entera un
+ * mes después, cuando el cliente reclama y no hay garantía.
+ *
+ * Los toasts son varios y no uno solo a propósito: un problema de rollo y un
+ * mail que no salió son cosas distintas, se resuelven distinto, y mezclarlas en
+ * un párrafo hace que no se lea ninguna.
+ */
+function avisarEfectos(efectos: EfectosDeTerminar | undefined) {
+  if (!efectos) {
+    toast.success('Orden terminada')
+    return
+  }
+
+  if (efectos.garantias.length === 1) {
+    toast.success(`Orden terminada. Garantía ${efectos.garantias[0].installationCode} activada.`)
+  } else if (efectos.garantias.length > 1) {
+    toast.success(
+      `Orden terminada. Se activaron ${efectos.garantias.length} garantías, una por cada rollo que usaste.`
+    )
+  } else if (efectos.problemas.length === 0) {
+    // Sin lámina no hay garantía, y está bien: un pulido no lleva.
+    toast.success('Orden terminada')
+  }
+
+  for (const p of efectos.problemas) {
+    toast.warning(`Sin garantía para el rollo ${p.fullRollCode}: ${p.motivo}. Avisale a Kristall.`, {
+      duration: 12000,
+    })
+  }
+
+  if (efectos.garantias.length > 0 && !efectos.mail.enviado) {
+    toast.warning(`No se le mandó el mail al cliente: ${efectos.mail.motivo}.`, { duration: 12000 })
+  }
+}
+
 export default function WorkOrderActions({ order }: { order: WorkOrderDetail }) {
   const router = useRouter()
   const [enviando, setEnviando] = useState<WorkOrderStatus | null>(null)
@@ -85,6 +129,7 @@ export default function WorkOrderActions({ order }: { order: WorkOrderDetail }) 
       }
       setTerminar(false)
       setCancelar(false)
+      if (to === 'TERMINADA') avisarEfectos(body.efectos)
       router.refresh()
     } catch {
       toast.error('Sin conexión. Probá de nuevo en un momento.')

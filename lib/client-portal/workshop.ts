@@ -1,4 +1,5 @@
 import { callCrmApi } from '@/lib/crm/api'
+import type { RollStatus } from '@/lib/client-portal/api'
 
 /**
  * Mi Taller — el puente hacia los endpoints `/workshop/*` del CRM.
@@ -153,7 +154,9 @@ export interface AgendaEntry {
 export interface WorkshopStockRoll {
   id: string
   fullRollCode: string
-  status: string
+  // El mismo enum que el stock de la sección 4.2: es el mismo rollo, visto con
+  // más campos. Reusar el tipo mantiene compatible a StockTable con los dos.
+  status: RollStatus
   lot: { lotNumber: string }
   product: {
     id: string
@@ -173,13 +176,36 @@ export interface WorkshopStockRoll {
   }[]
   _count: { installations: number }
   /**
-   * `null` cuando el producto no tiene medidas cargadas. **`null` no es `0`**:
-   * "no sé cuánto queda" y "no queda nada" son cosas distintas, y mostrar 0
-   * haría creer que el rollo está vacío.
+   * Cuatro números, y no es redundancia:
+   *
+   *   `usedM2`      lo que ya se cortó (órdenes terminadas o entregadas)
+   *   `reservedM2`  lo comprometido y sin cortar (presupuestadas, agendadas,
+   *                 en proceso). Las canceladas no cuentan en ninguno.
+   *   `remainingM2` lo que físicamente queda: total − usado
+   *   `availableM2` con lo que se puede contar para un trabajo nuevo:
+   *                 total − usado − reservado
+   *
+   * `totalM2`, `remainingM2` y `availableM2` son `null` cuando el producto no
+   * tiene medidas cargadas. **`null` no es `0`**: "no sé cuánto queda" y "no
+   * queda nada" son cosas distintas, y mostrar 0 haría creer que el rollo está
+   * vacío.
    */
   totalM2: number | null
   usedM2: number
+  reservedM2: number
   remainingM2: number | null
+  availableM2: number | null
+}
+
+/**
+ * Lo que pasó al terminar una orden. Viene **solo** en la respuesta de la
+ * transición a `TERMINADA`, al lado de la orden — no es parte del estado de la
+ * orden y no aparece en los GET.
+ */
+export interface EfectosDeTerminar {
+  garantias: { installationCode: string; fullRollCode: string; expiresAt: string }[]
+  problemas: { fullRollCode: string; motivo: string }[]
+  mail: { enviado: boolean; motivo?: string }
 }
 
 export interface WorkshopSummary {
@@ -349,9 +375,23 @@ export function transitionWorkOrder(
   to: WorkOrderStatus,
   priceFinal?: number | null
 ) {
-  return callCrmApi<WorkOrderDetail>(
+  return callCrmApi<WorkOrderDetail & { efectos?: EfectosDeTerminar }>(
     `${base(contactId)}/orders/${encodeURIComponent(orderId)}/transition`,
     { method: 'POST', ...SESSION(), body: { to, priceFinal } }
+  )
+}
+
+/**
+ * Reenvía el mail de garantía de una orden terminada.
+ *
+ * El `activationToken` no viaja: el CRM lo lee de su base y manda el mail. Por
+ * eso esto es un endpoint del CRM y no se puede hacer con el flujo de reenvío
+ * que ya existía en el portal, que necesita el token en la mano.
+ */
+export function resendWarrantyEmail(contactId: string, orderId: string, email?: string) {
+  return callCrmApi<{ enviado: true; destinatario: string }>(
+    `${base(contactId)}/orders/${encodeURIComponent(orderId)}/warranty-email`,
+    { method: 'POST', ...SESSION(), body: email ? { email } : {} }
   )
 }
 

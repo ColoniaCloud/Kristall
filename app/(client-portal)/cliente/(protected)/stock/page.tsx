@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { getClientSession, levelOf } from '@/lib/client-portal/session'
-import { getStock } from '@/lib/client-portal/api'
+import { getWorkshopStock } from '@/lib/client-portal/workshop'
 import { loadPortalData } from '@/lib/client-portal/guard'
 import StockTable from '@/components/client-portal/StockTable'
 
@@ -15,7 +15,10 @@ export default async function StockPage() {
   // con el 403 del CRM.
   if (levelOf(session) !== 'INSTALLER') redirect('/cliente/dashboard')
 
-  const rolls = await loadPortalData(() => getStock(session.contactId))
+  // `/workshop/stock` en vez de `/stock`: mismo listado, más los m² que
+  // quedan en cada rollo. Los dos endpoints exigen nivel INSTALLER, así que
+  // no cambia quién ve qué.
+  const rolls = await loadPortalData(() => getWorkshopStock(session.contactId))
 
   return (
     <div className="flex flex-col gap-6">

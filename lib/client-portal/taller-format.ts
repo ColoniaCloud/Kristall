@@ -27,14 +27,34 @@ export function formatMoney(v: Money | number | undefined, currency: Currency = 
 
 export function formatDateTime(iso: string | null): string {
   if (!iso) return '—'
+  // Con año, aunque sea de dos cifras. Sin él, una orden del año pasado se lee
+  // como si fuera de esta semana, y el ahorro son tres caracteres.
+  //
   // hour12: false a propósito. Un taller escribe "16:00", no "04:00 p. m.", y
   // el am/pm además ocupa el doble de ancho en una fila apretada de teléfono.
   return new Intl.DateTimeFormat('es-AR', {
     day: '2-digit',
     month: '2-digit',
+    year: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
+  }).format(new Date(iso))
+}
+
+/**
+ * Solo la fecha, con el año entero. Para vencimientos.
+ *
+ * Existe aparte porque un vencimiento a un año mostrado como "1/9, 19:39" se
+ * lee como "vence hoy": el año es justamente el dato que importa, y la hora no
+ * significa nada en una garantía.
+ */
+export function formatFecha(iso: string | null): string {
+  if (!iso) return '—'
+  return new Intl.DateTimeFormat('es-AR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
   }).format(new Date(iso))
 }
 

@@ -65,7 +65,8 @@ export interface StockRoll {
   product: {
     id: string
     name: string
-    sku: string
+    /** `null` es posible: en el CRM el SKU es una columna opcional del producto. */
+    sku: string | null
     /** null si el producto no tiene WarrantyConfig — en ese caso asumir 15 (default del CRM). */
     warrantyConfig: { maxInstallations: number } | null
   }
@@ -93,7 +94,7 @@ export interface Installation {
   assetDescription: string | null
   activatedAt: string | null
   expiresAt: string | null
-  roll: { fullRollCode: string; product: { id: string; name: string; sku: string } }
+  roll: { fullRollCode: string; product: { id: string; name: string; sku: string | null } }
 }
 
 /** Response de POST .../rolls/:fullRollCode/installations (sección 4.8 de CLIENT_PORTAL_API.md). */

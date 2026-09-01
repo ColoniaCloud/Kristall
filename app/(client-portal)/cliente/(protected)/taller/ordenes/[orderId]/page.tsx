@@ -9,9 +9,11 @@ import { CrmApiError } from '@/lib/crm/api'
 import WorkOrderStatusBadge from '@/components/client-portal/taller/WorkOrderStatusBadge'
 import WorkOrderActions from '@/components/client-portal/taller/WorkOrderActions'
 import WorkOrderPaymentForm from '@/components/client-portal/taller/WorkOrderPaymentForm'
+import ResendWarrantyEmail from '@/components/client-portal/taller/ResendWarrantyEmail'
 import {
   formatMoney,
   formatDateTime,
+  formatFecha,
   describirAsset,
   toNumber,
 } from '@/lib/client-portal/taller-format'
@@ -158,20 +160,50 @@ export default async function OrdenPage({ params }: { params: Promise<{ orderId:
       </section>
 
       <section className="flex flex-col gap-3 rounded-lg border border-border bg-card p-4 md:p-6">
-        <h2 className="font-heading text-lg font-semibold">Garantía</h2>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="font-heading text-lg font-semibold">Garantía</h2>
+          {order.warrantyInstallation && (
+            <ResendWarrantyEmail
+              orderId={order.id}
+              emailDelCliente={order.workshopClient.email}
+            />
+          )}
+        </div>
+
         {order.warrantyInstallation ? (
-          <p className="inline-flex items-center gap-2 text-sm">
-            <ShieldCheck className="size-4 text-emerald-600" />
-            <span className="font-medium">{order.warrantyInstallation.installationCode}</span>
-            <span className="text-muted-foreground">
-              {order.warrantyInstallation.expiresAt
-                ? `vence el ${formatDateTime(order.warrantyInstallation.expiresAt)}`
-                : ''}
-            </span>
+          <>
+            <p className="inline-flex flex-wrap items-center gap-2 text-sm">
+              <ShieldCheck className="size-4 shrink-0 text-emerald-600" />
+              <span className="font-medium">{order.warrantyInstallation.installationCode}</span>
+              <span className="text-muted-foreground">
+                {order.warrantyInstallation.expiresAt
+                  ? `vence el ${formatFecha(order.warrantyInstallation.expiresAt)}`
+                  : ''}
+              </span>
+            </p>
+            {!order.workshopClient.email && (
+              <p className="text-sm text-amber-700">
+                El cliente no tiene email cargado, así que no se le pudo mandar. Cargáselo en su
+                ficha, o mandáselo a una dirección puntual desde el botón de arriba.
+              </p>
+            )}
+            {/* Si el trabajo usó más de un rollo, hay más de una garantía. Acá se
+                muestra la principal; las demás salen en Instalaciones. */}
+            {order.items.filter((i) => i.roll).length > 1 && (
+              <p className="text-xs text-muted-foreground">
+                Este trabajo usó más de un rollo, así que tiene una garantía por cada uno. Las
+                demás están en Instalaciones.
+              </p>
+            )}
+          </>
+        ) : order.status === 'TERMINADA' || order.status === 'ENTREGADA' ? (
+          <p className="text-sm text-muted-foreground">
+            Este trabajo no generó garantía. Pasa cuando no se cargó ningún rollo en las líneas
+            —un pulido, por ejemplo— o cuando el rollo ya no admitía más instalaciones.
           </p>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Todavía no se generó la garantía de este trabajo.
+            La garantía se genera sola cuando termines la orden.
           </p>
         )}
       </section>

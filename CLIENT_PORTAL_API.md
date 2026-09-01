@@ -692,10 +692,50 @@ terminar una OT sin vehículo cargado (`"Cargá el vehículo antes de terminar l
 un espejo del estado actual. Si alguien vuelve atrás y avanza de nuevo, `startedAt` sigue marcando
 cuándo se empezó de verdad.
 
-> **Estado de la integración con garantías.** Hoy la transición valida el cambio y sella la fecha,
-> pero **todavía no descuenta material ni genera la `WarrantyInstallation` ni manda el mail**: eso es
-> la Fase 4 del plan. Cuando esté, el `TERMINADA` va a hacer las tres cosas en una transacción, y el
-> mail se manda **después** del commit — si falla el envío se reintenta, no revierte la OT.
+### Los efectos de `TERMINADA`
+
+Terminar una orden no solo cambia el estado. La respuesta trae, **solo en esa transición**, un campo
+`efectos` al lado de la orden:
+
+```json
+{
+  "id": "clo...", "status": "TERMINADA", "...": "resto de la ficha",
+  "efectos": {
+    "garantias": [
+      { "installationCode": "LOT-...-R003-I1", "fullRollCode": "LOT-20260705-0001-R003", "expiresAt": "2027-09-01T00:00:00.000Z" }
+    ],
+    "problemas": [],
+    "mail": { "enviado": false, "motivo": "El cliente no tiene email cargado" }
+  }
+}
+```
+
+`efectos` **no es parte del estado de la orden** y no aparece en ningún `GET`: es lo que pasó en esa
+llamada. Mostráselo al instalador — son cosas invisibles que pueden salir mal, y enterarse un mes
+después, cuando el cliente reclama y no hay garantía, es el peor final posible.
+
+**Una garantía por rollo, no por orden.** Si el trabajo usó lámina de dos rollos (pasa: el parabrisas
+suele llevar otro tono que los laterales), se activa **una instalación por cada uno**. La cadena de
+garantías de Kristall es por rollo justamente para eso: si mañana hay un reclamo, hay que poder decir
+de qué lámina física era. La orden apunta a la del rollo que puso más metros —la principal, y la
+primera del array—, porque `warrantyInstallationId` es uno solo; las demás existen igual y se ven en
+4.3 y en el stock.
+
+Las instalaciones se crean **y se activan** con los datos que la orden ya tiene: nombre, teléfono y
+documento del cliente final, tipo y descripción del vehículo, la fecha de terminado y el nombre del
+taller. El instalador no vuelve a tipear nada y el cliente final no tiene que activar nada.
+
+**`garantias` vacío no es un error.** Un trabajo sin ninguna línea con rollo —un pulido, sacar una
+película vieja— se termina sin generar garantía, y `problemas` también viene vacío.
+
+**`problemas` lista los rollos que no pudieron generar una**, con el motivo (`"El rollo no admite más
+instalaciones"`, `"El rollo ya no figura como tuyo"`). Un rollo agotado **no impide terminar la
+orden**: el trabajo se hizo, y bloquear el cierre del día por eso sería peor. Se reporta acá, se le
+avisa a un admin del CRM, y alguien lo resuelve.
+
+**El mail va después del commit y su fallo no revierte nada.** Si `mail.enviado` es `false`, la
+orden quedó terminada y la garantía activada igual; lo único que faltó es el aviso al cliente, y para
+eso está 4.10.13.
 
 ### 4.10.9 `POST /workshop/orders/:orderId/payments` — Registrar un cobro
 
@@ -741,18 +781,30 @@ Los mismos rollos de la sección 4.2, más cuánto queda adentro de cada uno:
                  "width": "1.52", "length": "30", "warrantyConfig": { "maxInstallations": 15 } },
     "installations": [ { "id": "cli...", "installationCode": "LOT-...-R003-I1", "status": "PENDING", "activatedAt": null, "expiresAt": null } ],
     "_count": { "installations": 0 },
-    "totalM2": 45.6, "usedM2": 12.5, "remainingM2": 33.1
+    "totalM2": 45.6, "usedM2": 12.5, "reservedM2": 10, "remainingM2": 33.1, "availableM2": 23.1
   }
 ]
 ```
 
-- **El sobrante se deriva, no se guarda**: `width × length − Σ(squareMetersUsed)` de las líneas que
-  declararon ese rollo. No hay dos números que puedan discrepar.
-- **Las OT canceladas no cuentan**: una OT cancelada no gastó material, y cancelarla devuelve los m²
-  al rollo.
-- **`totalM2` y `remainingM2` pueden ser `null`**, cuando el producto no tiene `width` y `length`
-  cargados. Es `null` y no `0` a propósito: "no sé cuánto queda" y "no queda nada" son cosas
-  distintas, y mostrar `0` haría creer que el rollo está vacío. `usedM2` siempre es un número.
+Son cuatro números y no es redundancia:
+
+| Campo | Qué es |
+|---|---|
+| `usedM2` | Lo que **ya se cortó**: líneas de órdenes `TERMINADA` o `ENTREGADA`. |
+| `reservedM2` | Lo **comprometido y todavía sin cortar**: `PRESUPUESTADA`, `AGENDADA`, `EN_PROCESO`. |
+| `remainingM2` | Lo que físicamente queda en el rollo: `totalM2 − usedM2`. |
+| `availableM2` | Con lo que se puede contar para un trabajo nuevo: `totalM2 − usedM2 − reservedM2`. |
+
+- **Las órdenes canceladas no cuentan en ninguno**: una orden cancelada no gastó ni comprometió nada.
+- **El sobrante se deriva, no se guarda.** No hay dos números que puedan discrepar.
+- **Por qué `reserved` existe.** Terminar una orden es lo que consume material de verdad, pero una
+  orden agendada con las líneas cargadas ya tiene ese material apalabrado. Contarlo como disponible
+  haría que el instalador venda dos veces el mismo pedazo de rollo; no contarlo en `remaining` haría
+  que el rollo parezca más vacío de lo que está. Por eso las dos cuentas.
+- **`totalM2`, `remainingM2` y `availableM2` pueden ser `null`**, cuando el producto no tiene `width`
+  y `length` cargados. Es `null` y no `0` a propósito: "no sé cuánto queda" y "no queda nada" son
+  cosas distintas, y mostrar `0` haría creer que el rollo está vacío. `usedM2` y `reservedM2` siempre
+  son números.
 
 Es un endpoint aparte y no una extensión de 4.2 a propósito: aquel contrato ya está publicado y
 consumido, y agregarle campos de un módulo que recién arranca lo ataría a este.
@@ -790,6 +842,28 @@ contra los trabajos que terminaste este mes" —incluidas las señas tomadas ant
 
 Es un solo endpoint en vez de que el panel pida seis cosas: es la primera pantalla que abre el
 instalador a la mañana, muchas veces con mala señal.
+
+### 4.10.13 `POST /workshop/orders/:orderId/warranty-email` — Reenviar la garantía
+
+**Body:** `{ "email": "otro@ejemplo.com" }`, o `{}` para usar el email del cliente final.
+
+**Response `200`:** `{ "enviado": true, "destinatario": "cliente@ejemplo.com" }`.
+
+Reenvía el mail con el link de la garantía de una orden ya terminada. Dos casos, y los dos pasan:
+
+- El envío automático falló (`efectos.mail.enviado === false` en 4.10.8).
+- El cliente no había dejado email cuando se terminó el trabajo y lo dejó después.
+
+**El `activationToken` no viaja en ninguna dirección.** El CRM lo lee de su propia base y arma el
+mail de su lado; desde afuera solo se manda la orden y, si hace falta, una dirección. Es lo que
+distingue este endpoint del reenvío que kristall-web ya tenía, que necesita el token en la mano y por
+eso solo sirve justo después de generar un sub-código (sección 4.8).
+
+Mandar `email` **no cambia** el email de la ficha del cliente final: es un envío puntual.
+
+**Errores:** `404` orden no encontrada · `409` la orden todavía no generó garantía · `400` no hay a
+dónde mandarlo (ni en la ficha ni en el body) · `429` cinco reenvíos por hora y por orden, que es
+generoso para reintentar y corto para spamear · `502` el servidor de mail no aceptó el envío.
 
 ---
 
