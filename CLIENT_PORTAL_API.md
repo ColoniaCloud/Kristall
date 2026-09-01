@@ -237,7 +237,6 @@ Devuelve los rollos (`WarrantyRoll`) vendidos a ese cliente, con su lote, produc
     "status": "IN_USE",
     "lot": { "lotNumber": "LOT-20260705-0001" },
     "product": { "id": "clp...", "name": "KRYPTON 05", "sku": "KR-05", "category": "AUTOMOTIVE", "warrantyConfig": { "maxInstallations": 1 } },
-    "currentLocation": { "id": "clx...", "type": "PUNTO_REVENTA", "name": "Punto de Reventa - Kristall", "contactId": "cly..." },
     "installations": [
       { "id": "cli...", "installationCode": "LOT-...-R003-I1", "status": "ACTIVE", "activatedAt": "2026-06-10T00:00:00.000Z", "expiresAt": "2027-06-10T00:00:00.000Z" }
     ],
@@ -251,13 +250,13 @@ cuántos sub-códigos de instalación quedan disponibles en un rollo, comparar `
 las generadas, no solo activas) contra `maxInstallations` — **no** usar `_count.installations`, que cuenta
 únicamente instalaciones `ACTIVE` (ver sección 4.8).
 
-**`currentLocation`** (agregado agosto 2026, campo aditivo — no rompe integraciones existentes que lo
-ignoren) — es **información de trazabilidad interna, no de stock disponible**. Como todo rollo que llega
-por esta API ya fue vendido a este Cliente (`saleItemId` no nulo), `currentLocation` refleja la **última
-ubicación física conocida antes de la venta** (ej. si se vendió desde el propio Punto de Reventa del
-Cliente, para ahorrar logística — ver sección 4.8) y **no se actualiza después de vendido**. Puede venir
-`null` en rollos vendidos antes de que existiera este sistema de ubicaciones. No lo uses para calcular
-qué puede instalar el Cliente — para eso alcanza con que el rollo aparezca en esta lista.
+**`currentLocation` se retiró de esta respuesta (septiembre 2026).** Existió entre agosto y septiembre
+de 2026 y devolvía la última ubicación física conocida del rollo antes de la venta. Se sacó porque es
+custodia interna y podía identificar a un tercero: el FIFO que asigna rollos a una venta no filtra por
+ubicación, así que a un Cliente se le puede asignar un rollo que estaba consignado en el Punto de
+Reventa de **otro** instalador, y ese campo le mostraba el nombre y el `contactId` de ese taller. Si
+integrabas contra él, sacalo: ya no viene. Para saber qué puede instalar el Cliente alcanza con que el
+rollo aparezca en esta lista.
 
 ### 4.3 `GET /api/portal/v1/contacts/:contactId/installations` — Instalaciones de garantía *(nivel INSTALLER)*
 
