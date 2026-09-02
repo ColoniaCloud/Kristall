@@ -52,14 +52,27 @@ export function activate(token: string, input: ActivateInput) {
   })
 }
 
-export interface CreateWarrantyClaimInput {
-  activationToken: string
+/**
+ * Dos formas de identificar la garantía, y no son intercambiables:
+ *
+ * - `activationToken` — el camino público, con el link del mail. El CRM exige
+ *   además que el email o el DNI coincidan con los de la activación: tener el
+ *   link no alcanza para reclamar en nombre de otro.
+ * - `installationCode` — para el usuario que **ya inició sesión** con su código
+ *   y su contraseña. No pide email ni DNI porque la identidad ya se verificó;
+ *   solo se puede usar desde el servidor, con el código sacado de la cookie
+ *   firmada y nunca del navegador.
+ */
+export type CreateWarrantyClaimInput = {
   reporterName: string
   reporterEmail?: string
   reporterPhone?: string
   reporterDni?: string
   description: string
-}
+} & (
+  | { activationToken: string; installationCode?: never }
+  | { installationCode: string; activationToken?: never }
+)
 
 export function createClaim(input: CreateWarrantyClaimInput) {
   return callCrmApi<{ id: string; status: 'OPEN' }>('/api/public/warranty/claims', {

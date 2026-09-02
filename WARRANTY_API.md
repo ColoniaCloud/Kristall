@@ -287,6 +287,23 @@ curl -X POST https://tu-crm.com/api/public/warranty/TOKEN_AQUI/activate \
 - **Uso:** formulario de "reportar un problema", para el usuario final.
 - **Precondición:** la instalación debe existir y estar `status: "ACTIVE"` (si venció o sigue `PENDING`,
   rechaza con `400`). Además debe pasar la validación de identidad (sección 2).
+**Hay dos formas de identificar la garantía, y no son intercambiables:**
+
+| Campo | Para quién | Qué exige además |
+|---|---|---|
+| `activationToken` | El usuario que tiene el link del mail | **Sí**: `reporterEmail` o `reporterDni` tienen que coincidir con los de la activación. Tener el link no alcanza para reclamar en nombre de otro — el mail se puede reenviar. |
+| `installationCode` | El usuario que **ya inició sesión** con su código y contraseña (5.5) | **No** pide email ni DNI |
+
+Que el camino por código no pida email ni DNI es deliberado: esa persona ya probó quién es con algo
+que solo ella sabe, que es más fuerte que repetir un dato que figura en el mail. Vale el mismo modelo
+de confianza que la API de Portal de Clientes: quien llama tiene la `x-api-key` —que vive solo en tu
+servidor— y **se compromete a haber autenticado a esa persona**. Mandá el `installationCode` desde tu
+backend, sacado de tu propia sesión, nunca uno que venga del navegador.
+
+Existe desde septiembre de 2026. Antes, la contraseña de la garantía servía para mirar el estado y
+nada más: para reclamar seguía haciendo falta el link largo, que es justo lo que uno no encuentra
+cuando tiene un problema.
+
 - A diferencia del endpoint de activación, acá `activationToken` va **en el body**, no en la URL.
 
 **Body (JSON):**
