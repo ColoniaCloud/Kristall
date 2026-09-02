@@ -123,7 +123,11 @@ export interface Notification {
    * `INSTALLMENT_OVERDUE` lo genera el watcher de cuotas del CRM
    * (lib/overdue-installments.ts) y faltaba en este tipo.
    */
-  type: 'NEW_PURCHASE' | 'WARRANTY_ACTIVATED' | 'INSTALLMENT_OVERDUE'
+  type:
+    | 'NEW_PURCHASE'
+    | 'WARRANTY_ACTIVATED'
+    | 'INSTALLMENT_OVERDUE'
+    | 'WARRANTY_CLAIM_UPDATED'
   title: string
   message: string
   /**
