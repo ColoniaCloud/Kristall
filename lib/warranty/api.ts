@@ -25,6 +25,26 @@ export interface WarrantyStatus {
   daysRemaining: number
   expiresAt: string | null
   assetType: AssetType | null
+  /**
+   * El taller que hizo el trabajo. Es marca comercial —nombre de fantasía y
+   * logo—, no datos del vendedor: no viene contactId, ni email, ni ubicación.
+   *
+   * `logoPath` es **relativo al CRM**. Para mostrarlo hay que anteponerle
+   * `CRM_BASE_URL`, no la base de este sitio; ver `crmAssetUrl()`.
+   */
+  installer: { name: string; logoPath: string | null } | null
+}
+
+/**
+ * Convierte una ruta de asset del CRM en una URL absoluta.
+ *
+ * Las imágenes que sirve el CRM —hoy, el logo del taller— no están en este
+ * sitio. Sin esto, el navegador las pediría a kristallfilm.com y daría 404.
+ */
+export function crmAssetUrl(path: string | null): string | null {
+  if (!path) return null
+  const base = (process.env.CRM_BASE_URL ?? '').replace(/\/$/, '')
+  return `${base}${path}`
 }
 
 /** GET /api/public/warranty/:token — sin key, es el único endpoint público. */

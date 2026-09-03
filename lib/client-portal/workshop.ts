@@ -428,6 +428,44 @@ export function getWorkshopStock(contactId: string) {
   return callCrmApi<WorkshopStockRoll[]>(`${base(contactId)}/stock`, SESSION())
 }
 
+// ─── Configuración del taller ────────────────────────────────────────────────
+
+export interface WorkshopSettings {
+  workshopName: string | null
+  autoSendWarrantyEmail: boolean
+  openingTime: string | null
+  closingTime: string | null
+  workingDays: string | null
+  defaultCurrency: Currency
+  nextOrderNumber: number
+  logoMimeType?: string | null
+  /** El logo nunca viaja en base64 por acá: solo si hay y de dónde servirlo. */
+  tieneLogo: boolean
+  logoUrl: string | null
+}
+
+export function getWorkshopSettings(contactId: string) {
+  return callCrmApi<WorkshopSettings>(`${base(contactId)}/settings`, SESSION())
+}
+
+export interface WorkshopSettingsInput {
+  workshopName?: string | null
+  autoSendWarrantyEmail?: boolean
+  openingTime?: string | null
+  closingTime?: string | null
+  workingDays?: string | null
+  /** Base64 **sin** el prefijo `data:`. `null` borra el logo. */
+  logo?: string | null
+  logoMimeType?: 'image/png' | 'image/jpeg' | 'image/webp' | null
+}
+
+export function updateWorkshopSettings(contactId: string, input: WorkshopSettingsInput) {
+  return callCrmApi<{ ok: true; tieneLogo: boolean; logoUrl: string | null }>(
+    `${base(contactId)}/settings`,
+    { method: 'PATCH', ...SESSION(), body: input }
+  )
+}
+
 export function getWorkshopSummary(contactId: string, from?: string, to?: string) {
   const params = new URLSearchParams()
   if (from) params.set('from', from)

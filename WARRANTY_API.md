@@ -186,7 +186,8 @@ Base URL: `https://<dominio-del-crm>` (a confirmar con el equipo — no hardcode
   "isActive": false,
   "daysRemaining": 0,
   "expiresAt": null,
-  "assetType": null
+  "assetType": null,
+  "installer": { "name": "Polarizados del Sur", "logoPath": "/api/public/workshop/logo/a3f1…" }
 }
 ```
 Cuando está activa:
@@ -198,9 +199,27 @@ Cuando está activa:
   "isActive": true,
   "daysRemaining": 342,
   "expiresAt": "2027-07-05T00:00:00.000Z",
-  "assetType": "VEHICLE"
+  "assetType": "VEHICLE",
+  "installer": { "name": "Polarizados del Sur", "logoPath": "/api/public/workshop/logo/a3f1…" }
 }
 ```
+
+#### El campo `installer`
+
+Quién hizo la instalación, para poder firmar la garantía con las dos marcas: Kristall respalda, el
+taller ejecutó. Es `null` si el rollo no está asociado a ninguna venta.
+
+| Campo | Tipo | Nota |
+|---|---|---|
+| `name` | `string` | El `installerName` de la instalación si se cargó; si no, el nombre del taller, y si no, la razón social. Nunca viene vacío. |
+| `logoPath` | `string \| null` | Ruta **relativa al CRM**, no a este sitio. `null` si el taller no cargó logo — en ese caso mostrá `name`. |
+
+⚠️ `logoPath` hay que prefijarlo con `CRM_BASE_URL`, no con la base de kristallfilm.com. Es una imagen
+que sirve el CRM (`GET /api/public/workshop/logo/:slug`, público, sin auth, cacheado 24 h).
+
+De acá **no** salen datos del vendedor más allá de su marca comercial: no viene su `contactId`, ni su
+email, ni su ubicación. El logo va por un slug aleatorio justamente para no poner el id interno del
+taller en una URL que viaja en mails y en HTML público.
 
 **Errores:**
 - `404 { "error": "Garantía no encontrada" }` — el token no existe.

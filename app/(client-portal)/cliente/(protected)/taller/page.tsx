@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { CalendarClock, Wrench, Plus, Users, CalendarDays, ClipboardList } from 'lucide-react'
+import { CalendarClock, Wrench, Plus, Users, CalendarDays, ClipboardList, Settings } from 'lucide-react'
 import { getClientSession } from '@/lib/client-portal/session'
 import { loadPortalData } from '@/lib/client-portal/guard'
 import { getWorkshopSummary, getAgenda } from '@/lib/client-portal/workshop'
@@ -85,6 +85,12 @@ export default async function TallerPage() {
           <Link href="/cliente/taller/clientes">
             <Users className="size-4" />
             Mis clientes
+          </Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link href="/cliente/taller/configuracion">
+            <Settings className="size-4" />
+            Configuración
           </Link>
         </Button>
       </div>

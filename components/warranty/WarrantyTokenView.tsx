@@ -6,14 +6,18 @@ import { Button } from '@/components/ui/button'
 import StatusCard from './StatusCard'
 import ActivationForm from './ActivationForm'
 import SetPasswordForm from './SetPasswordForm'
+import WarrantyHeader from './WarrantyHeader'
 import type { WarrantyStatus } from '@/lib/warranty/api'
 
 export default function WarrantyTokenView({
   token,
   initialStatus,
+  logoUrl,
 }: {
   token: string
   initialStatus: WarrantyStatus
+  /** Logo del taller, ya resuelto contra el CRM. */
+  logoUrl: string | null
 }) {
   const [status, setStatus] = useState(initialStatus)
   const [justActivated, setJustActivated] = useState(false)
@@ -26,7 +30,9 @@ export default function WarrantyTokenView({
 
   return (
     <div className="mx-auto flex min-h-screen max-w-lg flex-col justify-center gap-6 px-4 py-16">
-      <h1 className="text-center font-heading text-2xl font-semibold">Kristall Film — Garantía</h1>
+      <WarrantyHeader installer={status.installer} logoUrl={logoUrl} />
+
+      <h1 className="text-center font-heading text-2xl font-semibold">Garantía</h1>
 
       {status.status === 'PENDING' && !justActivated && (
         <div className="rounded-xl border border-border bg-card p-6">

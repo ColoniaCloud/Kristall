@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getStatus, type WarrantyStatus } from '@/lib/warranty/api'
+import { getStatus, crmAssetUrl, type WarrantyStatus } from '@/lib/warranty/api'
 import { CrmApiError } from '@/lib/crm/api'
 import WarrantyTokenView from '@/components/warranty/WarrantyTokenView'
 
@@ -31,5 +31,11 @@ export default async function TokenPage({ params }: Props) {
     )
   }
 
-  return <WarrantyTokenView token={token} initialStatus={status} />
+  return (
+    <WarrantyTokenView
+      token={token}
+      initialStatus={status}
+      logoUrl={crmAssetUrl(status.installer?.logoPath ?? null)}
+    />
+  )
 }
