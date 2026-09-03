@@ -113,7 +113,7 @@ const ROLLOS = [
       category: 'AUTOMOTIVE',
       width: '1.52',
       length: '30',
-      warrantyConfig: { maxInstallations: 15 },
+      warrantyConfig: { maxInstallations: 15, installWarrantyMonths: 60, warrantyEnabled: true },
     },
     installations: [
       {
@@ -140,7 +140,7 @@ const ROLLOS = [
       // remainingM2 sean null y la pantalla tenga que decir "no sé", no "0".
       width: null,
       length: null,
-      warrantyConfig: { maxInstallations: 15 },
+      warrantyConfig: { maxInstallations: 15, installWarrantyMonths: 60, warrantyEnabled: true },
     },
     installations: [],
     _count: { installations: 0 },

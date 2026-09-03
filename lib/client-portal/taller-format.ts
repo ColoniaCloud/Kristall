@@ -118,3 +118,27 @@ export { TIPO_LABEL }
 export function plural(n: number, singular: string, plural: string): string {
   return `${n} ${n === 1 ? singular : plural}`
 }
+
+/**
+ * Cuánto cubre la garantía de una instalación, en las palabras del mostrador.
+ *
+ * El CRM la guarda en meses porque hay productos de 18; el instalador la dice
+ * en años. Se muestran años cuando la cuenta es exacta y meses cuando no, en
+ * vez de redondear: "1,5 años" no se lo dice nadie a un cliente.
+ *
+ * Los dos casos sin garantía se distinguen a propósito. Un producto sin
+ * `warrantyConfig` nunca fue configurado —es la trampa del orden de O-6, y el
+ * rollo no va a poder generar garantías—; uno con la config apagada es una
+ * decisión tomada. Para el instalador el resultado es el mismo, pero para quien
+ * tenga que arreglarlo no.
+ */
+export function formatGarantia(
+  config: { installWarrantyMonths: number; warrantyEnabled: boolean } | null
+): string {
+  if (!config) return 'Sin configurar'
+  if (!config.warrantyEnabled) return 'Sin garantía'
+  const meses = config.installWarrantyMonths
+  if (meses <= 0) return 'Sin garantía'
+  if (meses % 12 === 0) return plural(meses / 12, 'año', 'años')
+  return plural(meses, 'mes', 'meses')
+}

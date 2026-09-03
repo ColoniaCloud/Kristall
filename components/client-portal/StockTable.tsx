@@ -1,22 +1,20 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
-import StatusBadge from '@/components/common/StatusBadge'
 import CreateInstallationAction from '@/components/client-portal/CreateInstallationAction'
+import { formatGarantia } from '@/lib/client-portal/taller-format'
 import type { WorkshopStockRoll } from '@/lib/client-portal/workshop'
 
 /**
- * El stock del instalador, con cuánta lámina queda en cada rollo.
+ * El stock del instalador: qué rollo, de qué producto, cuánto cubre, y el botón
+ * para generar la instalación.
  *
- * Desde la Fase 4 esta pantalla consume `/workshop/stock` en vez de `/stock`:
- * es el mismo listado más los metros. Los cuatro números que trae el CRM se
- * muestran como dos, que son los que el instalador usa:
+ * Antes esta tabla tenía siete columnas —lote, estado, metros restantes,
+ * comprometidos, instalaciones activas—. Son datos ciertos, pero ninguno es el
+ * que se necesita acá: esta pantalla se usa con el cliente enfrente, y lo que
+ * hay que resolver es «de qué rollo corto y qué garantía le digo». El resto
+ * es información de inventario, y su lugar es la pantalla de instalaciones.
  *
- *   **Quedan**      lo que físicamente hay en el rollo (total − cortado).
- *   **Disponibles** con lo que puede contar para un trabajo nuevo, o sea
- *                   descontando además lo comprometido en órdenes que todavía
- *                   no cortó.
- *
- * Cuando los dos coinciden se muestra uno solo: repetir el mismo número dos
- * veces con etiquetas distintas hace dudar de los dos.
+ * Los metros se sacaron con la misma lógica. El instalador mira el rollo, no la
+ * pantalla, para saber cuánto queda.
  */
 export default function StockTable({ rolls }: { rolls: WorkshopStockRoll[] }) {
   if (rolls.length === 0) {
@@ -29,55 +27,24 @@ export default function StockTable({ rolls }: { rolls: WorkshopStockRoll[] }) {
         <TableRow>
           <TableHead>Rollo</TableHead>
           <TableHead>Producto</TableHead>
-          <TableHead>Lote</TableHead>
-          <TableHead>Estado</TableHead>
-          <TableHead className="text-right">Lámina</TableHead>
-          <TableHead>Instalaciones activas</TableHead>
-          <TableHead>Acciones</TableHead>
+          <TableHead>Garantía</TableHead>
+          <TableHead className="text-right">Acciones</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {rolls.map((r) => (
           <TableRow key={r.id}>
-            <TableCell className="font-medium">{r.fullRollCode}</TableCell>
-            <TableCell>
-              {r.product.name}{' '}
-              {/* El SKU es opcional en el CRM; sin este chequeo quedaba "()" colgando. */}
-              {r.product.sku && <span className="text-muted-foreground">({r.product.sku})</span>}
+            <TableCell className="font-medium tabular-nums">{r.fullRollCode}</TableCell>
+            <TableCell>{r.product.name}</TableCell>
+            <TableCell className="text-muted-foreground">
+              {formatGarantia(r.product.warrantyConfig)}
             </TableCell>
-            <TableCell>{r.lot.lotNumber}</TableCell>
-            <TableCell>
-              <StatusBadge status={r.status} />
-            </TableCell>
-            <TableCell className="text-right tabular-nums">
-              <Metros roll={r} />
-            </TableCell>
-            <TableCell>{r._count.installations}</TableCell>
-            <TableCell>
+            <TableCell className="text-right">
               <CreateInstallationAction roll={r} />
             </TableCell>
           </TableRow>
         ))}
       </TableBody>
     </Table>
-  )
-}
-
-function Metros({ roll }: { roll: WorkshopStockRoll }) {
-  // null y no 0: el producto no tiene medidas cargadas, así que no sabemos
-  // cuánto queda. Decir "0 m²" sería afirmar algo falso.
-  if (roll.remainingM2 === null) {
-    return <span className="text-sm text-muted-foreground">Sin medidas</span>
-  }
-  const comprometido = roll.availableM2 !== null && roll.availableM2 !== roll.remainingM2
-  return (
-    <span className="flex flex-col items-end leading-tight">
-      <span className="font-medium">{roll.remainingM2} m²</span>
-      {comprometido && (
-        <span className="text-xs text-muted-foreground">
-          {roll.availableM2} libres · {roll.reservedM2} comprometidos
-        </span>
-      )}
-    </span>
   )
 }

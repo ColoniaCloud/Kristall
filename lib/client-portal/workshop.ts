@@ -165,7 +165,13 @@ export interface WorkshopStockRoll {
     category: string
     width: Money
     length: Money
-    warrantyConfig: { maxInstallations: number } | null
+    warrantyConfig: {
+      maxInstallations: number
+      /** Los meses que cubre la instalación al cliente final, no el rollo. */
+      installWarrantyMonths: number
+      /** Un producto puede tener config y tenerla apagada. */
+      warrantyEnabled: boolean
+    } | null
   }
   installations: {
     id: string

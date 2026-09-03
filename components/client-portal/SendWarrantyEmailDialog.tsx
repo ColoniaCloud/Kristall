@@ -9,6 +9,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import CopyableCode from './CopyableCode'
 import {
   Dialog,
   DialogContent,
@@ -81,12 +82,18 @@ export default function SendWarrantyEmailDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="crm-theme">
         <DialogHeader>
-          <DialogTitle>Enviar garantía por mail</DialogTitle>
+          <DialogTitle>Garantía generada</DialogTitle>
           <DialogDescription>
-            Le enviamos al cliente su clave de garantía ({installationCode}) y el link para activarla o
-            consultarla.
+            Mandásela por mail y le llega el link para activarla, o pasale el código y que la active
+            desde la web.
           </DialogDescription>
         </DialogHeader>
+
+        {/* El código va arriba y destacado a proposito: es lo que el instalador
+            necesita de esta pantalla aunque no mande el mail. Antes vivía entre
+            paréntesis dentro de una frase, que es el peor lugar para algo que
+            se transcribe a mano. */}
+        <CopyableCode value={installationCode} label="Código de garantía" />
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">

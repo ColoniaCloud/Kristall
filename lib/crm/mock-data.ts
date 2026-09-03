@@ -99,7 +99,7 @@ const MOCK_STOCK = [
     lot: { lotNumber: 'LOT-20260705-0001' },
     // maxInstallations: 1 a propósito — ya tiene 1 instalación generada, para probar el
     // camino de "este rollo ya no admite más instalaciones" sin necesitar estado mutable.
-    product: { id: 'clp1', name: 'KRYPTON 05', sku: 'KR-05', warrantyConfig: { maxInstallations: 1 } },
+    product: { id: 'clp1', name: 'KRYPTON 05', sku: 'KR-05', warrantyConfig: { maxInstallations: 1, installWarrantyMonths: 12, warrantyEnabled: true } },
     installations: [
       { id: 'cli1', installationCode: 'LOT-20260705-0001-R003-I1', status: 'ACTIVE', activatedAt: '2026-06-10T00:00:00.000Z', expiresAt: '2027-06-10T00:00:00.000Z' },
     ],
@@ -111,7 +111,7 @@ const MOCK_STOCK = [
     status: 'SOLD',
     lot: { lotNumber: 'LOT-20260705-0002' },
     // maxInstallations: 3 con 0 generadas — para probar el camino exitoso de creación.
-    product: { id: 'clp2', name: 'KAISER 20', sku: 'KA-20', warrantyConfig: { maxInstallations: 3 } },
+    product: { id: 'clp2', name: 'KAISER 20', sku: 'KA-20', warrantyConfig: { maxInstallations: 3, installWarrantyMonths: 36, warrantyEnabled: true } },
     installations: [],
     _count: { installations: 0 },
   },

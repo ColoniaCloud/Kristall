@@ -68,7 +68,13 @@ export interface StockRoll {
     /** `null` es posible: en el CRM el SKU es una columna opcional del producto. */
     sku: string | null
     /** null si el producto no tiene WarrantyConfig — en ese caso asumir 15 (default del CRM). */
-    warrantyConfig: { maxInstallations: number } | null
+    warrantyConfig: {
+      maxInstallations: number
+      /** Los meses que cubre la instalación al cliente final, no el rollo. */
+      installWarrantyMonths: number
+      /** Un producto puede tener config y tenerla apagada. */
+      warrantyEnabled: boolean
+    } | null
   }
   /**
    * TODAS las instalaciones generadas sobre este rollo (no solo las ACTIVE). Usar
