@@ -170,12 +170,46 @@ const haceDias = (d: number) => {
  * siguiente y todo daba 404. Es el mismo motivo por el que el cliente de Prisma
  * es un singleton colgado de globalThis.
  */
+interface MockServicio {
+  id: string
+  name: string
+  description: string | null
+  priceFrom: number | null
+  currency: 'ARS' | 'USD'
+  durationMinutes: number
+  active: boolean
+  sortOrder: number
+}
+
+interface MockSettings {
+  workshopName: string | null
+  autoSendWarrantyEmail: boolean
+  openingTime: string | null
+  closingTime: string | null
+  workingDays: string | null
+  defaultCurrency: 'ARS' | 'USD'
+  nextOrderNumber: number
+  logo: string | null
+  logoMimeType: string | null
+  logoSlug: string | null
+  handle: string | null
+  publicPageEnabled: boolean
+  publicAddress: string | null
+  publicLat: number | null
+  publicLng: number | null
+  publicPhone: string | null
+}
+
 interface MockStore {
   clientes: MockCliente[]
   assets: MockAsset[]
   ordenes: MockOrden[]
   proximoNumero: number
   secuencia: number
+  servicios: MockServicio[]
+  settings: MockSettings
+  /** Handles que ya tomó "otro taller", para poder probar el choque. */
+  handlesAjenos: string[]
 }
 
 const g = globalThis as unknown as { __workshopMock?: MockStore }
@@ -239,6 +273,38 @@ const store: MockStore = (g.__workshopMock ??= {
   ordenes: semillaOrdenes,
   proximoNumero: 5,
   secuencia: 0,
+  servicios: [
+    {
+      id: 'srv-1', name: 'Polarizado completo',
+      description: 'Cuatro puertas, luneta y parabrisas',
+      priceFrom: 85000, currency: 'ARS', durationMinutes: 120, active: true, sortOrder: 0,
+    },
+    {
+      id: 'srv-2', name: 'Parabrisas',
+      description: null, priceFrom: null, currency: 'ARS',
+      durationMinutes: 45, active: true, sortOrder: 1,
+    },
+  ],
+  settings: {
+    workshopName: 'Vidriería Sur',
+    autoSendWarrantyEmail: true,
+    openingTime: '09:00',
+    closingTime: '18:00',
+    workingDays: '1,2,3,4,5',
+    defaultCurrency: 'ARS',
+    nextOrderNumber: 5,
+    logo: null,
+    logoMimeType: null,
+    logoSlug: null,
+    handle: null,
+    publicPageEnabled: false,
+    publicAddress: null,
+    publicLat: null,
+    publicLng: null,
+    publicPhone: null,
+  },
+  // Para poder ver el estado "ocupado" sin tener dos cuentas.
+  handlesAjenos: ['tallercarlos', 'polarizados-sur'],
 })
 
 const { clientes, assets, ordenes } = store
@@ -635,6 +701,116 @@ export function getWorkshopMock(path: string, method: string, body: unknown): Re
             .flatMap((o) => o.items)
             .reduce((s, i) => s + Number(i.squareMetersUsed ?? 0), 0),
         },
+      },
+    }
+  }
+
+  // ─── Configuración, servicios y handle ────────────────────────────────────
+
+  if (ruta === '/settings' && method === 'GET') {
+    const { logo, logoSlug, ...resto } = store.settings
+    return {
+      status: 200,
+      data: {
+        ...resto,
+        tieneLogo: Boolean(logo),
+        logoUrl: logo && logoSlug ? `/api/public/workshop/logo/${logoSlug}` : null,
+      },
+    }
+  }
+
+  if (ruta === '/settings' && method === 'PATCH') {
+    const p = b as Partial<MockSettings>
+    if (p.handle) {
+      const libre = !store.handlesAjenos.includes(p.handle)
+      if (!libre) return { status: 400, data: { error: 'Ya lo está usando otro taller.' } }
+    }
+    if (p.publicPageEnabled && !(p.handle ?? store.settings.handle)) {
+      return {
+        status: 400,
+        data: { error: 'Elegí un nombre de usuario antes de publicar tu página.' },
+      }
+    }
+    Object.assign(store.settings, p)
+    if (p.logo && !store.settings.logoSlug) store.settings.logoSlug = 'mocklogoslug'
+    if (p.logo === null) { store.settings.logoMimeType = null; store.settings.logoSlug = null }
+    return {
+      status: 200,
+      data: {
+        ok: true,
+        tieneLogo: Boolean(store.settings.logo),
+        logoUrl: store.settings.logo && store.settings.logoSlug
+          ? `/api/public/workshop/logo/${store.settings.logoSlug}`
+          : null,
+        handle: store.settings.handle,
+        publicPageEnabled: store.settings.publicPageEnabled,
+      },
+    }
+  }
+
+  if (ruta === '/services' && method === 'GET') {
+    return {
+      status: 200,
+      data: [...store.servicios].sort(
+        (a, z) => Number(z.active) - Number(a.active) || a.sortOrder - z.sortOrder
+      ),
+    }
+  }
+
+  if (ruta === '/services' && method === 'POST') {
+    const p = b as Partial<MockServicio>
+    const nuevo: MockServicio = {
+      id: `srv-${++store.secuencia}-${Date.now().toString(36)}`,
+      name: String(p.name ?? ''),
+      description: p.description ?? null,
+      priceFrom: p.priceFrom ?? null,
+      currency: p.currency ?? 'ARS',
+      durationMinutes: p.durationMinutes ?? 60,
+      active: true,
+      sortOrder: store.servicios.length,
+    }
+    store.servicios.push(nuevo)
+    return { status: 201, data: { id: nuevo.id } }
+  }
+
+  const mServicio = ruta.match(/^\/services\/([^/]+)$/)
+  if (mServicio) {
+    const s = store.servicios.find((x) => x.id === mServicio[1])
+    if (!s) return { status: 404, data: { error: 'Servicio no encontrado' } }
+    if (method === 'PATCH') {
+      Object.assign(s, b)
+      return { status: 200, data: { ok: true } }
+    }
+    if (method === 'DELETE') {
+      // Desactiva, no borra.
+      s.active = false
+      return { status: 200, data: { ok: true } }
+    }
+  }
+
+  if (ruta === '/handle' && method === 'GET') {
+    const pedido = query.get('handle')
+    if (pedido !== null) {
+      const ocupado = store.handlesAjenos.includes(pedido)
+      const corto = pedido.length < 3
+      return {
+        status: 200,
+        data: {
+          handle: pedido,
+          disponible: !ocupado && !corto,
+          motivo: corto
+            ? 'Tiene que tener al menos 3 caracteres.'
+            : ocupado
+              ? 'Ya lo está usando otro taller.'
+              : null,
+        },
+      }
+    }
+    return {
+      status: 200,
+      data: {
+        actual: store.settings.handle,
+        sugerencias: ['vidrieria-sur', 'vidrieriasur', 'vidrieria-sur-taller'],
       },
     }
   }

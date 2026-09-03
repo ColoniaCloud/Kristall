@@ -31,6 +31,24 @@ export async function PATCH(request: NextRequest) {
   if (body.closingTime !== undefined) patch.closingTime = body.closingTime || null
   if (body.workingDays !== undefined) patch.workingDays = body.workingDays || null
 
+  // Página pública. El handle se manda en minúsculas y sin espacios: el CRM lo
+  // vuelve a normalizar y validar, pero mandarlo sucio haría que el instalador
+  // vea un error por algo que la pantalla podía arreglar sola.
+  if (body.handle !== undefined) {
+    patch.handle = typeof body.handle === 'string' ? body.handle.trim().toLowerCase() || null : null
+  }
+  if (body.publicPageEnabled !== undefined) patch.publicPageEnabled = Boolean(body.publicPageEnabled)
+  if (body.publicAddress !== undefined) patch.publicAddress = body.publicAddress?.trim() || null
+  if (body.publicPhone !== undefined) patch.publicPhone = body.publicPhone?.trim() || null
+  // Las coordenadas van juntas o no van: una sola no ubica nada en el mapa.
+  if (body.publicLat !== undefined || body.publicLng !== undefined) {
+    const lat = Number(body.publicLat)
+    const lng = Number(body.publicLng)
+    const validas = Number.isFinite(lat) && Number.isFinite(lng)
+    patch.publicLat = validas ? lat : null
+    patch.publicLng = validas ? lng : null
+  }
+
   if (body.logo === null) {
     patch.logo = null
     patch.logoMimeType = null

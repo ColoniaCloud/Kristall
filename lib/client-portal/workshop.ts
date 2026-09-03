@@ -441,6 +441,14 @@ export function getWorkshopStock(contactId: string) {
 
 export interface WorkshopSettings {
   workshopName: string | null
+  /** El nombre de usuario público: polariz.ar/<handle>. `null` = sin elegir. */
+  handle: string | null
+  /** Mientras esté en false la página no existe: el endpoint público da 404. */
+  publicPageEnabled: boolean
+  publicAddress: string | null
+  publicLat: number | null
+  publicLng: number | null
+  publicPhone: string | null
   autoSendWarrantyEmail: boolean
   openingTime: string | null
   closingTime: string | null
@@ -459,6 +467,12 @@ export function getWorkshopSettings(contactId: string) {
 
 export interface WorkshopSettingsInput {
   workshopName?: string | null
+  handle?: string | null
+  publicPageEnabled?: boolean
+  publicAddress?: string | null
+  publicLat?: number | null
+  publicLng?: number | null
+  publicPhone?: string | null
   autoSendWarrantyEmail?: boolean
   openingTime?: string | null
   closingTime?: string | null
@@ -469,7 +483,13 @@ export interface WorkshopSettingsInput {
 }
 
 export function updateWorkshopSettings(contactId: string, input: WorkshopSettingsInput) {
-  return callCrmApi<{ ok: true; tieneLogo: boolean; logoUrl: string | null }>(
+  return callCrmApi<{
+    ok: true
+    tieneLogo: boolean
+    logoUrl: string | null
+    handle: string | null
+    publicPageEnabled: boolean
+  }>(
     `${base(contactId)}/settings`,
     { method: 'PATCH', ...SESSION(), body: input }
   )
@@ -482,6 +502,78 @@ export function getWorkshopSummary(contactId: string, from?: string, to?: string
   const qs = params.toString()
   return callCrmApi<WorkshopSummary>(
     `${base(contactId)}/summary${qs ? `?${qs}` : ''}`,
+    SESSION()
+  )
+}
+
+// ─── Servicios y página pública ──────────────────────────────────────────────
+
+export interface WorkshopService {
+  id: string
+  name: string
+  description: string | null
+  /** `null` = el instalador eligió no publicar precio. */
+  priceFrom: Money | null
+  currency: Currency
+  /** Sin esto no se pueden calcular los huecos libres de la agenda. */
+  durationMinutes: number
+  active: boolean
+  sortOrder: number
+}
+
+export function listWorkshopServices(contactId: string) {
+  return callCrmApi<WorkshopService[]>(`${base(contactId)}/services`, SESSION())
+}
+
+export interface WorkshopServiceInput {
+  name?: string
+  description?: string | null
+  priceFrom?: number | null
+  currency?: Currency
+  durationMinutes?: number
+  active?: boolean
+  sortOrder?: number
+}
+
+export function createWorkshopService(contactId: string, input: WorkshopServiceInput) {
+  return callCrmApi<{ id: string }>(`${base(contactId)}/services`, {
+    method: 'POST',
+    ...SESSION(),
+    body: input,
+  })
+}
+
+export function updateWorkshopService(
+  contactId: string,
+  serviceId: string,
+  input: WorkshopServiceInput
+) {
+  return callCrmApi<{ ok: true }>(
+    `${base(contactId)}/services/${encodeURIComponent(serviceId)}`,
+    { method: 'PATCH', ...SESSION(), body: input }
+  )
+}
+
+/** No borra: desactiva. Un servicio borrado se llevaría los turnos que originó. */
+export function deactivateWorkshopService(contactId: string, serviceId: string) {
+  return callCrmApi<{ ok: true }>(
+    `${base(contactId)}/services/${encodeURIComponent(serviceId)}`,
+    { method: 'DELETE', ...SESSION() }
+  )
+}
+
+/** Sugerencias derivadas del nombre del taller, ya filtradas por disponibilidad. */
+export function suggestHandles(contactId: string) {
+  return callCrmApi<{ actual: string | null; sugerencias: string[] }>(
+    `${base(contactId)}/handle?sugerir=1`,
+    SESSION()
+  )
+}
+
+/** `motivo` viene en castellano listo para mostrar; no traducirlo acá. */
+export function checkHandle(contactId: string, handle: string) {
+  return callCrmApi<{ handle: string; disponible: boolean; motivo: string | null }>(
+    `${base(contactId)}/handle?handle=${encodeURIComponent(handle)}`,
     SESSION()
   )
 }
