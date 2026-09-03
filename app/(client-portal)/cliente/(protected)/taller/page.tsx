@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { CalendarClock, Wrench, Plus, Users, CalendarDays, ClipboardList, Settings } from 'lucide-react'
+import { CalendarClock, Wrench, Plus, Users, CalendarDays, ClipboardList, Settings, Inbox } from 'lucide-react'
 import { getClientSession } from '@/lib/client-portal/session'
 import { loadPortalData } from '@/lib/client-portal/guard'
-import { getWorkshopSummary, getAgenda } from '@/lib/client-portal/workshop'
+import { getWorkshopSummary, getAgenda, listBookings } from '@/lib/client-portal/workshop'
 import { Button } from '@/components/ui/button'
 import WorkOrderStatusBadge from '@/components/client-portal/taller/WorkOrderStatusBadge'
 import { formatHora, formatMoney, describirAsset, toDateInput } from '@/lib/client-portal/taller-format'
@@ -25,9 +25,11 @@ export default async function TallerPage() {
   const hasta = new Date(desde)
   hasta.setHours(23, 59, 59, 999)
 
-  const [summary, agendaHoy] = await Promise.all([
+  const [summary, agendaHoy, pedidosPendientes] = await Promise.all([
     loadPortalData(() => getWorkshopSummary(session.contactId)),
     loadPortalData(() => getAgenda(session.contactId, desde.toISOString(), hasta.toISOString())),
+    // Solo los pendientes: acá interesa el contador, no la lista.
+    loadPortalData(() => listBookings(session.contactId, true)),
   ])
 
   const enProceso = agendaHoy.filter((t) => t.status === 'EN_PROCESO')
@@ -85,6 +87,19 @@ export default async function TallerPage() {
           <Link href="/cliente/taller/clientes">
             <Users className="size-4" />
             Mis clientes
+          </Link>
+        </Button>
+        <Button asChild variant={pedidosPendientes.length > 0 ? 'default' : 'outline'}>
+          <Link href="/cliente/taller/turnos">
+            <Inbox className="size-4" />
+            Pedidos de turno
+            {/* El contador solo cuando hay algo esperando: un cero permanente
+                deja de significar nada y se vuelve invisible. */}
+            {pedidosPendientes.length > 0 && (
+              <span className="ml-1 rounded-full bg-background/20 px-1.5 text-xs font-semibold">
+                {pedidosPendientes.length}
+              </span>
+            )}
           </Link>
         </Button>
         <Button asChild variant="outline">

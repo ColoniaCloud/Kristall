@@ -181,6 +181,23 @@ interface MockServicio {
   sortOrder: number
 }
 
+interface MockBooking {
+  id: string
+  serviceName: string
+  durationMinutes: number
+  clientName: string
+  clientEmail: string | null
+  clientPhone: string
+  vehicleType: string | null
+  plate: string | null
+  notes: string | null
+  preferredAt: string
+  status: 'PENDIENTE' | 'CONFIRMADA' | 'RECHAZADA' | 'CANCELADA'
+  workOrderId: string | null
+  respondedAt: string | null
+  createdAt: string
+}
+
 interface MockSettings {
   workshopName: string | null
   autoSendWarrantyEmail: boolean
@@ -207,6 +224,7 @@ interface MockStore {
   proximoNumero: number
   secuencia: number
   servicios: MockServicio[]
+  bookings: MockBooking[]
   settings: MockSettings
   /** Handles que ya tomó "otro taller", para poder probar el choque. */
   handlesAjenos: string[]
@@ -305,6 +323,34 @@ const store: MockStore = (g.__workshopMock ??= {
   },
   // Para poder ver el estado "ocupado" sin tener dos cuentas.
   handlesAjenos: ['tallercarlos', 'polarizados-sur'],
+  bookings: [
+    {
+      id: 'bk-1', serviceName: 'Polarizado completo', durationMinutes: 120,
+      clientName: 'Ana Pérez', clientEmail: 'ana@ejemplo.com', clientPhone: '11 5555 4444',
+      vehicleType: 'SUV', plate: 'AB123CD',
+      notes: 'Prefiero a la mañana si se puede.',
+      preferredAt: new Date(Date.now() + 2 * 86400000).toISOString(),
+      status: 'PENDIENTE', workOrderId: null, respondedAt: null,
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 'bk-2', serviceName: 'Parabrisas', durationMinutes: 45,
+      clientName: 'Luis Gómez', clientEmail: null, clientPhone: '11 4444 3333',
+      vehicleType: null, plate: null, notes: null,
+      preferredAt: new Date(Date.now() + 5 * 86400000).toISOString(),
+      status: 'PENDIENTE', workOrderId: null, respondedAt: null,
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 'bk-3', serviceName: 'PPF capot', durationMinutes: 240,
+      clientName: 'Marta Ruiz', clientEmail: 'marta@ejemplo.com', clientPhone: '11 3333 2222',
+      vehicleType: 'SEDAN', plate: 'XY987ZW', notes: null,
+      preferredAt: new Date(Date.now() - 3 * 86400000).toISOString(),
+      status: 'CONFIRMADA', workOrderId: 'wo-mock-1',
+      respondedAt: new Date(Date.now() - 4 * 86400000).toISOString(),
+      createdAt: new Date(Date.now() - 5 * 86400000).toISOString(),
+    },
+  ],
 })
 
 const { clientes, assets, ordenes } = store
@@ -786,6 +832,34 @@ export function getWorkshopMock(path: string, method: string, body: unknown): Re
       s.active = false
       return { status: 200, data: { ok: true } }
     }
+  }
+
+  if (ruta === '/bookings' && method === 'GET') {
+    const soloPendientes = query.get('pendientes') === '1'
+    const lista = store.bookings.filter((b) => !soloPendientes || b.status === 'PENDIENTE')
+    return {
+      status: 200,
+      data: [...lista].sort(
+        (a, z) => a.status.localeCompare(z.status) || a.preferredAt.localeCompare(z.preferredAt)
+      ),
+    }
+  }
+
+  const mBooking = ruta.match(/^\/bookings\/([^/]+)\/(confirm|reject)$/)
+  if (mBooking && method === 'POST') {
+    const bk = store.bookings.find((x) => x.id === mBooking[1])
+    if (!bk) return { status: 404, data: { error: 'Pedido no encontrado' } }
+    if (bk.status !== 'PENDIENTE') {
+      return { status: 409, data: { error: 'Este pedido ya fue respondido' } }
+    }
+    bk.respondedAt = new Date().toISOString()
+    if (mBooking[2] === 'reject') {
+      bk.status = 'RECHAZADA'
+      return { status: 200, data: { ok: true } }
+    }
+    bk.status = 'CONFIRMADA'
+    bk.workOrderId = `wo-mock-${++store.secuencia}`
+    return { status: 200, data: { ok: true, workOrderId: bk.workOrderId } }
   }
 
   if (ruta === '/handle' && method === 'GET') {

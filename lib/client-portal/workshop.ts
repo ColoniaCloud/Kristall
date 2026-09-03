@@ -577,3 +577,48 @@ export function checkHandle(contactId: string, handle: string) {
     SESSION()
   )
 }
+
+// ─── Pedidos de turno ────────────────────────────────────────────────────────
+
+export type BookingStatus = 'PENDIENTE' | 'CONFIRMADA' | 'RECHAZADA' | 'CANCELADA'
+
+export interface Booking {
+  id: string
+  serviceName: string
+  durationMinutes: number
+  clientName: string
+  clientEmail: string | null
+  clientPhone: string
+  vehicleType: string | null
+  plate: string | null
+  notes: string | null
+  /** Lo que pidió el cliente. Al confirmar el taller puede correrlo. */
+  preferredAt: string
+  status: BookingStatus
+  /** La orden que se creó al confirmar, si se confirmó. */
+  workOrderId: string | null
+  respondedAt: string | null
+  createdAt: string
+}
+
+export function listBookings(contactId: string, soloPendientes = false) {
+  return callCrmApi<Booking[]>(
+    `${base(contactId)}/bookings${soloPendientes ? '?pendientes=1' : ''}`,
+    SESSION()
+  )
+}
+
+/** `scheduledAt` ISO para correr el horario; sin él vale el que pidió el cliente. */
+export function confirmBooking(contactId: string, bookingId: string, scheduledAt?: string) {
+  return callCrmApi<{ ok: true; workOrderId: string }>(
+    `${base(contactId)}/bookings/${encodeURIComponent(bookingId)}/confirm`,
+    { method: 'POST', ...SESSION(), body: scheduledAt ? { scheduledAt } : {} }
+  )
+}
+
+export function rejectBooking(contactId: string, bookingId: string) {
+  return callCrmApi<{ ok: true }>(
+    `${base(contactId)}/bookings/${encodeURIComponent(bookingId)}/reject`,
+    { method: 'POST', ...SESSION(), body: {} }
+  )
+}
