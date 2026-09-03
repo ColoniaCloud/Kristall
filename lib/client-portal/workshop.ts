@@ -179,6 +179,9 @@ export interface WorkshopStockRoll {
     status: string
     activatedAt: string | null
     expiresAt: string | null
+    /** Precargados por el taller al generar la instalación. */
+    vehicleType: string | null
+    plate: string | null
   }[]
   _count: { installations: number }
   /**

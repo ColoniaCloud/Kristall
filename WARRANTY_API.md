@@ -173,9 +173,12 @@ Base URL: `https://<dominio-del-crm>` (a confirmar con el equipo — no hardcode
 
 - **Auth:** ninguna (no requiere `x-api-key`).
 - **Uso:** pantalla previa a mostrar el formulario de activación, o pantalla de "validar garantía".
-- **Importante:** esta respuesta **no incluye datos personales** (`clientName`, `clientEmail`, etc.)
-  a propósito, para que se pueda consultar sin exponer PII de terceros. Si necesitás mostrarle al
-  cliente sus propios datos ya cargados, no vas a poder desde este endpoint (ver sección 8, gaps).
+- **Importante — esto cambió.** Antes esta respuesta no incluía ningún dato personal. Ahora
+  incluye **solo lo que precargó el taller** al generar la instalación: `clientEmail`, `vehicleType`
+  y `plate`. Salen para que la pantalla de activación pueda mostrarle al cliente una ficha con los
+  datos del trabajo y que él los confirme en vez de tipearlos.
+  Lo que el **cliente** carga después (`clientName`, `clientPhone`, `clientDni`) sigue sin salir
+  nunca. Tenelo en cuenta: si el link se reenvía, el mail y la patente viajan con él.
 
 **Response `200`:**
 ```json
@@ -186,8 +189,12 @@ Base URL: `https://<dominio-del-crm>` (a confirmar con el equipo — no hardcode
   "isActive": false,
   "daysRemaining": 0,
   "expiresAt": null,
-  "assetType": null,
-  "installer": { "name": "Polarizados del Sur", "logoPath": "/api/public/workshop/logo/a3f1…" }
+  "assetType": "VEHICLE",
+  "installer": { "name": "Polarizados del Sur", "logoPath": "/api/public/workshop/logo/a3f1…" },
+  "vehicleType": "SUV",
+  "plate": "AB123CD",
+  "clientEmail": "cliente@ejemplo.com",
+  "warrantyMonths": 60
 }
 ```
 Cuando está activa:
@@ -200,8 +207,18 @@ Cuando está activa:
   "daysRemaining": 342,
   "expiresAt": "2027-07-05T00:00:00.000Z",
   "assetType": "VEHICLE",
-  "installer": { "name": "Polarizados del Sur", "logoPath": "/api/public/workshop/logo/a3f1…" }
+  "installer": { "name": "Polarizados del Sur", "logoPath": "/api/public/workshop/logo/a3f1…" },
+  "vehicleType": "SUV",
+  "plate": "AB123CD",
+  "clientEmail": "cliente@ejemplo.com",
+  "warrantyMonths": 60
 }
+
+`vehicleType` es uno de los slugs de la lista compartida (`SEDAN`, `HATCHBACK`, `SUV`, `FURGON`,
+`VAN_MINIBUS`, `CAMION_CHICO`, `CAMION_GRANDE`, `COLECTIVO`, `YATE_CHICO`, `YATE_GRANDE`) o `null`.
+Cada slug tiene su icono en `public/iconos/vehiculos` de kristall-web — **si agregás uno, agregalo en
+los dos lados**. `warrantyMonths` sirve estando `PENDING`, que es justo cuando `expiresAt` todavía es
+`null` y no hay otra forma de decirle a la persona cuánto va a durar la garantía.
 ```
 
 #### El campo `installer`

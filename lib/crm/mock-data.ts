@@ -22,7 +22,28 @@ const WARRANTY_STATUSES: Record<string, unknown> = {
     isActive: false,
     daysRemaining: 0,
     expiresAt: null,
+    assetType: 'VEHICLE',
+    installer: { name: 'Vidriería Sur', logoPath: null },
+    vehicleType: 'SUV',
+    plate: 'AB123CD',
+    clientEmail: 'cliente@ejemplo.com',
+    warrantyMonths: 60,
+  },
+  // Sin nada precargado: el taller genero la instalacion en blanco. La ficha no
+  // se dibuja y el formulario pregunta todo, como antes.
+  'mock-pending-vacia': {
+    installationCode: 'LOT-20260705-0001-R003-I2',
+    status: 'PENDING',
+    product: { id: 'clyproduct1', name: 'KRYPTON 05', brand: 'Kristall' },
+    isActive: false,
+    daysRemaining: 0,
+    expiresAt: null,
     assetType: null,
+    installer: { name: 'Vidriería Sur', logoPath: null },
+    vehicleType: null,
+    plate: null,
+    clientEmail: null,
+    warrantyMonths: 12,
   },
   'mock-active': {
     installationCode: 'LOT-20260705-0002-R001-I1',
@@ -32,6 +53,11 @@ const WARRANTY_STATUSES: Record<string, unknown> = {
     daysRemaining: 342,
     expiresAt: '2027-07-05T00:00:00.000Z',
     assetType: 'VEHICLE',
+    installer: { name: 'Vidriería Sur', logoPath: null },
+    vehicleType: 'SEDAN',
+    plate: 'XY987ZW',
+    clientEmail: 'cliente@ejemplo.com',
+    warrantyMonths: 60,
   },
   'mock-expired': {
     installationCode: 'LOT-20250101-0001-R001-I1',
@@ -41,6 +67,11 @@ const WARRANTY_STATUSES: Record<string, unknown> = {
     daysRemaining: 0,
     expiresAt: '2026-01-01T00:00:00.000Z',
     assetType: 'VEHICLE',
+    installer: { name: 'Vidriería Sur', logoPath: null },
+    vehicleType: 'HATCHBACK',
+    plate: 'CD456EF',
+    clientEmail: 'cliente@ejemplo.com',
+    warrantyMonths: 24,
   },
   'mock-voided': {
     installationCode: 'LOT-20260101-0001-R001-I1',
@@ -50,6 +81,11 @@ const WARRANTY_STATUSES: Record<string, unknown> = {
     daysRemaining: 0,
     expiresAt: null,
     assetType: null,
+    installer: null,
+    vehicleType: null,
+    plate: null,
+    clientEmail: null,
+    warrantyMonths: 12,
   },
 }
 
@@ -101,7 +137,7 @@ const MOCK_STOCK = [
     // camino de "este rollo ya no admite más instalaciones" sin necesitar estado mutable.
     product: { id: 'clp1', name: 'KRYPTON 05', sku: 'KR-05', warrantyConfig: { maxInstallations: 1, installWarrantyMonths: 12, warrantyEnabled: true } },
     installations: [
-      { id: 'cli1', installationCode: 'LOT-20260705-0001-R003-I1', status: 'ACTIVE', activatedAt: '2026-06-10T00:00:00.000Z', expiresAt: '2027-06-10T00:00:00.000Z' },
+      { id: 'cli1', installationCode: 'LOT-20260705-0001-R003-I1', status: 'ACTIVE', activatedAt: '2026-06-10T00:00:00.000Z', expiresAt: '2027-06-10T00:00:00.000Z', vehicleType: 'SUV', plate: 'AB123CD' },
     ],
     _count: { installations: 1 },
   },

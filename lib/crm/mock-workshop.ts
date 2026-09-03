@@ -122,6 +122,8 @@ const ROLLOS = [
         status: 'PENDING',
         activatedAt: null,
         expiresAt: null,
+        vehicleType: 'SEDAN',
+        plate: 'AB123CD',
       },
     ],
     _count: { installations: 0 },

@@ -33,6 +33,22 @@ export interface WarrantyStatus {
    * `CRM_BASE_URL`, no la base de este sitio; ver `crmAssetUrl()`.
    */
   installer: { name: string; logoPath: string | null } | null
+  /**
+   * Lo que el taller precargó al generar la instalación, para que el cliente
+   * lo confirme en vez de tipearlo.
+   *
+   * Son datos personales y hasta ahora esta respuesta no traía ninguno. Salen
+   * porque la ficha de confirmación no existe sin ellos, y el `token` que abre
+   * esta página ya es un secreto que solo tienen el taller y el dueño del
+   * vehículo. Lo que el CLIENTE carga después (nombre, teléfono, DNI) sigue sin
+   * salir nunca.
+   */
+  vehicleType: string | null
+  plate: string | null
+  clientEmail: string | null
+  /** Meses que dura la garantía una vez activada. Sirve estando PENDING, que es
+   *  justo cuando `expiresAt` todavía es null. */
+  warrantyMonths: number
 }
 
 /**

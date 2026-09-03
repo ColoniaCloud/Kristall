@@ -7,6 +7,7 @@ import StatusCard from './StatusCard'
 import ActivationForm from './ActivationForm'
 import SetPasswordForm from './SetPasswordForm'
 import WarrantyHeader from './WarrantyHeader'
+import InstallationSummary from './InstallationSummary'
 import type { WarrantyStatus } from '@/lib/warranty/api'
 
 export default function WarrantyTokenView({
@@ -35,12 +36,26 @@ export default function WarrantyTokenView({
       <h1 className="text-center font-heading text-2xl font-semibold">Garantía</h1>
 
       {status.status === 'PENDING' && !justActivated && (
-        <div className="rounded-xl border border-border bg-card p-6">
-          <p className="mb-4 text-sm text-muted-foreground">
-            Completá estos datos para activar la garantía de tu {status.product.name}.
-          </p>
-          <ActivationForm token={token} onActivated={handleActivated} />
-        </div>
+        <>
+          {/* Entre los logos y el formulario: primero lo que ya sabemos del
+              trabajo, después lo que falta preguntar. */}
+          <InstallationSummary status={status} />
+
+          <div className="rounded-xl border border-border bg-card p-6">
+            <p className="mb-4 text-sm text-muted-foreground">
+              Completá estos datos para activar la garantía de tu {status.product.name}.
+            </p>
+            <ActivationForm
+              token={token}
+              onActivated={handleActivated}
+              precargado={{
+                installerName: status.installer?.name ?? null,
+                clientEmail: status.clientEmail,
+                assetTypeFijo: Boolean(status.vehicleType),
+              }}
+            />
+          </div>
+        </>
       )}
 
       {justActivated && (

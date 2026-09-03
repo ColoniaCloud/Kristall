@@ -32,9 +32,16 @@ const ASSET_LABELS: Record<FormData['assetType'], string> = {
 interface Props {
   token: string
   onActivated: (expiresAt: string) => void
+  /** Datos que ya cargó el taller. Prellenan el formulario. */
+  precargado?: {
+    installerName?: string | null
+    clientEmail?: string | null
+    /** Ya elegido por el taller: si vino, no se vuelve a preguntar. */
+    assetTypeFijo?: boolean
+  }
 }
 
-export default function ActivationForm({ token, onActivated }: Props) {
+export default function ActivationForm({ token, onActivated, precargado }: Props) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
 
@@ -43,7 +50,18 @@ export default function ActivationForm({ token, onActivated }: Props) {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<FormData>({ resolver: zodResolver(schema) })
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      // El taller no se elige: lo sabe el sistema, porque la garantía cuelga
+      // del rollo que ESE taller compró. Preguntarlo con el logo del taller
+      // arriba de la pantalla era pedirle a la persona que confirmara algo que
+      // ya estaba a la vista, y dejaba abierto que escribiera cualquier cosa.
+      installerName: precargado?.installerName ?? '',
+      clientEmail: precargado?.clientEmail ?? '',
+      ...(precargado?.assetTypeFijo ? { assetType: 'VEHICLE' as const } : {}),
+    },
+  })
 
   const onSubmit = async (data: FormData) => {
     setStatus('loading')
@@ -69,22 +87,29 @@ export default function ActivationForm({ token, onActivated }: Props) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="assetType">Tipo de instalación</Label>
-        <Select onValueChange={(v) => setValue('assetType', v as FormData['assetType'], { shouldValidate: true })}>
-          <SelectTrigger id="assetType" className="w-full">
-            <SelectValue placeholder="Elegí una opción" />
-          </SelectTrigger>
-          <SelectContent>
-            {(Object.keys(ASSET_LABELS) as FormData['assetType'][]).map((value) => (
-              <SelectItem key={value} value={value}>
-                {ASSET_LABELS[value]}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {errors.assetType && <span className="text-sm text-destructive">Elegí un tipo</span>}
-      </div>
+      {/* Si el taller ya cargó el vehículo, esto está resuelto y se muestra en
+          la ficha de arriba — volver a preguntarlo solo da lugar a que se
+          conteste distinto. */}
+      {!precargado?.assetTypeFijo && (
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="assetType">Tipo de instalación</Label>
+          <Select
+            onValueChange={(v) => setValue('assetType', v as FormData['assetType'], { shouldValidate: true })}
+          >
+            <SelectTrigger id="assetType" className="w-full">
+              <SelectValue placeholder="Elegí una opción" />
+            </SelectTrigger>
+            <SelectContent>
+              {(Object.keys(ASSET_LABELS) as FormData['assetType'][]).map((value) => (
+                <SelectItem key={value} value={value}>
+                  {ASSET_LABELS[value]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {errors.assetType && <span className="text-sm text-destructive">Elegí un tipo</span>}
+        </div>
+      )}
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="assetDescription">Descripción (opcional)</Label>
@@ -121,8 +146,15 @@ export default function ActivationForm({ token, onActivated }: Props) {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="installerName">Taller que instaló (opcional)</Label>
-        <Input id="installerName" {...register('installerName')} />
+        <Label htmlFor="installerName">Taller que instaló</Label>
+        {/* `readOnly` y no `disabled`: un campo deshabilitado no se envía, y
+            queremos que el nombre viaje tal cual. */}
+        <Input
+          id="installerName"
+          readOnly={Boolean(precargado?.installerName)}
+          className={precargado?.installerName ? 'bg-muted text-muted-foreground' : undefined}
+          {...register('installerName')}
+        />
       </div>
 
       {status === 'error' && <p className="text-sm text-destructive">{errorMsg}</p>}

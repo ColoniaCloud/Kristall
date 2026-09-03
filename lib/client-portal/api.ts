@@ -87,6 +87,9 @@ export interface StockRoll {
     status: string
     activatedAt: string | null
     expiresAt: string | null
+    /** Precargados por el taller al generar la instalación. */
+    vehicleType: string | null
+    plate: string | null
   }[]
   /** Cuenta SOLO instalaciones ACTIVE (activadas por el cliente final) — no usar para cupo. */
   _count: { installations: number }
@@ -337,10 +340,24 @@ export function getInstallations(contactId: string) {
 }
 
 /** Genera un nuevo sub-código de instalación (#2, #3, ...) sobre un rollo ya vendido a ese contacto. */
-export function createRollInstallation(contactId: string, fullRollCode: string) {
+/** Lo que el instalador precarga. Todo opcional: la instalación en blanco
+ *  sigue siendo válida y es como funcionaba hasta ahora. */
+export interface PreloadInstallation {
+  clientName?: string
+  clientEmail?: string
+  clientPhone?: string
+  vehicleType?: string
+  plate?: string
+}
+
+export function createRollInstallation(
+  contactId: string,
+  fullRollCode: string,
+  datos: PreloadInstallation = {}
+) {
   return callCrmApi<CreatedInstallation>(
     `/api/portal/v1/contacts/${encodeURIComponent(contactId)}/rolls/${encodeURIComponent(fullRollCode)}/installations`,
-    { method: 'POST', ...SESSION() }
+    { method: 'POST', body: datos, ...SESSION() }
   )
 }
 
