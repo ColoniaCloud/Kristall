@@ -46,6 +46,24 @@ export default function PublicPageForm({ settings }: { settings: WorkshopSetting
     publicPhone: settings.publicPhone ?? '',
     publicEmail: settings.publicEmail ?? '',
   })
+  const [modos, setModos] = useState({
+    worksAtShop: settings.worksAtShop,
+    worksOnSite: settings.worksOnSite,
+    worksForDealers: settings.worksForDealers,
+  })
+
+  /**
+   * Marcar o desmarcar guarda en el momento.
+   *
+   * Es un check: mandarlo a buscar un botón «guardar» después de tocarlo es
+   * fricción sin ninguna ventaja, y el riesgo de perder el cambio por navegar
+   * antes de guardar desaparece.
+   */
+  function cambiarModo(k: keyof typeof modos, v: boolean) {
+    const proximo = { ...modos, [k]: v }
+    setModos(proximo)
+    guardar({ [k]: v }, 'Listo, así se va a ver tu página')
+  }
 
   // El handle guardado es el que ya es suyo: no tiene sentido consultarlo.
   const sinCambios = handle === (settings.handle ?? '')
@@ -228,6 +246,43 @@ export default function PublicPageForm({ settings }: { settings: WorkshopSetting
           </p>
         </div>
       </div>
+
+      {/* Cómo trabaja. Define qué tarjetas aparecen activas en su página: las
+          que no marque se muestran igual pero apagadas, porque decir «esto no lo
+          hago» también informa y evita que la página cambie de forma según el
+          taller. */}
+      <fieldset className="flex flex-col gap-2 border-t border-border pt-4">
+        <legend className="sr-only">Cómo trabajás</legend>
+        <p className="text-sm font-medium">¿Cómo trabajás?</p>
+        <p className="text-xs text-muted-foreground">
+          Podés marcar más de una. Lo que no marques aparece en tu página como no disponible.
+        </p>
+        <div className="mt-1 flex flex-col gap-2">
+          {(
+            [
+              { k: 'worksAtShop' as const, t: 'Trabajo solo en mi taller' },
+              { k: 'worksOnSite' as const, t: 'Trabajo a domicilio' },
+              { k: 'worksForDealers' as const, t: 'Trabajo en concesionarias' },
+            ]
+          ).map((o) => (
+            <label key={o.k} className="inline-flex items-center gap-2.5 text-sm">
+              <input
+                type="checkbox"
+                className="size-4"
+                checked={modos[o.k]}
+                disabled={guardando}
+                onChange={(e) => cambiarModo(o.k, e.target.checked)}
+              />
+              {o.t}
+            </label>
+          ))}
+        </div>
+        {!modos.worksAtShop && !modos.worksOnSite && !modos.worksForDealers && (
+          <p className="text-xs text-destructive">
+            Si no marcás ninguna, tu página no le ofrece nada a tus clientes.
+          </p>
+        )}
+      </fieldset>
 
       <div className="flex flex-wrap items-center gap-3">
         <Button

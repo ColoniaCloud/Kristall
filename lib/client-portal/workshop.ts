@@ -451,6 +451,10 @@ export interface WorkshopSettings {
   publicPhone: string | null
   /** El mail que el taller publica, distinto del de su cuenta. */
   publicEmail: string | null
+  /** Cómo trabaja. Define qué tarjetas se ven activas en su página. */
+  worksAtShop: boolean
+  worksOnSite: boolean
+  worksForDealers: boolean
   autoSendWarrantyEmail: boolean
   openingTime: string | null
   closingTime: string | null
@@ -478,6 +482,9 @@ export interface WorkshopSettingsInput {
   publicLng?: number | null
   publicPhone?: string | null
   publicEmail?: string | null
+  worksAtShop?: boolean
+  worksOnSite?: boolean
+  worksForDealers?: boolean
   autoSendWarrantyEmail?: boolean
   openingTime?: string | null
   closingTime?: string | null

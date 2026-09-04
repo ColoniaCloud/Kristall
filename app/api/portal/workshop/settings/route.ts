@@ -44,6 +44,9 @@ export async function PATCH(request: NextRequest) {
   if (body.logoBackground === 'CLARO' || body.logoBackground === 'OSCURO') {
     patch.logoBackground = body.logoBackground
   }
+  for (const k of ['worksAtShop', 'worksOnSite', 'worksForDealers'] as const) {
+    if (body[k] !== undefined) patch[k] = Boolean(body[k])
+  }
   // Las coordenadas van juntas o no van: una sola no ubica nada en el mapa.
   if (body.publicLat !== undefined || body.publicLng !== undefined) {
     const lat = Number(body.publicLat)

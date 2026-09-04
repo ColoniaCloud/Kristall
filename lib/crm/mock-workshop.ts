@@ -219,6 +219,9 @@ interface MockSettings {
   publicLng: number | null
   publicPhone: string | null
   publicEmail: string | null
+  worksAtShop: boolean
+  worksOnSite: boolean
+  worksForDealers: boolean
 }
 
 interface MockStore {
@@ -326,6 +329,9 @@ const store: MockStore = (g.__workshopMock ??= {
     publicLng: null,
     publicPhone: null,
     publicEmail: null,
+    worksAtShop: true,
+    worksOnSite: false,
+    worksForDealers: false,
   },
   // Para poder ver el estado "ocupado" sin tener dos cuentas.
   handlesAjenos: ['tallercarlos', 'polarizados-sur'],

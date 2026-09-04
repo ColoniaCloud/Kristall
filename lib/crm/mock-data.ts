@@ -24,7 +24,7 @@ const WARRANTY_STATUSES: Record<string, unknown> = {
     expiresAt: null,
     assetType: 'VEHICLE',
     installer: { name: 'Vidriería Sur', logoPath: null },
-    vehicleType: 'SUV',
+    vehicleType: 'PICKUP',
     plate: 'AB123CD',
     clientEmail: 'cliente@ejemplo.com',
     warrantyMonths: 60,

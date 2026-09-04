@@ -29,13 +29,22 @@ export default function InstallationSummary({ status }: { status: WarrantyStatus
   return (
     <section className="flex items-center gap-4 rounded-xl border border-border bg-muted/30 p-4">
       {vehiculo && (
-        <Image
-          src={vehiculo.icon}
-          alt=""
-          width={64}
-          height={44}
-          className="hidden h-11 w-auto shrink-0 object-contain opacity-80 dark:invert sm:block"
-        />
+        // Sobre una pastilla blanca, y **sin `dark:invert`**.
+        //
+        // Antes tenía `dark:invert`, y ese era el bug: los SVG son de trazo
+        // negro, así que a quien tuviera el sistema en modo oscuro se le
+        // invertían a blanco — pero la tarjeta que hay detrás es clara, y el
+        // ícono desaparecía. La pastilla blanca hace que el trazo oscuro se lea
+        // igual en los dos temas, sin depender de cuál esté activo.
+        <span className="hidden shrink-0 rounded-lg bg-white p-1.5 sm:block">
+          <Image
+            src={vehiculo.icon}
+            alt=""
+            width={64}
+            height={44}
+            className="h-10 w-auto object-contain opacity-70"
+          />
+        </span>
       )}
       <dl className="grid min-w-0 flex-1 grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
         {filas.map(([etiqueta, valor]) => (
