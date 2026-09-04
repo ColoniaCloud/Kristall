@@ -449,6 +449,8 @@ export interface WorkshopSettings {
   publicLat: number | null
   publicLng: number | null
   publicPhone: string | null
+  /** El mail que el taller publica, distinto del de su cuenta. */
+  publicEmail: string | null
   autoSendWarrantyEmail: boolean
   openingTime: string | null
   closingTime: string | null
@@ -473,6 +475,7 @@ export interface WorkshopSettingsInput {
   publicLat?: number | null
   publicLng?: number | null
   publicPhone?: string | null
+  publicEmail?: string | null
   autoSendWarrantyEmail?: boolean
   openingTime?: string | null
   closingTime?: string | null
@@ -592,6 +595,10 @@ export interface Booking {
   vehicleType: string | null
   plate: string | null
   notes: string | null
+  /** `null` = el cliente no contestó. No es lo mismo que «no». */
+  alreadyTinted: boolean | null
+  /** Solo dice si hay foto; los bytes se piden aparte. */
+  photoMimeType: string | null
   /** Lo que pidió el cliente. Al confirmar el taller puede correrlo. */
   preferredAt: string
   status: BookingStatus
@@ -621,4 +628,30 @@ export function rejectBooking(contactId: string, bookingId: string) {
     `${base(contactId)}/bookings/${encodeURIComponent(bookingId)}/reject`,
     { method: 'POST', ...SESSION(), body: {} }
   )
+}
+
+/**
+ * Los bytes de la foto de un pedido.
+ *
+ * No usa `callCrmApi` porque aquel espera JSON y esto es una imagen. `null` si
+ * no hay foto o si el pedido no es de este taller — el CRM devuelve 404 en los
+ * dos casos y no distingue, a propósito.
+ */
+export async function crmBookingPhoto(
+  contactId: string,
+  bookingId: string
+): Promise<{ bytes: ArrayBuffer; mime: string } | null> {
+  const baseUrl = process.env.CRM_BASE_URL
+  const apiKey = process.env.CRM_CLIENT_PORTAL_API_KEY
+  if (!baseUrl || !apiKey) return null
+
+  const res = await fetch(
+    `${baseUrl.replace(/\/$/, '')}${base(contactId)}/bookings/${encodeURIComponent(bookingId)}/photo`,
+    { headers: { 'x-api-key': apiKey }, cache: 'no-store' }
+  )
+  if (!res.ok) return null
+  return {
+    bytes: await res.arrayBuffer(),
+    mime: res.headers.get('content-type') ?? 'image/jpeg',
+  }
 }

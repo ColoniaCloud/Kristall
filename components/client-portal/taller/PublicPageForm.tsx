@@ -44,6 +44,7 @@ export default function PublicPageForm({ settings }: { settings: WorkshopSetting
   const [form, setForm] = useState({
     publicAddress: settings.publicAddress ?? '',
     publicPhone: settings.publicPhone ?? '',
+    publicEmail: settings.publicEmail ?? '',
   })
 
   // El handle guardado es el que ya es suyo: no tiene sentido consultarlo.
@@ -210,6 +211,21 @@ export default function PublicPageForm({ settings }: { settings: WorkshopSetting
             value={form.publicPhone}
             onChange={(e) => setForm({ ...form, publicPhone: e.target.value })}
           />
+          <p className="text-xs text-muted-foreground">
+            Con este armamos el botón de WhatsApp de tu página.
+          </p>
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="publicEmail">Email que se muestra</Label>
+          <Input
+            id="publicEmail"
+            type="email"
+            value={form.publicEmail}
+            onChange={(e) => setForm({ ...form, publicEmail: e.target.value })}
+          />
+          <p className="text-xs text-muted-foreground">
+            No es el de tu cuenta: es el de atención al público.
+          </p>
         </div>
       </div>
 

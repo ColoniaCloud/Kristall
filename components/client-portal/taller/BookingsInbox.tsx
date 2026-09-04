@@ -138,7 +138,25 @@ function Tarjeta({ booking: b }: { booking: Booking }) {
           <span className="text-muted-foreground">{vehicleLabel(b.vehicleType)}</span>
         )}
         {b.plate && <span className="font-medium tabular-nums">{b.plate}</span>}
+        {/* Que ya tenga lamina cambia el trabajo: sacar la vieja puede duplicar
+            el tiempo. Se destaca porque decide si el turno entra o no. */}
+        {b.alreadyTinted === true && (
+          <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-700 dark:text-amber-400">
+            Ya está polarizado
+          </span>
+        )}
       </div>
+
+      {b.photoMimeType && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <a href={`/api/portal/workshop/bookings/${b.id}/foto`} target="_blank" rel="noreferrer">
+          <img
+            src={`/api/portal/workshop/bookings/${b.id}/foto`}
+            alt="Foto del vehículo que mandó el cliente"
+            className="h-40 w-full rounded-md border border-border object-cover sm:w-64"
+          />
+        </a>
+      )}
 
       {b.notes && (
         <p className="rounded-md bg-muted/50 p-2.5 text-sm text-muted-foreground">{b.notes}</p>

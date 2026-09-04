@@ -191,6 +191,8 @@ interface MockBooking {
   vehicleType: string | null
   plate: string | null
   notes: string | null
+  alreadyTinted: boolean | null
+  photoMimeType: string | null
   preferredAt: string
   status: 'PENDIENTE' | 'CONFIRMADA' | 'RECHAZADA' | 'CANCELADA'
   workOrderId: string | null
@@ -215,6 +217,7 @@ interface MockSettings {
   publicLat: number | null
   publicLng: number | null
   publicPhone: string | null
+  publicEmail: string | null
 }
 
 interface MockStore {
@@ -320,6 +323,7 @@ const store: MockStore = (g.__workshopMock ??= {
     publicLat: null,
     publicLng: null,
     publicPhone: null,
+    publicEmail: null,
   },
   // Para poder ver el estado "ocupado" sin tener dos cuentas.
   handlesAjenos: ['tallercarlos', 'polarizados-sur'],
@@ -328,6 +332,7 @@ const store: MockStore = (g.__workshopMock ??= {
       id: 'bk-1', serviceName: 'Polarizado completo', durationMinutes: 120,
       clientName: 'Ana Pérez', clientEmail: 'ana@ejemplo.com', clientPhone: '11 5555 4444',
       vehicleType: 'SUV', plate: 'AB123CD',
+      alreadyTinted: true, photoMimeType: null,
       notes: 'Prefiero a la mañana si se puede.',
       preferredAt: new Date(Date.now() + 2 * 86400000).toISOString(),
       status: 'PENDIENTE', workOrderId: null, respondedAt: null,
@@ -337,6 +342,7 @@ const store: MockStore = (g.__workshopMock ??= {
       id: 'bk-2', serviceName: 'Parabrisas', durationMinutes: 45,
       clientName: 'Luis Gómez', clientEmail: null, clientPhone: '11 4444 3333',
       vehicleType: null, plate: null, notes: null,
+      alreadyTinted: false, photoMimeType: null,
       preferredAt: new Date(Date.now() + 5 * 86400000).toISOString(),
       status: 'PENDIENTE', workOrderId: null, respondedAt: null,
       createdAt: new Date().toISOString(),
@@ -345,6 +351,7 @@ const store: MockStore = (g.__workshopMock ??= {
       id: 'bk-3', serviceName: 'PPF capot', durationMinutes: 240,
       clientName: 'Marta Ruiz', clientEmail: 'marta@ejemplo.com', clientPhone: '11 3333 2222',
       vehicleType: 'SEDAN', plate: 'XY987ZW', notes: null,
+      alreadyTinted: null, photoMimeType: null,
       preferredAt: new Date(Date.now() - 3 * 86400000).toISOString(),
       status: 'CONFIRMADA', workOrderId: 'wo-mock-1',
       respondedAt: new Date(Date.now() - 4 * 86400000).toISOString(),
