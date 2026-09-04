@@ -58,6 +58,11 @@ export default function WorkshopSettingsForm({
   const [guardando, setGuardando] = useState(false)
   const [subiendo, setSubiendo] = useState(false)
   const [preview, setPreview] = useState<string | null>(logoSrc)
+  // `null` = todavía no eligió. Se distingue de CLARO a propósito: la pregunta
+  // es obligatoria, y un valor por defecto la respondería sola.
+  const [fondo, setFondo] = useState<'CLARO' | 'OSCURO' | null>(
+    settings.tieneLogo ? settings.logoBackground : null
+  )
   const [form, setForm] = useState({
     workshopName: settings.workshopName ?? '',
     openingTime: settings.openingTime ?? '09:00',
@@ -89,10 +94,17 @@ export default function WorkshopSettingsForm({
       toast.error('Tiene que ser PNG, JPG o WEBP')
       return
     }
+    if (!fondo) {
+      toast.error('Antes decinos sobre qué fondo se ve mejor tu logo.')
+      return
+    }
     setSubiendo(true)
     try {
       const dataUri = await achicar(file)
-      const ok = await guardar({ logo: dataUri }, 'Logo actualizado')
+      // El fondo viaja junto con el logo: son una sola decisión, y guardarlos
+      // por separado deja una ventana en la que el logo está publicado sobre un
+      // fondo que nadie eligió.
+      const ok = await guardar({ logo: dataUri, logoBackground: fondo }, 'Logo actualizado')
       if (ok) setPreview(dataUri)
     } catch {
       toast.error('No pudimos procesar esa imagen. Probá con otra.')
@@ -166,6 +178,53 @@ export default function WorkshopSettingsForm({
             </p>
           </div>
         </div>
+
+        {/* La pregunta va acá, pegada al logo, y no en otra sección: es parte de
+            subirlo. Un logo de trazo oscuro sobre fondo negro desaparece, y uno
+            blanco sobre fondo blanco también — no hay forma confiable de
+            deducirlo mirando los píxeles, así que se pregunta. */}
+        <fieldset className="flex flex-col gap-2 border-t border-border pt-4">
+          <legend className="sr-only">Fondo del logo</legend>
+          <p className="text-sm font-medium">
+            ¿Tu logo queda mejor sobre fondo claro u oscuro?
+            {!fondo && <span className="ml-1 text-destructive">*</span>}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            Define el color de la cabecera de tu página. El resto es claro siempre.
+          </p>
+          <div className="mt-1 flex flex-wrap gap-2">
+            {(
+              [
+                { v: 'CLARO' as const, t: 'Claro', muestra: 'bg-white text-neutral-900 border-border' },
+                { v: 'OSCURO' as const, t: 'Oscuro', muestra: 'bg-neutral-900 text-white border-neutral-700' },
+              ]
+            ).map((o) => (
+              <button
+                key={o.v}
+                type="button"
+                aria-pressed={fondo === o.v}
+                onClick={() => {
+                  setFondo(o.v)
+                  // Si ya hay logo, el cambio se guarda solo: es una decisión de
+                  // un clic y mandarlo a buscar un botón «guardar» es fricción.
+                  if (settings.tieneLogo) {
+                    guardar({ logoBackground: o.v }, 'Listo, así se va a ver tu cabecera')
+                  }
+                }}
+                className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-all ${o.muestra} ${
+                  fondo === o.v ? 'ring-2 ring-sky-500 ring-offset-1 ring-offset-background' : ''
+                }`}
+              >
+                <span className="font-medium">{o.t}</span>
+              </button>
+            ))}
+          </div>
+          {!fondo && (
+            <p className="text-xs text-destructive">
+              Elegí una opción para poder subir tu logo.
+            </p>
+          )}
+        </fieldset>
       </section>
 
       <form

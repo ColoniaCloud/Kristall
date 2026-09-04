@@ -41,6 +41,9 @@ export async function PATCH(request: NextRequest) {
   if (body.publicAddress !== undefined) patch.publicAddress = body.publicAddress?.trim() || null
   if (body.publicPhone !== undefined) patch.publicPhone = body.publicPhone?.trim() || null
   if (body.publicEmail !== undefined) patch.publicEmail = body.publicEmail?.trim() || null
+  if (body.logoBackground === 'CLARO' || body.logoBackground === 'OSCURO') {
+    patch.logoBackground = body.logoBackground
+  }
   // Las coordenadas van juntas o no van: una sola no ubica nada en el mapa.
   if (body.publicLat !== undefined || body.publicLng !== undefined) {
     const lat = Number(body.publicLat)

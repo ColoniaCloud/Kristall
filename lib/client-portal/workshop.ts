@@ -458,6 +458,8 @@ export interface WorkshopSettings {
   defaultCurrency: Currency
   nextOrderNumber: number
   logoMimeType?: string | null
+  /** Sobre qué fondo se ve bien el logo. Define la cabecera de su página. */
+  logoBackground: 'CLARO' | 'OSCURO'
   /** El logo nunca viaja en base64 por acá: solo si hay y de dónde servirlo. */
   tieneLogo: boolean
   logoUrl: string | null
@@ -483,6 +485,7 @@ export interface WorkshopSettingsInput {
   /** Base64 **sin** el prefijo `data:`. `null` borra el logo. */
   logo?: string | null
   logoMimeType?: 'image/png' | 'image/jpeg' | 'image/webp' | null
+  logoBackground?: 'CLARO' | 'OSCURO'
 }
 
 export function updateWorkshopSettings(contactId: string, input: WorkshopSettingsInput) {

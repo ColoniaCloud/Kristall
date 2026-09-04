@@ -211,6 +211,7 @@ interface MockSettings {
   logo: string | null
   logoMimeType: string | null
   logoSlug: string | null
+  logoBackground: 'CLARO' | 'OSCURO'
   handle: string | null
   publicPageEnabled: boolean
   publicAddress: string | null
@@ -317,6 +318,7 @@ const store: MockStore = (g.__workshopMock ??= {
     logo: null,
     logoMimeType: null,
     logoSlug: null,
+    logoBackground: 'CLARO',
     handle: null,
     publicPageEnabled: false,
     publicAddress: null,
