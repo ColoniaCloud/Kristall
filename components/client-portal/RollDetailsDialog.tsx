@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import { formatGarantia, formatFecha } from '@/lib/client-portal/taller-format'
 import { vehicleLabel } from '@/lib/vehicle-types'
+import { PRODUCT_CATEGORY_LABELS } from '@/lib/client-portal/api'
 import type { WorkshopStockRoll } from '@/lib/client-portal/workshop'
 
 /**
@@ -46,7 +47,11 @@ export default function RollDetailsDialog({
               <StatusBadge status={roll.status} />
             </Dato>
             <Dato etiqueta="Lote">{roll.lot.lotNumber}</Dato>
-            <Dato etiqueta="Categoría">{roll.product.category}</Dato>
+            {/* La etiqueta y no el enum: la pantalla está en castellano y
+                "AUTOMOTIVE" es un valor de base de datos, no una palabra. */}
+            <Dato etiqueta="Categoría">
+              {PRODUCT_CATEGORY_LABELS[roll.product.category] ?? roll.product.category}
+            </Dato>
             <Dato etiqueta="Garantía">{formatGarantia(roll.product.warrantyConfig)}</Dato>
             <Dato etiqueta="Instalaciones activas">
               {roll._count.installations} de {roll.product.warrantyConfig?.maxInstallations ?? 15}

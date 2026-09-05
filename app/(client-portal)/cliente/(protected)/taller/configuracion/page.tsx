@@ -36,7 +36,18 @@ export default async function ConfiguracionPage() {
       </div>
       <WorkshopSettingsForm settings={settings} logoSrc={logoSrc} />
       <PublicPageForm settings={settings} />
-      <ServicesForm services={services} />
+      {/* El selector de rubro por servicio solo aparece si el taller marco los
+          dos: a quien hace una sola cosa no se le pregunta lo que ya contesto. */}
+      <ServicesForm
+        services={services}
+        soloRubro={
+          settings.doesAutomotive && settings.doesArchitectural
+            ? null
+            : settings.doesArchitectural
+              ? 'ARCHITECTURAL'
+              : 'AUTOMOTIVE'
+        }
+      />
     </div>
   )
 }

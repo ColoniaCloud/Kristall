@@ -17,6 +17,22 @@ export type PaymentStatus = 'PAID' | 'PARTIAL' | 'PENDING'
 export type RollStatus = 'IN_STOCK' | 'SOLD' | 'IN_USE' | 'EXHAUSTED' | 'VOIDED'
 export type ClaimStatus = 'OPEN' | 'IN_REVIEW' | 'RESOLVED' | 'REJECTED'
 
+/**
+ * El rubro de un producto, tal como lo clasifica el CRM.
+ *
+ * Es la fuente de verdad del rubro de una instalación: una lámina no cambia de
+ * naturaleza según quién la ponga, así que de acá sale qué le preguntamos al
+ * instalador y qué le preguntamos después al cliente final. `PPF` cuenta como
+ * automotriz — es otro producto, pero va sobre un auto y tiene patente.
+ */
+export type ProductCategory = 'AUTOMOTIVE' | 'ARCHITECTURAL' | 'PPF'
+
+export const PRODUCT_CATEGORY_LABELS: Record<ProductCategory, string> = {
+  AUTOMOTIVE: 'Automotriz',
+  ARCHITECTURAL: 'Arquitectura',
+  PPF: 'PPF',
+}
+
 export interface Purchase {
   id: string
   saleNumber: string
@@ -67,6 +83,14 @@ export interface StockRoll {
     name: string
     /** `null` es posible: en el CRM el SKU es una columna opcional del producto. */
     sku: string | null
+    /**
+     * El rubro de la lámina. Decide qué le pedimos al instalador al generar la
+     * instalación, y qué le pedirá después al cliente final la pantalla de
+     * activación: una lámina de arquitectura no tiene patente.
+     *
+     * `PPF` cuenta como automotriz: va sobre autos.
+     */
+    category: ProductCategory
     /** null si el producto no tiene WarrantyConfig — en ese caso asumir 15 (default del CRM). */
     warrantyConfig: {
       maxInstallations: number

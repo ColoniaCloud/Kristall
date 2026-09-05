@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { formatMoney } from '@/lib/client-portal/taller-format'
-import type { WorkshopService } from '@/lib/client-portal/workshop'
+import type { WorkshopService, ServiceCategory } from '@/lib/client-portal/workshop'
 
 /**
  * El catálogo de servicios del taller.
@@ -25,9 +25,33 @@ import type { WorkshopService } from '@/lib/client-portal/workshop'
  * defecto para que no frene a nadie.
  */
 
-const VACIO = { name: '', description: '', priceFrom: '', durationMinutes: '60' }
+const VACIO = {
+  name: '',
+  description: '',
+  priceFrom: '',
+  durationMinutes: '60',
+  category: 'AUTOMOTIVE' as ServiceCategory,
+}
 
-export default function ServicesForm({ services }: { services: WorkshopService[] }) {
+const RUBRO_LABEL: Record<ServiceCategory, string> = {
+  AUTOMOTIVE: 'Vehículos',
+  ARCHITECTURAL: 'Casas, oficinas y edificios',
+}
+
+export default function ServicesForm({
+  services,
+  soloRubro,
+}: {
+  services: WorkshopService[]
+  /**
+   * El único rubro del taller, o `null` si hace los dos.
+   *
+   * Con un solo rubro no se pregunta —ya está contestado en la configuración de
+   * arriba— y se aplica solo. Preguntarlo igual sería pedirle a alguien que
+   * repita en cada servicio algo que dijo una vez.
+   */
+  soloRubro: ServiceCategory | null
+}) {
   const router = useRouter()
   const [editando, setEditando] = useState<string | null>(null)
   const [creando, setCreando] = useState(false)
@@ -38,7 +62,7 @@ export default function ServicesForm({ services }: { services: WorkshopService[]
   const inactivos = services.filter((s) => !s.active)
 
   function abrirNuevo() {
-    setForm(VACIO)
+    setForm({ ...VACIO, category: soloRubro ?? 'AUTOMOTIVE' })
     setEditando(null)
     setCreando(true)
   }
@@ -49,6 +73,7 @@ export default function ServicesForm({ services }: { services: WorkshopService[]
       description: s.description ?? '',
       priceFrom: s.priceFrom !== null ? String(s.priceFrom) : '',
       durationMinutes: String(s.durationMinutes),
+      category: s.category,
     })
     setCreando(false)
     setEditando(s.id)
@@ -63,6 +88,7 @@ export default function ServicesForm({ services }: { services: WorkshopService[]
       // Vacío es "no publico precio", que no es lo mismo que cero.
       priceFrom: precio === '' ? null : Number(precio),
       durationMinutes: Number(form.durationMinutes) || 60,
+      category: soloRubro ?? form.category,
     }
     if (cuerpo.priceFrom !== null && !Number.isFinite(cuerpo.priceFrom)) {
       toast.error('El precio tiene que ser un número')
@@ -129,13 +155,45 @@ export default function ServicesForm({ services }: { services: WorkshopService[]
 
       {(creando || editando) && (
         <form onSubmit={enviar} className="flex flex-col gap-4 rounded-md border border-border p-4">
+          {/* Va primero porque cambia el sentido de todo lo de abajo: la
+              duración de un polarizado es el turno; la de una visita para medir
+              es cuánto se queda mirando ventanas. */}
+          {soloRubro === null && (
+            <fieldset className="flex flex-col gap-2">
+              <legend className="mb-1.5 text-sm font-medium">¿Sobre qué es este servicio?</legend>
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
+                {(['AUTOMOTIVE', 'ARCHITECTURAL'] as const).map((c) => (
+                  <label key={c} className="inline-flex items-center gap-2 text-sm">
+                    <input
+                      type="radio"
+                      name="s-category"
+                      className="size-4"
+                      checked={form.category === c}
+                      onChange={() => setForm({ ...form, category: c })}
+                    />
+                    {RUBRO_LABEL[c]}
+                  </label>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {form.category === 'ARCHITECTURAL'
+                  ? 'Tu cliente te va a pedir una visita para medir, y te deja la dirección.'
+                  : 'Tu cliente elige un horario libre de tu agenda y te deja la patente.'}
+              </p>
+            </fieldset>
+          )}
+
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="s-name">Nombre</Label>
             <Input
               id="s-name"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="Polarizado completo"
+              placeholder={
+                (soloRubro ?? form.category) === 'ARCHITECTURAL'
+                  ? 'Control solar en vidrios'
+                  : 'Polarizado completo'
+              }
               required
             />
           </div>
@@ -146,7 +204,11 @@ export default function ServicesForm({ services }: { services: WorkshopService[]
               id="s-desc"
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              placeholder="Cuatro puertas, luneta y parabrisas"
+              placeholder={
+                (soloRubro ?? form.category) === 'ARCHITECTURAL'
+                  ? 'Ventanas y ventanales, interior o exterior'
+                  : 'Cuatro puertas, luneta y parabrisas'
+              }
             />
           </div>
 
@@ -176,7 +238,9 @@ export default function ServicesForm({ services }: { services: WorkshopService[]
                 onChange={(e) => setForm({ ...form, durationMinutes: e.target.value })}
               />
               <p className="text-xs text-muted-foreground">
-                Con esto calculamos qué horarios ofrecerle a tu cliente.
+                {(soloRubro ?? form.category) === 'ARCHITECTURAL'
+                  ? 'Acá no calcula horarios: en arquitectura tu cliente pide una visita, no un turno. Es a modo de referencia.'
+                  : 'Con esto calculamos qué horarios ofrecerle a tu cliente.'}
               </p>
             </div>
           </div>
@@ -209,7 +273,13 @@ export default function ServicesForm({ services }: { services: WorkshopService[]
       {activos.length > 0 && (
         <ul className="flex flex-col divide-y divide-border rounded-md border border-border">
           {activos.map((s) => (
-            <Fila key={s.id} service={s} onEditar={abrirEdicion} onCambiar={cambiarActivo} />
+            <Fila
+              key={s.id}
+              service={s}
+              mostrarRubro={soloRubro === null}
+              onEditar={abrirEdicion}
+              onCambiar={cambiarActivo}
+            />
           ))}
         </ul>
       )}
@@ -221,7 +291,13 @@ export default function ServicesForm({ services }: { services: WorkshopService[]
           </h3>
           <ul className="flex flex-col divide-y divide-border rounded-md border border-dashed border-border">
             {inactivos.map((s) => (
-              <Fila key={s.id} service={s} onEditar={abrirEdicion} onCambiar={cambiarActivo} />
+              <Fila
+              key={s.id}
+              service={s}
+              mostrarRubro={soloRubro === null}
+              onEditar={abrirEdicion}
+              onCambiar={cambiarActivo}
+            />
             ))}
           </ul>
         </div>
@@ -232,17 +308,27 @@ export default function ServicesForm({ services }: { services: WorkshopService[]
 
 function Fila({
   service: s,
+  mostrarRubro,
   onEditar,
   onCambiar,
 }: {
   service: WorkshopService
+  /** Solo si el taller hace los dos: si no, la etiqueta seria siempre la misma. */
+  mostrarRubro: boolean
   onEditar: (s: WorkshopService) => void
   onCambiar: (s: WorkshopService) => void
 }) {
   return (
     <li className={`flex flex-wrap items-center gap-x-3 gap-y-1 p-3 ${s.active ? '' : 'opacity-60'}`}>
       <div className="min-w-0 flex-1">
-        <p className="font-medium">{s.name}</p>
+        <p className="flex flex-wrap items-center gap-2 font-medium">
+          {s.name}
+          {mostrarRubro && (
+            <span className="rounded-full border border-border px-2 py-0.5 text-[11px] font-normal text-muted-foreground">
+              {RUBRO_LABEL[s.category]}
+            </span>
+          )}
+        </p>
         {s.description && (
           <p className="truncate text-sm text-muted-foreground">{s.description}</p>
         )}

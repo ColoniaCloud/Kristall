@@ -44,7 +44,17 @@ export async function PATCH(request: NextRequest) {
   if (body.logoBackground === 'CLARO' || body.logoBackground === 'OSCURO') {
     patch.logoBackground = body.logoBackground
   }
-  for (const k of ['worksAtShop', 'worksOnSite', 'worksForDealers'] as const) {
+  // Cómo trabaja y sobre qué trabaja. La regla de «al menos uno» de cada grupo
+  // la aplica el CRM, que es el que ve el estado guardado: acá llega un campo
+  // por vez —son checkboxes que guardan al tocarse— y validarlo contra el body
+  // solo dejaría pasar el caso que importa.
+  for (const k of [
+    'worksAtShop',
+    'worksOnSite',
+    'worksForDealers',
+    'doesAutomotive',
+    'doesArchitectural',
+  ] as const) {
     if (body[k] !== undefined) patch[k] = Boolean(body[k])
   }
   // Las coordenadas van juntas o no van: una sola no ubica nada en el mapa.

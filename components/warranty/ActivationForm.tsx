@@ -29,6 +29,21 @@ const ASSET_LABELS: Record<FormData['assetType'], string> = {
   OTHER: 'Otro',
 }
 
+/**
+ * Qué opciones tienen sentido según el rubro de la lámina.
+ *
+ * El rubro no lo contesta nadie: sale del producto del rollo, que está
+ * clasificado desde que el producto existe. A quien puso lámina en su casa no
+ * se le ofrece «Vehículo», y al revés — no porque esté prohibido elegir mal,
+ * sino porque una lista con la opción imposible adentro invita a elegirla.
+ */
+const OPCIONES_POR_RUBRO = {
+  AUTOMOTRIZ: ['VEHICLE', 'OTHER'],
+  ARQUITECTURA: ['WINDOW', 'BUILDING', 'OTHER'],
+} as const satisfies Record<string, readonly FormData['assetType'][]>
+
+type Rubro = keyof typeof OPCIONES_POR_RUBRO
+
 interface Props {
   token: string
   onActivated: (expiresAt: string) => void
@@ -38,6 +53,8 @@ interface Props {
     clientEmail?: string | null
     /** Ya elegido por el taller: si vino, no se vuelve a preguntar. */
     assetTypeFijo?: boolean
+    /** Derivado del producto del rollo. Decide qué opciones se ofrecen. */
+    rubro?: Rubro
   }
 }
 
@@ -62,6 +79,10 @@ export default function ActivationForm({ token, onActivated, precargado }: Props
       ...(precargado?.assetTypeFijo ? { assetType: 'VEHICLE' as const } : {}),
     },
   })
+
+  const rubro: Rubro = precargado?.rubro ?? 'AUTOMOTRIZ'
+  const opciones = OPCIONES_POR_RUBRO[rubro]
+  const esArquitectura = rubro === 'ARQUITECTURA'
 
   const onSubmit = async (data: FormData) => {
     setStatus('loading')
@@ -92,7 +113,9 @@ export default function ActivationForm({ token, onActivated, precargado }: Props
           conteste distinto. */}
       {!precargado?.assetTypeFijo && (
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="assetType">Tipo de instalación</Label>
+          <Label htmlFor="assetType">
+            {esArquitectura ? '¿Dónde se instaló?' : 'Tipo de instalación'}
+          </Label>
           <Select
             onValueChange={(v) => setValue('assetType', v as FormData['assetType'], { shouldValidate: true })}
           >
@@ -100,7 +123,7 @@ export default function ActivationForm({ token, onActivated, precargado }: Props
               <SelectValue placeholder="Elegí una opción" />
             </SelectTrigger>
             <SelectContent>
-              {(Object.keys(ASSET_LABELS) as FormData['assetType'][]).map((value) => (
+              {opciones.map((value) => (
                 <SelectItem key={value} value={value}>
                   {ASSET_LABELS[value]}
                 </SelectItem>
@@ -112,10 +135,16 @@ export default function ActivationForm({ token, onActivated, precargado }: Props
       )}
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="assetDescription">Descripción (opcional)</Label>
+        <Label htmlFor="assetDescription">
+          {esArquitectura ? '¿Qué se laminó? (opcional)' : 'Descripción (opcional)'}
+        </Label>
         <Input
           id="assetDescription"
-          placeholder="Ej: Toyota Corolla 2022, patente AB123CD"
+          placeholder={
+            esArquitectura
+              ? 'Ej: ventanal del living, 6 paños, Av. Siempreviva 742'
+              : 'Ej: Toyota Corolla 2022, patente AB123CD'
+          }
           {...register('assetDescription')}
         />
       </div>

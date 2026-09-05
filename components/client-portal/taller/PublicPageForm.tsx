@@ -51,6 +51,30 @@ export default function PublicPageForm({ settings }: { settings: WorkshopSetting
     worksOnSite: settings.worksOnSite,
     worksForDealers: settings.worksForDealers,
   })
+  const [rubros, setRubros] = useState({
+    doesAutomotive: settings.doesAutomotive,
+    doesArchitectural: settings.doesArchitectural,
+  })
+
+  /**
+   * El rubro cambia la FORMA de la página, no un texto.
+   *
+   * Con arquitectura marcada aparece un bloque de servicios nuevo, el
+   * formulario aprende a pedir dirección en vez de patente, y sale una tarjeta
+   * de visita. Por eso se avisa qué pasó y no un «guardado» genérico.
+   *
+   * Desmarcar el último lo rechaza el CRM: un taller sin rubro no tiene página
+   * posible. El error vuelve por `guardar` y se revierte el check.
+   */
+  async function cambiarRubro(k: keyof typeof rubros, v: boolean) {
+    const previo = rubros
+    setRubros({ ...rubros, [k]: v })
+    const ok = await guardar(
+      { [k]: v },
+      v ? 'Listo, ya se ve en tu página' : 'Listo, lo sacamos de tu página'
+    )
+    if (!ok) setRubros(previo)
+  }
 
   /**
    * Marcar o desmarcar guarda en el momento.
@@ -247,6 +271,43 @@ export default function PublicPageForm({ settings }: { settings: WorkshopSetting
         </div>
       </div>
 
+      {/* Sobre qué trabaja. Va ANTES de «cómo trabajás» porque es la pregunta
+          más de fondo: define qué bloques existen en su página, mientras que la
+          de abajo solo prende y apaga tarjetas dentro de ellos. */}
+      <fieldset className="flex flex-col gap-2 border-t border-border pt-4">
+        <legend className="sr-only">Sobre qué trabajás</legend>
+        <p className="text-sm font-medium">¿Sobre qué trabajás?</p>
+        <p className="text-xs text-muted-foreground">
+          Define qué le pedimos a tu cliente cuando te escribe: a quien tiene un auto, la patente;
+          a quien tiene una casa, la dirección.
+        </p>
+        <div className="mt-1 flex flex-col gap-2">
+          {(
+            [
+              { k: 'doesAutomotive' as const, t: 'Vehículos' },
+              { k: 'doesArchitectural' as const, t: 'Vidrios de casas, oficinas y edificios' },
+            ]
+          ).map((o) => (
+            <label key={o.k} className="inline-flex items-center gap-2.5 text-sm">
+              <input
+                type="checkbox"
+                className="size-4"
+                checked={rubros[o.k]}
+                disabled={guardando}
+                onChange={(e) => cambiarRubro(o.k, e.target.checked)}
+              />
+              {o.t}
+            </label>
+          ))}
+        </div>
+        {rubros.doesAutomotive && rubros.doesArchitectural && (
+          <p className="text-xs text-muted-foreground">
+            Como hacés las dos cosas, al cargar un servicio vas a poder elegir sobre cuál es. En tu
+            página se muestran en dos listas separadas.
+          </p>
+        )}
+      </fieldset>
+
       {/* Cómo trabaja. Define qué tarjetas aparecen activas en su página: las
           que no marque se muestran igual pero apagadas, porque decir «esto no lo
           hago» también informa y evita que la página cambie de forma según el
@@ -257,6 +318,15 @@ export default function PublicPageForm({ settings }: { settings: WorkshopSetting
         <p className="text-xs text-muted-foreground">
           Podés marcar más de una. Lo que no marques aparece en tu página como no disponible.
         </p>
+        {rubros.doesArchitectural && !rubros.doesAutomotive && (
+          // Las tres opciones de abajo son de taller de autos. A quien solo hace
+          // arquitectura no se le esconden —puede tener local— pero se le dice
+          // que su página va a ofrecer visita, que es lo que su cliente busca.
+          <p className="text-xs text-muted-foreground">
+            En arquitectura tu página ofrece siempre «pedir una visita para medir»: nadie lleva su
+            ventana al taller.
+          </p>
+        )}
         <div className="mt-1 flex flex-col gap-2">
           {(
             [

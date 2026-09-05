@@ -404,8 +404,38 @@ independiente, hasta el máximo configurado en el producto (`maxInstallations`, 
 producto no tiene configuración explícita). La primera instalación (`-I1`) ya existe desde que se
 vendió el rollo — este endpoint es para generar la segunda, tercera, etc.
 
-No lleva body — no hace falta ningún dato del vehículo/cliente final todavía (eso se carga después,
-cuando ese cliente final abre su link y activa la garantía, igual que con la instalación original).
+**Body opcional.** Sin body genera la instalación en blanco, como siempre: el cliente final carga
+todo cuando abre su link. Pero conviene mandar lo que el instalador tenga a mano en el mostrador —la
+patente se lee bien con el auto adelante, y el mail se pregunta en voz alta— porque lo que no se carga
+acá lo termina tipeando el cliente final desde el celular, y ahí es donde aparecen los mails con un
+punto de más que después rompen el reclamo.
+
+```json
+{
+  "clientName": "Juan Pérez",
+  "clientEmail": "juan@example.com",
+  "clientPhone": "+5491112345678",
+  "vehicleType": "SUV",
+  "plate": "AB123CD",
+  "assetDescription": "Ventanal del living, 6 paños"
+}
+```
+
+**Qué campos aplican lo decide el producto del rollo, no el body.** `Product.category` ya clasifica
+cada lámina como `AUTOMOTIVE`, `ARCHITECTURAL` o `PPF` desde que el producto existe, así que el CRM
+deriva de ahí el rubro de la instalación y **descarta lo que no corresponde**:
+
+| Rubro del producto | Se guarda | Se descarta | `assetType` que queda |
+|---|---|---|---|
+| `ARCHITECTURAL` | `assetDescription` | `vehicleType`, `plate` | `BUILDING` |
+| `AUTOMOTIVE` · `PPF` | `vehicleType`, `plate` | `assetDescription` | `VEHICLE` si vino `vehicleType`, si no `null` |
+
+Es deliberado que no haya forma de declarar el rubro desde el request: una lámina no cambia de
+naturaleza según quién la ponga. Mandar los campos del otro rubro no es un error —se ignoran en
+silencio— pero conviene no mandarlos, para que el que lee el código de tu lado vea qué aplica.
+
+Con `assetType` ya resuelto, la pantalla de activación no vuelve a preguntarlo: al dueño de una
+ventana no se le pide la patente. Ver `WARRANTY_API.md` sección 5.1, campo `productCategory`.
 
 **Response `201`:**
 ```json

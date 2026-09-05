@@ -1,5 +1,5 @@
 import { callCrmApi } from '@/lib/crm/api'
-import type { RollStatus } from '@/lib/client-portal/api'
+import type { RollStatus, ProductCategory } from '@/lib/client-portal/api'
 
 /**
  * Mi Taller — el puente hacia los endpoints `/workshop/*` del CRM.
@@ -162,7 +162,8 @@ export interface WorkshopStockRoll {
     id: string
     name: string
     sku: string | null
-    category: string
+    /** El rubro de la lámina. Ver `ProductCategory`. */
+    category: ProductCategory
     width: Money
     length: Money
     warrantyConfig: {
@@ -455,6 +456,15 @@ export interface WorkshopSettings {
   worksAtShop: boolean
   worksOnSite: boolean
   worksForDealers: boolean
+  /**
+   * Sobre qué trabaja. Define la **forma** de su página pública: con los dos,
+   * los servicios se agrupan en dos bloques y el formulario de turno cambia
+   * según cuál eligió el visitante.
+   *
+   * Al menos uno tiene que estar en true; el CRM rechaza los dos en false.
+   */
+  doesAutomotive: boolean
+  doesArchitectural: boolean
   autoSendWarrantyEmail: boolean
   openingTime: string | null
   closingTime: string | null
@@ -485,6 +495,8 @@ export interface WorkshopSettingsInput {
   worksAtShop?: boolean
   worksOnSite?: boolean
   worksForDealers?: boolean
+  doesAutomotive?: boolean
+  doesArchitectural?: boolean
   autoSendWarrantyEmail?: boolean
   openingTime?: string | null
   closingTime?: string | null
@@ -521,10 +533,19 @@ export function getWorkshopSummary(contactId: string, from?: string, to?: string
 
 // ─── Servicios y página pública ──────────────────────────────────────────────
 
+/** Sobre qué se aplica un servicio. PPF no está: va sobre autos. */
+export type ServiceCategory = 'AUTOMOTIVE' | 'ARCHITECTURAL'
+
 export interface WorkshopService {
   id: string
   name: string
   description: string | null
+  /**
+   * Lo que decide qué campos muestra el formulario público cuando el visitante
+   * elige este servicio. Va por servicio y no por taller para que uno que hace
+   * las dos cosas tenga las dos formas en la misma página.
+   */
+  category: ServiceCategory
   /** `null` = el instalador eligió no publicar precio. */
   priceFrom: Money | null
   currency: Currency
@@ -541,6 +562,7 @@ export function listWorkshopServices(contactId: string) {
 export interface WorkshopServiceInput {
   name?: string
   description?: string | null
+  category?: ServiceCategory
   priceFrom?: number | null
   currency?: Currency
   durationMinutes?: number
@@ -602,8 +624,26 @@ export interface Booking {
   clientName: string
   clientEmail: string | null
   clientPhone: string
+  /** Qué campos de abajo están llenos. Copiado del servicio al crear el pedido. */
+  category: ServiceCategory
   vehicleType: string | null
   plate: string | null
+  /** Arquitectura: `CASA | OFICINA | LOCAL | EDIFICIO | OTRO`. */
+  propertyType: string | null
+  glassCount: number | null
+  /** Llega como string: Prisma serializa `Decimal` así. */
+  approxM2: Money | null
+  /** `CONTROL_SOLAR | PRIVACIDAD | SEGURIDAD | DECORATIVO`. */
+  goal: string | null
+  /** Dónde queda el inmueble. Sin esto no hay visita posible. */
+  siteAddress: string | null
+  /**
+   * `MANANA | TARDE`, solo en las visitas de arquitectura.
+   *
+   * Cuando está, **manda sobre la hora de `preferredAt`**: lo que el cliente
+   * pidió fue una franja, y mostrar «10:30» sería inventarle un compromiso.
+   */
+  timeWindow: string | null
   notes: string | null
   /** `null` = el cliente no contestó. No es lo mismo que «no». */
   alreadyTinted: boolean | null

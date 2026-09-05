@@ -15,11 +15,17 @@ import type { WarrantyStatus } from '@/lib/warranty/api'
  * peor que ninguna ficha.
  */
 export default function InstallationSummary({ status }: { status: WarrantyStatus }) {
-  const vehiculo = vehicleType(status.vehicleType)
+  // El rubro sale del producto, no de si hay patente cargada: un trabajo de
+  // arquitectura nunca la tiene, y decidir por el campo vacío haría que se
+  // dibuje igual que uno de auto al que el taller no le cargó nada.
+  const esArquitectura = status.productCategory === 'ARCHITECTURAL'
+  const vehiculo = esArquitectura ? undefined : vehicleType(status.vehicleType)
   const filas: [string, string][] = []
 
-  if (status.vehicleType) filas.push(['Tipo de vehículo', vehicleLabel(status.vehicleType)!])
-  if (status.plate) filas.push(['Patente', status.plate])
+  if (!esArquitectura) {
+    if (status.vehicleType) filas.push(['Tipo de vehículo', vehicleLabel(status.vehicleType)!])
+    if (status.plate) filas.push(['Patente', status.plate])
+  }
   filas.push(['Duración de la garantía', `${formatDuracion(status.warrantyMonths)} desde que queda activa`])
   if (status.clientEmail) filas.push(['Mail del cliente', status.clientEmail])
 

@@ -30,14 +30,21 @@ import type { StockRoll, CreatedInstallation } from '@/lib/client-portal/api'
  *
  * Igual todo es opcional salvo el tipo de vehículo: un taller apurado tiene que
  * poder generar la instalación y seguir. Lo que falte lo completa el cliente.
+ *
+ * **Qué se pide depende de la lámina, no de una pregunta.** El rollo cuelga de
+ * un producto que está clasificado como automotriz o arquitectónico desde que
+ * existe, así que para un rollo de arquitectura este diálogo no muestra
+ * siluetas de autos ni patente: muestra un campo para describir el trabajo. El
+ * CRM aplica la misma regla del otro lado y descarta lo que no corresponda.
  */
 
 const schema = z.object({
   clientName: z.string().trim().optional(),
   clientEmail: z.string().trim().email('Revisá el email').or(z.literal('')).optional(),
   clientPhone: z.string().trim().optional(),
-  vehicleType: z.string().min(1, 'Elegí el tipo de vehículo'),
+  vehicleType: z.string().optional(),
   plate: z.string().trim().optional(),
+  assetDescription: z.string().trim().optional(),
 })
 
 type FormData = z.infer<typeof schema>
@@ -65,9 +72,19 @@ export default function NewInstallationDialog({
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema), defaultValues: { vehicleType: '' } })
 
+  // PPF queda del lado de los autos: es otro producto, pero va sobre un auto y
+  // tiene patente.
+  const esArquitectura = roll.product.category === 'ARCHITECTURAL'
   const elegido = watch('vehicleType')
 
   const onSubmit = async (data: FormData) => {
+    // El tipo de vehículo es obligatorio solo cuando la lámina va sobre un auto.
+    // Se valida acá y no en el schema porque el schema no sabe de qué rollo se
+    // trata, y hacerlo condicional adentro lo volvería ilegible.
+    if (!esArquitectura && !data.vehicleType) {
+      setErrorMsg('Elegí el tipo de vehículo')
+      return
+    }
     setStatus('loading')
     setErrorMsg('')
     try {
@@ -80,8 +97,13 @@ export default function NewInstallationDialog({
           clientName: data.clientName || undefined,
           clientEmail: data.clientEmail || undefined,
           clientPhone: data.clientPhone || undefined,
-          vehicleType: data.vehicleType,
-          plate: data.plate || undefined,
+          // Cada rubro manda lo suyo. El CRM igual descarta lo que no
+          // corresponde mirando el producto del rollo, pero mandar basura para
+          // que la filtren del otro lado es confiar en que nadie cambie esa
+          // línea.
+          vehicleType: esArquitectura ? undefined : data.vehicleType,
+          plate: esArquitectura ? undefined : data.plate || undefined,
+          assetDescription: esArquitectura ? data.assetDescription || undefined : undefined,
         }),
       })
       const body = await res.json().catch(() => ({}))
@@ -110,6 +132,20 @@ export default function NewInstallationDialog({
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+          {esArquitectura ? (
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="assetDescription">¿Qué se laminó?</Label>
+              <Input
+                id="assetDescription"
+                placeholder="Ventanal del living, 6 paños"
+                {...register('assetDescription')}
+              />
+              <p className="text-xs text-muted-foreground">
+                Con esto tu cliente reconoce su trabajo en la garantía. Un inmueble no tiene patente,
+                así que esto ocupa su lugar.
+              </p>
+            </div>
+          ) : (
           <div className="flex flex-col gap-2">
             <Label>Tipo de vehículo</Label>
             {/* Botones con el dibujo y no un <select> de texto: el instalador
@@ -142,16 +178,16 @@ export default function NewInstallationDialog({
                 )
               })}
             </div>
-            {errors.vehicleType && (
-              <span className="text-sm text-destructive">{errors.vehicleType.message}</span>
-            )}
           </div>
+          )}
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="plate">Patente</Label>
-              <Input id="plate" placeholder="AB 123 CD" className="uppercase" {...register('plate')} />
-            </div>
+            {!esArquitectura && (
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="plate">Patente</Label>
+                <Input id="plate" placeholder="AB 123 CD" className="uppercase" {...register('plate')} />
+              </div>
+            )}
 
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="clientName">Nombre del cliente</Label>

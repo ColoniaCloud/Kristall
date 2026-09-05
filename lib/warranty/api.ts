@@ -21,6 +21,15 @@ export interface WarrantyStatus {
   installationCode: string
   status: InstallationStatus
   product: { id: string; name: string; brand: string }
+  /**
+   * El rubro de la lámina, derivado del producto del rollo.
+   *
+   * **Nadie lo contesta**: la categoría del producto ya está cargada desde que
+   * el producto existe, así que el sistema sabe solo que una lámina de
+   * arquitectura no va sobre un auto. Es lo que permite no pedirle la patente
+   * al dueño de una ventana. `PPF` cuenta como automotriz: va sobre autos.
+   */
+  productCategory: 'AUTOMOTIVE' | 'ARCHITECTURAL' | 'PPF'
   isActive: boolean
   daysRemaining: number
   expiresAt: string | null

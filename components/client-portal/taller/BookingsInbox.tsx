@@ -2,13 +2,14 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Loader2, Check, X, Phone, Mail } from 'lucide-react'
+import { Loader2, Check, X, Phone, Mail, MapPin } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { formatDateTime, toDatetimeLocal } from '@/lib/client-portal/taller-format'
+import { formatDateTime, formatFecha, toDatetimeLocal } from '@/lib/client-portal/taller-format'
 import { vehicleLabel } from '@/lib/vehicle-types'
+import { propertyLabel, goalLabel, timeWindowLabel } from '@/lib/property-types'
 import type { Booking } from '@/lib/client-portal/workshop'
 
 /**
@@ -75,6 +76,7 @@ function Tarjeta({ booking: b }: { booking: Booking }) {
   const [cargando, setCargando] = useState<'confirmar' | 'rechazar' | null>(null)
   const [cuando, setCuando] = useState(toDatetimeLocal(b.preferredAt))
   const pendiente = b.status === 'PENDIENTE'
+  const esArquitectura = b.category === 'ARCHITECTURAL'
 
   async function responder(accion: 'confirmar' | 'rechazar') {
     setCargando(accion)
@@ -114,7 +116,13 @@ function Tarjeta({ booking: b }: { booking: Booking }) {
         <div className="min-w-0">
           <p className="font-medium">{b.serviceName}</p>
           <p className="text-sm text-muted-foreground">
-            Pidió {formatDateTime(b.preferredAt)} · {b.durationMinutes} min
+            {/* En arquitectura no se pidió una hora sino una franja, y la
+                duración del servicio no es lo que dura una visita para medir.
+                Mostrar «10:30 · 90 min» sería inventar un compromiso que el
+                cliente nunca hizo. */}
+            {esArquitectura && b.timeWindow
+              ? `Pidió una visita el ${formatFecha(b.preferredAt)}, ${timeWindowLabel(b.timeWindow)}`
+              : `Pidió ${formatDateTime(b.preferredAt)} · ${b.durationMinutes} min`}
           </p>
         </div>
         <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${COLOR[b.status]}`}>
@@ -134,25 +142,67 @@ function Tarjeta({ booking: b }: { booking: Booking }) {
             {b.clientEmail}
           </a>
         )}
-        {vehicleLabel(b.vehicleType) && (
-          <span className="text-muted-foreground">{vehicleLabel(b.vehicleType)}</span>
+        {/* Cada rubro muestra lo suyo, mirando `category` y no si el campo está
+            lleno: los campos del otro rubro llegan siempre en null, y decidir por
+            ellos haría que un pedido incompleto se dibuje como si fuera del otro
+            tipo. */}
+        {esArquitectura ? (
+          <>
+            {propertyLabel(b.propertyType) && (
+              <span className="text-muted-foreground">{propertyLabel(b.propertyType)}</span>
+            )}
+            {b.glassCount !== null && (
+              <span className="text-muted-foreground">
+                {b.glassCount} {b.glassCount === 1 ? 'vidrio' : 'vidrios'}
+              </span>
+            )}
+            {b.approxM2 !== null && (
+              <span className="text-muted-foreground tabular-nums">{Number(b.approxM2)} m²</span>
+            )}
+            {goalLabel(b.goal) && (
+              <span className="rounded-full border border-border px-2 py-0.5 text-xs">
+                {goalLabel(b.goal)}
+              </span>
+            )}
+          </>
+        ) : (
+          <>
+            {vehicleLabel(b.vehicleType) && (
+              <span className="text-muted-foreground">{vehicleLabel(b.vehicleType)}</span>
+            )}
+            {b.plate && <span className="font-medium tabular-nums">{b.plate}</span>}
+          </>
         )}
-        {b.plate && <span className="font-medium tabular-nums">{b.plate}</span>}
         {/* Que ya tenga lamina cambia el trabajo: sacar la vieja puede duplicar
             el tiempo. Se destaca porque decide si el turno entra o no. */}
         {b.alreadyTinted === true && (
           <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-700 dark:text-amber-400">
-            Ya está polarizado
+            {esArquitectura ? 'Ya tiene lámina puesta' : 'Ya está polarizado'}
           </span>
         )}
       </div>
+
+      {/* La dirección va en su propia línea y con ícono, no mezclada entre los
+          datos de arriba: es lo único sin lo cual la visita no se puede hacer,
+          y es lo que el instalador va a copiar al mapa. */}
+      {esArquitectura && b.siteAddress && (
+        <a
+          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.siteAddress)}`}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex w-fit items-center gap-1.5 text-sm hover:underline"
+        >
+          <MapPin className="size-3.5 shrink-0 text-muted-foreground" />
+          {b.siteAddress}
+        </a>
+      )}
 
       {b.photoMimeType && (
         // eslint-disable-next-line @next/next/no-img-element
         <a href={`/api/portal/workshop/bookings/${b.id}/foto`} target="_blank" rel="noreferrer">
           <img
             src={`/api/portal/workshop/bookings/${b.id}/foto`}
-            alt="Foto del vehículo que mandó el cliente"
+            alt={esArquitectura ? 'Foto que mandó el cliente' : 'Foto del vehículo que mandó el cliente'}
             className="h-40 w-full rounded-md border border-border object-cover sm:w-64"
           />
         </a>

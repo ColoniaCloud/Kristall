@@ -51,7 +51,12 @@ export default function WarrantyTokenView({
               precargado={{
                 installerName: status.installer?.name ?? null,
                 clientEmail: status.clientEmail,
+                // En automotriz queda fijo si el taller ya cargó el vehículo.
+                // En arquitectura NO: el sistema sabe que no es un auto, pero
+                // no si es una ventana suelta o el edificio entero, y eso solo
+                // lo sabe quien está mirando el trabajo.
                 assetTypeFijo: Boolean(status.vehicleType),
+                rubro: status.productCategory === 'ARCHITECTURAL' ? 'ARQUITECTURA' : 'AUTOMOTRIZ',
               }}
             />
           </div>

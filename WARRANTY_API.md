@@ -186,6 +186,7 @@ Base URL: `https://<dominio-del-crm>` (a confirmar con el equipo — no hardcode
   "installationCode": "LOT-20260705-0001-R003-I1",
   "status": "PENDING",
   "product": { "id": "cly...", "name": "KRYPTON 05", "brand": "Kristall" },
+  "productCategory": "AUTOMOTIVE",
   "isActive": false,
   "daysRemaining": 0,
   "expiresAt": null,
@@ -203,6 +204,7 @@ Cuando está activa:
   "installationCode": "LOT-20260705-0001-R003-I1",
   "status": "ACTIVE",
   "product": { "id": "cly...", "name": "KRYPTON 05", "brand": "Kristall" },
+  "productCategory": "ARCHITECTURAL",
   "isActive": true,
   "daysRemaining": 342,
   "expiresAt": "2027-07-05T00:00:00.000Z",
@@ -214,11 +216,24 @@ Cuando está activa:
   "warrantyMonths": 60
 }
 
-`vehicleType` es uno de los slugs de la lista compartida (`SEDAN`, `HATCHBACK`, `SUV`, `FURGON`,
-`VAN_MINIBUS`, `CAMION_CHICO`, `CAMION_GRANDE`, `COLECTIVO`, `YATE_CHICO`, `YATE_GRANDE`) o `null`.
-Cada slug tiene su icono en `public/iconos/vehiculos` de kristall-web — **si agregás uno, agregalo en
-los dos lados**. `warrantyMonths` sirve estando `PENDING`, que es justo cuando `expiresAt` todavía es
-`null` y no hay otra forma de decirle a la persona cuánto va a durar la garantía.
+`vehicleType` es uno de los nueve slugs de la lista compartida (`SEDAN`, `HATCHBACK`, `SUV`,
+`PICKUP`, `FURGON`, `VAN_MINIBUS`, `CAMION`, `COLECTIVO`, `EMBARCACION`) o `null`. Cada slug tiene su
+icono en `public/iconos/vehiculos` de kristall-web — **si agregás uno, agregalo en los tres lados**
+(CRM, kristall-web y polarizar), o el desplegable muestra un hueco o el endpoint rechaza la elección.
+
+Pueden llegar slugs viejos en garantías anteriores a septiembre 2026: `CAMION_CHICO` y `CAMION_GRANDE`
+se unificaron en `CAMION`, y `YATE_CHICO` / `YATE_GRANDE` en `EMBARCACION`. **Las filas viejas no se
+reescribieron**, así que traducilos al mostrarlos (`lib/vehicle-types.ts` tiene el mapa) — si no, una
+garantía de hace unos meses muestra el slug crudo.
+
+**`productCategory`** es el rubro de la lámina: `AUTOMOTIVE`, `ARCHITECTURAL` o `PPF`. Sale de la
+categoría del producto, que está cargada desde que el producto existe — **nadie la contesta**. Es lo
+que te permite no pedirle la patente al dueño de una ventana: con `ARCHITECTURAL` no muestres el
+vehículo ni la patente en la ficha, y ofrecé `WINDOW | BUILDING | OTHER` en el select de `assetType`.
+`PPF` cuenta como automotriz: es otro producto, pero va sobre un auto y tiene patente.
+
+`warrantyMonths` sirve estando `PENDING`, que es justo cuando `expiresAt` todavía es `null` y no hay
+otra forma de decirle a la persona cuánto va a durar la garantía.
 ```
 
 #### El campo `installer`
@@ -467,8 +482,13 @@ que sirve de referencia directa para el sitio externo:
 
 ### Pantalla 2 — Formulario de activación (registro)
 Campos sugeridos, en este orden (siguiendo el formulario interno existente):
-- `assetType` — select: Vehículo / Ventana / Inmueble / Otro.
-- `assetDescription` — texto libre.
+- `assetType` — select, **filtrado por `productCategory`**: con `ARCHITECTURAL`, Ventana / Inmueble /
+  Otro; con `AUTOMOTIVE` o `PPF`, Vehículo / Otro. No porque esté prohibido elegir mal, sino porque
+  una lista con la opción imposible adentro invita a elegirla. Si el taller ya precargó
+  `vehicleType`, el rubro está resuelto y conviene no volver a preguntarlo: se muestra en la ficha.
+- `assetDescription` — texto libre. En arquitectura ocupa el lugar que en automotriz ocupan el tipo de
+  vehículo y la patente ("ventanal del living, 6 paños"), así que ahí conviene pedirlo con un rótulo
+  propio en vez de dejarlo como "Descripción (opcional)".
 - `clientName` * — requerido.
 - `clientEmail` * — requerido.
 - `clientPhone` — opcional.
