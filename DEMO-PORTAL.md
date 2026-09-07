@@ -7,7 +7,15 @@ Vive en este repo y no junto a `TURNOS-POLARIZAR.md` / `RUBROS-INSTALADOR.md` (q
 `polarizar/`) porque el sujeto de esta función es el portal, y el portal vive acá. Si preferís los
 tres planes en un solo lugar, movelo — no hay nada que dependa de la ruta.
 
-> **Estado: propuesta.** Nada implementado.
+> **Estado: implementado (fases 0 a 8).** En las ramas `feat/portal-demo` de
+> crm-polarizados, kristall-web y polarizar. **Sin pushear**: este trabajo toca
+> `src/lib/prisma.ts`, que importan 145 archivos, y en Hostinger pushear es
+> publicar. Se mezcla a mano y mirando.
+>
+> Verificado con `npm run demo:verificar` (41 aserciones contra las dos bases
+> reales) y de punta a punta con los dos servidores levantados: se abre la
+> sesión por la puerta real, las seis pantallas del portal cargan con los datos
+> del clon, y producción no se movió ni un contacto ni un peso.
 
 ---
 
@@ -359,3 +367,68 @@ caso de uso principal.
   producción antes y después de una sesión de demo completa, y que dé exactamente igual.
 - **Que el clon se muera.** Correr el cron y verificar que no queda nada — y que no se llevó puesto
   nada real, ni el taller de exhibición.
+
+---
+
+## 11. Lo que cambió al construirlo
+
+Tres cosas salieron distinto de lo planeado. Las dejo escritas porque son las que
+alguien va a querer entender dentro de seis meses.
+
+### Los espejos de la API del portal no estaban en el plan
+
+El plan preveía cinco endpoints públicos espejados. Faltaban **los 28 del
+portal**: el panel le pega a `/api/portal/v1/contacts/<id>/...`, y el `contactId`
+de un clon solo existe en la base de demo. Sin espejos, cada pantalla del demo
+daba 404.
+
+Se generan con `npm run demo:espejos` en vez de escribirse, y
+`npm run demo:espejos:verificar` falla si alguno quedó viejo. Eso último es lo
+que de verdad protege: el día que alguien agregue un endpoint y no regenere, el
+demo pierde esa pantalla, y no se nota compilando — se nota cuando un prospecto
+hace clic.
+
+### Las api keys tenían que salir siempre de la base real
+
+**Esto lo encontró la prueba de punta a punta, no las unitarias**, y es el mejor
+argumento para haberla hecho.
+
+Las rutas espejo envuelven el handler entero, portero incluido. Así que el
+portero buscaba la api key en la base de demo —donde no hay ninguna— y toda
+llamada del portal de demostración moría con «API key inválida».
+
+La regla que quedó, y que vale la pena tener presente al tocar esta zona:
+
+- **Las api keys son infraestructura** y salen siempre de la base real.
+- **Las cuentas de portal siguen el contexto**, porque la del clon vive en la de
+  demo.
+
+Las dos cosas conviven en `portal-api-auth.ts`, con el porqué escrito al lado de
+los imports.
+
+### Un acoplamiento viejo que este trabajo destapó
+
+`RollDetailsDialog` —un componente de cliente— importaba `PRODUCT_CATEGORY_LABELS`
+de `client-portal/api.ts`, que llega a `next/headers`. Con los tipos no molesta
+porque TypeScript los borra al compilar; con un objeto de verdad arrastra el
+módulo del servidor al bundle del navegador y el build falla.
+
+La constante se mudó a `lib/client-portal/product-category.ts`, que no tiene nada
+del servidor que arrastrar. Es la clase de acoplamiento que no se ve leyendo el
+import: dice `@/lib/client-portal/api` y parece inofensivo.
+
+---
+
+## 12. Lo que falta antes de mezclar a master
+
+- **Cargar `DATABASE_URL_DEMO` en producción** (ya está hecho) y confirmar que el
+  primer `POST /api/public/demo/session` en producción responda. Es lo único que
+  no se puede verificar desde acá: por la API de Hostinger las variables se
+  escriben pero no se leen.
+- **Mirar el recorrido con ojos**, no con `grep`. Las anclas están y los pasos se
+  saltean solos si faltan, pero si un globito tapa un botón eso solo se ve
+  mirando.
+- **Revisar los textos de los quince globitos.** Son de redacción, y es lo que
+  decide si el recorrido ayuda o molesta.
+- Decidir si el recorrido se enciende también para los instaladores nuevos
+  reales. El componente ya lo soporta (`activo`), hoy solo se prende en demo.
