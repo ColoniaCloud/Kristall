@@ -47,6 +47,7 @@ export default function CreateInstallationAction({ roll }: { roll: WorkshopStock
       </Button>
 
       <Button
+        data-tour="generar-instalacion"
         size="sm"
         onClick={() => setFormOpen(true)}
         disabled={disabled}

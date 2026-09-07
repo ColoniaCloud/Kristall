@@ -4,6 +4,7 @@ import { getClientSession } from '@/lib/client-portal/session'
 import { loadPortalData } from '@/lib/client-portal/guard'
 import { listBookings } from '@/lib/client-portal/workshop'
 import BookingsInbox from '@/components/client-portal/taller/BookingsInbox'
+import Recorrido from '@/components/client-portal/Recorrido'
 
 export const metadata: Metadata = { title: 'Pedidos de turno' }
 
@@ -15,6 +16,7 @@ export default async function TurnosPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
+      <Recorrido pantalla="turnos" activo={Boolean(session.demo)} />
       <div>
         <h1 className="font-heading text-2xl font-semibold">Pedidos de turno</h1>
         <p className="mt-1 text-sm text-muted-foreground">

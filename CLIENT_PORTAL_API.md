@@ -897,6 +897,57 @@ generoso para reintentar y corto para spamear · `502` el servidor de mail no ac
 
 ---
 
+## 4.11 El espejo de demostración *(nivel INSTALLER)*
+
+Existe un portal de demostración: alguien entra sin cuenta, ve un taller de
+prueba con datos de ejemplo, toca todo, y lo que haya hecho se borra solo.
+
+Corre **el mismo código contra otra base de datos**. Del lado de la API eso es un
+prefijo:
+
+```
+/api/portal/v1/contacts/:contactId/...        → base real
+/api/portal/v1/demo/contacts/:contactId/...   → base de demostración
+```
+
+Los caminos, los parámetros, las validaciones y las respuestas son **idénticos**,
+porque del otro lado es literalmente el mismo handler envuelto. Si integrás
+contra el portal real, no tenés que hacer nada distinto: el prefijo lo usa solo
+la sesión de demostración.
+
+**Cómo se abre una sesión.** `POST /api/public/demo/session` (con la api key del
+portal) crea un taller descartable y devuelve:
+
+```json
+{
+  "contactId": "cmt...",
+  "credentialVersion": "443280c19dfdc533",
+  "nombre": "Polarizados del Sur"
+}
+```
+
+Con eso se emite la cookie de sesión de siempre apuntando a ese `contactId`. **No
+hay autenticación nueva**: la sesión ya era un token firmado que lleva el
+`contactId`, y el CRM revalida ese id contra `ClientPortalAccount` en cada
+endpoint. El clon tiene su cuenta —el portero la exige— con una contraseña
+aleatoria que nadie conoce.
+
+Tres cosas que conviene saber si tocás esto:
+
+- **El `contactId` de un clon no existe en producción.** Llamar a la ruta sin
+  `/demo/` devuelve `404 Cliente no encontrado`, que es la respuesta correcta.
+- **Las api keys se verifican siempre contra la base real**, aunque la ruta sea
+  la de demostración. Son infraestructura, no dato de negocio, y la base de demo
+  no tiene credenciales propias.
+- **Nada sale del sistema en una sesión de demostración**: ni correo, ni
+  WhatsApp, ni avisos a los administradores. Las guardias están en el emisor
+  (`mailer.ts`, `whatsapp.ts`, `notifications.ts`), no en cada lugar que llama.
+
+Los espejos se generan con `npm run demo:espejos` y `npm run
+demo:espejos:verificar` falla si alguno quedó viejo. **Si agregás un endpoint al
+portal, regenerá**: si no, el demo se queda sin esa pantalla, y eso no se nota
+compilando — se nota cuando alguien hace clic.
+
 ## 5. Errores comunes a todos los endpoints
 
 | Código | Cuándo |

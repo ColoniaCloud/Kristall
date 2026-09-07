@@ -137,7 +137,10 @@ export default function ServicesForm({
   }
 
   return (
-    <section className="flex flex-col gap-4 rounded-lg border border-border bg-card p-4 md:p-6">
+    <section
+      data-tour="servicios"
+      className="flex flex-col gap-4 rounded-lg border border-border bg-card p-4 md:p-6"
+    >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="font-heading text-lg font-semibold">Servicios</h2>

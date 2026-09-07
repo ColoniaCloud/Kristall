@@ -8,6 +8,7 @@ import { getWorkshopSummary, getAgenda, listBookings } from '@/lib/client-portal
 import { Button } from '@/components/ui/button'
 import WorkOrderStatusBadge from '@/components/client-portal/taller/WorkOrderStatusBadge'
 import { formatHora, formatMoney, describirAsset, toDateInput } from '@/lib/client-portal/taller-format'
+import Recorrido from '@/components/client-portal/Recorrido'
 
 export const metadata: Metadata = { title: 'Mi Taller' }
 
@@ -37,6 +38,7 @@ export default async function TallerPage() {
 
   return (
     <div className="flex flex-col gap-6">
+      <Recorrido pantalla="taller" activo={Boolean(session.demo)} />
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="font-heading text-2xl font-semibold">Mi Taller</h1>
         <Button asChild size="lg">
@@ -47,7 +49,7 @@ export default async function TallerPage() {
         </Button>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div data-tour="resumen-mes" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Tarjeta titulo="Turnos de hoy" valor={String(summary.hoy.turnos)} icono={CalendarClock} />
         <Tarjeta titulo="En el taller ahora" valor={String(summary.hoy.enProceso)} icono={Wrench} />
         <Tarjeta titulo="Terminadas este mes" valor={String(summary.periodo.terminadas)} icono={ClipboardList} />
@@ -90,7 +92,7 @@ export default async function TallerPage() {
           </Link>
         </Button>
         <Button asChild variant={pedidosPendientes.length > 0 ? 'default' : 'outline'}>
-          <Link href="/cliente/taller/turnos">
+          <Link data-tour="nav-turnos" href="/cliente/taller/turnos">
             <Inbox className="size-4" />
             Pedidos de turno
             {/* El contador solo cuando hay algo esperando: un cero permanente
@@ -103,7 +105,7 @@ export default async function TallerPage() {
           </Link>
         </Button>
         <Button asChild variant="outline">
-          <Link href="/cliente/taller/configuracion">
+          <Link data-tour="nav-configuracion" href="/cliente/taller/configuracion">
             <Settings className="size-4" />
             Configuración
           </Link>

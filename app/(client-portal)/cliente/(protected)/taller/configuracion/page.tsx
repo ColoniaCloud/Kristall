@@ -6,6 +6,7 @@ import { getWorkshopSettings, listWorkshopServices } from '@/lib/client-portal/w
 import WorkshopSettingsForm from '@/components/client-portal/taller/WorkshopSettingsForm'
 import PublicPageForm from '@/components/client-portal/taller/PublicPageForm'
 import ServicesForm from '@/components/client-portal/taller/ServicesForm'
+import Recorrido from '@/components/client-portal/Recorrido'
 
 export const metadata: Metadata = { title: 'Configuración del taller' }
 
@@ -28,6 +29,7 @@ export default async function ConfiguracionPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
+      <Recorrido pantalla="configuracion" activo={Boolean(session.demo)} />
       <div>
         <h1 className="font-heading text-2xl font-semibold">Configuración del taller</h1>
         <p className="mt-1 text-sm text-muted-foreground">

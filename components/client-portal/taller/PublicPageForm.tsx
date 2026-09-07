@@ -171,7 +171,7 @@ export default function PublicPageForm({ settings }: { settings: WorkshopSetting
         </p>
       </div>
 
-      <div className="flex flex-col gap-1.5">
+      <div data-tour="handle" className="flex flex-col gap-1.5">
         <Label htmlFor="handle">Nombre de usuario</Label>
         <div className="flex items-center gap-2">
           <span className="shrink-0 text-sm text-muted-foreground">{BASE_PUBLICA}/</span>
@@ -274,7 +274,7 @@ export default function PublicPageForm({ settings }: { settings: WorkshopSetting
       {/* Sobre qué trabaja. Va ANTES de «cómo trabajás» porque es la pregunta
           más de fondo: define qué bloques existen en su página, mientras que la
           de abajo solo prende y apaga tarjetas dentro de ellos. */}
-      <fieldset className="flex flex-col gap-2 border-t border-border pt-4">
+      <fieldset data-tour="rubros" className="flex flex-col gap-2 border-t border-border pt-4">
         <legend className="sr-only">Sobre qué trabajás</legend>
         <p className="text-sm font-medium">¿Sobre qué trabajás?</p>
         <p className="text-xs text-muted-foreground">
@@ -312,7 +312,7 @@ export default function PublicPageForm({ settings }: { settings: WorkshopSetting
           que no marque se muestran igual pero apagadas, porque decir «esto no lo
           hago» también informa y evita que la página cambie de forma según el
           taller. */}
-      <fieldset className="flex flex-col gap-2 border-t border-border pt-4">
+      <fieldset data-tour="modalidades" className="flex flex-col gap-2 border-t border-border pt-4">
         <legend className="sr-only">Cómo trabajás</legend>
         <p className="text-sm font-medium">¿Cómo trabajás?</p>
         <p className="text-xs text-muted-foreground">

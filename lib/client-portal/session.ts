@@ -5,6 +5,15 @@ export const CLIENT_SESSION_COOKIE = 'kf_client_session'
 const MAX_AGE_SECONDS = 60 * 60 * 12 // 12h
 
 /**
+ * Una sesión de demostración dura media hora, no doce.
+ *
+ * Es tiempo de sobra para recorrer el panel y bastante menos que el de una
+ * cuenta real: el taller descartable que hay detrás se borra solo, y una cookie
+ * que sobreviva al clon deja a la persona mirando un panel roto.
+ */
+export const MAX_AGE_DEMO_SECONDS = 60 * 30
+
+/**
  * Nivel de acceso del Cliente, tal como lo devuelve el CRM al iniciar sesión.
  *
  * `BASIC` — "Panel Clientes": compras, cuenta corriente y notificaciones.
@@ -34,6 +43,15 @@ export interface ClientSession {
    * setiembre 2026 no la traen, y el CRM las acepta hasta que venzan.
    */
   credentialVersion?: string
+  /**
+   * Si esta sesión es del portal de demostración.
+   *
+   * Hace dos cosas: dibuja la banda de aviso en todas las pantallas, y hace que
+   * `callCrmApi` apunte a los espejos `/api/portal/v1/demo/**` del CRM, que son
+   * los que resuelven contra la base de demo. El `contactId` de un clon **no
+   * existe en producción**, así que sin esto cada pantalla daría 404.
+   */
+  demo?: true
 }
 
 /** Nivel efectivo de una sesión, tratando las viejas sin nivel como BASIC. */
@@ -42,9 +60,12 @@ export function levelOf(session: ClientSession | null): AccessLevel {
 }
 
 export function buildClientSessionCookie(data: ClientSession) {
+  // Las de demostración vencen antes. Es el mismo mecanismo de siempre: solo
+  // cambia cuánto vive la firma.
+  const maxAge = data.demo ? MAX_AGE_DEMO_SECONDS : MAX_AGE_SECONDS
   return {
     name: CLIENT_SESSION_COOKIE,
-    value: createSessionToken(data, MAX_AGE_SECONDS),
+    value: createSessionToken(data, maxAge),
     options: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -52,7 +73,7 @@ export function buildClientSessionCookie(data: ClientSession) {
       // path '/' (no '/cliente'): las páginas y los route handlers que leen esta
       // cookie viven en árboles de URL distintos (/cliente/* vs /api/portal/*).
       path: '/',
-      maxAge: MAX_AGE_SECONDS,
+      maxAge,
     },
   }
 }

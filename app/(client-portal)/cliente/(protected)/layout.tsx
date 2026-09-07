@@ -1,6 +1,7 @@
 import type { Viewport } from 'next'
 import { redirect } from 'next/navigation'
 import { getClientSession, levelOf } from '@/lib/client-portal/session'
+import BandaDemo from '@/components/client-portal/BandaDemo'
 import Sidebar from '@/components/client-portal/Sidebar'
 import TopBar from '@/components/client-portal/TopBar'
 import RegisterServiceWorker from '@/components/client-portal/RegisterServiceWorker'
@@ -25,6 +26,9 @@ export default async function ProtectedLayout({ children }: { children: React.Re
     <div className="crm-theme flex min-h-screen bg-background text-foreground">
       <Sidebar level={level} />
       <div className="flex min-w-0 flex-1 flex-col">
+        {/* Arriba de todo y en todas las pantallas: alguien le va a sacar una
+            captura a esto y mandarla por WhatsApp. */}
+        {session.demo && <BandaDemo />}
         <TopBar session={session} level={level} />
         <main className="flex-1 p-4 md:p-8">{children}</main>
       </div>
