@@ -4,6 +4,7 @@ import { getClientSession, levelOf } from '@/lib/client-portal/session'
 import { getWorkshopStock } from '@/lib/client-portal/workshop'
 import { loadPortalData } from '@/lib/client-portal/guard'
 import StockTable from '@/components/client-portal/StockTable'
+import Recorrido from '@/components/client-portal/Recorrido'
 
 export const metadata: Metadata = { title: 'Stock' }
 
@@ -22,6 +23,7 @@ export default async function StockPage() {
 
   return (
     <div className="flex flex-col gap-6">
+      <Recorrido pantalla="stock" activo={Boolean(session.demo)} />
       <h1 className="font-heading text-2xl font-semibold">Stock de rollos</h1>
       <StockTable rolls={rolls} />
     </div>

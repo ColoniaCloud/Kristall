@@ -213,7 +213,10 @@ function Tarjeta({ booking: b }: { booking: Booking }) {
       )}
 
       {pendiente && (
-        <div className="flex flex-wrap items-end gap-3 border-t border-border pt-3">
+        <div
+          data-tour="confirmar-turno"
+          className="flex flex-wrap items-end gap-3 border-t border-border pt-3"
+        >
           <div className="flex flex-col gap-1.5">
             <Label htmlFor={`cuando-${b.id}`} className="text-xs">
               Confirmar para

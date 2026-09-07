@@ -24,14 +24,14 @@ export type ClaimStatus = 'OPEN' | 'IN_REVIEW' | 'RESOLVED' | 'REJECTED'
  * naturaleza según quién la ponga, así que de acá sale qué le preguntamos al
  * instalador y qué le preguntamos después al cliente final. `PPF` cuenta como
  * automotriz — es otro producto, pero va sobre un auto y tiene patente.
+ *
+ * La definición vive en `product-category.ts` y se reexporta acá por comodidad.
+ * **Un componente de cliente tiene que importarla de allá**, no de este archivo:
+ * este llega a `next/headers` y arrastrarlo al navegador rompe el build.
  */
-export type ProductCategory = 'AUTOMOTIVE' | 'ARCHITECTURAL' | 'PPF'
-
-export const PRODUCT_CATEGORY_LABELS: Record<ProductCategory, string> = {
-  AUTOMOTIVE: 'Automotriz',
-  ARCHITECTURAL: 'Arquitectura',
-  PPF: 'PPF',
-}
+import type { ProductCategory } from '@/lib/client-portal/product-category'
+export type { ProductCategory }
+export { PRODUCT_CATEGORY_LABELS } from '@/lib/client-portal/product-category'
 
 export interface Purchase {
   id: string

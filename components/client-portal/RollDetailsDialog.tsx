@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import { formatGarantia, formatFecha } from '@/lib/client-portal/taller-format'
 import { vehicleLabel } from '@/lib/vehicle-types'
-import { PRODUCT_CATEGORY_LABELS } from '@/lib/client-portal/api'
+import { PRODUCT_CATEGORY_LABELS } from '@/lib/client-portal/product-category'
 import type { WorkshopStockRoll } from '@/lib/client-portal/workshop'
 
 /**

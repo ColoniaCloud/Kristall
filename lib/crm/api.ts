@@ -37,17 +37,34 @@ interface CallCrmApiOptions {
   portalSession?: boolean
 }
 
-/** Versión de credencial de la sesión activa, si hay uno logueado. */
-async function credentialVersionHeader(): Promise<string | null> {
+/** La sesión del portal, si hay una. */
+async function sesionActiva(): Promise<ClientSession | null> {
   try {
     const store = await cookies()
-    const session = readSessionToken<ClientSession>(store.get(CLIENT_SESSION_COOKIE)?.value)
-    return session?.credentialVersion ?? null
+    return readSessionToken<ClientSession>(store.get(CLIENT_SESSION_COOKIE)?.value)
   } catch {
     // cookies() tira fuera del scope de un request. No es un error: significa
-    // que no hay sesión que verificar.
+    // que no hay sesión que consultar.
     return null
   }
+}
+
+/**
+ * Reapunta las llamadas del portal a los espejos de demostración.
+ *
+ * El CRM tiene `/api/portal/v1/demo/contacts/**` con los mismos handlers
+ * corriendo contra la base de demo. El `contactId` de un clon solo existe ahí,
+ * así que sin esta traducción cada pantalla del demo daría 404.
+ *
+ * Se hace en un solo lugar y no en las ~30 funciones de `client-portal/*`: una
+ * traducción repartida es una traducción a la que le va a faltar un caso, y ese
+ * caso sería una pantalla que en el demo no anda.
+ */
+function rutaDeLaSesion(path: string, session: ClientSession | null): string {
+  if (!session?.demo) return path
+  return path.startsWith('/api/portal/v1/contacts/')
+    ? path.replace('/api/portal/v1/contacts/', '/api/portal/v1/demo/contacts/')
+    : path
 }
 
 /**
@@ -69,15 +86,20 @@ export async function callCrmApi<T>(path: string, options: CallCrmApiOptions = {
 
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
   if (options.apiKey) headers['x-api-key'] = options.apiKey
+
+  let ruta = path
   if (options.portalSession) {
-    const version = await credentialVersionHeader()
-    if (version) headers['x-portal-credential-version'] = version
+    const session = await sesionActiva()
+    if (session?.credentialVersion) {
+      headers['x-portal-credential-version'] = session.credentialVersion
+    }
+    ruta = rutaDeLaSesion(path, session)
   }
 
   // Sin timeout, un CRM colgado cuelga las páginas del panel hasta que corte
   // la plataforma. 10s es holgado para la consulta más pesada (el perfil con
   // compras y pagos) y corto frente a la paciencia de una persona.
-  const res = await fetch(`${baseUrl}${path}`, {
+  const res = await fetch(`${baseUrl}${ruta}`, {
     method,
     headers,
     body: options.body !== undefined ? JSON.stringify(options.body) : undefined,

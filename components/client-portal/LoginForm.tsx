@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import BotonDemo from '@/components/client-portal/BotonDemo'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -86,6 +87,8 @@ export default function LoginForm() {
           Activá tu cuenta
         </Link>
       </p>
+
+      <BotonDemo />
     </form>
   )
 }
