@@ -37,7 +37,6 @@ export default function Recorrido({
     const clave = `recorrido:${pantalla}`
     try {
       if (sessionStorage.getItem(clave)) return
-      sessionStorage.setItem(clave, '1')
     } catch {
       // Sin sessionStorage (ventana privada, cookies bloqueadas) el recorrido
       // se muestra igual. Repetirlo es molesto; no mostrarlo nunca es peor.
@@ -58,10 +57,28 @@ export default function Recorrido({
 
     if (disponibles.length === 0) return
 
+    let instancia: ReturnType<typeof driver> | undefined
+
     // Un respiro antes de arrancar: la pantalla termina de dibujarse y el
     // resaltado cae sobre el elemento ya ubicado, no sobre donde estaba.
     const t = setTimeout(() => {
-      driver({
+      // Se marca como visto ACÁ, no al entrar al efecto.
+      //
+      // Marcarlo antes parece igual y no lo es: entre el montaje y estos 400 ms
+      // el componente se puede desmontar —un `router.refresh()`, una
+      // renegociación de Fast Refresh, una navegación rápida— y entonces la
+      // marca queda puesta sin que el recorrido se haya visto nunca. Al volver a
+      // montar se lo saltea, y el prospecto no ve el recorrido jamás.
+      //
+      // Es exactamente lo que pasaba: `BotonDemo` hace push y después refresh,
+      // el primer montaje ponía la marca y el segundo la encontraba.
+      try {
+        sessionStorage.setItem(clave, '1')
+      } catch {
+        // Ver arriba: sin almacenamiento se muestra igual.
+      }
+
+      instancia = driver({
         showProgress: disponibles.length > 1,
         nextBtnText: 'Siguiente',
         prevBtnText: 'Atrás',
@@ -71,10 +88,20 @@ export default function Recorrido({
           element: p.ancla ? `[data-tour="${p.ancla}"]` : undefined,
           popover: { title: p.titulo, description: p.texto },
         })),
-      }).drive()
+      })
+      instancia.drive()
     }, 400)
 
-    return () => clearTimeout(t)
+    // Al salir de la pantalla se destruye el recorrido.
+    //
+    // driver.js dibuja su overlay sobre el `body`, fuera del árbol de React, así
+    // que no se va solo al desmontar el componente. Sin esto, quien navega a
+    // mitad de un recorrido se lleva el globito viejo a la pantalla nueva — y si
+    // ahí arranca otro, quedan los dos encima, cada uno con su propio "3 de 4".
+    return () => {
+      clearTimeout(t)
+      instancia?.destroy()
+    }
   }, [pantalla, activo])
 
   return null
