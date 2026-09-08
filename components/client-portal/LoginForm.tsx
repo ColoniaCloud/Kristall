@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import BotonDemo from '@/components/client-portal/BotonDemo'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -87,15 +88,7 @@ export default function LoginForm() {
         </Link>
       </p>
 
-      {/*
-        El botón de demostración está desactivado a propósito: las rutas del CRM que lo
-        sostienen (`/api/public/demo/session` y los espejos bajo `/api/public/demo/`) se
-        revirtieron de producción. Sin ellas el botón muestra un error, y ofrecer una
-        prueba que falla es peor que no ofrecerla.
-
-        Para reactivarlo: volver a mergear el portal de demostración en el CRM y devolver
-        acá el `<BotonDemo />` junto a su import. Ver DEMO-PORTAL.md.
-      */}
+      <BotonDemo />
     </form>
   )
 }
