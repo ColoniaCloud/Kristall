@@ -35,7 +35,14 @@ type Estado =
 /** La respuesta del servidor, atada al handle que se preguntó. */
 type Respuesta = { handle: string; disponible: boolean; motivo: string | null }
 
-export default function PublicPageForm({ settings }: { settings: WorkshopSettings }) {
+export default function PublicPageForm({
+  settings,
+  demo = false,
+}: {
+  settings: WorkshopSettings
+  /** En demostración la página pública cuelga de `/demo/`, no de la raíz. */
+  demo?: boolean
+}) {
   const router = useRouter()
   const [handle, setHandle] = useState(settings.handle ?? '')
   const [respuesta, setRespuesta] = useState<Respuesta | null>(null)
@@ -160,7 +167,11 @@ export default function PublicPageForm({ settings }: { settings: WorkshopSetting
     }
   }
 
-  const urlCompleta = `${BASE_PUBLICA}/${settings.handle ?? handle}`
+  // El mismo prefijo que usa el CRM para sus rutas espejo. Va acá y no solo en
+  // el link de "Verla" porque la dirección también se muestra para copiar, y
+  // una dirección que no se puede pegar en el navegador no sirve de nada.
+  const prefijo = demo ? `${BASE_PUBLICA}/demo` : BASE_PUBLICA
+  const urlCompleta = `${prefijo}/${settings.handle ?? handle}`
 
   return (
     <section className="flex flex-col gap-5 rounded-lg border border-border bg-card p-4 md:p-6">
@@ -174,7 +185,7 @@ export default function PublicPageForm({ settings }: { settings: WorkshopSetting
       <div data-tour="handle" className="flex flex-col gap-1.5">
         <Label htmlFor="handle">Nombre de usuario</Label>
         <div className="flex items-center gap-2">
-          <span className="shrink-0 text-sm text-muted-foreground">{BASE_PUBLICA}/</span>
+          <span className="shrink-0 text-sm text-muted-foreground">{prefijo}/</span>
           <Input
             id="handle"
             value={handle}

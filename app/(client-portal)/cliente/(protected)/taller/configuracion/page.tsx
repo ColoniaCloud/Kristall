@@ -37,7 +37,10 @@ export default async function ConfiguracionPage() {
         </p>
       </div>
       <WorkshopSettingsForm settings={settings} logoSrc={logoSrc} />
-      <PublicPageForm settings={settings} />
+      {/* En demostración la página pública vive bajo /demo/, que es el espacio
+          que habla con la base de prueba. Sin esto el link lleva a la ruta real,
+          donde el handle no existe. */}
+      <PublicPageForm settings={settings} demo={Boolean(session.demo)} />
       {/* El selector de rubro por servicio solo aparece si el taller marco los
           dos: a quien hace una sola cosa no se le pregunta lo que ya contesto. */}
       <ServicesForm
