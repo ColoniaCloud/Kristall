@@ -25,20 +25,23 @@ const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?for
 
 const CHECK_ONLY = process.argv.includes('--check')
 
-/** Columnas esperadas, en orden, arrancando en la B (la A viene vacía). */
-const COLUMNAS = [
-  'Categoría',
-  'Subcateogira',
-  'Linea',
-  'Codigo Kristall',
-  'Codigo China',
-  'VLT',
-  'UVR',
-  'IR',
-  'Garantia',
-  'Thickness',
-  'Stock',
-]
+/**
+ * Columnas que usa el catálogo. Se ubican por nombre en la fila de encabezado,
+ * no por posición: la planilla ya cambió de forma dos veces (una columna vacía
+ * más al inicio, y "Unidad" / "x 3" / "x5" insertadas antes de "Stock"), y cada
+ * vez cortó el build. Las columnas que no figuran acá se ignoran.
+ */
+const COLUMNAS = {
+  categoria: 'Categoría',
+  subcategoria: 'Subcateogira',
+  linea: 'Linea',
+  codigo: 'Codigo Kristall',
+  vlt: 'VLT',
+  uvr: 'UVR',
+  ir: 'IR',
+  garantia: 'Garantia',
+  thickness: 'Thickness',
+}
 
 const NICHOS = { AUTOS: 'autos', ARQUITECTURA: 'arquitectura' }
 const CATEGORIAS = { STANDARD: 'standard', PREMIUM: 'premium' }
@@ -100,21 +103,32 @@ function parsearCatalogo(csv) {
   const vistos = new Map()
   let nicho = null
 
-  const encabezado = filas[0]?.slice(1, 1 + COLUMNAS.length).map(limpio) ?? []
-  COLUMNAS.forEach((esperada, i) => {
-    if (encabezado[i] !== esperada) {
+  const encabezado = (filas[0] ?? []).map(limpio)
+  const indice = {}
+  for (const [campo, nombre] of Object.entries(COLUMNAS)) {
+    const i = encabezado.indexOf(nombre)
+    if (i === -1) {
       errores.push(
-        `Encabezado: la columna ${i + 1} dice "${encabezado[i] ?? '(vacía)'}" y se esperaba "${esperada}". ` +
-          `Si renombraste o moviste columnas en la planilla, hay que actualizar COLUMNAS en este script.`,
+        `Encabezado: no encuentro la columna "${nombre}". ` +
+          `Si la renombraste en la planilla, hay que actualizar COLUMNAS en este script.`,
       )
     }
-  })
+    indice[campo] = i
+  }
   if (errores.length) return { productos, errores }
 
   for (let i = 1; i < filas.length; i++) {
     const nroFila = i + 1 // como se ve en la planilla
-    const [, categoria, subcategoria, linea, codigo, , vlt, uvr, ir, garantia, thickness] =
-      filas[i].map(limpio)
+    const celda = (campo) => limpio(filas[i][indice[campo]])
+    const categoria = celda('categoria')
+    const subcategoria = celda('subcategoria')
+    const linea = celda('linea')
+    const codigo = celda('codigo')
+    const vlt = celda('vlt')
+    const uvr = celda('uvr')
+    const ir = celda('ir')
+    const garantia = celda('garantia')
+    const thickness = celda('thickness')
 
     // Fila separadora de nicho: solo la primera celda tiene texto.
     if (categoria in NICHOS && !linea && !codigo) { nicho = NICHOS[categoria]; continue }
