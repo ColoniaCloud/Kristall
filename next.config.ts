@@ -40,6 +40,13 @@ const CSP = [
 ].join('; ')
 
 const nextConfig: NextConfig = {
+  // Acota los workers de generación estática del build. El default de Next sale
+  // de os.cpus(), y el hosting compartido reporta 64 núcleos que la cuenta no
+  // puede usar: cada build levantaba 63 procesos en paralelo contra un techo de
+  // 200 para toda la cuenta —y este sitio se construye seguido, a veces en el
+  // mismo segundo que el CRM y polariz.ar—, lo que tumbaba las otras apps del
+  // plan. Mismo valor que crm-polarizados/next.config.ts.
+  experimental: { cpus: 4 },
   // Evita que Next.js infiera mal la raíz del workspace por lockfiles
   // ajenos al proyecto (p. ej. package-lock.json en el home del usuario).
   outputFileTracingRoot: import.meta.dirname,
