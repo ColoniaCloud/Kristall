@@ -3,8 +3,7 @@ import { requireInstallerSession } from '@/lib/client-portal/workshop-bridge'
 import { updateWorkshopSettings } from '@/lib/client-portal/workshop'
 import { crmErrorResponse } from '@/lib/crm/api'
 
-const MIMES = ['image/png', 'image/jpeg', 'image/webp'] as const
-type Mime = (typeof MIMES)[number]
+type Mime = 'image/png' | 'image/jpeg' | 'image/webp'
 
 /**
  * Guarda la configuración del taller, incluido el logo.

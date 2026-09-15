@@ -16,15 +16,13 @@ import { useCart } from '@/lib/cart'
 import { useTranslations } from 'next-intl'
 import { trackLead } from '@/lib/analytics'
 
-const schema = z.object({
-  name: z.string().min(2),
-  company: z.string().optional(),
-  email: z.string().email(),
-  phone: z.string().optional(),
-  message: z.string().optional(),
-})
-
-type FormData = z.infer<typeof schema>
+type FormData = {
+  name: string
+  company?: string
+  email: string
+  phone?: string
+  message?: string
+}
 
 interface QuoteModalProps {
   open: boolean

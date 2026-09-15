@@ -7,7 +7,7 @@ import { loadPortalData } from '@/lib/client-portal/guard'
 import { getWorkshopSummary, getAgenda, listBookings } from '@/lib/client-portal/workshop'
 import { Button } from '@/components/ui/button'
 import WorkOrderStatusBadge from '@/components/client-portal/taller/WorkOrderStatusBadge'
-import { formatHora, formatMoney, describirAsset, toDateInput } from '@/lib/client-portal/taller-format'
+import { formatHora, formatMoney, describirAsset } from '@/lib/client-portal/taller-format'
 import Recorrido from '@/components/client-portal/Recorrido'
 
 export const metadata: Metadata = { title: 'Mi Taller' }
