@@ -1,6 +1,6 @@
 {
   "_comentario": "Generado por scripts/sync-catalogo.mjs desde Google Sheets. No editar a mano.",
-  "generadoEl": "2026-09-07T16:10:33.322Z",
+  "generadoEl": "2026-09-15T22:54:34.741Z",
   "productos": [
     {
       "codigo": "KLS05",
@@ -28,38 +28,6 @@
       "vlt": 15,
       "uvr": 92,
       "ir": 20,
-      "garantiaAnios": 3,
-      "espesor": {
-        "valor": 1,
-        "unidad": "ply"
-      }
-    },
-    {
-      "codigo": "KTX05",
-      "linea": "Kortex",
-      "lineaSlug": "kortex",
-      "nicho": "autos",
-      "categoria": "standard",
-      "tecnologia": "Dyed",
-      "vlt": 5,
-      "uvr": 99,
-      "ir": 73,
-      "garantiaAnios": 3,
-      "espesor": {
-        "valor": 1,
-        "unidad": "ply"
-      }
-    },
-    {
-      "codigo": "KTX20",
-      "linea": "Kortex",
-      "lineaSlug": "kortex",
-      "nicho": "autos",
-      "categoria": "standard",
-      "tecnologia": "Dyed",
-      "vlt": 20,
-      "uvr": 92,
-      "ir": 58,
       "garantiaAnios": 3,
       "espesor": {
         "valor": 1,
@@ -111,86 +79,6 @@
       "garantiaAnios": 3,
       "espesor": {
         "valor": 1,
-        "unidad": "ply"
-      }
-    },
-    {
-      "codigo": "KPRO05",
-      "linea": "Klar",
-      "lineaSlug": "klar",
-      "nicho": "autos",
-      "categoria": "standard",
-      "tecnologia": "Dyed",
-      "vlt": 5,
-      "uvr": 99,
-      "ir": 73,
-      "garantiaAnios": 3,
-      "espesor": {
-        "valor": 2,
-        "unidad": "ply"
-      }
-    },
-    {
-      "codigo": "KPRO15",
-      "linea": "Klar",
-      "lineaSlug": "klar",
-      "nicho": "autos",
-      "categoria": "standard",
-      "tecnologia": "Dyed",
-      "vlt": 15,
-      "uvr": 92,
-      "ir": 58,
-      "garantiaAnios": 3,
-      "espesor": {
-        "valor": 2,
-        "unidad": "ply"
-      }
-    },
-    {
-      "codigo": "KRY05",
-      "linea": "Kryon",
-      "lineaSlug": "kryon",
-      "nicho": "autos",
-      "categoria": "standard",
-      "tecnologia": "Nano Ceramic",
-      "vlt": 5,
-      "uvr": 99,
-      "ir": 90,
-      "garantiaAnios": 5,
-      "espesor": {
-        "valor": 2,
-        "unidad": "ply"
-      }
-    },
-    {
-      "codigo": "KRY15",
-      "linea": "Kryon",
-      "lineaSlug": "kryon",
-      "nicho": "autos",
-      "categoria": "standard",
-      "tecnologia": "Nano Ceramic",
-      "vlt": 15,
-      "uvr": 90,
-      "ir": 90,
-      "garantiaAnios": 5,
-      "espesor": {
-        "valor": 2,
-        "unidad": "ply"
-      }
-    },
-    {
-      "codigo": "KRY80",
-      "linea": "Kryon",
-      "lineaSlug": "kryon",
-      "nicho": "autos",
-      "categoria": "standard",
-      "tecnologia": "Nano Ceramic",
-      "vlt": 80,
-      "uvr": 99,
-      "ir": 80,
-      "garantiaAnios": 5,
-      "espesor": {
-        "valor": 2,
         "unidad": "ply"
       }
     },

@@ -19,13 +19,13 @@ const organizationLd = {
     width: 300,
     height: 80,
   },
-  description: 'Distribuidor oficial de láminas polarizantes de tecnología alemana para automotriz, arquitectura y PPF en Argentina.',
+  description: 'Distribuidor oficial de láminas polarizantes de tecnología alemana para automotriz, arquitectura y PPF en Latinoamérica.',
   areaServed: { '@type': 'Country', name: 'Argentina' },
-  knowsLanguage: ['es', 'en', 'de'],
+  knowsLanguage: ['es', 'en', 'de', 'pt'],
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer support',
-    availableLanguage: ['Spanish', 'English'],
+    availableLanguage: ['Spanish', 'English', 'German', 'Portuguese'],
   },
 }
 
@@ -34,7 +34,7 @@ const websiteLd = {
   '@type': 'WebSite',
   name: 'Kristall Film',
   url: 'https://kristallfilm.com',
-  inLanguage: ['es', 'en', 'de'],
+  inLanguage: ['es', 'en', 'de', 'pt'],
 }
 
 const localeMeta: Record<string, { title: string; description: string; locale: string }> = {
@@ -52,6 +52,11 @@ const localeMeta: Record<string, { title: string; description: string; locale: s
     title: 'Kristall Film',
     description: 'Deutsche Folientechnologie für Automobil, Architektur und Lackschutzfolie. Offizieller Vertrieb in Argentinien.',
     locale: 'de_DE',
+  },
+  pt: {
+    title: 'Kristall Film',
+    description: 'Películas de insulfilm de tecnologia alemã para automotivo, arquitetura e PPF. Distribuidor oficial na América Latina.',
+    locale: 'pt_BR',
   },
 }
 
@@ -72,6 +77,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
         es: 'https://kristallfilm.com/es',
         en: 'https://kristallfilm.com/en',
         de: 'https://kristallfilm.com/de',
+        pt: 'https://kristallfilm.com/pt',
       },
     },
     openGraph: {
@@ -98,7 +104,7 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>
 }) {
   const { locale } = await params
-  if (!routing.locales.includes(locale as 'es' | 'en' | 'de')) notFound()
+  if (!routing.locales.includes(locale as any)) notFound()
   const messages = await getMessages()
   return (
     <html lang={locale}>

@@ -11,14 +11,14 @@ const ISOLATED_PREFIXES = ['/cliente', '/garantia']
 
 // La ruta se renombró de /propuesta-vidrierias a /propuesta-aberturas; esta
 // redirige el slug viejo (ya indexado/compartido en producción) al nuevo.
-const OLD_ABERTURAS_SLUG = /^\/(es|en|de)\/propuesta-vidrierias(\/.*)?$/
+const OLD_ABERTURAS_SLUG = /^\/(es|en|de|pt)\/propuesta-vidrierias(\/.*)?$/
 
 // El catálogo se renombró de /productos/categorias/:linea a
 // /productos/lineas/:linea (categorias queda libre para un futuro filtro por
 // categoría Standard/Premium). Dos casos especiales: keramx cambió de slug
 // (keram-x) y vitral se retiró del catálogo — su URL indexada redirige al
 // nicho de arquitectura en vez de a una línea que ya no existe.
-const OLD_LINEA_SLUG = /^\/(es|en|de)\/productos\/categorias\/([a-z0-9-]+)(\/.*)?$/
+const OLD_LINEA_SLUG = /^\/(es|en|de|pt)\/productos\/categorias\/([a-z0-9-]+)(\/.*)?$/
 const LINEA_SLUG_RENAMES: Record<string, string> = { keramx: 'keram-x' }
 const LINEA_RETIRADA_A_NICHO: Record<string, string> = { vitral: 'arquitectura' }
 

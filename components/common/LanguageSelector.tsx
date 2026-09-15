@@ -6,25 +6,17 @@ import { useLocale } from 'next-intl'
 import ArgentinaFlag from './ArgentinaFlag'
 import UKFlag from './UKFlag'
 import GermanyFlag from './GermanyFlag'
+import BrazilFlag from './BrazilFlag'
 import { ChevronDown } from 'lucide-react'
 
-/**
- * Selector de idioma de la barra superior: bandera + nombre del idioma + chevron,
- * sin fondo ni caja — es un item más de la barra, no un botón.
- * `es` usa la bandera de Argentina (es el mercado, no España).
- *
- * Pensado para vivir sobre el fondo negro de `TopBar`: el trigger usa texto
- * blanco translúcido. El desplegable en sí es un popover claro (fondo
- * `--surface`) para mantener legibilidad, con `z-[60]` — por encima del header
- * sticky (`z-50`) para que no quede tapado por el logo al abrirse.
- */
-
+type SupportedLocale = 'es' | 'en' | 'de' | 'pt'
 type FlagComponent = (props: { width?: number; height?: number }) => React.JSX.Element
 
-const languages: { code: 'es' | 'en' | 'de'; name: string; flag: FlagComponent }[] = [
+const languages: { code: SupportedLocale; name: string; flag: FlagComponent }[] = [
   { code: 'es', name: 'Español', flag: ArgentinaFlag },
   { code: 'en', name: 'English', flag: UKFlag },
   { code: 'de', name: 'Deutsch', flag: GermanyFlag },
+  { code: 'pt', name: 'Português', flag: BrazilFlag },
 ]
 
 /** Mitad del tamaño histórico (20x14) en el trigger; el desplegable va un punto más grande. */
@@ -33,7 +25,7 @@ const FLAG_MENU = { width: 14, height: 10 }
 
 export default function LanguageSelector() {
   const [isOpen, setIsOpen] = useState(false)
-  const locale = useLocale() as 'es' | 'en' | 'de'
+  const locale = useLocale() as SupportedLocale
   const router = useRouter()
   const pathname = usePathname()
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -56,7 +48,7 @@ export default function LanguageSelector() {
     }
   }, [isOpen])
 
-  const switchLocale = (locale: 'es' | 'en' | 'de') => {
+  const switchLocale = (locale: SupportedLocale) => {
     router.replace(pathname, { locale })
     setIsOpen(false)
   }

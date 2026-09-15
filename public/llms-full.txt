@@ -1,0 +1,40 @@
+# Kristall Film — Complete Knowledge Base & Technical Documentation
+
+> Kristall Film desarrollador y distribuidor de láminas de control solar, seguridad y películas de protección de pintura (PPF) de alta performance. Fabricadas bajo estándares alemanes de ingeniería para el mercado profesional de América Latina.
+
+## 1. Catálogo Técnico de Productos
+
+### Línea Automotriz
+| Línea | Tecnología | Construcción | Rechazo IR | Bloqueo UV | Garantía | VLTs Disponibles |
+|---|---|---|---|---|---|---|
+| **KLASS** | Standard Tint | 1 Ply | N/A | 99% | 3 Años | 5%, 15%, 35%, 50% |
+| **KARBON** | Nano Carbono | 2 Ply | ~50-70% | 99% | 7 Años | 5%, 15%, 35%, 50% |
+| **KERAMX** | Nano Cerámica | 2 Ply | 95% | 99% | 10 Años | 5%, 15%, 35%, 70% |
+| **KRYPTON** | Seguridad + Cerámica | 4-8 mil | 85-90% | 99% | 10 Años | 5%, 20%, 35%, Transparente |
+
+### Línea Protección de Pintura (PPF)
+- **Kristall PPF TPU**: 150-200 micrones, acabado ultra gloss, propiedad de auto-recuperación térmica ante arañazos leves, hidrofóbico y resistente a agentes químicos de carretera.
+
+### Línea Arquitectura
+- **KReflect Silver**: Láminas espejadas para alto rechazo calórico comercial y residencial.
+- **Klear Security**: 8 y 12 mil de espesor para protección antivandalismo y retención de cristales.
+- **KWhite Matte / Knight**: Soluciones esmeriladas y blackout para privacidad en oficinas y hogares.
+
+## 2. Preguntas Frecuentes Técnicas (FAQ)
+
+### ¿Qué significa VLT en una lámina de control solar?
+VLT significa *Visible Light Transmission* (Transmisión de Luz Visible). Representa el porcentaje de luz solar que atraviesa el vidrio. Un VLT del 5% es muy oscuro (máxima privacidad), mientras que un VLT del 50% o 70% ofrece alta claridad visual.
+
+### ¿Cuál es la diferencia entre una lámina Nano Carbono y una Nano Cerámica?
+- **Nano Carbono (Karbon)**: Utiliza partículas de carbono que previenen la decoloración y aportan alto confort sin bloquear señales telefónicas o GPS.
+- **Nano Cerámica (Keramx)**: Ofrece la tecnología más avanzada de bloqueo infrarrojo (hasta 95% IR), reduciendo drásticamente la temperatura interna del vehículo o espacio vidriado sin requerir un tono extremadamente oscuro.
+
+### ¿Qué es el programa Punto Kristall?
+Es la red oficial de talleres e instaladores certificados de Kristall Film. Acceden a precios preferenciales de distribución, material publicitario exclusivo y soporte en la plataforma Polarized App para emisión de garantías digitales.
+
+## 3. Contacto & Redes Oficiales
+- **Sitio Web**: https://kristallfilm.com
+- **Instagram**: @kristallfilm.la
+- **Dirección**: Av. Juan B Justo 2918, CABA, Argentina
+- **WhatsApp**: +54 9 11 6048-4312
+- **Email**: hola@kristallfilm.com

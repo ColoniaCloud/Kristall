@@ -3,7 +3,7 @@ import path from 'node:path'
 import { productoDestacadaSrc, lineaDestacadaSrc, productoNombre, type Producto, type Linea } from '@/lib/catalogo'
 
 const BASE = 'https://kristallfilm.com'
-const LOCALES = ['es', 'en', 'de'] as const
+const LOCALES = ['es', 'en', 'de', 'pt'] as const
 
 /**
  * Next.js no hace deep-merge de `openGraph`/`twitter` entre segmentos: si una
@@ -20,14 +20,15 @@ export const DEFAULT_OG_IMAGE = {
 }
 
 export function buildAlternates(route: string, locale: string) {
+  const languages: Record<string, string> = {
+    'x-default': `${BASE}/es${route}`,
+  }
+  for (const loc of LOCALES) {
+    languages[loc] = `${BASE}/${loc}${route}`
+  }
   return {
     canonical: `${BASE}/${locale}${route}`,
-    languages: {
-      'x-default': `${BASE}/es${route}`,
-      es: `${BASE}/es${route}`,
-      en: `${BASE}/en${route}`,
-      de: `${BASE}/de${route}`,
-    } as Record<string, string>,
+    languages,
   }
 }
 
@@ -53,6 +54,7 @@ export function productJsonLd(p: Producto, linea: Linea, locale: string) {
   ].filter(Boolean)
 
   return {
+    '@context': 'https://schema.org',
     '@type': 'Product',
     name: productoNombre(p),
     sku: p.codigo,
@@ -64,4 +66,77 @@ export function productJsonLd(p: Producto, linea: Linea, locale: string) {
   }
 }
 
+/** Nodo `Organization` de schema.org para la marca Kristall Film (GEO / Knowledge Graph). */
+export function organizationJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Kristall Film',
+    url: BASE,
+    logo: `${BASE}/logo.png`,
+    sameAs: [
+      'https://www.linkedin.com/company/135156381',
+      'https://www.facebook.com/people/Kristall-Film-Latam/61590712143296/',
+      'https://www.instagram.com/kristallfilm.la',
+    ],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: 'hola@kristallfilm.com',
+      contactType: 'customer service',
+      availableLanguage: ['Spanish', 'English', 'German', 'Portuguese'],
+    },
+  }
+}
+
+/** Nodo `LocalBusiness` para showroom / distribución Kristall Film. */
+export function localBusinessJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: 'Kristall Film Latam',
+    image: `${BASE}/og-default.jpg`,
+    telePhone: '+5491160484312',
+    email: 'hola@kristallfilm.com',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Av. Juan B Justo 2918',
+      addressLocality: 'Buenos Aires',
+      addressRegion: 'CABA',
+      addressCountry: 'AR',
+    },
+    url: BASE,
+  }
+}
+
+/** Nodo `BreadcrumbList` de schema.org para navegación contextualizada en motores de búsqueda e IA. */
+export function breadcrumbJsonLd(items: Array<{ name: string; item: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((it, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      name: it.name,
+      item: it.item.startsWith('http') ? it.item : `${BASE}${it.item}`,
+    })),
+  }
+}
+
+/** Nodo `FAQPage` de schema.org para optimización AIO/GEO de consultas directas en navegadores de IA. */
+export function faqJsonLd(faqs: Array<{ question: string; answer: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  }
+}
+
 export { BASE, LOCALES }
+
