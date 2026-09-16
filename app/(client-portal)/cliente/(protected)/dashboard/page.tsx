@@ -7,6 +7,7 @@ import { getContact, getAccount } from '@/lib/client-portal/api'
 import { loadPortalData } from '@/lib/client-portal/guard'
 import StatCards from '@/components/client-portal/StatCards'
 import PurchasesTable from '@/components/client-portal/PurchasesTable'
+import RegisterPaymentDialog from '@/components/client-portal/RegisterPaymentDialog'
 import { formatCurrency, formatDate } from '@/lib/format'
 
 export const metadata: Metadata = { title: 'Dashboard' }
@@ -21,14 +22,20 @@ export default async function DashboardPage() {
   ])
 
   const { overdueAmount, nextDueDate } = account.summary
+  // Solo se puede declarar un pago sobre un plan vigente: uno CANCELLED o
+  // COMPLETED no tiene contra qué imputarlo.
+  const planesConSaldo = account.plans.filter((p) => p.status === 'ACTIVE')
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="font-heading text-2xl font-semibold">Hola, {contact.firstName}</h1>
-        {/* `company` es null para los clientes sin razón social; sin esto el
-            renglón quedaba vacío debajo del saludo. */}
-        {contact.company && <p className="text-sm text-muted-foreground">{contact.company}</p>}
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="font-heading text-2xl font-semibold">Hola, {contact.firstName}</h1>
+          {/* `company` es null para los clientes sin razón social; sin esto el
+              renglón quedaba vacío debajo del saludo. */}
+          {contact.company && <p className="text-sm text-muted-foreground">{contact.company}</p>}
+        </div>
+        {planesConSaldo.length > 0 && <RegisterPaymentDialog plans={planesConSaldo} />}
       </div>
 
       {/* Lo primero que tiene que ver es si hay algo vencido. */}

@@ -241,6 +241,52 @@ const MOCK_ACCOUNT = {
   ],
 }
 
+/**
+ * Pagos declarados desde el portal (mutable: un POST se ve en el próximo GET,
+ * como MOCK_INSTALLATIONS). Arranca con uno ya confirmado y otro rechazado
+ * para poder ver los tres estados sin tener que declarar nada primero.
+ */
+const MOCK_DECLARATIONS: {
+  id: string
+  saleId: string
+  saleNumber: number
+  amount: number
+  method: string
+  reference: string | null
+  notes: string | null
+  status: 'PENDING' | 'CONFIRMED' | 'REJECTED'
+  hasReceipt: boolean
+  rejectionReason: string | null
+  createdAt: string
+}[] = [
+  {
+    id: 'cldecl1',
+    saleId: 'clz2',
+    saleNumber: 1042,
+    amount: 287500,
+    method: 'TRANSFER',
+    reference: 'Operación 4021',
+    notes: null,
+    status: 'CONFIRMED',
+    hasReceipt: true,
+    rejectionReason: null,
+    createdAt: '2026-06-18T00:00:00.000Z',
+  },
+  {
+    id: 'cldecl2',
+    saleId: 'clz2',
+    saleNumber: 1042,
+    amount: 125000,
+    method: 'CASH',
+    reference: null,
+    notes: null,
+    status: 'REJECTED',
+    hasReceipt: false,
+    rejectionReason: 'No encontramos el pago en efectivo en la caja de ese día.',
+    createdAt: '2026-07-16T00:00:00.000Z',
+  },
+]
+
 function match(path: string, pattern: RegExp): RegExpMatchArray | null {
   return path.match(pattern)
 }
@@ -414,6 +460,40 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
     return m[1] === MOCK_CONTACT_ID
       ? { status: 200, data: MOCK_ACCOUNT }
       : { status: 404, data: { error: 'Cliente no encontrado' } }
+  }
+
+  m = match(path, /^\/api\/portal\/v1\/contacts\/([^/]+)\/payment-declarations$/)
+  if (m && method === 'GET') {
+    return { status: 200, data: m[1] === MOCK_CONTACT_ID ? MOCK_DECLARATIONS : [] }
+  }
+  if (m && method === 'POST') {
+    if (m[1] !== MOCK_CONTACT_ID) return { status: 404, data: { error: 'Cliente no encontrado' } }
+    const datos = (body ?? {}) as {
+      saleId?: string
+      amount?: number
+      method?: string
+      reference?: string
+      notes?: string
+      receipt?: string
+      receiptMimeType?: string
+    }
+    const plan = MOCK_ACCOUNT.plans.find((p) => p.saleId === datos.saleId)
+    if (!plan) return { status: 400, data: { error: 'Esta compra no tiene un plan de cuotas vigente.' } }
+    const nueva = {
+      id: `cldecl-mock-${MOCK_DECLARATIONS.length + 1}`,
+      saleId: plan.saleId,
+      saleNumber: plan.saleNumber,
+      amount: Number(datos.amount ?? 0),
+      method: datos.method ?? 'OTHER',
+      reference: datos.reference ?? null,
+      notes: datos.notes ?? null,
+      status: 'PENDING' as const,
+      hasReceipt: Boolean(datos.receipt),
+      rejectionReason: null,
+      createdAt: new Date().toISOString(),
+    }
+    MOCK_DECLARATIONS.unshift(nueva)
+    return { status: 201, data: nueva }
   }
 
   return { status: 404, data: { error: `Mock no implementado para ${method} ${path}` } }

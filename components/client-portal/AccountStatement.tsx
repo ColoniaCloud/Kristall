@@ -1,7 +1,25 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { formatCurrency, formatDate } from '@/lib/format'
-import type { ClientAccount, AccountPlan, InstallmentStatus } from '@/lib/client-portal/api'
+import type {
+  ClientAccount,
+  AccountPlan,
+  InstallmentStatus,
+  PaymentDeclaration,
+  PaymentDeclarationStatus,
+} from '@/lib/client-portal/api'
+
+const DECLARATION_STATUS_LABEL: Record<PaymentDeclarationStatus, string> = {
+  PENDING: 'Pendiente de revisión',
+  CONFIRMED: 'Confirmado',
+  REJECTED: 'Rechazado',
+}
+
+const DECLARATION_STATUS_VARIANT: Record<PaymentDeclarationStatus, 'default' | 'secondary' | 'destructive' | 'outline'> = {
+  PENDING: 'outline',
+  CONFIRMED: 'default',
+  REJECTED: 'destructive',
+}
 
 const STATUS_LABEL: Record<InstallmentStatus, string> = {
   PENDING: 'Pendiente',
@@ -60,7 +78,14 @@ function StatCard({
  * Es la misma vista y el mismo cálculo que ve el operador en el CRM, a
  * propósito: si los números no coincidieran, el panel no serviría.
  */
-export default function AccountStatement({ account }: { account: ClientAccount }) {
+export default function AccountStatement({
+  account,
+  declarations,
+}: {
+  account: ClientAccount
+  /** Pagos que el cliente declaró desde el portal, con su estado de revisión. */
+  declarations: PaymentDeclaration[]
+}) {
   const { summary, entries, plans } = account
   // Negativo = pagó de más o tiene una nota de crédito. Se muestra como saldo a
   // favor, no como deuda cero.
@@ -178,6 +203,45 @@ export default function AccountStatement({ account }: { account: ClientAccount }
           a tu favor, es plata que quedó a cuenta para tu próxima compra.
         </p>
       </section>
+
+      {declarations.length > 0 && (
+        <section>
+          <h2 className="mb-3 text-lg font-medium">Pagos declarados</h2>
+          <p className="mb-3 text-sm text-muted-foreground">
+            Lo que avisaste con &quot;Registrar un pago&quot;. Todavía no descuenta de tu saldo
+            hasta que lo confirmemos.
+          </p>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Compra</TableHead>
+                  <TableHead>Monto</TableHead>
+                  <TableHead>Estado</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {declarations.map((d) => (
+                  <TableRow key={d.id}>
+                    <TableCell className="whitespace-nowrap">{formatDate(d.createdAt)}</TableCell>
+                    <TableCell>#{d.saleNumber}</TableCell>
+                    <TableCell>{formatCurrency(d.amount)}</TableCell>
+                    <TableCell>
+                      <Badge variant={DECLARATION_STATUS_VARIANT[d.status]}>
+                        {DECLARATION_STATUS_LABEL[d.status]}
+                      </Badge>
+                      {d.status === 'REJECTED' && d.rejectionReason && (
+                        <p className="mt-1 text-xs text-muted-foreground">{d.rejectionReason}</p>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </section>
+      )}
     </div>
   )
 }

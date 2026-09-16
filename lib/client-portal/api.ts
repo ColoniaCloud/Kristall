@@ -420,3 +420,50 @@ export function markNotificationRead(contactId: string, notificationId: string) 
     { method: 'PATCH', ...SESSION() }
   )
 }
+
+// ─── Pagos declarados por el Cliente ────────────────────────────────────────
+//
+// "Ya pagué esta cuota", avisado desde el Dashboard o Cuenta corriente. NO
+// mueve el saldo: queda pendiente hasta que un admin la confirma desde el CRM
+// (ver PaymentDeclaration en el CRM). El cliente solo ve el estado.
+
+export type PaymentDeclarationStatus = 'PENDING' | 'CONFIRMED' | 'REJECTED'
+
+export interface PaymentDeclaration {
+  id: string
+  saleId: string
+  saleNumber: number
+  amount: number
+  method: string
+  reference: string | null
+  notes: string | null
+  status: PaymentDeclarationStatus
+  hasReceipt: boolean
+  rejectionReason: string | null
+  createdAt: string
+}
+
+export function getPaymentDeclarations(contactId: string) {
+  return callCrmApi<PaymentDeclaration[]>(
+    `/api/portal/v1/contacts/${encodeURIComponent(contactId)}/payment-declarations`,
+    SESSION()
+  )
+}
+
+export interface DeclarePaymentInput {
+  saleId: string
+  amount: number
+  method: 'TRANSFER' | 'CASH' | 'OTHER'
+  reference?: string
+  notes?: string
+  /** Base64 SIN el prefijo `data:`. */
+  receipt?: string
+  receiptMimeType?: 'image/png' | 'image/jpeg' | 'image/webp' | 'application/pdf'
+}
+
+export function declarePayment(contactId: string, input: DeclarePaymentInput) {
+  return callCrmApi<PaymentDeclaration>(
+    `/api/portal/v1/contacts/${encodeURIComponent(contactId)}/payment-declarations`,
+    { method: 'POST', ...SESSION(), body: input }
+  )
+}
