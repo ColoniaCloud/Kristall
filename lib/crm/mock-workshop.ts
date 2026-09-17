@@ -227,6 +227,7 @@ interface MockSettings {
   worksForDealers: boolean
   description: string | null
   pageTheme: 'BLANCO' | 'GRIS_CLARO' | 'GRIS_OSCURO' | 'NEGRO'
+  accentColor: 'AZUL' | 'VERDE' | 'VIOLETA' | 'ROJO' | 'NARANJA' | 'ROSA'
   socialInstagram: string | null
   socialFacebook: string | null
   socialTiktok: string | null
@@ -352,6 +353,7 @@ const store: MockStore = (g.__workshopMock ??= {
     worksForDealers: false,
     description: null,
     pageTheme: 'BLANCO',
+    accentColor: 'AZUL',
     socialInstagram: null,
     socialFacebook: null,
     socialTiktok: null,

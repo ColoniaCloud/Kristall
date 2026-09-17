@@ -47,6 +47,9 @@ export async function PATCH(request: NextRequest) {
   if (['BLANCO', 'GRIS_CLARO', 'GRIS_OSCURO', 'NEGRO'].includes(body.pageTheme)) {
     patch.pageTheme = body.pageTheme
   }
+  if (['AZUL', 'VERDE', 'VIOLETA', 'ROJO', 'NARANJA', 'ROSA'].includes(body.accentColor)) {
+    patch.accentColor = body.accentColor
+  }
   for (const k of ['socialInstagram', 'socialFacebook', 'socialTiktok', 'socialGoogle'] as const) {
     if (body[k] !== undefined) patch[k] = body[k]?.trim() || null
   }

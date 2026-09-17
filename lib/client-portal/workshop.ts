@@ -485,6 +485,8 @@ export interface WorkshopSettings {
   description: string | null
   /** Preset de color de la página pública. Las paletas viven en polarizar. */
   pageTheme: 'BLANCO' | 'GRIS_CLARO' | 'GRIS_OSCURO' | 'NEGRO'
+  /** Preset de color de acento. Los valores hex viven en polarizar. */
+  accentColor: 'AZUL' | 'VERDE' | 'VIOLETA' | 'ROJO' | 'NARANJA' | 'ROSA'
   /** Redes sociales. `null` = no la completó, no se muestra en la página. */
   socialInstagram: string | null
   socialFacebook: string | null
@@ -523,6 +525,7 @@ export interface WorkshopSettingsInput {
   heroImageMimeType?: 'image/png' | 'image/jpeg' | 'image/webp' | null
   description?: string | null
   pageTheme?: 'BLANCO' | 'GRIS_CLARO' | 'GRIS_OSCURO' | 'NEGRO'
+  accentColor?: 'AZUL' | 'VERDE' | 'VIOLETA' | 'ROJO' | 'NARANJA' | 'ROSA'
   socialInstagram?: string | null
   socialFacebook?: string | null
   socialTiktok?: string | null

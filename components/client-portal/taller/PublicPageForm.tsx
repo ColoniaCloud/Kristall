@@ -135,6 +135,7 @@ export default function PublicPageForm({
     doesArchitectural: settings.doesArchitectural,
   })
   const [tema, setTema] = useState(settings.pageTheme)
+  const [acento, setAcento] = useState(settings.accentColor)
 
   /**
    * El rubro cambia la FORMA de la página, no un texto.
@@ -172,6 +173,11 @@ export default function PublicPageForm({
   function cambiarTema(v: typeof tema) {
     setTema(v)
     guardar({ pageTheme: v }, 'Listo, así se va a ver el fondo de tu página')
+  }
+
+  function cambiarAcento(v: typeof acento) {
+    setAcento(v)
+    guardar({ accentColor: v }, 'Listo, así se van a ver los botones de tu página')
   }
 
   // El handle guardado es el que ya es suyo: no tiene sentido consultarlo.
@@ -369,6 +375,44 @@ export default function PublicPageForm({
             >
               <span className="font-medium">{o.t}</span>
             </button>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset className="flex flex-col gap-2 border-b border-border pb-5">
+        <legend className="sr-only">Color de acento de tu página</legend>
+        <p className="text-sm font-medium">Color de acento</p>
+        <p className="text-xs text-muted-foreground">
+          Es el color de los botones y los links de tu página — como el que arma el turno.
+        </p>
+        <div className="mt-1 flex flex-wrap gap-2">
+          {(
+            [
+              { v: 'AZUL' as const, t: 'Azul', hex: '#0284c7' },
+              { v: 'VERDE' as const, t: 'Verde', hex: '#059669' },
+              { v: 'VIOLETA' as const, t: 'Violeta', hex: '#7c3aed' },
+              { v: 'ROJO' as const, t: 'Rojo', hex: '#dc2626' },
+              { v: 'NARANJA' as const, t: 'Naranja', hex: '#ea580c' },
+              { v: 'ROSA' as const, t: 'Rosa', hex: '#db2777' },
+            ]
+          ).map((o) => (
+            <button
+              key={o.v}
+              type="button"
+              aria-pressed={acento === o.v}
+              aria-label={o.t}
+              title={o.t}
+              disabled={guardando}
+              onClick={() => cambiarAcento(o.v)}
+              className={`size-9 rounded-full border-2 transition-all ${
+                acento === o.v ? 'ring-2 ring-offset-2 ring-offset-background' : 'border-transparent'
+              }`}
+              style={{
+                backgroundColor: o.hex,
+                borderColor: acento === o.v ? o.hex : 'transparent',
+                ...(acento === o.v ? ({ '--tw-ring-color': o.hex } as React.CSSProperties) : {}),
+              }}
+            />
           ))}
         </div>
       </fieldset>
