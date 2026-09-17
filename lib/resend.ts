@@ -1,4 +1,5 @@
 import { Resend } from 'resend'
+import { renderActivarGarantia } from '@/lib/mail/garantia-activar'
 
 function escapeHtml(value: string): string {
   return value
@@ -82,30 +83,26 @@ export async function sendLeadConfirmation(lead: {
 export async function sendWarrantyActivationEmail(params: {
   to: string
   recipientName?: string
-  installerCompany: string
+  taller: { nombre: string; logoUrl: string | null }
   installationCode: string
   productName: string
   activationLink: string
 }) {
   const resend = getResendClient()
-  const { to, recipientName, installerCompany, installationCode, productName, activationLink } = params
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://kristallfilm.com').replace(/\/$/, '')
+  // El logo blanco lo sirve el CRM, igual que el del taller: es el servidor de
+  // imágenes de todo lo que sale con la marca hacia el cliente final.
+  const crmUrl = (process.env.CRM_BASE_URL || 'https://kri.kristallfilm.com').replace(/\/$/, '')
 
-  // El subject viaja como header, no como HTML: escaparlo mostraría entidades
-  // (&amp;) al cliente. Lo único que hay que sacarle son los saltos de línea.
-  const safeProductName = productName.replace(/[\r\n]+/g, ' ').trim()
-  const link = escapeHtml(activationLink)
-
-  await resend.emails.send({
-    from: process.env.EMAIL_FROM!,
-    to,
-    subject: `Tu garantía Kristall Film — ${safeProductName}`,
-    html: `
-      <h2>Hola${recipientName ? ` ${escapeHtml(recipientName)}` : ''},</h2>
-      <p>${escapeHtml(installerCompany)} te entregó un producto Kristall Film (${escapeHtml(productName)}) con garantía. Usá este link para activarla o consultar su estado:</p>
-      <p><a href="${link}">${link}</a></p>
-      <p>Tu clave de garantía es: <strong>${escapeHtml(installationCode)}</strong></p>
-      <br/>
-      <p style="color:#9A9A9A;font-size:12px">Kristall Film — Tecnología alemana de precisión</p>
-    `,
+  const { subject, html } = renderActivarGarantia({
+    nombreCliente: params.recipientName ?? null,
+    taller: params.taller,
+    installationCode: params.installationCode,
+    producto: params.productName,
+    activationLink: params.activationLink,
+    accederLink: `${siteUrl}/garantia/acceder`,
+    logoKristallUrl: `${crmUrl}/logo-blanco.png`,
   })
+
+  await resend.emails.send({ from: process.env.EMAIL_FROM!, to: params.to, subject, html })
 }

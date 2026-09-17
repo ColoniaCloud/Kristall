@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getClientSession, levelOf } from '@/lib/client-portal/session'
 import { getInstallations } from '@/lib/client-portal/api'
+import { getWorkshopSettings } from '@/lib/client-portal/workshop'
 import { crmErrorResponse } from '@/lib/crm/api'
+import { crmAssetUrl } from '@/lib/warranty/api'
 import { checkRateLimit, clientIp } from '@/lib/rate-limit'
 import { sendWarrantyActivationEmail } from '@/lib/resend'
 
@@ -71,14 +73,30 @@ export async function POST(request: NextRequest) {
   // encodeURIComponent además del regex: el token no puede escaparse del path.
   const activationLink = `${siteUrl}/garantia/${encodeURIComponent(activationToken)}`
 
+  // El taller firma el mail con el nombre y el logo que cargó en Mi Taller.
+  // Sin configuración —o si el CRM no contesta— se firma con la razón social
+  // del Cliente: el mail dice quién le instaló la lámina y no puede quedar en
+  // blanco, y un logo que falta no puede frenar el envío.
+  let taller: { nombre: string; logoUrl: string | null } = {
+    nombre: session.company ?? session.name,
+    logoUrl: null,
+  }
+  try {
+    const settings = await getWorkshopSettings(session.contactId)
+    taller = {
+      nombre: settings.workshopName?.trim() || taller.nombre,
+      logoUrl: crmAssetUrl(settings.logoUrl),
+    }
+  } catch (err) {
+    console.warn('[API/portal/installations/send-email] sin configuración del taller, se firma con la razón social', err)
+  }
+
   try {
     await sendWarrantyActivationEmail({
       to,
       recipientName:
         typeof recipientName === 'string' ? recipientName.slice(0, MAX_RECIPIENT_NAME) : undefined,
-      // Sin razón social se firma con el nombre del Cliente: el mail al usuario
-      // final dice quién le instaló la lámina y no puede quedar en blanco.
-      installerCompany: session.company ?? session.name,
+      taller,
       // Del CRM, no del body.
       installationCode: installation.installationCode,
       productName: installation.roll.product.name,
