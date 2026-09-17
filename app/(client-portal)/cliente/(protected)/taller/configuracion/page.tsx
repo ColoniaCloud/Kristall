@@ -2,9 +2,10 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { getClientSession } from '@/lib/client-portal/session'
 import { loadPortalData } from '@/lib/client-portal/guard'
-import { getWorkshopSettings, listWorkshopServices } from '@/lib/client-portal/workshop'
+import { getWorkshopSettings, listWorkshopServices, listWorkshopPhotos } from '@/lib/client-portal/workshop'
 import WorkshopSettingsForm from '@/components/client-portal/taller/WorkshopSettingsForm'
 import PublicPageForm from '@/components/client-portal/taller/PublicPageForm'
+import PhotoAlbumForm from '@/components/client-portal/taller/PhotoAlbumForm'
 import ServicesForm from '@/components/client-portal/taller/ServicesForm'
 import Recorrido from '@/components/client-portal/Recorrido'
 
@@ -16,9 +17,10 @@ export default async function ConfiguracionPage() {
 
   // En paralelo: son dos llamadas independientes al CRM y encadenarlas
   // duplicaría el tiempo de carga de la pantalla.
-  const [settings, services] = await Promise.all([
+  const [settings, services, photos] = await Promise.all([
     loadPortalData(() => getWorkshopSettings(session.contactId)),
     loadPortalData(() => listWorkshopServices(session.contactId)),
+    loadPortalData(() => listWorkshopPhotos(session.contactId)),
   ])
 
   // El CRM devuelve la ruta relativa del logo; el navegador tiene que pedirla
@@ -26,6 +28,7 @@ export default async function ConfiguracionPage() {
   // la URL del CRM en el bundle del cliente más de lo necesario.
   const crm = (process.env.CRM_BASE_URL ?? '').replace(/\/$/, '')
   const logoSrc = settings.logoUrl ? `${crm}${settings.logoUrl}` : null
+  const heroSrc = settings.heroUrl ? `${crm}${settings.heroUrl}` : null
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
@@ -40,7 +43,8 @@ export default async function ConfiguracionPage() {
       {/* En demostración la página pública vive bajo /demo/, que es el espacio
           que habla con la base de prueba. Sin esto el link lleva a la ruta real,
           donde el handle no existe. */}
-      <PublicPageForm settings={settings} demo={Boolean(session.demo)} />
+      <PublicPageForm settings={settings} heroSrc={heroSrc} demo={Boolean(session.demo)} />
+      <PhotoAlbumForm photos={photos} />
       {/* El selector de rubro por servicio solo aparece si el taller marco los
           dos: a quien hace una sola cosa no se le pregunta lo que ya contesto. */}
       <ServicesForm

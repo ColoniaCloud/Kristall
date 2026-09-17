@@ -212,6 +212,9 @@ interface MockSettings {
   logoMimeType: string | null
   logoSlug: string | null
   logoBackground: 'CLARO' | 'OSCURO'
+  heroImage: string | null
+  heroImageMimeType: string | null
+  heroSlug: string | null
   handle: string | null
   publicPageEnabled: boolean
   publicAddress: string | null
@@ -222,6 +225,17 @@ interface MockSettings {
   worksAtShop: boolean
   worksOnSite: boolean
   worksForDealers: boolean
+  description: string | null
+  pageTheme: 'BLANCO' | 'GRIS_CLARO' | 'GRIS_OSCURO' | 'NEGRO'
+  socialInstagram: string | null
+  socialFacebook: string | null
+  socialTiktok: string | null
+  socialGoogle: string | null
+}
+
+interface MockPhoto {
+  id: string
+  sortOrder: number
 }
 
 interface MockStore {
@@ -233,6 +247,7 @@ interface MockStore {
   servicios: MockServicio[]
   bookings: MockBooking[]
   settings: MockSettings
+  photos: MockPhoto[]
   /** Handles que ya tomó "otro taller", para poder probar el choque. */
   handlesAjenos: string[]
 }
@@ -322,6 +337,9 @@ const store: MockStore = (g.__workshopMock ??= {
     logoMimeType: null,
     logoSlug: null,
     logoBackground: 'CLARO',
+    heroImage: null,
+    heroImageMimeType: null,
+    heroSlug: null,
     handle: null,
     publicPageEnabled: false,
     publicAddress: null,
@@ -332,7 +350,14 @@ const store: MockStore = (g.__workshopMock ??= {
     worksAtShop: true,
     worksOnSite: false,
     worksForDealers: false,
+    description: null,
+    pageTheme: 'BLANCO',
+    socialInstagram: null,
+    socialFacebook: null,
+    socialTiktok: null,
+    socialGoogle: null,
   },
+  photos: [],
   // Para poder ver el estado "ocupado" sin tener dos cuentas.
   handlesAjenos: ['tallercarlos', 'polarizados-sur'],
   bookings: [
@@ -368,7 +393,7 @@ const store: MockStore = (g.__workshopMock ??= {
   ],
 })
 
-const { clientes, assets, ordenes } = store
+const { clientes, assets, ordenes, photos } = store
 const nuevoId = (p: string) => `${p}-mock-nuevo-${++store.secuencia}`
 
 // ─── Proyecciones ────────────────────────────────────────────────────────────
@@ -769,13 +794,15 @@ export function getWorkshopMock(path: string, method: string, body: unknown): Re
   // ─── Configuración, servicios y handle ────────────────────────────────────
 
   if (ruta === '/settings' && method === 'GET') {
-    const { logo, logoSlug, ...resto } = store.settings
+    const { logo, logoSlug, heroImage, heroSlug, ...resto } = store.settings
     return {
       status: 200,
       data: {
         ...resto,
         tieneLogo: Boolean(logo),
         logoUrl: logo && logoSlug ? `/api/public/workshop/logo/${logoSlug}` : null,
+        tieneHero: Boolean(heroImage),
+        heroUrl: heroImage && heroSlug ? `/api/public/workshop/hero/${heroSlug}` : null,
       },
     }
   }
@@ -795,6 +822,8 @@ export function getWorkshopMock(path: string, method: string, body: unknown): Re
     Object.assign(store.settings, p)
     if (p.logo && !store.settings.logoSlug) store.settings.logoSlug = 'mocklogoslug'
     if (p.logo === null) { store.settings.logoMimeType = null; store.settings.logoSlug = null }
+    if (p.heroImage && !store.settings.heroSlug) store.settings.heroSlug = 'mockheroslug'
+    if (p.heroImage === null) { store.settings.heroImageMimeType = null; store.settings.heroSlug = null }
     return {
       status: 200,
       data: {
@@ -803,9 +832,59 @@ export function getWorkshopMock(path: string, method: string, body: unknown): Re
         logoUrl: store.settings.logo && store.settings.logoSlug
           ? `/api/public/workshop/logo/${store.settings.logoSlug}`
           : null,
+        tieneHero: Boolean(store.settings.heroImage),
+        heroUrl: store.settings.heroImage && store.settings.heroSlug
+          ? `/api/public/workshop/hero/${store.settings.heroSlug}`
+          : null,
         handle: store.settings.handle,
         publicPageEnabled: store.settings.publicPageEnabled,
       },
+    }
+  }
+
+  const MAX_FOTOS = 12
+  const gallerySlug = 'mockgalleryslug'
+
+  if (ruta === '/photos' && method === 'GET') {
+    return {
+      status: 200,
+      data: [...photos]
+        .sort((a, b2) => a.sortOrder - b2.sortOrder)
+        .map((f) => ({ id: f.id, url: `/api/public/workshop/gallery/${gallerySlug}/${f.id}` })),
+    }
+  }
+
+  if (ruta === '/photos' && method === 'POST') {
+    if (photos.length >= MAX_FOTOS) {
+      return { status: 400, data: { error: `Máximo ${MAX_FOTOS} fotos. Borrá alguna para subir otra.` } }
+    }
+    const ultima = Math.max(-1, ...photos.map((f) => f.sortOrder))
+    const nueva: MockPhoto = { id: nuevoId('clf'), sortOrder: ultima + 1 }
+    photos.push(nueva)
+    return { status: 201, data: { id: nueva.id } }
+  }
+
+  r = ruta.match(/^\/photos\/([^/]+)$/)
+  if (r) {
+    const foto = photos.find((f) => f.id === r![1])
+    if (!foto) return noEncontrado('Foto')
+    if (method === 'PATCH') {
+      const ordenadas = [...photos].sort((a, b2) => a.sortOrder - b2.sortOrder)
+      const i = ordenadas.findIndex((f) => f.id === foto.id)
+      const j = (b as { direccion?: string }).direccion === 'arriba' ? i - 1 : i + 1
+      if (j >= 0 && j < ordenadas.length) {
+        const tmp = ordenadas[i].sortOrder
+        ordenadas[i].sortOrder = ordenadas[j].sortOrder
+        ordenadas[j].sortOrder = tmp
+      }
+      return { status: 200, data: { ok: true } }
+    }
+    if (method === 'DELETE') {
+      // `splice` en el mismo array y no reasignar `store.photos`: `photos`
+      // es un alias tomado al cargar el módulo, y reasignar el campo del
+      // store dejaría a ese alias apuntando al array viejo.
+      photos.splice(photos.indexOf(foto), 1)
+      return { status: 200, data: { ok: true } }
     }
   }
 

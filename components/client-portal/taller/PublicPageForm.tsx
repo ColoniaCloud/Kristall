@@ -1,12 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Loader2, Check, X, ExternalLink } from 'lucide-react'
+import { Loader2, Check, X, ExternalLink, Upload, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import CopyableCode from '@/components/client-portal/CopyableCode'
 import type { WorkshopSettings } from '@/lib/client-portal/workshop'
 
@@ -35,23 +36,94 @@ type Estado =
 /** La respuesta del servidor, atada al handle que se preguntó. */
 type Respuesta = { handle: string; disponible: boolean; motivo: string | null }
 
+const TIPOS_HERO = ['image/png', 'image/jpeg', 'image/webp']
+/**
+ * Lado máximo de la foto del hero. Mucho más grande que el logo (400px): acá
+ * el detalle importa, es la imagen principal de la página, y ocupa todo el
+ * ancho de la pantalla en desktop.
+ */
+const HERO_LADO_MAX = 1600
+
+/**
+ * Redimensiona y recomprime en el navegador. Devuelve un data URI.
+ *
+ * JPEG y no PNG, a diferencia del logo: esto es una foto de un trabajo, no un
+ * logo con fondo transparente, y JPEG pesa una fracción para el mismo detalle
+ * — mismo criterio que `achicarFoto` en el formulario público de turnos.
+ */
+async function achicarHero(file: File): Promise<string> {
+  const bitmap = await createImageBitmap(file)
+  const escala = Math.min(1, HERO_LADO_MAX / Math.max(bitmap.width, bitmap.height))
+  const w = Math.round(bitmap.width * escala)
+  const h = Math.round(bitmap.height * escala)
+
+  const canvas = document.createElement('canvas')
+  canvas.width = w
+  canvas.height = h
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('No se pudo procesar la imagen')
+  ctx.drawImage(bitmap, 0, 0, w, h)
+
+  return canvas.toDataURL('image/jpeg', 0.82)
+}
+
+/**
+ * Ejemplo visual de cómo queda el hero, chico y estático — no pide ninguna
+ * imagen real. Reproduce en miniatura la estructura de `HeroTaller.tsx` en
+ * polarizar: una franja de degradé oscuro a la izquierda con el nombre y la
+ * descripción encima, casi transparente a la derecha. Mismo lenguaje visual
+ * que el hero de verdad para que no haga falta imaginarlo.
+ */
+function EjemploHero() {
+  return (
+    <div className="overflow-hidden rounded-lg border border-border">
+      <div className="relative h-28 w-full bg-gradient-to-br from-sky-900 via-slate-700 to-slate-500 sm:h-32">
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+        <div className="relative flex h-full w-[42%] flex-col justify-center gap-1.5 px-4">
+          <div className="h-2.5 w-24 rounded-full bg-white/90 sm:w-28" />
+          <div className="h-1.5 w-16 rounded-full bg-white/60 sm:w-20" />
+        </div>
+      </div>
+      <p className="border-t border-border bg-muted/40 px-3 py-1.5 text-center text-xs text-muted-foreground">
+        Así se va a ver
+      </p>
+    </div>
+  )
+}
+
 export default function PublicPageForm({
   settings,
+  heroSrc,
   demo = false,
 }: {
   settings: WorkshopSettings
+  /**
+   * Ruta ya resuelta hacia la foto del hero actual, si hay — mismo criterio
+   * que `logoSrc` en `WorkshopSettingsForm`: `settings.heroUrl` es relativa al
+   * CRM, y se arma la URL completa en la página para no repartir
+   * `CRM_BASE_URL` en el bundle del cliente más de lo necesario.
+   */
+  heroSrc: string | null
   /** En demostración la página pública cuelga de `/demo/`, no de la raíz. */
   demo?: boolean
 }) {
   const router = useRouter()
+  const inputHero = useRef<HTMLInputElement>(null)
   const [handle, setHandle] = useState(settings.handle ?? '')
   const [respuesta, setRespuesta] = useState<Respuesta | null>(null)
   const [sugerencias, setSugerencias] = useState<string[]>([])
   const [guardando, setGuardando] = useState(false)
+  const [subiendoHero, setSubiendoHero] = useState(false)
+  const [heroPreview, setHeroPreview] = useState<string | null>(heroSrc)
   const [form, setForm] = useState({
     publicAddress: settings.publicAddress ?? '',
     publicPhone: settings.publicPhone ?? '',
     publicEmail: settings.publicEmail ?? '',
+    description: settings.description ?? '',
+    socialInstagram: settings.socialInstagram ?? '',
+    socialFacebook: settings.socialFacebook ?? '',
+    socialTiktok: settings.socialTiktok ?? '',
+    socialGoogle: settings.socialGoogle ?? '',
   })
   const [modos, setModos] = useState({
     worksAtShop: settings.worksAtShop,
@@ -62,6 +134,7 @@ export default function PublicPageForm({
     doesAutomotive: settings.doesAutomotive,
     doesArchitectural: settings.doesArchitectural,
   })
+  const [tema, setTema] = useState(settings.pageTheme)
 
   /**
    * El rubro cambia la FORMA de la página, no un texto.
@@ -94,6 +167,11 @@ export default function PublicPageForm({
     const proximo = { ...modos, [k]: v }
     setModos(proximo)
     guardar({ [k]: v }, 'Listo, así se va a ver tu página')
+  }
+
+  function cambiarTema(v: typeof tema) {
+    setTema(v)
+    guardar({ pageTheme: v }, 'Listo, así se va a ver el fondo de tu página')
   }
 
   // El handle guardado es el que ya es suyo: no tiene sentido consultarlo.
@@ -167,6 +245,35 @@ export default function PublicPageForm({
     }
   }
 
+  async function elegirHero(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    if (!TIPOS_HERO.includes(file.type)) {
+      toast.error('Tiene que ser PNG, JPG o WEBP')
+      return
+    }
+    setSubiendoHero(true)
+    try {
+      const dataUri = await achicarHero(file)
+      // `achicarHero` siempre recomprime a JPEG, sea cual sea el tipo original.
+      const ok = await guardar(
+        { heroImage: dataUri, heroImageMimeType: 'image/jpeg' },
+        'Foto del hero actualizada'
+      )
+      if (ok) setHeroPreview(dataUri)
+    } catch {
+      toast.error('No pudimos procesar esa imagen. Probá con otra.')
+    } finally {
+      setSubiendoHero(false)
+    }
+  }
+
+  async function quitarHero() {
+    const ok = await guardar({ heroImage: null }, 'Foto del hero quitada')
+    if (ok) setHeroPreview(null)
+  }
+
   // El mismo prefijo que usa el CRM para sus rutas espejo. Va acá y no solo en
   // el link de "Verla" porque la dirección también se muestra para copiar, y
   // una dirección que no se puede pegar en el navegador no sirve de nada.
@@ -181,6 +288,90 @@ export default function PublicPageForm({
           Una página con tu logo y tus servicios, donde tus clientes te piden turno.
         </p>
       </div>
+
+      <div className="flex flex-col gap-3 border-b border-border pb-5">
+        <div>
+          <p className="text-sm font-medium">Foto de portada</p>
+          <p className="text-xs text-muted-foreground">
+            Aparece de fondo, a todo el ancho, arriba de tu página. Elegí una buena foto
+            horizontal de un trabajo que hayas hecho — es lo primero que ve quien entra.
+          </p>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2 sm:items-start">
+          <EjemploHero />
+
+          <div className="flex flex-col gap-2">
+            {heroPreview ? (
+              <div className="overflow-hidden rounded-lg border border-border">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={heroPreview} alt="Foto de portada" className="h-28 w-full object-cover sm:h-32" />
+              </div>
+            ) : (
+              <div className="flex h-28 items-center justify-center rounded-lg border border-dashed border-border bg-muted/30 text-xs text-muted-foreground sm:h-32">
+                Todavía no subiste ninguna
+              </div>
+            )}
+            <input
+              ref={inputHero}
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              className="hidden"
+              onChange={elegirHero}
+            />
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={subiendoHero}
+                onClick={() => inputHero.current?.click()}
+              >
+                {subiendoHero ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />}
+                {heroPreview ? 'Cambiar foto' : 'Subir foto'}
+              </Button>
+              {heroPreview && (
+                <Button type="button" variant="ghost" size="sm" onClick={quitarHero}>
+                  <Trash2 className="size-4" />
+                  Quitar
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <fieldset className="flex flex-col gap-2 border-b border-border pb-5">
+        <legend className="sr-only">Color de fondo de tu página</legend>
+        <p className="text-sm font-medium">Color de fondo de tu página</p>
+        <p className="text-xs text-muted-foreground">
+          Con un fondo oscuro el texto se ve casi blanco; con uno claro, casi negro — se ajusta
+          solo para que siempre se pueda leer.
+        </p>
+        <div className="mt-1 flex flex-wrap gap-2">
+          {(
+            [
+              { v: 'BLANCO' as const, t: 'Blanco', muestra: 'bg-white text-neutral-900 border-border' },
+              { v: 'GRIS_CLARO' as const, t: 'Gris claro', muestra: 'bg-neutral-200 text-neutral-900 border-neutral-300' },
+              { v: 'GRIS_OSCURO' as const, t: 'Gris oscuro', muestra: 'bg-neutral-800 text-white border-neutral-700' },
+              { v: 'NEGRO' as const, t: 'Negro', muestra: 'bg-black text-white border-neutral-800' },
+            ]
+          ).map((o) => (
+            <button
+              key={o.v}
+              type="button"
+              aria-pressed={tema === o.v}
+              disabled={guardando}
+              onClick={() => cambiarTema(o.v)}
+              className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-all ${o.muestra} ${
+                tema === o.v ? 'ring-2 ring-sky-500 ring-offset-1 ring-offset-background' : ''
+              }`}
+            >
+              <span className="font-medium">{o.t}</span>
+            </button>
+          ))}
+        </div>
+      </fieldset>
 
       <div data-tour="handle" className="flex flex-col gap-1.5">
         <Label htmlFor="handle">Nombre de usuario</Label>
@@ -279,6 +470,49 @@ export default function PublicPageForm({
           <p className="text-xs text-muted-foreground">
             No es el de tu cuenta: es el de atención al público.
           </p>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="description">Descripción breve</Label>
+        <Textarea
+          id="description"
+          value={form.description}
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          rows={2}
+          maxLength={280}
+          placeholder="Ej: más de 15 años polarizando autos y vidrieras en Villa del Parque."
+        />
+        <p className="text-xs text-muted-foreground">
+          Se muestra en tu página, junto a tu nombre. {form.description.length}/280.
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-2 border-t border-border pt-4">
+        <p className="text-sm font-medium">Redes sociales</p>
+        <p className="text-xs text-muted-foreground">
+          Completá el link de las que uses — las que dejes vacías no se muestran en tu página.
+        </p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {(
+            [
+              { k: 'socialInstagram' as const, t: 'Instagram', p: 'https://instagram.com/tutaller' },
+              { k: 'socialFacebook' as const, t: 'Facebook', p: 'https://facebook.com/tutaller' },
+              { k: 'socialTiktok' as const, t: 'TikTok', p: 'https://tiktok.com/@tutaller' },
+              { k: 'socialGoogle' as const, t: 'Google (Maps o Negocio)', p: 'https://g.page/tutaller' },
+            ]
+          ).map((o) => (
+            <div key={o.k} className="flex flex-col gap-1.5">
+              <Label htmlFor={o.k}>{o.t}</Label>
+              <Input
+                id={o.k}
+                type="url"
+                value={form[o.k]}
+                onChange={(e) => setForm({ ...form, [o.k]: e.target.value })}
+                placeholder={o.p}
+              />
+            </div>
+          ))}
         </div>
       </div>
 

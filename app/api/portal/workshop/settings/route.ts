@@ -43,6 +43,13 @@ export async function PATCH(request: NextRequest) {
   if (body.logoBackground === 'CLARO' || body.logoBackground === 'OSCURO') {
     patch.logoBackground = body.logoBackground
   }
+  if (body.description !== undefined) patch.description = body.description?.trim() || null
+  if (['BLANCO', 'GRIS_CLARO', 'GRIS_OSCURO', 'NEGRO'].includes(body.pageTheme)) {
+    patch.pageTheme = body.pageTheme
+  }
+  for (const k of ['socialInstagram', 'socialFacebook', 'socialTiktok', 'socialGoogle'] as const) {
+    if (body[k] !== undefined) patch[k] = body[k]?.trim() || null
+  }
   // Cómo trabaja y sobre qué trabaja. La regla de «al menos uno» de cada grupo
   // la aplica el CRM, que es el que ve el estado guardado: acá llega un campo
   // por vez —son checkboxes que guardan al tocarse— y validarlo contra el body
@@ -78,6 +85,21 @@ export async function PATCH(request: NextRequest) {
     }
     patch.logoMimeType = m[1] as Mime
     patch.logo = m[2]
+  }
+
+  if (body.heroImage === null) {
+    patch.heroImage = null
+    patch.heroImageMimeType = null
+  } else if (typeof body.heroImage === 'string' && body.heroImage.length > 0) {
+    const m = /^data:(image\/(?:png|jpeg|webp));base64,(.+)$/.exec(body.heroImage)
+    if (!m) {
+      return NextResponse.json(
+        { error: 'La foto del hero tiene que ser un PNG, JPG o WEBP' },
+        { status: 400 }
+      )
+    }
+    patch.heroImageMimeType = m[1] as Mime
+    patch.heroImage = m[2]
   }
 
   if (Object.keys(patch).length === 0) {

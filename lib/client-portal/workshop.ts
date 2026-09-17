@@ -477,6 +477,19 @@ export interface WorkshopSettings {
   /** El logo nunca viaja en base64 por acá: solo si hay y de dónde servirlo. */
   tieneLogo: boolean
   logoUrl: string | null
+  heroImageMimeType?: string | null
+  /** La foto del hero nunca viaja en base64 por acá, igual que el logo. */
+  tieneHero: boolean
+  heroUrl: string | null
+  /** Bajada corta para la página pública. `null` = no completó nada. */
+  description: string | null
+  /** Preset de color de la página pública. Las paletas viven en polarizar. */
+  pageTheme: 'BLANCO' | 'GRIS_CLARO' | 'GRIS_OSCURO' | 'NEGRO'
+  /** Redes sociales. `null` = no la completó, no se muestra en la página. */
+  socialInstagram: string | null
+  socialFacebook: string | null
+  socialTiktok: string | null
+  socialGoogle: string | null
 }
 
 export function getWorkshopSettings(contactId: string) {
@@ -505,6 +518,15 @@ export interface WorkshopSettingsInput {
   logo?: string | null
   logoMimeType?: 'image/png' | 'image/jpeg' | 'image/webp' | null
   logoBackground?: 'CLARO' | 'OSCURO'
+  /** Base64 **sin** el prefijo `data:`. `null` borra la foto del hero. */
+  heroImage?: string | null
+  heroImageMimeType?: 'image/png' | 'image/jpeg' | 'image/webp' | null
+  description?: string | null
+  pageTheme?: 'BLANCO' | 'GRIS_CLARO' | 'GRIS_OSCURO' | 'NEGRO'
+  socialInstagram?: string | null
+  socialFacebook?: string | null
+  socialTiktok?: string | null
+  socialGoogle?: string | null
 }
 
 export function updateWorkshopSettings(contactId: string, input: WorkshopSettingsInput) {
@@ -512,6 +534,8 @@ export function updateWorkshopSettings(contactId: string, input: WorkshopSetting
     ok: true
     tieneLogo: boolean
     logoUrl: string | null
+    tieneHero: boolean
+    heroUrl: string | null
     handle: string | null
     publicPageEnabled: boolean
   }>(
@@ -593,6 +617,49 @@ export function updateWorkshopService(
 export function deactivateWorkshopService(contactId: string, serviceId: string) {
   return callCrmApi<{ ok: true }>(
     `${base(contactId)}/services/${encodeURIComponent(serviceId)}`,
+    { method: 'DELETE', ...SESSION() }
+  )
+}
+
+// ─── Álbum de fotos ──────────────────────────────────────────────────────────
+
+export interface WorkshopPhoto {
+  id: string
+  /** URL pública — la misma que ve cualquier visitante de la página. */
+  url: string
+}
+
+export function listWorkshopPhotos(contactId: string) {
+  return callCrmApi<WorkshopPhoto[]>(`${base(contactId)}/photos`, SESSION())
+}
+
+export function createWorkshopPhoto(
+  contactId: string,
+  input: { image: string; imageMimeType: 'image/png' | 'image/jpeg' | 'image/webp' }
+) {
+  return callCrmApi<{ id: string }>(`${base(contactId)}/photos`, {
+    method: 'POST',
+    ...SESSION(),
+    body: input,
+  })
+}
+
+/** Intercambia el lugar de una foto con la de arriba o la de abajo. Sin drag-and-drop. */
+export function reorderWorkshopPhoto(
+  contactId: string,
+  photoId: string,
+  direccion: 'arriba' | 'abajo'
+) {
+  return callCrmApi<{ ok: true }>(
+    `${base(contactId)}/photos/${encodeURIComponent(photoId)}`,
+    { method: 'PATCH', ...SESSION(), body: { direccion } }
+  )
+}
+
+/** A diferencia de un servicio, esto sí borra de verdad. */
+export function deleteWorkshopPhoto(contactId: string, photoId: string) {
+  return callCrmApi<{ ok: true }>(
+    `${base(contactId)}/photos/${encodeURIComponent(photoId)}`,
     { method: 'DELETE', ...SESSION() }
   )
 }
