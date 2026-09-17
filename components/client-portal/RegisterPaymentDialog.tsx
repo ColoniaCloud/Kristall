@@ -173,8 +173,8 @@ export default function RegisterPaymentDialog({ plans }: { plans: AccountPlan[] 
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          <Wallet className="size-4" />
+        <Button size="lg" className="h-11 gap-2 px-5 text-base font-semibold">
+          <Wallet className="size-5" />
           Registrar un pago
         </Button>
       </DialogTrigger>

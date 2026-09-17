@@ -204,7 +204,11 @@ body {
   --destructive: oklch(0.62 0.21 25);
   --destructive-foreground: oklch(0.98 0 0);
   --border: oklch(1 0 0 / 10%);
-  --input: oklch(0.30 0.006 285);
+  /* Contra --card (0.27) esto tiene que leerse como un borde de campo, no
+     como una raya perdida — antes era oklch(0.30 …), a un paso de --card, y
+     el input se veía sin borde. 0.42 da un salto de luminosidad que se nota
+     sin ir a un gris claro que grite. */
+  --input: oklch(0.42 0.006 285);
   --ring: oklch(0.62 0.19 255 / 50%);
   --radius: 0.5rem;
   color-scheme: dark;
