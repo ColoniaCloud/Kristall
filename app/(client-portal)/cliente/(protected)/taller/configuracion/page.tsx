@@ -7,6 +7,7 @@ import WorkshopSettingsForm from '@/components/client-portal/taller/WorkshopSett
 import PublicPageForm from '@/components/client-portal/taller/PublicPageForm'
 import PhotoAlbumForm from '@/components/client-portal/taller/PhotoAlbumForm'
 import ServicesForm from '@/components/client-portal/taller/ServicesForm'
+import ConfiguracionTabs from '@/components/client-portal/taller/ConfiguracionTabs'
 import Recorrido from '@/components/client-portal/Recorrido'
 
 export const metadata: Metadata = { title: 'Configuración del taller' }
@@ -39,22 +40,30 @@ export default async function ConfiguracionPage() {
           Cómo te ven tus clientes en las garantías que generás y en tu página pública.
         </p>
       </div>
-      <WorkshopSettingsForm settings={settings} logoSrc={logoSrc} />
-      {/* En demostración la página pública vive bajo /demo/, que es el espacio
-          que habla con la base de prueba. Sin esto el link lleva a la ruta real,
-          donde el handle no existe. */}
-      <PublicPageForm settings={settings} heroSrc={heroSrc} demo={Boolean(session.demo)} />
-      <PhotoAlbumForm photos={photos} />
-      {/* El selector de rubro por servicio solo aparece si el taller marco los
-          dos: a quien hace una sola cosa no se le pregunta lo que ya contesto. */}
-      <ServicesForm
-        services={services}
-        soloRubro={
-          settings.doesAutomotive && settings.doesArchitectural
-            ? null
-            : settings.doesArchitectural
-              ? 'ARCHITECTURAL'
-              : 'AUTOMOTIVE'
+      <ConfiguracionTabs
+        tabInicial={session.demo ? 'pagina' : 'general'}
+        general={<WorkshopSettingsForm settings={settings} logoSrc={logoSrc} />}
+        pagina={
+          // En demostración la página pública vive bajo /demo/, que es el
+          // espacio que habla con la base de prueba. Sin esto el link lleva a
+          // la ruta real, donde el handle no existe.
+          <PublicPageForm settings={settings} heroSrc={heroSrc} demo={Boolean(session.demo)} />
+        }
+        album={<PhotoAlbumForm photos={photos} />}
+        servicios={
+          // El selector de rubro por servicio solo aparece si el taller marco
+          // los dos: a quien hace una sola cosa no se le pregunta lo que ya
+          // contesto.
+          <ServicesForm
+            services={services}
+            soloRubro={
+              settings.doesAutomotive && settings.doesArchitectural
+                ? null
+                : settings.doesArchitectural
+                  ? 'ARCHITECTURAL'
+                  : 'AUTOMOTIVE'
+            }
+          />
         }
       />
     </div>

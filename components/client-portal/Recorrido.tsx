@@ -42,11 +42,21 @@ export default function Recorrido({
       // se muestra igual. Repetirlo es molesto; no mostrarlo nunca es peor.
     }
 
+    // No alcanza con que el ancla exista en el DOM: desde que Configuración
+    // vive en tabs, un ancla de una tab que no es la activa está en el DOM
+    // pero con `display:none` — y ahí driver.js posiciona el resaltado en
+    // (0,0). `getClientRects().length` es 0 en ese caso, así que cuenta como
+    // "no disponible" y el paso se saltea, igual que un ancla que no existe.
+    const visible = (ancla: string) => {
+      const el = document.querySelector(`[data-tour="${ancla}"]`)
+      return el !== null && el.getClientRects().length > 0
+    }
+
     const pasos = RECORRIDOS[pantalla] ?? []
-    const disponibles = pasos.filter((p) => !p.ancla || document.querySelector(`[data-tour="${p.ancla}"]`))
+    const disponibles = pasos.filter((p) => !p.ancla || visible(p.ancla))
 
     if (process.env.NODE_ENV !== 'production') {
-      const huerfanos = pasos.filter((p) => p.ancla && !document.querySelector(`[data-tour="${p.ancla}"]`))
+      const huerfanos = pasos.filter((p) => p.ancla && !visible(p.ancla))
       if (huerfanos.length) {
         console.warn(
           `[recorrido:${pantalla}] pasos sin ancla en el DOM:`,

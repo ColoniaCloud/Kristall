@@ -3,24 +3,27 @@
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { navItemsFor } from './nav-items'
+import { navItemsFor, type ClientNavItem } from './nav-items'
 import type { AccessLevel } from '@/lib/client-portal/session'
 
 export default function NavLinks({
   level,
   onNavigate,
   collapsed = false,
+  items,
 }: {
   /** Decide qué secciones se muestran. El CRM igual valida el nivel por su cuenta. */
   level: AccessLevel
   onNavigate?: () => void
   collapsed?: boolean
+  /** Para mostrar un subconjunto (el "Más" de la bottom nav) en vez de todo lo del nivel. */
+  items?: readonly ClientNavItem[]
 }) {
   const pathname = usePathname()
 
   return (
     <nav className="flex flex-col gap-1">
-      {navItemsFor(level).map(({ href, label, icon: Icon }) => {
+      {(items ?? navItemsFor(level)).map(({ href, label, icon: Icon }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`)
         return (
           <Link

@@ -4,6 +4,7 @@ import { getClientSession, levelOf } from '@/lib/client-portal/session'
 import BandaDemo from '@/components/client-portal/BandaDemo'
 import Sidebar from '@/components/client-portal/Sidebar'
 import TopBar from '@/components/client-portal/TopBar'
+import BottomNav from '@/components/client-portal/BottomNav'
 import RegisterServiceWorker from '@/components/client-portal/RegisterServiceWorker'
 import { Toaster } from '@/components/ui/sonner'
 
@@ -29,9 +30,12 @@ export default async function ProtectedLayout({ children }: { children: React.Re
         {/* Arriba de todo y en todas las pantallas: alguien le va a sacar una
             captura a esto y mandarla por WhatsApp. */}
         {session.demo && <BandaDemo />}
-        <TopBar session={session} level={level} />
-        <main className="flex-1 p-4 md:p-8">{children}</main>
+        <TopBar session={session} />
+        {/* pb-20 en celular: deja lugar para la bottom nav fija de abajo. En
+            escritorio no hace falta, ahí no existe. */}
+        <main className="flex-1 p-4 pb-20 md:p-8">{children}</main>
       </div>
+      <BottomNav level={level} />
       <RegisterServiceWorker />
       <Toaster position="top-right" />
     </div>
