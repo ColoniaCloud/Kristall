@@ -207,8 +207,8 @@ const MOCK_NOTIFICATIONS = [
  */
 const MOCK_ACCOUNT = {
   summary: {
-    balance: 690000,
-    totalInvoiced: 1450000,
+    balance: 890000,
+    totalInvoiced: 1650000,
     totalPaid: 760000,
     overdueAmount: 120000,
     nextDueDate: '2026-08-15T12:00:00.000Z',
@@ -219,6 +219,9 @@ const MOCK_ACCOUNT = {
     { id: 'cla1', date: '2026-05-10T00:00:00.000Z', type: 'ADJUSTMENT', description: 'Nota de crédito por devolución', debit: 0, credit: 0, balance: -10000 },
     { id: 'clz2', date: '2026-06-01T00:00:00.000Z', type: 'SALE', description: 'Compra #1042', debit: 1150000, credit: 0, balance: 1140000, saleId: 'clz2' },
     { id: 'clp2', date: '2026-06-20T00:00:00.000Z', type: 'PAYMENT', description: 'Pago compra #1042', debit: 0, credit: 450000, balance: 690000, saleId: 'clz2' },
+    // Venta regular sin plan de cuotas, todavía sin cobrar — el caso que antes
+    // no tenía ningún botón de "Registrar pago" (ver PendingSale).
+    { id: 'clz3', date: '2026-07-20T00:00:00.000Z', type: 'SALE', description: 'Compra #1055', debit: 200000, credit: 0, balance: 890000, saleId: 'clz3' },
   ],
   plans: [
     {
@@ -237,6 +240,31 @@ const MOCK_ACCOUNT = {
       ],
       nextDue: { id: 'cli2', number: 2, dueDate: '2026-07-15T12:00:00.000Z', amount: 287500, paid: 162500, remaining: 125000, status: 'OVERDUE' },
       overdueCount: 1,
+    },
+  ],
+  // Ventas REGULAR con saldo, tengan o no plan — ver la nota larga en
+  // PendingSale (lib/client-portal/api.ts). Compra #1042 tiene plan (se
+  // sugiere la próxima cuota); Compra #1055 no tiene ninguno (se sugiere el
+  // saldo total).
+  pendingSales: [
+    {
+      saleId: 'clz2',
+      saleNumber: 1042,
+      total: 1150000,
+      remaining: 700000,
+      createdAt: '2026-06-01T00:00:00.000Z',
+      plan: {
+        nextDue: { id: 'cli2', number: 2, dueDate: '2026-07-15T12:00:00.000Z', amount: 287500, paid: 162500, remaining: 125000, status: 'OVERDUE' },
+        overdueCount: 1,
+      },
+    },
+    {
+      saleId: 'clz3',
+      saleNumber: 1055,
+      total: 200000,
+      remaining: 200000,
+      createdAt: '2026-07-20T00:00:00.000Z',
+      plan: null,
     },
   ],
 }
@@ -477,12 +505,12 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
       receipt?: string
       receiptMimeType?: string
     }
-    const plan = MOCK_ACCOUNT.plans.find((p) => p.saleId === datos.saleId)
-    if (!plan) return { status: 400, data: { error: 'Esta compra no tiene un plan de cuotas vigente.' } }
+    const venta = MOCK_ACCOUNT.pendingSales.find((v) => v.saleId === datos.saleId)
+    if (!venta) return { status: 400, data: { error: 'Esa venta no tiene saldo pendiente.' } }
     const nueva = {
       id: `cldecl-mock-${MOCK_DECLARATIONS.length + 1}`,
-      saleId: plan.saleId,
-      saleNumber: plan.saleNumber,
+      saleId: venta.saleId,
+      saleNumber: venta.saleNumber,
       amount: Number(datos.amount ?? 0),
       method: datos.method ?? 'OTHER',
       reference: datos.reference ?? null,

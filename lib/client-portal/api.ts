@@ -308,6 +308,17 @@ export interface AccountPlan {
   overdueCount: number
 }
 
+export interface PendingSale {
+  saleId: string
+  saleNumber: number
+  total: number
+  remaining: number
+  createdAt: string
+  /** Si esta venta tiene un plan de cuotas activo, el detalle de la próxima
+   *  cuota. `null` = saldo simple, sin plan — se paga el total pendiente. */
+  plan: { nextDue: AccountInstallment | null; overdueCount: number } | null
+}
+
 export interface ClientAccount {
   summary: {
     /** Negativo = saldo a favor del cliente. */
@@ -320,6 +331,9 @@ export interface ClientAccount {
   entries: AccountEntry[]
   /** Vacío si ninguna compra se financió en cuotas — es el caso más común. */
   plans: AccountPlan[]
+  /** Ventas REGULAR con saldo, tengan o no plan — lo que puede recibir una
+   *  declaración de pago desde `RegisterPaymentDialog`. */
+  pendingSales: PendingSale[]
 }
 
 /**

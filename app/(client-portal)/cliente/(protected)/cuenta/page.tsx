@@ -16,8 +16,6 @@ export default async function CuentaPage() {
     loadPortalData(() => getAccount(session.contactId)),
     loadPortalData(() => getPaymentDeclarations(session.contactId)),
   ])
-  const planesConSaldo = account.plans.filter((p) => p.status === 'ACTIVE')
-
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -27,7 +25,7 @@ export default async function CuentaPage() {
             Tus compras, tus pagos y el saldo, movimiento por movimiento.
           </p>
         </div>
-        {planesConSaldo.length > 0 && <RegisterPaymentDialog plans={planesConSaldo} />}
+        {account.pendingSales.length > 0 && <RegisterPaymentDialog pendingSales={account.pendingSales} />}
       </div>
       <AccountStatement account={account} declarations={declarations} />
     </div>

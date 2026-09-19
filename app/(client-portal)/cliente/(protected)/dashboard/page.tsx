@@ -22,9 +22,6 @@ export default async function DashboardPage() {
   ])
 
   const { overdueAmount, nextDueDate } = account.summary
-  // Solo se puede declarar un pago sobre un plan vigente: uno CANCELLED o
-  // COMPLETED no tiene contra qué imputarlo.
-  const planesConSaldo = account.plans.filter((p) => p.status === 'ACTIVE')
 
   return (
     <div className="flex flex-col gap-6">
@@ -35,7 +32,7 @@ export default async function DashboardPage() {
               renglón quedaba vacío debajo del saludo. */}
           {contact.company && <p className="text-sm text-muted-foreground">{contact.company}</p>}
         </div>
-        {planesConSaldo.length > 0 && <RegisterPaymentDialog plans={planesConSaldo} />}
+        {account.pendingSales.length > 0 && <RegisterPaymentDialog pendingSales={account.pendingSales} />}
       </div>
 
       {/* Lo primero que tiene que ver es si hay algo vencido. */}

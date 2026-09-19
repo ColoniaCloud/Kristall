@@ -19,15 +19,25 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { formatCurrency } from '@/lib/format'
-import type { AccountPlan } from '@/lib/client-portal/api'
+import type { PendingSale } from '@/lib/client-portal/api'
 
 /**
- * "Ya pagué esta cuota" — el cliente lo avisa, no lo confirma.
+ * "Ya pagué esto" — el cliente lo avisa, no lo confirma.
  *
  * A propósito NO toca el saldo al enviar: el CRM lo deja pendiente hasta que
  * alguien de Kristall lo revisa. El texto de éxito dice "lo vamos a confirmar",
  * nunca "listo" — para no dar la impresión de que la deuda ya bajó.
+ *
+ * `pendingSales` son ventas REGULAR con saldo, tengan o no un plan de cuotas
+ * armado — antes esto solo aparecía si había un plan, y una venta de
+ * mostrador que tarda en cobrarse (alguien que dice "te transfiero más
+ * tarde") no tenía ningún camino de autoservicio para avisarlo.
  */
+
+/** La próxima cuota si la venta tiene plan; si no, el saldo total. */
+function montoSugerido(venta: PendingSale): string {
+  return String(venta.plan?.nextDue?.remaining ?? venta.remaining)
+}
 
 const TIPOS_IMAGEN = ['image/png', 'image/jpeg', 'image/webp']
 const MAX_IMAGEN_BYTES = 8 * 1024 * 1024
@@ -79,27 +89,27 @@ const METODOS = [
   { value: 'OTHER', label: 'Otro' },
 ] as const
 
-export default function RegisterPaymentDialog({ plans }: { plans: AccountPlan[] }) {
+export default function RegisterPaymentDialog({ pendingSales }: { pendingSales: PendingSale[] }) {
   const router = useRouter()
   const inputFile = useRef<HTMLInputElement>(null)
   const [abierto, setAbierto] = useState(false)
   const [enviando, setEnviando] = useState(false)
   const [procesandoArchivo, setProcesandoArchivo] = useState(false)
-  const [saleId, setSaleId] = useState(plans[0]?.saleId ?? '')
-  const [amount, setAmount] = useState(() => String(plans[0]?.nextDue?.remaining ?? ''))
+  const [saleId, setSaleId] = useState(pendingSales[0]?.saleId ?? '')
+  const [amount, setAmount] = useState(() => (pendingSales[0] ? montoSugerido(pendingSales[0]) : ''))
   const [method, setMethod] = useState<string>('TRANSFER')
   const [reference, setReference] = useState('')
   const [notes, setNotes] = useState('')
   const [comprobante, setComprobante] = useState<{ nombre: string; data: string; mime: string } | null>(null)
 
-  if (plans.length === 0) return null
+  if (pendingSales.length === 0) return null
 
-  const planSeleccionado = plans.find((p) => p.saleId === saleId) ?? plans[0]
+  const ventaSeleccionada = pendingSales.find((v) => v.saleId === saleId) ?? pendingSales[0]
 
   function elegirVenta(id: string) {
     setSaleId(id)
-    const plan = plans.find((p) => p.saleId === id)
-    if (plan?.nextDue) setAmount(String(plan.nextDue.remaining))
+    const venta = pendingSales.find((v) => v.saleId === id)
+    if (venta) setAmount(montoSugerido(venta))
   }
 
   async function elegirArchivo(e: React.ChangeEvent<HTMLInputElement>) {
@@ -118,8 +128,8 @@ export default function RegisterPaymentDialog({ plans }: { plans: AccountPlan[] 
   }
 
   function reset() {
-    setSaleId(plans[0]?.saleId ?? '')
-    setAmount(String(plans[0]?.nextDue?.remaining ?? ''))
+    setSaleId(pendingSales[0]?.saleId ?? '')
+    setAmount(pendingSales[0] ? montoSugerido(pendingSales[0]) : '')
     setMethod('TRANSFER')
     setReference('')
     setNotes('')
@@ -182,13 +192,13 @@ export default function RegisterPaymentDialog({ plans }: { plans: AccountPlan[] 
         <DialogHeader>
           <DialogTitle>Registrar un pago</DialogTitle>
           <DialogDescription>
-            Contanos que ya pagaste una cuota. Lo vamos a revisar y confirmar — todavía no
-            descuenta de tu saldo.
+            Contanos que ya pagaste. Lo vamos a revisar y confirmar — todavía no descuenta de tu
+            saldo.
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={enviar} className="flex flex-col gap-4">
-          {plans.length > 1 ? (
+          {pendingSales.length > 1 ? (
             <div className="flex flex-col gap-1.5">
               <Label>Compra</Label>
               <Select value={saleId} onValueChange={elegirVenta}>
@@ -196,16 +206,16 @@ export default function RegisterPaymentDialog({ plans }: { plans: AccountPlan[] 
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {plans.map((p) => (
-                    <SelectItem key={p.saleId} value={p.saleId}>
-                      Compra #{p.saleNumber}
+                  {pendingSales.map((v) => (
+                    <SelectItem key={v.saleId} value={v.saleId}>
+                      Compra #{v.saleNumber}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">Compra #{planSeleccionado.saleNumber}</p>
+            <p className="text-sm text-muted-foreground">Compra #{ventaSeleccionada.saleNumber}</p>
           )}
 
           <div className="flex flex-col gap-1.5">
@@ -220,9 +230,13 @@ export default function RegisterPaymentDialog({ plans }: { plans: AccountPlan[] 
               onChange={(e) => setAmount(e.target.value)}
               autoFocus
             />
-            {planSeleccionado.nextDue && (
+            {ventaSeleccionada.plan?.nextDue ? (
               <p className="text-xs text-muted-foreground">
-                Próxima cuota: {formatCurrency(planSeleccionado.nextDue.remaining)}
+                Próxima cuota: {formatCurrency(ventaSeleccionada.plan.nextDue.remaining)}
+              </p>
+            ) : (
+              <p className="text-xs text-muted-foreground">
+                Saldo total: {formatCurrency(ventaSeleccionada.remaining)}
               </p>
             )}
           </div>
