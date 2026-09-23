@@ -105,6 +105,45 @@ export async function PATCH(request: NextRequest) {
     patch.heroImage = m[2]
   }
 
+  // Quién atiende: la foto sigue el mismo camino que el hero — llega como
+  // data URI y se parte en bytes y tipo.
+  //
+  // **Esta lista es blanca, no pasa nada que no esté nombrado acá.** Es lo
+  // que hay que recordar al agregar un campo a la configuración: agregarlo al
+  // CRM y al formulario no alcanza, y el síntoma no es obvio — con el cuerpo
+  // filtrado entero, `patch` queda vacío y esto responde "No hay nada que
+  // actualizar"; con un campo filtrado entre otros que sí pasan, se guarda
+  // todo menos ese, sin ningún error.
+  if (body.teamImage === null) {
+    patch.teamImage = null
+    patch.teamImageMimeType = null
+  } else if (typeof body.teamImage === 'string' && body.teamImage.length > 0) {
+    const m = /^data:(image\/(?:png|jpeg|webp));base64,(.+)$/.exec(body.teamImage)
+    if (!m) {
+      return NextResponse.json(
+        { error: 'La foto tiene que ser un PNG, JPG o WEBP' },
+        { status: 400 }
+      )
+    }
+    patch.teamImageMimeType = m[1] as Mime
+    patch.teamImage = m[2]
+  }
+  if (body.teamName !== undefined) patch.teamName = body.teamName?.trim() || null
+  if (body.teamRole !== undefined) patch.teamRole = body.teamRole?.trim() || null
+  if (body.installerSince !== undefined) {
+    // Vacío borra el dato. Un año imposible se rechaza acá en vez de dejar que
+    // el CRM devuelva un error de validación sin contexto.
+    if (body.installerSince === null || body.installerSince === '') {
+      patch.installerSince = null
+    } else {
+      const anio = Number(body.installerSince)
+      if (!Number.isInteger(anio) || anio < 1950 || anio > new Date().getFullYear()) {
+        return NextResponse.json({ error: 'Poné un año entre 1950 y hoy' }, { status: 400 })
+      }
+      patch.installerSince = anio
+    }
+  }
+
   if (Object.keys(patch).length === 0) {
     return NextResponse.json({ error: 'No hay nada que actualizar' }, { status: 400 })
   }
