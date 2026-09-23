@@ -30,6 +30,7 @@ export default async function ConfiguracionPage() {
   const crm = (process.env.CRM_BASE_URL ?? '').replace(/\/$/, '')
   const logoSrc = settings.logoUrl ? `${crm}${settings.logoUrl}` : null
   const heroSrc = settings.heroUrl ? `${crm}${settings.heroUrl}` : null
+  const teamSrc = settings.teamUrl ? `${crm}${settings.teamUrl}` : null
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
@@ -47,7 +48,12 @@ export default async function ConfiguracionPage() {
           // En demostración la página pública vive bajo /demo/, que es el
           // espacio que habla con la base de prueba. Sin esto el link lleva a
           // la ruta real, donde el handle no existe.
-          <PublicPageForm settings={settings} heroSrc={heroSrc} demo={Boolean(session.demo)} />
+          <PublicPageForm
+            settings={settings}
+            heroSrc={heroSrc}
+            teamSrc={teamSrc}
+            demo={Boolean(session.demo)}
+          />
         }
         album={<PhotoAlbumForm photos={photos} />}
         servicios={

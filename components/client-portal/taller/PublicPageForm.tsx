@@ -94,6 +94,7 @@ function EjemploHero() {
 export default function PublicPageForm({
   settings,
   heroSrc,
+  teamSrc,
   demo = false,
 }: {
   settings: WorkshopSettings
@@ -104,6 +105,8 @@ export default function PublicPageForm({
    * `CRM_BASE_URL` en el bundle del cliente más de lo necesario.
    */
   heroSrc: string | null
+  /** Igual que `heroSrc`, para la foto de quien atiende. */
+  teamSrc: string | null
   /** En demostración la página pública cuelga de `/demo/`, no de la raíz. */
   demo?: boolean
 }) {
@@ -115,11 +118,21 @@ export default function PublicPageForm({
   const [guardando, setGuardando] = useState(false)
   const [subiendoHero, setSubiendoHero] = useState(false)
   const [heroPreview, setHeroPreview] = useState<string | null>(heroSrc)
+  const inputTeam = useRef<HTMLInputElement>(null)
+  const [subiendoTeam, setSubiendoTeam] = useState(false)
+  const [teamPreview, setTeamPreview] = useState<string | null>(teamSrc)
+  // Aparte de `form` porque viaja como número y no como texto: el resto del
+  // formulario se manda tal cual está escrito.
+  const [desde, setDesde] = useState(
+    settings.installerSince ? String(settings.installerSince) : ''
+  )
   const [form, setForm] = useState({
     publicAddress: settings.publicAddress ?? '',
     publicPhone: settings.publicPhone ?? '',
     publicEmail: settings.publicEmail ?? '',
     description: settings.description ?? '',
+    teamName: settings.teamName ?? '',
+    teamRole: settings.teamRole ?? '',
     socialInstagram: settings.socialInstagram ?? '',
     socialFacebook: settings.socialFacebook ?? '',
     socialTiktok: settings.socialTiktok ?? '',
@@ -275,6 +288,57 @@ export default function PublicPageForm({
     }
   }
 
+  async function elegirTeam(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    if (!TIPOS_HERO.includes(file.type)) {
+      toast.error('Tiene que ser PNG, JPG o WEBP')
+      return
+    }
+    setSubiendoTeam(true)
+    try {
+      const dataUri = await achicarHero(file)
+      const ok = await guardar(
+        { teamImage: dataUri, teamImageMimeType: 'image/jpeg' },
+        'Foto actualizada'
+      )
+      if (ok) setTeamPreview(dataUri)
+    } catch {
+      toast.error('No pudimos procesar esa imagen. Probá con otra.')
+    } finally {
+      setSubiendoTeam(false)
+    }
+  }
+
+  /**
+   * Guarda el año al salir del campo, y solo si es un año posible.
+   *
+   * Vacío borra el dato, y entonces la página deja de mostrar la línea — que
+   * es lo correcto: este año no se puede deducir de nada nuestro. Se intentó
+   * con la fecha de alta del contacto y terminó anunciando "desde 2026" en
+   * talleres con años de oficio.
+   */
+  async function guardarDesde() {
+    const limpio = desde.trim()
+    if (limpio === '') {
+      if (settings.installerSince !== null) await guardar({ installerSince: null }, 'Listo')
+      return
+    }
+    const anio = Number(limpio)
+    if (!Number.isInteger(anio) || anio < 1950 || anio > new Date().getFullYear()) {
+      toast.error('Poné un año entre 1950 y hoy')
+      return
+    }
+    if (anio === settings.installerSince) return
+    await guardar({ installerSince: anio }, 'Listo')
+  }
+
+  async function quitarTeam() {
+    const ok = await guardar({ teamImage: null }, 'Foto quitada')
+    if (ok) setTeamPreview(null)
+  }
+
   async function quitarHero() {
     const ok = await guardar({ heroImage: null }, 'Foto del hero quitada')
     if (ok) setHeroPreview(null)
@@ -342,6 +406,113 @@ export default function PublicPageForm({
                   Quitar
                 </Button>
               )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quién atiende.
+          Va después de la portada porque en la página aparece justo después:
+          primero qué es el lugar, después quién te va a atender. */}
+      <div className="flex flex-col gap-3 border-b border-border pb-5">
+        <div>
+          <p className="text-sm font-medium">Quién atiende</p>
+          <p className="text-xs text-muted-foreground">
+            Tu foto o la de tu equipo, en la sección “Nosotros” de tu página. Quien entra está
+            por dejarte su auto unas horas sin conocerte: una cara con nombre ayuda más que
+            cualquier otra cosa que puedas escribir. Sacala en el taller, trabajando o al lado de
+            un auto terminado — no una foto de estudio ni el logo. Horizontal o cuadrada, que se
+            te vea la cara. Si no subís ninguna no pasa nada: la sección queda solo con texto.
+          </p>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2 sm:items-start">
+          <div className="flex flex-col gap-2">
+            {teamPreview ? (
+              <div className="overflow-hidden rounded-lg border border-border">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={teamPreview}
+                  alt="Foto de quien atiende"
+                  className="h-28 w-full object-cover sm:h-32"
+                />
+              </div>
+            ) : (
+              <div className="flex h-28 items-center justify-center rounded-lg border border-dashed border-border bg-muted/30 text-xs text-muted-foreground sm:h-32">
+                Todavía no subiste ninguna
+              </div>
+            )}
+            <input
+              ref={inputTeam}
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              className="hidden"
+              onChange={elegirTeam}
+            />
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={subiendoTeam}
+                onClick={() => inputTeam.current?.click()}
+              >
+                {subiendoTeam ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <Upload className="size-4" />
+                )}
+                {teamPreview ? 'Cambiar foto' : 'Subir foto'}
+              </Button>
+              {teamPreview && (
+                <Button type="button" variant="ghost" size="sm" onClick={quitarTeam}>
+                  <Trash2 className="size-4" />
+                  Quitar
+                </Button>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="teamName">Nombre</Label>
+              <Input
+                id="teamName"
+                value={form.teamName}
+                maxLength={80}
+                placeholder="Manuel"
+                onChange={(e) => setForm({ ...form, teamName: e.target.value })}
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="teamRole">Rol</Label>
+              <Input
+                id="teamRole"
+                value={form.teamRole}
+                maxLength={80}
+                placeholder="Instalador"
+                onChange={(e) => setForm({ ...form, teamRole: e.target.value })}
+              />
+              <p className="text-xs text-muted-foreground">
+                El nombre y el rol se guardan con el botón de abajo.
+              </p>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="installerSince">Trabajás con Kristall desde</Label>
+              <Input
+                id="installerSince"
+                inputMode="numeric"
+                value={desde}
+                placeholder="2019"
+                onChange={(e) => setDesde(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                onBlur={guardarDesde}
+                className="max-w-28"
+              />
+              <p className="text-xs text-muted-foreground">
+                El año, nada más. Se muestra como “Instalador autorizado Kristall desde 2019” y
+                es de lo poco que distingue a un taller con oficio de uno que recién empieza. Si
+                lo dejás vacío, no se muestra.
+              </p>
             </div>
           </div>
         </div>
@@ -648,7 +819,7 @@ export default function PublicPageForm({
           type="button"
           variant="outline"
           disabled={guardando}
-          onClick={() => guardar(form, 'Datos de contacto guardados')}
+          onClick={() => guardar(form, 'Datos guardados')}
         >
           Guardar datos
         </Button>

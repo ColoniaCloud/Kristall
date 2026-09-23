@@ -481,6 +481,13 @@ export interface WorkshopSettings {
   /** La foto del hero nunca viaja en base64 por acá, igual que el logo. */
   tieneHero: boolean
   heroUrl: string | null
+  /** La cara de quien atiende, para la sección "Nosotros" de su página. */
+  tieneTeam: boolean
+  teamUrl: string | null
+  teamName: string | null
+  teamRole: string | null
+  /** Año desde el que trabaja con Kristall. Lo carga él: nadie más lo sabe. */
+  installerSince: number | null
   /** Bajada corta para la página pública. `null` = no completó nada. */
   description: string | null
   /** Preset de color de la página pública. Las paletas viven en polarizar. */
@@ -523,6 +530,12 @@ export interface WorkshopSettingsInput {
   /** Base64 **sin** el prefijo `data:`. `null` borra la foto del hero. */
   heroImage?: string | null
   heroImageMimeType?: 'image/png' | 'image/jpeg' | 'image/webp' | null
+  /** Base64 **sin** el prefijo `data:`. `null` borra la foto de quien atiende. */
+  teamImage?: string | null
+  teamImageMimeType?: 'image/png' | 'image/jpeg' | 'image/webp' | null
+  teamName?: string | null
+  teamRole?: string | null
+  installerSince?: number | null
   description?: string | null
   pageTheme?: 'BLANCO' | 'GRIS_CLARO' | 'GRIS_OSCURO' | 'NEGRO'
   accentColor?: 'AZUL' | 'VERDE' | 'VIOLETA' | 'ROJO' | 'NARANJA' | 'ROSA'
