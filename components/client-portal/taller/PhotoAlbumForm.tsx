@@ -93,6 +93,30 @@ export default function PhotoAlbumForm({ photos }: { photos: WorkshopPhoto[] }) 
     }
   }
 
+  /**
+   * Guarda al salir del campo y solo si cambió: escribir una descripción son
+   * treinta pulsaciones, y mandar treinta PATCH — uno por letra — sería
+   * ruido sobre el CRM sin ningún beneficio para quien escribe.
+   */
+  async function describir(photoId: string, texto: string, anterior: string) {
+    if (texto.trim() === (anterior ?? '').trim()) return
+    try {
+      const res = await fetch(`/api/portal/workshop/photos/${photoId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description: texto }),
+      })
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        toast.error(body.error ?? 'No pudimos guardar la descripción')
+        return
+      }
+      router.refresh()
+    } catch {
+      toast.error('No pudimos guardar la descripción')
+    }
+  }
+
   async function borrar(photoId: string) {
     setActuandoSobre(photoId)
     try {
@@ -117,7 +141,8 @@ export default function PhotoAlbumForm({ photos }: { photos: WorkshopPhoto[] }) 
         <h2 className="font-heading text-lg font-semibold">Álbum de fotos</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Fotos de trabajos que hiciste. Se muestran en tu página pública, al lado del botón de
-          reservar turno.
+          reservar turno. Escribí qué se ve en cada una: es lo que lee Google para mostrarlas en
+          las búsquedas, y lo único que escucha alguien que navega sin ver la pantalla.
         </p>
       </div>
 
@@ -129,8 +154,22 @@ export default function PhotoAlbumForm({ photos }: { photos: WorkshopPhoto[] }) 
             <div key={p.id} className="flex flex-col gap-1.5">
               <div className="overflow-hidden rounded-lg border border-border">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={p.url} alt="" className="aspect-square w-full object-cover" />
+                <img
+                  src={p.url}
+                  alt={p.description ?? ''}
+                  className="aspect-square w-full object-cover"
+                />
               </div>
+
+              <input
+                type="text"
+                maxLength={160}
+                defaultValue={p.description ?? ''}
+                placeholder="¿Qué se ve?"
+                aria-label={`Descripción de la foto ${i + 1}`}
+                onBlur={(e) => describir(p.id, e.target.value, p.description ?? '')}
+                className="w-full rounded-md border border-border bg-background px-2 py-1.5 text-xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              />
               <div className="flex items-center justify-between gap-1">
                 <div className="flex gap-1">
                   <Button

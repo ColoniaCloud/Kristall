@@ -630,6 +630,11 @@ export interface WorkshopPhoto {
   id: string
   /** URL pública — la misma que ve cualquier visitante de la página. */
   url: string
+  /**
+   * Qué se ve en la foto, escrito por el taller. Va al `alt` de la imagen en
+   * la página pública. `null` = todavía no lo completó.
+   */
+  description: string | null
 }
 
 export function listWorkshopPhotos(contactId: string) {
@@ -656,6 +661,21 @@ export function reorderWorkshopPhoto(
   return callCrmApi<{ ok: true }>(
     `${base(contactId)}/photos/${encodeURIComponent(photoId)}`,
     { method: 'PATCH', ...SESSION(), body: { direccion } }
+  )
+}
+
+/**
+ * Guarda la descripción de una foto. Vacío se manda como `null`: es la
+ * diferencia entre "no completó" y "completó con nada".
+ */
+export function describeWorkshopPhoto(
+  contactId: string,
+  photoId: string,
+  description: string | null
+) {
+  return callCrmApi<{ ok: true }>(
+    `${base(contactId)}/photos/${encodeURIComponent(photoId)}`,
+    { method: 'PATCH', ...SESSION(), body: { description } }
   )
 }
 
