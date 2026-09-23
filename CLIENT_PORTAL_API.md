@@ -897,6 +897,68 @@ generoso para reintentar y corto para spamear · `502` el servidor de mail no ac
 
 ---
 
+### 4.10.14 `GET · POST /workshop/photos` — El álbum de la página pública
+
+Las fotos de trabajos que el taller muestra en su landing. Máximo **12**; el orden lo decide
+él y sale en `sortOrder`, que se calcula en el servidor — nunca se confía en el que manda el
+cliente.
+
+`GET` devuelve la lista en orden:
+
+```json
+[
+  {
+    "id": "clw...",
+    "url": "/api/public/workshop/gallery/8f2c.../clw...",
+    "description": "Ford Focus con polarizado completo, visto de costado"
+  }
+]
+```
+
+| Campo | Qué es |
+|---|---|
+| `url` | Ruta **relativa al CRM**. Quien la use desde afuera le antepone `CRM_BASE_URL`. Va por slug de galería y no por `contactId`: el id interno no queda a la vista en una página pública. |
+| `description` | Qué se ve en la foto, escrito por el taller. Termina en el `alt` de la imagen en la landing. `null` = no lo completó, y ahí el `alt` va **vacío** a propósito: para un lector de pantalla eso significa “esto es decorativo, seguí”, que es mejor que anunciar “foto 3”. |
+
+`POST` sube una:
+
+```json
+{ "image": "<base64 sin el prefijo data:>", "imageMimeType": "image/jpeg" }
+```
+
+Responde `201 { "id": "clw..." }`. Límite de **800 KB de base64** (≈ 600 KB de imagen) — más chico
+que el hero porque acá hay hasta doce, no una. `400` si ya llegó a 12 o si la imagen pesa de más.
+
+### 4.10.15 `PATCH · DELETE /workshop/photos/:photoId` — Mover, describir o borrar
+
+**El `PATCH` resuelve dos operaciones distintas y las distingue por el cuerpo.** Van juntas en
+la misma ruta porque son eso, ediciones parciales del mismo recurso; separarlas obligaría a
+inventarle un sub-recurso a un campo de texto.
+
+Mover de lugar — intercambia con la foto vecina:
+
+```json
+{ "direccion": "arriba" }
+```
+
+Describir — lo que se ve en la foto, hasta 160 caracteres:
+
+```json
+{ "description": "Ford Focus con polarizado completo, visto de costado" }
+```
+
+Mandar `null` (o texto vacío, que el servidor normaliza a `null`) borra la descripción. La
+distinción importa: `null` dice “no completó” y `""` diría “completó con nada”, y hace falta
+para poder avisarle algún día a quiénes les falta.
+
+Los dos responden `{ "ok": true }`. `DELETE` borra la foto **de verdad**, a diferencia de un
+servicio, que se apaga: nada río abajo depende de una foto.
+
+**`404` y no `403`** cuando el `photoId` es de otro taller: una foto ajena no existe para este
+contacto, y contestar “prohibido” confirmaría que existe.
+
+---
+
 ## 4.11 El espejo de demostración *(nivel INSTALLER)*
 
 Existe un portal de demostración: alguien entra sin cuenta, ve un taller de
