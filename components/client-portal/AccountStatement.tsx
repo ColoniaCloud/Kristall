@@ -1,6 +1,8 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
+import MonthlyTotalCard from '@/components/client-portal/MonthlyTotalCard'
 import { formatCurrency, formatDate } from '@/lib/format'
+import { totalesPorMes, mesActual } from '@/lib/client-portal/account-months'
 import type {
   ClientAccount,
   AccountPlan,
@@ -92,11 +94,29 @@ export default function AccountStatement({
   const aFavor = summary.balance < 0
   const planesVigentes = plans.filter((p) => p.status !== 'CANCELLED')
 
+  // Los dos primeros cards van por mes, no por toda la vida de la cuenta. Se
+  // resuelve acá arriba, en el servidor, y no dentro de cada card: es el mismo
+  // recorrido de movimientos para los dos, y así el corte de mes no depende de
+  // la zona horaria del navegador. Ver `account-months.ts`.
+  const totales = totalesPorMes(entries)
+  const mesCorriente = mesActual()
+
   return (
     <div className="flex flex-col gap-8">
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Total comprado" value={formatCurrency(summary.totalInvoiced)} />
-        <StatCard label="Total pagado" value={formatCurrency(summary.totalPaid)} tone="good" />
+        <MonthlyTotalCard
+          label="Total comprado"
+          metrica="comprado"
+          totales={totales}
+          mesActual={mesCorriente}
+        />
+        <MonthlyTotalCard
+          label="Total pagado"
+          metrica="pagado"
+          totales={totales}
+          mesActual={mesCorriente}
+          tone="good"
+        />
         <StatCard
           label={aFavor ? 'Saldo a tu favor' : 'Saldo pendiente'}
           value={formatCurrency(Math.abs(summary.balance))}
