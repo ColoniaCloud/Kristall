@@ -89,14 +89,34 @@ const METODOS = [
   { value: 'OTHER', label: 'Otro' },
 ] as const
 
-export default function RegisterPaymentDialog({ pendingSales }: { pendingSales: PendingSale[] }) {
+export default function RegisterPaymentDialog({
+  pendingSales,
+  trigger,
+  ventaInicial,
+}: {
+  pendingSales: PendingSale[]
+  /**
+   * El botón que lo abre. Por defecto el grande de la cabecera; las otras
+   * entradas —el aviso de vencidas, cada cuota impaga, la barra del celular—
+   * pasan el suyo para que cada una pese lo que tiene que pesar en su lugar.
+   */
+  trigger?: React.ReactNode
+  /**
+   * Qué compra viene elegida al abrir. La entrada que nace al lado de una
+   * cuota sabe de cuál se trata; obligar a buscarla de nuevo en el select
+   * sería pedirle a la persona que repita algo que ya dijo con el clic.
+   */
+  ventaInicial?: string
+}) {
   const router = useRouter()
   const inputFile = useRef<HTMLInputElement>(null)
   const [abierto, setAbierto] = useState(false)
   const [enviando, setEnviando] = useState(false)
   const [procesandoArchivo, setProcesandoArchivo] = useState(false)
-  const [saleId, setSaleId] = useState(pendingSales[0]?.saleId ?? '')
-  const [amount, setAmount] = useState(() => (pendingSales[0] ? montoSugerido(pendingSales[0]) : ''))
+  const porDefecto =
+    pendingSales.find((v) => v.saleId === ventaInicial) ?? pendingSales[0]
+  const [saleId, setSaleId] = useState(porDefecto?.saleId ?? '')
+  const [amount, setAmount] = useState(() => (porDefecto ? montoSugerido(porDefecto) : ''))
   const [method, setMethod] = useState<string>('TRANSFER')
   const [reference, setReference] = useState('')
   const [notes, setNotes] = useState('')
@@ -128,8 +148,8 @@ export default function RegisterPaymentDialog({ pendingSales }: { pendingSales: 
   }
 
   function reset() {
-    setSaleId(pendingSales[0]?.saleId ?? '')
-    setAmount(pendingSales[0] ? montoSugerido(pendingSales[0]) : '')
+    setSaleId(porDefecto?.saleId ?? '')
+    setAmount(porDefecto ? montoSugerido(porDefecto) : '')
     setMethod('TRANSFER')
     setReference('')
     setNotes('')
@@ -183,10 +203,12 @@ export default function RegisterPaymentDialog({ pendingSales }: { pendingSales: 
       }}
     >
       <DialogTrigger asChild>
-        <Button size="lg" className="h-11 gap-2 px-5 text-base font-semibold">
-          <Wallet className="size-5" />
-          Registrar un pago
-        </Button>
+        {trigger ?? (
+          <Button size="lg" className="h-11 gap-2 px-5 text-base font-semibold">
+            <Wallet className="size-5" />
+            Registrar un pago
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="crm-theme">
         <DialogHeader>

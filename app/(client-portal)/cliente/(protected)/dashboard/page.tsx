@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { AlertTriangle, CalendarClock } from 'lucide-react'
+import { AlertTriangle, CalendarClock, Wallet } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { getClientSession, levelOf } from '@/lib/client-portal/session'
 import { getContact, getAccount, getNotifications } from '@/lib/client-portal/api'
 import { getWorkshopSummary } from '@/lib/client-portal/workshop'
@@ -49,36 +50,68 @@ export default async function DashboardPage() {
           }
         />
 
-        {/* Lo primero que tiene que ver es si hay algo vencido. */}
+        {/* Lo primero que tiene que ver es si hay algo vencido.
+
+            El aviso lleva la acción adentro, y no solo un link al detalle: el
+            momento en que alguien piensa «tengo que pagar esto» es cuando lee
+            cuánto debe, no cuando llega a la cabecera de otra pantalla. El
+            botón de arriba sigue estando; este es la misma puerta abierta
+            donde aparece la necesidad. */}
         {overdueAmount > 0 ? (
-          <Link
-            href="/cliente/cuenta"
-            className="flex items-start gap-3 rounded-lg border border-destructive/40 bg-destructive/10 p-4 transition-colors hover:bg-destructive/15"
-          >
+          <div className="flex flex-wrap items-start gap-3 rounded-lg border border-destructive/40 bg-destructive/10 p-4">
             <AlertTriangle className="mt-0.5 size-5 shrink-0 text-destructive" />
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="font-medium">Tenés {formatCurrency(overdueAmount)} en cuotas vencidas</p>
-              <p className="text-sm text-muted-foreground">Mirá el detalle en tu cuenta corriente.</p>
+              <Link
+                href="/cliente/cuenta"
+                className="text-sm text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-current"
+              >
+                Mirá el detalle en tu cuenta corriente
+              </Link>
             </div>
-          </Link>
+            {account.pendingSales.length > 0 && (
+              <RegisterPaymentDialog
+                pendingSales={account.pendingSales}
+                trigger={
+                  <Button size="sm" className="shrink-0">
+                    <Wallet className="size-4" />
+                    Registrar un pago
+                  </Button>
+                }
+              />
+            )}
+          </div>
         ) : (
           nextDueDate && (
             /* Amarillo, un escalón por debajo del rojo de "vencido": esto es un
                aviso de algo que viene, no un problema que ya pasó. El fondo va
                semitransparente para que el color se lea sobre el panel oscuro
                sin convertirse en un bloque macizo. */
-            <Link
-              href="/cliente/cuenta"
-              className="flex items-start gap-3 rounded-lg border border-warning/40 bg-warning/10 p-4 transition-colors hover:bg-warning/20"
-            >
+            <div className="flex flex-wrap items-start gap-3 rounded-lg border border-warning/40 bg-warning/10 p-4">
               <CalendarClock className="mt-0.5 size-5 shrink-0 text-warning" />
-              <div>
+              <div className="min-w-0 flex-1">
                 <p className="font-medium text-warning">
                   Tu próxima cuota vence el {formatDate(nextDueDate)}
                 </p>
-                <p className="text-sm text-muted-foreground">Mirá el detalle en tu cuenta corriente.</p>
+                <Link
+                  href="/cliente/cuenta"
+                  className="text-sm text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-current"
+                >
+                  Mirá el detalle en tu cuenta corriente
+                </Link>
               </div>
-            </Link>
+              {account.pendingSales.length > 0 && (
+                <RegisterPaymentDialog
+                  pendingSales={account.pendingSales}
+                  trigger={
+                    <Button size="sm" className="shrink-0">
+                      <Wallet className="size-4" />
+                      Registrar un pago
+                    </Button>
+                  }
+                />
+              )}
+            </div>
           )
         )}
 

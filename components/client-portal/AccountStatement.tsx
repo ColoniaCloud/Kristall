@@ -1,6 +1,8 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import EmptyState from '@/components/client-portal/EmptyState'
+import RegisterPaymentDialog from '@/components/client-portal/RegisterPaymentDialog'
 import MonthlyTotalCard from '@/components/client-portal/MonthlyTotalCard'
 import { formatCurrency, formatDate } from '@/lib/format'
 import { cn } from '@/lib/utils'
@@ -101,6 +103,11 @@ export default function AccountStatement({
   const totales = totalesPorMes(entries)
   const mesCorriente = mesActual()
 
+  // Sobre qué compras se puede declarar un pago. Una cuota de una venta que no
+  // esté acá no lleva botón: ofrecerlo y que el CRM lo rechace después es peor
+  // que no ofrecerlo.
+  const declarables = new Set(account.pendingSales.map((v) => v.saleId))
+
   return (
     <div className="flex flex-col gap-8">
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -155,6 +162,9 @@ export default function AccountStatement({
                 <TableHead>Monto</TableHead>
                 <TableHead>Resta</TableHead>
                 <TableHead>Estado</TableHead>
+                <TableHead className="text-right">
+                  <span className="sr-only">Registrar un pago</span>
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -168,6 +178,21 @@ export default function AccountStatement({
                   <TableCell>{c.remaining > 0 ? formatCurrency(c.remaining) : '—'}</TableCell>
                   <TableCell>
                     <Badge variant={STATUS_VARIANT[c.status]}>{STATUS_LABEL[c.status]}</Badge>
+                  </TableCell>
+                  {/* La puerta al lado de la cuota, con la compra ya elegida:
+                      acá es donde alguien se da cuenta de que tiene que pagar. */}
+                  <TableCell className="text-right">
+                    {c.remaining > 0 && declarables.has(plan.saleId) && (
+                      <RegisterPaymentDialog
+                        pendingSales={account.pendingSales}
+                        ventaInicial={plan.saleId}
+                        trigger={
+                          <Button variant="outline" size="sm">
+                            Registrar pago
+                          </Button>
+                        }
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

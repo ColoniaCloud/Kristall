@@ -47,7 +47,9 @@ export default function PageHeader({
 
       <div
         className={cn(
-          'flex flex-wrap justify-between gap-x-4 gap-y-3',
+          // Separación generosa contra el bloque de título: un botón aislado se
+        // nota más que uno grande pegado a un párrafo.
+        'flex flex-wrap justify-between gap-x-6 gap-y-4 md:gap-x-10',
           // Con bajada el botón se alinea arriba, contra el título. Sin bajada
           // se centra: un botón de 44px arriba de un título de 33 queda
           // visiblemente desbalanceado.
