@@ -269,7 +269,6 @@ function Tarjeta({ booking: b }: { booking: Booking }) {
             size="sm"
             disabled={cargando !== null}
             onClick={() => responder('confirmar')}
-            className="bg-sky-500 text-white hover:bg-sky-600"
           >
             {cargando === 'confirmar' ? (
               <Loader2 className="size-3.5 animate-spin" />

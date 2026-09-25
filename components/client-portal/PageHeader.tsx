@@ -56,7 +56,11 @@ export default function PageHeader({
       >
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="font-heading text-2xl font-semibold">{title}</h1>
+            {/* 31px en escritorio contra los 19 del título de sección: antes
+                eran 25 contra 19 y los dos niveles se confundían. En celular
+                se queda en 25, que es lo que entra sin partir un nombre
+                largo de cliente en tres renglones. */}
+            <h1 className="font-heading text-2xl font-semibold md:text-3xl">{title}</h1>
             {badge}
           </div>
           {description && (

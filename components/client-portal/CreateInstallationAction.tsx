@@ -51,7 +51,6 @@ export default function CreateInstallationAction({ roll }: { roll: WorkshopStock
         size="sm"
         onClick={() => setFormOpen(true)}
         disabled={disabled}
-        className="bg-sky-500 text-white hover:bg-sky-600"
       >
         <Plus className="size-3.5" />
         Generar instalación ({count}/{max})

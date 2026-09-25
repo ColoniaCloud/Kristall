@@ -24,7 +24,7 @@ export default function StatCards({
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm font-normal text-muted-foreground">Saldo pendiente</CardTitle>
+          <CardTitle className="text-xs font-normal text-muted-foreground">Saldo pendiente</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-2xl font-semibold">{formatCurrency(contact.balance)}</p>
@@ -32,7 +32,7 @@ export default function StatCards({
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm font-normal text-muted-foreground">Compras totales</CardTitle>
+          <CardTitle className="text-xs font-normal text-muted-foreground">Compras totales</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-2xl font-semibold">{contact.purchases.length}</p>
@@ -40,7 +40,7 @@ export default function StatCards({
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm font-normal text-muted-foreground">Última compra</CardTitle>
+          <CardTitle className="text-xs font-normal text-muted-foreground">Última compra</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-2xl font-semibold">{lastPurchase ? formatCurrency(lastPurchase.total) : '—'}</p>
@@ -91,7 +91,7 @@ function CardConLink({
     >
       <Card className="h-full">
         <CardHeader>
-          <CardTitle className="text-sm font-normal text-muted-foreground">{titulo}</CardTitle>
+          <CardTitle className="text-xs font-normal text-muted-foreground">{titulo}</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-2xl font-semibold tabular-nums">{valor}</p>

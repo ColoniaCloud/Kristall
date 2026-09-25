@@ -162,7 +162,7 @@ export default function NewInstallationDialog({
                     aria-pressed={activo}
                     className={`flex flex-col items-center gap-1.5 rounded-lg border p-2 text-center transition-colors ${
                       activo
-                        ? 'border-sky-500 bg-sky-500/10'
+                        ? 'border-primary bg-primary/10'
                         : 'border-border hover:border-sky-500/50 hover:bg-muted/50'
                     }`}
                   >
@@ -217,7 +217,6 @@ export default function NewInstallationDialog({
             <Button
               type="submit"
               disabled={status === 'loading'}
-              className="bg-sky-500 text-white hover:bg-sky-600"
             >
               {status === 'loading' && <Loader2 className="size-4 animate-spin" />}
               Generar instalación

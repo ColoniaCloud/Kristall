@@ -10,7 +10,10 @@ import { Toaster } from '@/components/ui/sonner'
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#26262a',
+  // El equivalente en hex de --background del panel. Si cambia el token,
+  // cambia acá: es la barra del navegador en celular, y desfasada se ve como
+  // un borde de otro color arriba de la pantalla.
+  themeColor: '#110f0d',
   colorScheme: 'dark',
 }
 

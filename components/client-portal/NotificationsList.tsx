@@ -42,7 +42,7 @@ export default function NotificationsList({ initial }: { initial: Notification[]
             {n.link?.startsWith('/') && !n.link.startsWith('//') && (
               <Link
                 href={n.link}
-                className="mt-1 inline-block text-sm font-medium text-primary underline"
+                className="mt-1 inline-block text-sm font-medium underline underline-offset-4"
               >
                 Ver detalle
               </Link>

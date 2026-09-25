@@ -17,7 +17,7 @@ export default function ProtectedError({
 
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-24 text-center">
-      <p className="text-lg font-medium">
+      <p className="font-heading text-lg font-semibold">
         {saturado ? 'El sistema está muy demandado' : 'No pudimos cargar tus datos'}
       </p>
       <p className="max-w-sm text-sm text-muted-foreground">
@@ -25,7 +25,7 @@ export default function ProtectedError({
           ? 'Se están procesando muchos pedidos a la vez. Esperá unos segundos y volvé a intentar — tus datos están bien.'
           : 'Hubo un problema de conexión con el sistema de Kristall. Intentá de nuevo en unos minutos.'}
       </p>
-      <button onClick={reset} className="mt-2 text-sm font-medium text-primary underline">
+      <button onClick={reset} className="mt-2 text-sm font-medium underline underline-offset-4">
         Reintentar
       </button>
     </div>

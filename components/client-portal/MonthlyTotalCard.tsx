@@ -83,7 +83,7 @@ export default function MonthlyTotalCard({
       <p
         className={cn(
           'text-xl font-semibold tabular-nums',
-          tone === 'good' && 'text-primary'
+          tone === 'good' && 'text-success'
         )}
       >
         {formatCurrency(montoDe(mes))}
@@ -108,7 +108,7 @@ export default function MonthlyTotalCard({
         <button
           type="button"
           onClick={() => setHistoricoAbierto(true)}
-          className="inline-flex items-center gap-1.5 text-xs text-primary underline-offset-2 hover:underline"
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-current"
         >
           <CalendarSearch className="size-3.5" />
           Consultar histórico

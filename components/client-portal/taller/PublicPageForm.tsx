@@ -847,7 +847,7 @@ export default function PublicPageForm({
             href={`https://${urlCompleta}`}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1 text-sm text-sky-600 hover:underline dark:text-sky-400"
+            className="inline-flex items-center gap-1 text-sm underline decoration-border underline-offset-4 transition-colors hover:decoration-current"
           >
             Verla <ExternalLink className="size-3.5" />
           </a>

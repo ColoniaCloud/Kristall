@@ -135,6 +135,13 @@ body {
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  /* Los dos estados que faltaban como token y se venían escribiendo a mano
+     con clases literales de Tailwind (emerald-*, amber-*). Con fallback por
+     lo mismo que --radius: fuera del tema estas variables no existen. */
+  --color-success: var(--success, oklch(0.6 0.13 155));
+  --color-success-foreground: var(--success-foreground, oklch(0.98 0 0));
+  --color-warning: var(--warning, oklch(0.72 0.14 80));
+  --color-warning-foreground: var(--warning-foreground, oklch(0.2 0.04 80));
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -187,67 +194,104 @@ body {
 /* /garantia y el resto del sitio público).                                */
 /* ---------------------------------------------------------------------- */
 .crm-theme {
-  --background: oklch(0.22 0.006 285);
-  --foreground: oklch(0.92 0.004 285);
-  --card: oklch(0.27 0.006 285);
-  --card-foreground: oklch(0.92 0.004 285);
-  --popover: oklch(0.30 0.007 285);
-  --popover-foreground: oklch(0.94 0.004 285);
-  --primary: oklch(0.62 0.19 255);
-  --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.32 0.006 285);
-  --secondary-foreground: oklch(0.92 0.004 285);
-  --muted: oklch(0.26 0.006 285);
-  --muted-foreground: oklch(0.64 0.008 285);
-  --accent: oklch(0.34 0.010 285);
-  --accent-foreground: oklch(0.95 0.004 285);
-  --destructive: oklch(0.62 0.21 25);
+  /* ─── Superficies: cuatro pasos de transmisión ──────────────────────── */
+  /* Antes había dos grises casi iguales (0.22 y 0.27) y todo flotaba a la
+     misma altura. Ahora son cuatro escalones parejos, y la altura de una
+     superficie dice cuánto pesa: fondo, panel, card, menú.
+
+     El hue pasa de 285 a 70: es el cambio que no se ve y se siente. Los
+     grises azulados se leían fríos, de instrumental; el carbón cálido es
+     además el vecindario del casi-negro de la marca (#1A1A1A). La croma se
+     queda abajo de 0.008 a propósito — es un gris templado, no un sepia. */
+  --background: oklch(0.17 0.005 70);
+  --muted: oklch(0.205 0.005 70);
+  --card: oklch(0.225 0.006 70);
+  --secondary: oklch(0.25 0.006 70);
+  --popover: oklch(0.275 0.007 70);
+  --accent: oklch(0.29 0.007 70);
+
+  --foreground: oklch(0.93 0.004 70);
+  --card-foreground: oklch(0.93 0.004 70);
+  --popover-foreground: oklch(0.95 0.004 70);
+  --secondary-foreground: oklch(0.93 0.004 70);
+  --accent-foreground: oklch(0.96 0.004 70);
+  --muted-foreground: oklch(0.67 0.008 70);
+
+  /* ─── La acción es luz, no un color ─────────────────────────────────── */
+  /* El --primary era oklch(0.62 0.19 255): un azul de SaaS que no decía
+     Kristall en ninguna parte y que se llevaba el color más saturado de la
+     pantalla para decorar el cromo. Ahora el botón primario y la sección
+     activa son claros sobre oscuro — que es el botón casi-negro sobre claro
+     del sitio público, dado vuelta. Mismo sistema, otra superficie. */
+  --primary: oklch(0.95 0.003 70);
+  --primary-foreground: oklch(0.20 0.005 70);
+
+  /* ─── El color queda reservado para el estado del negocio ───────────── */
+  /* Con el cromo en monocromo, lo único saturado de la pantalla es el dato:
+     vencido, pagado, por vencer. Saltan solos porque no compiten con nada. */
+  --destructive: oklch(0.64 0.20 25);
   --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(1 0 0 / 10%);
+  --success: oklch(0.74 0.15 155);
+  --success-foreground: oklch(0.18 0.03 155);
+  --warning: oklch(0.80 0.14 80);
+  --warning-foreground: oklch(0.20 0.04 80);
+
+  --border: oklch(1 0 0 / 9%);
   /* Contra --card (0.27) esto tiene que leerse como un borde de campo, no
      como una raya perdida — antes era oklch(0.30 …), a un paso de --card, y
      el input se veía sin borde. 0.42 da un salto de luminosidad que se nota
      sin ir a un gris claro que grite. */
-  --input: oklch(0.42 0.006 285);
-  --ring: oklch(0.62 0.19 255 / 50%);
+  --input: oklch(0.42 0.006 70);
+  --ring: oklch(0.85 0.004 70 / 55%);
   --radius: 0.5rem;
   color-scheme: dark;
   font-family: var(--font-body);
 }
 
-/* Botón primario: gradiente + relieve táctil */
+/* El <body> del portal es claro porque lo comparten el login y el panel. En
+   el panel eso asoma al rebotar el scroll en el celular: una franja blanca
+   arriba o abajo de una pantalla oscura. Se resuelve mirando si la página
+   trae el tema del panel, que es lo único que los distingue. */
+html:has(.crm-theme),
+html:has(.crm-theme) body {
+  background-color: oklch(0.17 0.005 70);
+}
+
+/* Botón primario: el mismo relieve de siempre, ahora en luz. Es el botón
+   casi-negro sobre claro del sitio público, invertido para la superficie
+   oscura del panel. */
 .crm-theme [data-slot="button"][data-variant="default"] {
-  background-image: linear-gradient(to bottom, oklch(0.68 0.19 255), oklch(0.58 0.19 255));
-  border-color: oklch(1 0 0 / 12%);
+  background-image: linear-gradient(to bottom, oklch(0.98 0.003 70), oklch(0.91 0.004 70));
+  border-color: oklch(0 0 0 / 12%);
   box-shadow:
-    inset 0 1px 0 oklch(1 0 0 / 15%),
-    0 1px 2px oklch(0 0 0 / 40%);
+    inset 0 1px 0 oklch(1 0 0 / 70%),
+    0 1px 2px oklch(0 0 0 / 45%);
 }
 .crm-theme [data-slot="button"][data-variant="default"]:hover {
-  background-image: linear-gradient(to bottom, oklch(0.72 0.19 255), oklch(0.62 0.19 255));
+  background-image: linear-gradient(to bottom, oklch(1 0 0), oklch(0.95 0.003 70));
 }
 .crm-theme [data-slot="button"][data-variant="default"]:active {
-  background-image: linear-gradient(to bottom, oklch(0.56 0.19 255), oklch(0.50 0.19 255));
-  box-shadow: inset 0 1px 2px oklch(0 0 0 / 30%);
+  background-image: linear-gradient(to bottom, oklch(0.88 0.004 70), oklch(0.84 0.005 70));
+  box-shadow: inset 0 1px 2px oklch(0 0 0 / 25%);
 }
 
 /* Botón secundario/outline: relieve sutil sobre gris de panel */
 .crm-theme [data-slot="button"][data-variant="secondary"],
 .crm-theme [data-slot="button"][data-variant="outline"] {
-  background-image: linear-gradient(to bottom, oklch(0.34 0.006 285), oklch(0.28 0.006 285));
+  background-image: linear-gradient(to bottom, oklch(0.29 0.006 70), oklch(0.24 0.006 70));
   border-color: oklch(1 0 0 / 8%);
   box-shadow: inset 0 1px 0 oklch(1 0 0 / 6%);
 }
 .crm-theme [data-slot="button"][data-variant="secondary"]:hover,
 .crm-theme [data-slot="button"][data-variant="outline"]:hover {
-  background-image: linear-gradient(to bottom, oklch(0.38 0.006 285), oklch(0.32 0.006 285));
+  background-image: linear-gradient(to bottom, oklch(0.33 0.006 70), oklch(0.28 0.006 70));
 }
 
 /* Cards sin borde: reemplaza el ring-1 ring-foreground/10 de card.tsx por
    un gradiente vertical sutil como señal de relieve/profundidad. */
 .crm-theme [data-slot="card"] {
   box-shadow: none;
-  background-image: linear-gradient(180deg, oklch(0.285 0.006 285), oklch(0.255 0.006 285));
+  background-image: linear-gradient(180deg, oklch(0.24 0.006 70), oklch(0.21 0.006 70));
 }
 
 /* sheet.tsx hardcodea bg-white junto a bg-popover (misma prioridad de utility
@@ -267,10 +311,12 @@ body {
   background-color: var(--popover);
 }
 
-/* Sidebar: item activo con el mismo lenguaje de relieve que los botones */
+/* Sidebar: la sección en la que estás parado usa la misma luz que el botón
+   primario. En una herramienta que se abre todos los días, saber dónde
+   estás parado no puede ser un matiz. */
 .crm-theme [data-slot="nav-link"][data-active="true"] {
-  background-image: linear-gradient(180deg, oklch(0.64 0.19 255), oklch(0.56 0.19 255));
-  box-shadow: inset 0 1px 0 oklch(1 0 0 / 15%);
+  background-image: linear-gradient(180deg, oklch(0.97 0.003 70), oklch(0.91 0.004 70));
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 70%);
 }
 
 /* Remap de StatusBadge (components/common/StatusBadge.tsx): sus 5 combinaciones
@@ -297,10 +343,20 @@ body {
   color: oklch(0.82 0.15 25);
   border-color: oklch(0.42 0.12 25);
 }
+/* ENTREGADA usa bg-emerald-600/10 y se había quedado fuera de esta lista:
+   caia sin remapear, o sea un verde al 10% con texto emerald-800 sobre un
+   panel oscuro — ilegible. Va un escalón más fuerte que TERMINADA, que es
+   lo que significa: entregada está más cerrada que terminada. */
+.crm-theme [data-slot="badge"].bg-emerald-600\/10 {
+  background-color: oklch(0.32 0.07 155);
+  color: oklch(0.88 0.13 155);
+  border-color: oklch(0.46 0.10 155);
+}
+
 .crm-theme [data-slot="badge"].bg-neutral-100 {
-  background-color: oklch(0.32 0.006 285);
-  color: oklch(0.75 0.006 285);
-  border-color: oklch(0.42 0.006 285);
+  background-color: oklch(0.28 0.006 70);
+  color: oklch(0.75 0.006 70);
+  border-color: oklch(0.38 0.006 70);
 }
 
 /* ---------------------------------------------------------------------- */

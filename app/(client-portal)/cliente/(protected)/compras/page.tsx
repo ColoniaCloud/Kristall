@@ -29,11 +29,11 @@ export default async function ComprasPage() {
         }
       />
       <div>
-        <h2 className="mb-3 text-lg font-medium">Historial de compras</h2>
+        <h2 className="mb-3 font-heading text-lg font-semibold">Historial de compras</h2>
         <PurchasesTable purchases={contact.purchases} />
       </div>
       <div>
-        <h2 className="mb-3 text-lg font-medium">Pagos registrados</h2>
+        <h2 className="mb-3 font-heading text-lg font-semibold">Pagos registrados</h2>
         <PaymentsTable payments={contact.payments} />
       </div>
     </div>

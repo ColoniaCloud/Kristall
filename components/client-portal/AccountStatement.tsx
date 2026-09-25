@@ -64,7 +64,7 @@ function StatCard({
         className={cn(
           'text-xl font-semibold tabular-nums',
           tone === 'bad' && 'text-destructive',
-          tone === 'good' && 'text-primary'
+          tone === 'good' && 'text-success'
         )}
       >
         {value}
@@ -133,7 +133,7 @@ export default function AccountStatement({
       {planesVigentes.map((plan) => (
         <section key={plan.id}>
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            <h2 className="text-lg font-medium">Cuotas de la compra #{plan.saleNumber}</h2>
+            <h2 className="font-heading text-lg font-semibold">Cuotas de la compra #{plan.saleNumber}</h2>
             <Badge variant={plan.status === 'COMPLETED' ? 'default' : 'outline'}>
               {plan.status === 'COMPLETED' ? 'Completado' : 'En curso'}
             </Badge>
@@ -177,7 +177,7 @@ export default function AccountStatement({
       ))}
 
       <section>
-        <h2 className="mb-3 text-lg font-medium">Movimientos</h2>
+        <h2 className="mb-3 font-heading text-lg font-semibold">Movimientos</h2>
         {entries.length === 0 ? (
           <EmptyState>Todavía no hay movimientos en tu cuenta.</EmptyState>
         ) : (
@@ -199,13 +199,13 @@ export default function AccountStatement({
                     <TableCell className="text-right">
                       {e.debit > 0 ? formatCurrency(e.debit) : '—'}
                     </TableCell>
-                    <TableCell className="text-right text-primary">
+                    <TableCell className="text-right text-success">
                       {e.credit > 0 ? formatCurrency(e.credit) : '—'}
                     </TableCell>
                     <TableCell
                       className={
                         e.balance < 0
-                          ? 'text-right font-medium text-primary'
+                          ? 'text-right font-medium text-success'
                           : 'text-right font-medium'
                       }
                     >
@@ -224,7 +224,7 @@ export default function AccountStatement({
 
       {declarations.length > 0 && (
         <section>
-          <h2 className="mb-3 text-lg font-medium">Pagos declarados</h2>
+          <h2 className="mb-3 font-heading text-lg font-semibold">Pagos declarados</h2>
           <p className="mb-3 text-sm text-muted-foreground">
             Lo que avisaste con &quot;Registrar un pago&quot;. Todavía no descuenta de tu saldo
             hasta que lo confirmemos.

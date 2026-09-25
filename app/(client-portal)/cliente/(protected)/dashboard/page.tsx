@@ -69,14 +69,14 @@ export default async function DashboardPage() {
                sin convertirse en un bloque macizo. */
             <Link
               href="/cliente/cuenta"
-              className="flex items-start gap-3 rounded-lg border border-amber-400/40 bg-amber-400/10 p-4 transition-colors hover:bg-amber-400/20"
+              className="flex items-start gap-3 rounded-lg border border-warning/40 bg-warning/10 p-4 transition-colors hover:bg-warning/20"
             >
-              <CalendarClock className="mt-0.5 size-5 shrink-0 text-amber-400" />
+              <CalendarClock className="mt-0.5 size-5 shrink-0 text-warning" />
               <div>
-                <p className="font-medium text-amber-100">
+                <p className="font-medium text-warning">
                   Tu próxima cuota vence el {formatDate(nextDueDate)}
                 </p>
-                <p className="text-sm text-amber-200/70">Mirá el detalle en tu cuenta corriente.</p>
+                <p className="text-sm text-muted-foreground">Mirá el detalle en tu cuenta corriente.</p>
               </div>
             </Link>
           )
@@ -91,7 +91,7 @@ export default async function DashboardPage() {
         />
 
         <div>
-          <h2 className="mb-3 text-lg font-medium">Compras recientes</h2>
+          <h2 className="mb-3 font-heading text-lg font-semibold">Compras recientes</h2>
           <PurchasesTable purchases={contact.purchases.slice(0, 5)} />
         </div>
       </div>

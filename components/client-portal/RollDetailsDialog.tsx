@@ -129,7 +129,7 @@ function Metro({
   destacado?: boolean
 }) {
   return (
-    <div className={`rounded-md border p-2 ${destacado ? 'border-sky-500/40 bg-sky-500/5' : 'border-border'}`}>
+    <div className={`rounded-md border p-2 ${destacado ? 'border-primary/40 bg-primary/5' : 'border-border'}`}>
       <span className="block text-xs text-muted-foreground">{etiqueta}</span>
       <span className="block text-lg font-semibold tabular-nums">
         {valor === null ? '—' : `${valor} m²`}
