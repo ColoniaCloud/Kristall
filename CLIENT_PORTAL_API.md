@@ -516,6 +516,17 @@ financiadas al mismo tiempo. Solo vienen los que no están cancelados.
 cronograma: en ese caso `plans` viene vacío y `entries` igual muestra todo. Que no haya plan no
 significa que falte información.
 
+**`pendingSales`** son las ventas contra las que el Cliente puede declarar un pago desde el portal
+(el botón "Registrar un pago"). La regla es **toda venta no anulada a la que le reste saldo**, de
+cualquier `type` y tenga o no plan de cuotas — la misma que usa el extracto: si figura como deuda,
+se puede declarar un pago contra ella.
+
+> **No filtrar esto por tipo de venta.** Hasta setiembre de 2026 solo devolvía las `REGULAR`, y una
+> consignación con plan de cuotas quedaba en el peor de los dos mundos: el panel le mostraba la
+> deuda, las cuotas y el próximo vencimiento, y no le daba ningún modo de avisar el pago. Declarar
+> no es cobrar — el pago queda pendiente hasta que alguien de Kristall lo confirma—, así que
+> ampliar el universo no mueve ningún saldo por sí solo.
+
 > **Cómo se calcula el saldo:** siempre `ventas − pagos ± ajustes`, ignorando las ventas anuladas.
 > **Nunca depende de las cuotas.** Si un plan estuviera mal armado, el saldo sigue siendo correcto.
 > Es el mismo cálculo que ve el operador en el CRM, a propósito: si los números no coincidieran, el

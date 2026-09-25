@@ -331,8 +331,10 @@ export interface ClientAccount {
   entries: AccountEntry[]
   /** Vacío si ninguna compra se financió en cuotas — es el caso más común. */
   plans: AccountPlan[]
-  /** Ventas REGULAR con saldo, tengan o no plan — lo que puede recibir una
-   *  declaración de pago desde `RegisterPaymentDialog`. */
+  /** Toda venta no anulada con saldo — de cualquier tipo y tenga o no plan —
+   *  es lo que puede recibir una declaración de pago desde
+   *  `RegisterPaymentDialog`. Si viene vacío, el botón "Registrar un pago" no
+   *  se dibuja: es la única condición que lo esconde. */
   pendingSales: PendingSale[]
 }
 
