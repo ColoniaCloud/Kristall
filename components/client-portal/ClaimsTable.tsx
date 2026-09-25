@@ -1,11 +1,12 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import EmptyState from '@/components/client-portal/EmptyState'
 import StatusBadge from '@/components/common/StatusBadge'
 import { formatDate } from '@/lib/format'
 import type { Claim } from '@/lib/client-portal/api'
 
 export default function ClaimsTable({ claims }: { claims: Claim[] }) {
   if (claims.length === 0) {
-    return <p className="text-sm text-muted-foreground">Todavía no cargaste reclamos.</p>
+    return <EmptyState>Todavía no cargaste reclamos.</EmptyState>
   }
 
   return (

@@ -10,6 +10,7 @@ import { listAds } from '@/lib/client-portal/ads'
 import StatCards from '@/components/client-portal/StatCards'
 import PurchasesTable from '@/components/client-portal/PurchasesTable'
 import RegisterPaymentDialog from '@/components/client-portal/RegisterPaymentDialog'
+import PageHeader from '@/components/client-portal/PageHeader'
 import AdRotator from '@/components/client-portal/AdRotator'
 import { formatCurrency, formatDate } from '@/lib/format'
 
@@ -36,15 +37,17 @@ export default async function DashboardPage() {
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_1fr]">
       <div className="flex min-w-0 flex-col gap-6">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <h1 className="font-heading text-2xl font-semibold">Hola, {contact.firstName}</h1>
-            {/* `company` es null para los clientes sin razón social; sin esto el
-                renglón quedaba vacío debajo del saludo. */}
-            {contact.company && <p className="text-sm text-muted-foreground">{contact.company}</p>}
-          </div>
-          {account.pendingSales.length > 0 && <RegisterPaymentDialog pendingSales={account.pendingSales} />}
-        </div>
+        {/* `company` es null para los clientes sin razón social — PageHeader
+            omite el renglón en vez de dejarlo vacío debajo del saludo. */}
+        <PageHeader
+          title={`Hola, ${contact.firstName}`}
+          description={contact.company}
+          action={
+            account.pendingSales.length > 0 ? (
+              <RegisterPaymentDialog pendingSales={account.pendingSales} />
+            ) : undefined
+          }
+        />
 
         {/* Lo primero que tiene que ver es si hay algo vencido. */}
         {overdueAmount > 0 ? (

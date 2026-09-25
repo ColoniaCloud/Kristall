@@ -30,7 +30,14 @@ export default async function ProtectedLayout({ children }: { children: React.Re
             captura a esto y mandarla por WhatsApp. */}
         {session.demo && <BandaDemo />}
         <TopBar session={session} level={level} />
-        <main className="flex-1 p-4 md:p-8">{children}</main>
+        {/* El tope de ancho vive acá y no en cada pantalla porque la mitad de
+            ellas no lo tenía: en un monitor ancho, una tabla de cuatro
+            columnas cortas se estiraba 1300px y leérla era un viaje. 1200px
+            es el techo del panel; las pantallas de formulario o de lectura se
+            angostan más por su cuenta (`max-w-3xl` en Mi Taller). */}
+        <main className="flex-1 p-4 md:p-8">
+          <div className="mx-auto w-full max-w-[1200px]">{children}</div>
+        </main>
       </div>
       <RegisterServiceWorker />
       <Toaster position="top-right" />

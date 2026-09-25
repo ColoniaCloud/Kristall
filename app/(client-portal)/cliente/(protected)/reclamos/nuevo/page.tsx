@@ -4,6 +4,7 @@ import { getClientSession, levelOf } from '@/lib/client-portal/session'
 import { getInstallations } from '@/lib/client-portal/api'
 import { loadPortalData } from '@/lib/client-portal/guard'
 import ClaimForm from '@/components/client-portal/ClaimForm'
+import PageHeader from '@/components/client-portal/PageHeader'
 
 export const metadata: Metadata = { title: 'Nuevo reclamo' }
 
@@ -16,7 +17,10 @@ export default async function NuevoReclamoPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-heading text-2xl font-semibold">Nuevo reclamo</h1>
+      <PageHeader
+        title="Nuevo reclamo"
+        description="Contá qué pasó con una garantía que activaste. Lo revisamos y te respondemos."
+      />
       <ClaimForm installations={installations} />
     </div>
   )

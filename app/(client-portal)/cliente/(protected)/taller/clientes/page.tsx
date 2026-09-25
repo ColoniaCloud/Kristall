@@ -6,6 +6,7 @@ import { getClientSession } from '@/lib/client-portal/session'
 import { loadPortalData } from '@/lib/client-portal/guard'
 import { listWorkshopClients } from '@/lib/client-portal/workshop'
 import { Button } from '@/components/ui/button'
+import PageHeader from '@/components/client-portal/PageHeader'
 import WorkshopClientForm from '@/components/client-portal/taller/WorkshopClientForm'
 import { plural } from '@/lib/client-portal/taller-format'
 
@@ -19,17 +20,20 @@ export default async function ClientesPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="font-heading text-2xl font-semibold">Mis clientes</h1>
-        <WorkshopClientForm
-          trigger={
-            <Button>
-              <Plus className="size-4" />
-              Nuevo cliente
-            </Button>
-          }
-        />
-      </div>
+      <PageHeader
+        title="Mis clientes"
+        description="Los clientes de tu taller. No se comparten con Kristall."
+        action={
+          <WorkshopClientForm
+            trigger={
+              <Button>
+                <Plus className="size-4" />
+                Nuevo cliente
+              </Button>
+            }
+          />
+        }
+      />
 
       {clients.length === 0 ? (
         <div className="rounded-lg border border-border bg-card p-6">

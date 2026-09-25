@@ -9,6 +9,7 @@ import PhotoAlbumForm from '@/components/client-portal/taller/PhotoAlbumForm'
 import ServicesForm from '@/components/client-portal/taller/ServicesForm'
 import ConfiguracionTabs from '@/components/client-portal/taller/ConfiguracionTabs'
 import Recorrido from '@/components/client-portal/Recorrido'
+import PageHeader from '@/components/client-portal/PageHeader'
 
 export const metadata: Metadata = { title: 'Configuración del taller' }
 
@@ -35,12 +36,10 @@ export default async function ConfiguracionPage() {
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
       <Recorrido pantalla="configuracion" activo={Boolean(session.demo)} />
-      <div>
-        <h1 className="font-heading text-2xl font-semibold">Configuración del taller</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Cómo te ven tus clientes en las garantías que generás y en tu página pública.
-        </p>
-      </div>
+      <PageHeader
+        title="Configuración del taller"
+        description="Cómo te ven tus clientes en las garantías que generás y en tu página pública."
+      />
       <ConfiguracionTabs
         tabInicial={session.demo ? 'pagina' : 'general'}
         general={<WorkshopSettingsForm settings={settings} logoSrc={logoSrc} />}

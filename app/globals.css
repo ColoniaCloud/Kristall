@@ -302,3 +302,35 @@ body {
   color: oklch(0.75 0.006 285);
   border-color: oklch(0.42 0.006 285);
 }
+
+/* ---------------------------------------------------------------------- */
+/* Listas del panel: una sola superficie para todas.                      */
+/*                                                                          */
+/* Mi Taller ya dibujaba sus listas dentro de un contenedor con borde, y   */
+/* las seis tablas del portal original flotaban sueltas sobre el fondo:    */
+/* dos lenguajes para la misma cosa. Se resuelve acá, sobre el contenedor  */
+/* que ya emite table.tsx, y no en cada componente, por dos razones: son   */
+/* seis archivos que no tienen nada más en común, y la séptima tabla que   */
+/* alguien agregue tiene que salir bien sin acordarse de esta decisión.    */
+/* ---------------------------------------------------------------------- */
+.crm-theme [data-slot="table-container"] {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--card);
+}
+
+/* Las celdas traen px-2, que alcanza entre columnas y queda corto contra el
+   marco del panel. */
+.crm-theme [data-slot="table-container"] :is(th, td):first-child {
+  padding-left: 0.75rem;
+}
+.crm-theme [data-slot="table-container"] :is(th, td):last-child {
+  padding-right: 0.75rem;
+}
+
+/* Cifras y fechas alinean entre filas. Es una tabla de plata: que el peso de
+   una columna de importes baile según qué dígitos toquen la vuelve ilegible
+   de un vistazo, que es justo para lo que sirve una tabla. */
+.crm-theme [data-slot="table"] {
+  font-variant-numeric: tabular-nums;
+}

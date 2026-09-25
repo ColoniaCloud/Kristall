@@ -1,11 +1,12 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import EmptyState from '@/components/client-portal/EmptyState'
 import StatusBadge from '@/components/common/StatusBadge'
 import { formatDate } from '@/lib/format'
 import type { Installation } from '@/lib/client-portal/api'
 
 export default function InstallationsTable({ installations }: { installations: Installation[] }) {
   if (installations.length === 0) {
-    return <p className="text-sm text-muted-foreground">Todavía no hay garantías activadas por tus clientes.</p>
+    return <EmptyState>Todavía no hay garantías activadas por tus clientes.</EmptyState>
   }
 
   return (

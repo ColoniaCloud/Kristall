@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
-import { ArrowLeft, Plus, Phone, Mail, Pencil } from 'lucide-react'
+import { Plus, Phone, Mail, Pencil } from 'lucide-react'
 import { getClientSession } from '@/lib/client-portal/session'
 import { loadPortalData } from '@/lib/client-portal/guard'
 import { getWorkshopClient, listWorkOrders } from '@/lib/client-portal/workshop'
 import { CrmApiError } from '@/lib/crm/api'
 import { Button } from '@/components/ui/button'
+import PageHeader from '@/components/client-portal/PageHeader'
 import WorkshopClientForm from '@/components/client-portal/taller/WorkshopClientForm'
 import WorkshopAssetForm from '@/components/client-portal/taller/WorkshopAssetForm'
 import WorkOrderStatusBadge from '@/components/client-portal/taller/WorkOrderStatusBadge'
@@ -38,25 +39,21 @@ export default async function ClientePage({ params }: { params: Promise<{ client
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
       <div className="flex flex-col gap-3">
-        <Link
-          href="/cliente/taller/clientes"
-          className="inline-flex w-fit items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="size-4" />
-          Mis clientes
-        </Link>
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h1 className="font-heading text-2xl font-semibold">{client.name}</h1>
-          <WorkshopClientForm
-            client={client}
-            trigger={
-              <Button variant="outline" size="sm">
-                <Pencil className="size-4" />
-                Editar
-              </Button>
-            }
-          />
-        </div>
+        <PageHeader
+          back={{ href: '/cliente/taller/clientes', label: 'Mis clientes' }}
+          title={client.name}
+          action={
+            <WorkshopClientForm
+              client={client}
+              trigger={
+                <Button variant="outline" size="sm">
+                  <Pencil className="size-4" />
+                  Editar
+                </Button>
+              }
+            />
+          }
+        />
         <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
           {client.phone && (
             <a href={`tel:${client.phone}`} className="inline-flex items-center gap-1.5 hover:text-foreground">

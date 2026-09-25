@@ -1,10 +1,11 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import EmptyState from '@/components/client-portal/EmptyState'
 import { formatCurrency, formatDate } from '@/lib/format'
 import type { Payment } from '@/lib/client-portal/api'
 
 export default function PaymentsTable({ payments }: { payments: Payment[] }) {
   if (payments.length === 0) {
-    return <p className="text-sm text-muted-foreground">Todavía no registraste pagos.</p>
+    return <EmptyState>Todavía no registraste pagos.</EmptyState>
   }
 
   return (

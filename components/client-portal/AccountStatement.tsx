@@ -1,7 +1,9 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
+import EmptyState from '@/components/client-portal/EmptyState'
 import MonthlyTotalCard from '@/components/client-portal/MonthlyTotalCard'
 import { formatCurrency, formatDate } from '@/lib/format'
+import { cn } from '@/lib/utils'
 import { totalesPorMes, mesActual } from '@/lib/client-portal/account-months'
 import type {
   ClientAccount,
@@ -59,13 +61,11 @@ function StatCard({
     <div className="rounded-lg border border-border bg-card p-4">
       <p className="text-xs text-muted-foreground">{label}</p>
       <p
-        className={
-          tone === 'bad'
-            ? 'text-xl font-semibold text-destructive'
-            : tone === 'good'
-              ? 'text-xl font-semibold text-primary'
-              : 'text-xl font-semibold'
-        }
+        className={cn(
+          'text-xl font-semibold tabular-nums',
+          tone === 'bad' && 'text-destructive',
+          tone === 'good' && 'text-primary'
+        )}
       >
         {value}
       </p>
@@ -179,10 +179,9 @@ export default function AccountStatement({
       <section>
         <h2 className="mb-3 text-lg font-medium">Movimientos</h2>
         {entries.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Todavía no hay movimientos en tu cuenta.</p>
+          <EmptyState>Todavía no hay movimientos en tu cuenta.</EmptyState>
         ) : (
-          <div className="overflow-x-auto">
-            <Table>
+          <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Fecha</TableHead>
@@ -215,8 +214,7 @@ export default function AccountStatement({
                   </TableRow>
                 ))}
               </TableBody>
-            </Table>
-          </div>
+          </Table>
         )}
         <p className="mt-3 text-xs text-muted-foreground">
           El saldo se calcula como el total de tus compras menos todo lo que pagaste. Si ves un saldo
@@ -231,8 +229,7 @@ export default function AccountStatement({
             Lo que avisaste con &quot;Registrar un pago&quot;. Todavía no descuenta de tu saldo
             hasta que lo confirmemos.
           </p>
-          <div className="overflow-x-auto">
-            <Table>
+          <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Fecha</TableHead>
@@ -258,8 +255,7 @@ export default function AccountStatement({
                   </TableRow>
                 ))}
               </TableBody>
-            </Table>
-          </div>
+          </Table>
         </section>
       )}
     </div>

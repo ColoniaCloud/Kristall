@@ -6,6 +6,7 @@ import { getClientSession } from '@/lib/client-portal/session'
 import { loadPortalData } from '@/lib/client-portal/guard'
 import { getAgenda } from '@/lib/client-portal/workshop'
 import { Button } from '@/components/ui/button'
+import PageHeader from '@/components/client-portal/PageHeader'
 import WorkOrderStatusBadge from '@/components/client-portal/taller/WorkOrderStatusBadge'
 import { formatHora, describirAsset, toDateInput } from '@/lib/client-portal/taller-format'
 
@@ -58,24 +59,26 @@ export default async function AgendaPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="font-heading text-2xl font-semibold">Agenda</h1>
-        <div className="flex items-center gap-2">
-          <Button asChild variant="outline" size="icon" aria-label="Semana anterior">
-            <Link href={`/cliente/taller/agenda?semana=${toDateInput(anterior)}`}>
-              <ChevronLeft className="size-4" />
-            </Link>
-          </Button>
-          <Button asChild variant="outline" size="sm">
-            <Link href="/cliente/taller/agenda">Hoy</Link>
-          </Button>
-          <Button asChild variant="outline" size="icon" aria-label="Semana siguiente">
-            <Link href={`/cliente/taller/agenda?semana=${toDateInput(siguiente)}`}>
-              <ChevronRight className="size-4" />
-            </Link>
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title="Agenda"
+        action={
+          <div className="flex items-center gap-2">
+            <Button asChild variant="outline" size="icon" aria-label="Semana anterior">
+              <Link href={`/cliente/taller/agenda?semana=${toDateInput(anterior)}`}>
+                <ChevronLeft className="size-4" />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/cliente/taller/agenda">Hoy</Link>
+            </Button>
+            <Button asChild variant="outline" size="icon" aria-label="Semana siguiente">
+              <Link href={`/cliente/taller/agenda?semana=${toDateInput(siguiente)}`}>
+                <ChevronRight className="size-4" />
+              </Link>
+            </Button>
+          </div>
+        }
+      />
 
       <div className="flex flex-col gap-3">
         {dias.map((dia) => {

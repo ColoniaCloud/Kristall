@@ -1,11 +1,12 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import EmptyState from '@/components/client-portal/EmptyState'
 import StatusBadge from '@/components/common/StatusBadge'
 import { formatCurrency, formatDate } from '@/lib/format'
 import type { Purchase } from '@/lib/client-portal/api'
 
 export default function PurchasesTable({ purchases }: { purchases: Purchase[] }) {
   if (purchases.length === 0) {
-    return <p className="text-sm text-muted-foreground">Todavía no tenés compras registradas.</p>
+    return <EmptyState>Todavía no tenés compras registradas.</EmptyState>
   }
 
   return (

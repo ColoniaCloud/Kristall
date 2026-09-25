@@ -9,6 +9,7 @@ import {
   type WorkshopAsset,
 } from '@/lib/client-portal/workshop'
 import WorkOrderForm from '@/components/client-portal/taller/WorkOrderForm'
+import PageHeader from '@/components/client-portal/PageHeader'
 
 export const metadata: Metadata = { title: 'Nueva orden' }
 
@@ -35,7 +36,7 @@ export default async function NuevaOrdenPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
-      <h1 className="font-heading text-2xl font-semibold">Nueva orden</h1>
+      <PageHeader title="Nueva orden" />
       <WorkOrderForm clients={clients} assetsByClient={assetsByClient} rolls={rolls} />
     </div>
   )

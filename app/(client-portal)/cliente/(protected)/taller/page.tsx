@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import WorkOrderStatusBadge from '@/components/client-portal/taller/WorkOrderStatusBadge'
 import { formatHora, formatMoney, describirAsset } from '@/lib/client-portal/taller-format'
 import Recorrido from '@/components/client-portal/Recorrido'
+import PageHeader from '@/components/client-portal/PageHeader'
 
 export const metadata: Metadata = { title: 'Mi Taller' }
 
@@ -37,15 +38,17 @@ export default async function TallerPage() {
   return (
     <div className="flex flex-col gap-6">
       <Recorrido pantalla="taller" activo={Boolean(session.demo)} />
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="font-heading text-2xl font-semibold">Mi Taller</h1>
-        <Button asChild size="lg">
-          <Link href="/cliente/taller/ordenes/nueva">
-            <Plus className="size-5" />
-            Nueva orden
-          </Link>
-        </Button>
-      </div>
+      <PageHeader
+        title="Mi Taller"
+        action={
+          <Button asChild size="lg">
+            <Link href="/cliente/taller/ordenes/nueva">
+              <Plus className="size-5" />
+              Nueva orden
+            </Link>
+          </Button>
+        }
+      />
 
       <div data-tour="resumen-mes" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Tarjeta titulo="Turnos de hoy" valor={String(summary.hoy.turnos)} icono={CalendarClock} />

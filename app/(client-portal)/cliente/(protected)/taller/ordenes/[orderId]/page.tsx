@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
-import { ArrowLeft, Phone, ShieldCheck } from 'lucide-react'
+import { Phone, ShieldCheck } from 'lucide-react'
 import { getClientSession } from '@/lib/client-portal/session'
 import { loadPortalData } from '@/lib/client-portal/guard'
 import { getWorkOrder } from '@/lib/client-portal/workshop'
 import { CrmApiError } from '@/lib/crm/api'
 import WorkOrderStatusBadge from '@/components/client-portal/taller/WorkOrderStatusBadge'
+import PageHeader from '@/components/client-portal/PageHeader'
 import WorkOrderActions from '@/components/client-portal/taller/WorkOrderActions'
 import WorkOrderPaymentForm from '@/components/client-portal/taller/WorkOrderPaymentForm'
 import ResendWarrantyEmail from '@/components/client-portal/taller/ResendWarrantyEmail'
@@ -47,19 +48,11 @@ export default async function OrdenPage({ params }: { params: Promise<{ orderId:
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
-      <div className="flex flex-col gap-3">
-        <Link
-          href="/cliente/taller/ordenes"
-          className="inline-flex w-fit items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="size-4" />
-          Órdenes
-        </Link>
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="font-heading text-2xl font-semibold">Orden #{order.orderNumber}</h1>
-          <WorkOrderStatusBadge status={order.status} />
-        </div>
-      </div>
+      <PageHeader
+        back={{ href: '/cliente/taller/ordenes', label: 'Órdenes' }}
+        title={`Orden #${order.orderNumber}`}
+        badge={<WorkOrderStatusBadge status={order.status} />}
+      />
 
       <WorkOrderActions order={order} />
 

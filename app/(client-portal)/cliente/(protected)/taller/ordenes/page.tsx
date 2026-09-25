@@ -6,6 +6,7 @@ import { getClientSession } from '@/lib/client-portal/session'
 import { loadPortalData } from '@/lib/client-portal/guard'
 import { listWorkOrders, type WorkOrderStatus } from '@/lib/client-portal/workshop'
 import { Button } from '@/components/ui/button'
+import PageHeader from '@/components/client-portal/PageHeader'
 import WorkOrderStatusBadge, { ESTADO_LABEL } from '@/components/client-portal/taller/WorkOrderStatusBadge'
 import { formatMoney, formatDateTime, describirAsset } from '@/lib/client-portal/taller-format'
 
@@ -40,15 +41,17 @@ export default async function OrdenesPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="font-heading text-2xl font-semibold">Órdenes</h1>
-        <Button asChild>
-          <Link href="/cliente/taller/ordenes/nueva">
-            <Plus className="size-4" />
-            Nueva orden
-          </Link>
-        </Button>
-      </div>
+      <PageHeader
+        title="Órdenes"
+        action={
+          <Button asChild>
+            <Link href="/cliente/taller/ordenes/nueva">
+              <Plus className="size-4" />
+              Nueva orden
+            </Link>
+          </Button>
+        }
+      />
 
       <nav className="flex flex-wrap gap-2" aria-label="Filtrar por estado">
         <FiltroChip href="/cliente/taller/ordenes" activo={!filtro} label="Todas" />

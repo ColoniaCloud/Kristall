@@ -1,4 +1,5 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import EmptyState from '@/components/client-portal/EmptyState'
 import CreateInstallationAction from '@/components/client-portal/CreateInstallationAction'
 import { formatGarantia } from '@/lib/client-portal/taller-format'
 import type { WorkshopStockRoll } from '@/lib/client-portal/workshop'
@@ -18,7 +19,7 @@ import type { WorkshopStockRoll } from '@/lib/client-portal/workshop'
  */
 export default function StockTable({ rolls }: { rolls: WorkshopStockRoll[] }) {
   if (rolls.length === 0) {
-    return <p className="text-sm text-muted-foreground">Todavía no tenés rollos asignados.</p>
+    return <EmptyState>Todavía no tenés rollos asignados.</EmptyState>
   }
 
   return (
