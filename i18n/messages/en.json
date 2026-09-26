@@ -133,6 +133,14 @@
     "empty_products": "No products available in this line yet.",
     "breadcrumb_home": "Home"
   },
+  "portal_instaladores": {
+    "title": "Installer Portal",
+    "desc": "A dedicated portal to help you run your business, keep track of your stock and manage your customer relationships.",
+    "cta": "Try the demo",
+    "note": "*The demo uses fictitious data so you can try out the whole system.",
+    "error": "We couldn't open the demo. Please try again in a moment.",
+    "alt": "Walkthrough of the Installer Portal"
+  },
   "services": {
     "label": "Software",
     "svc1_title": "Implementation and onboarding",

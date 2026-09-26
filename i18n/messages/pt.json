@@ -133,6 +133,14 @@
     "empty_products": "Não há produtos disponíveis nesta linha ainda.",
     "breadcrumb_home": "Início"
   },
+  "portal_instaladores": {
+    "title": "Portal de Instaladores",
+    "desc": "Um portal dedicado para ajudar você na gestão do seu negócio, no controle de estoque e no relacionamento com os seus clientes.",
+    "cta": "Testar a demo",
+    "note": "*A demo utiliza dados fictícios para que você possa testar todo o nosso sistema.",
+    "error": "Não conseguimos abrir a demo. Tente de novo em instantes.",
+    "alt": "Passeio pelo Portal de Instaladores"
+  },
   "services": {
     "label": "Software",
     "svc1_title": "Implementação e onboarding",

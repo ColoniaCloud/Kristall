@@ -5,7 +5,7 @@ import HeroCategories from '@/components/sections/HeroCategories'
 import BrandStory from '@/components/sections/BrandStory'
 import ShowRoomComingSoon from '@/components/sections/ShowRoomComingSoon'
 import ProductsGrid from '@/components/sections/ProductsGrid'
-import ServicesSection from '@/components/sections/ServicesSection'
+import PortalInstaladores from '@/components/sections/PortalInstaladores'
 import ContactCTA from '@/components/sections/ContactCTA'
 import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
 
@@ -35,7 +35,7 @@ export default function HomePage() {
       <BrandStory />
       <ShowRoomComingSoon />
       <ProductsGrid />
-      <ServicesSection />
+      <PortalInstaladores />
       <ContactCTA />
     </>
   )

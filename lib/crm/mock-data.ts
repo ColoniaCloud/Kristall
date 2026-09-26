@@ -357,6 +357,17 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
     return { status: 401, data: { error: 'Credenciales inválidas' } }
   }
 
+  // Sesión de demostración (sección 4.11 de CLIENT_PORTAL_API.md). En mock
+  // devuelve el mismo contacto de siempre: `callCrmApi` reapunta a los espejos
+  // `/demo/` recién en la rama que pega al CRM real, así que acá el taller de
+  // demo se sirve con los fixtures normales.
+  if (path === '/api/public/demo/session' && method === 'POST') {
+    return {
+      status: 200,
+      data: { contactId: MOCK_CONTACT_ID, credentialVersion: MOCK_CREDENTIAL_VERSION, nombre: MOCK_CONTACT.company },
+    }
+  }
+
   // --- Portal de Clientes (CLIENT_PORTAL_API.md) ---
   if (path === '/api/portal/v1/auth/login' && method === 'POST') {
     const { email, password } = (body ?? {}) as { email?: string; password?: string }
