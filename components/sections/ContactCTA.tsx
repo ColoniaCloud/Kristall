@@ -12,7 +12,7 @@ export default function ContactCTA() {
     <section className="relative overflow-hidden px-6 min-h-[50vh] flex items-center">
       {/* Background Image — bg-fixed: queda anclada al viewport, el contenido se desliza sobre ella */}
       <div
-        className="absolute inset-0 bg-[url('/futermail.png')] bg-cover bg-bottom bg-fixed"
+        className="absolute inset-0 bg-[url('/futermail.webp')] bg-cover bg-bottom"
         aria-hidden="true"
       />
       {/* Overlay */}

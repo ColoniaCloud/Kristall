@@ -110,7 +110,7 @@ export default function BrandStory() {
           variants={fadeInUpVariants}
           transition={{ delay: 0.1 }}
           style={{
-            backgroundImage: 'url(/builds.jpg)',
+            backgroundImage: 'url(/builds.webp)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',

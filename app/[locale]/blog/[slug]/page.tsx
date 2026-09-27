@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import type { ComponentProps } from 'react'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { RichText } from '@payloadcms/richtext-lexical/react'
-import { Link } from '@/i18n/routing'
+import { Link, routing } from '@/i18n/routing'
 import { buildAlternates, BASE } from '@/lib/seo'
 import {
   getArticleBySlug,
@@ -21,8 +21,7 @@ export const revalidate = 3600
 // Genera los slugs publicados para cada idioma (mismo patrón que /productos/categorias).
 export async function generateStaticParams() {
   const articles = await getPublishedArticles(100)
-  const locales = ['es', 'en', 'de']
-  return locales.flatMap((locale) => articles.map((a) => ({ locale, slug: a.slug })))
+  return routing.locales.flatMap((locale) => articles.map((a) => ({ locale, slug: a.slug })))
 }
 
 /** URL de imagen para metadata: meta.image del plugin SEO, con fallback a coverImage. */
@@ -108,6 +107,7 @@ function blogPostingLd(article: Article, locale: string, slug: string, loc: Blog
 
 export default async function ArticuloPage({ params }: PageProps) {
   const { locale, slug } = await params
+  setRequestLocale(locale)
   const loc = locale as BlogLocale
 
   const article = await getArticleBySlug(slug)

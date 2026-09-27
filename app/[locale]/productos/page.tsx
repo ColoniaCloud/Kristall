@@ -3,11 +3,13 @@ import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
 import ProductsHero from '@/components/product/ProductsHero'
 import CatalogDownloadBar from '@/components/product/CatalogDownloadBar'
 import ProductsClient from '@/components/product/ProductsClient'
+import { setRequestLocale } from 'next-intl/server'
 
 const pageMeta: Record<string, { title: string; description: string }> = {
   es: { title: 'Productos', description: 'Explorá nuestro catálogo completo de láminas automotrices, arquitectónicas y PPF.' },
   en: { title: 'Products', description: 'Browse our full catalog of automotive, architectural and PPF window films.' },
   de: { title: 'Produkte', description: 'Durchstöbern Sie unser vollständiges Sortiment an Automobil-, Architektur- und Lackschutzfolien.' },
+  pt: { title: 'Produtos', description: 'Explore nosso catálogo completo de películas automotivas, arquitetônicas e PPF.' },
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -21,7 +23,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function ProductsPage() {
+export default async function ProductsPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  setRequestLocale(locale)
+
   return (
     <div className="min-h-screen bg-[#F2F2F0]">
       <ProductsHero />

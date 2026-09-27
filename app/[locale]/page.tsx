@@ -8,11 +8,13 @@ import ProductsGrid from '@/components/sections/ProductsGrid'
 import PortalInstaladores from '@/components/sections/PortalInstaladores'
 import ContactCTA from '@/components/sections/ContactCTA'
 import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
+import { setRequestLocale } from 'next-intl/server'
 
 const pageMeta: Record<string, { title: string; description: string }> = {
   es: { title: 'Inicio', description: 'Láminas polarizantes de tecnología alemana para automotriz, arquitectura y PPF. Distribuidor oficial en Argentina.' },
   en: { title: 'Home', description: 'German-engineered window films for automotive, architectural and PPF applications. Official distributor in Argentina.' },
   de: { title: 'Startseite', description: 'Deutsche Folientechnologie für Automobil, Architektur und Lackschutzfolie. Offizieller Vertrieb in Argentinien.' },
+  pt: { title: 'Início', description: 'Películas de controle solar de tecnologia alemã para automotivo, arquitetura e PPF. Distribuidor oficial na América Latina.' },
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -26,7 +28,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function HomePage() {
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  setRequestLocale(locale)
+
   return (
     <>
       <Hero />

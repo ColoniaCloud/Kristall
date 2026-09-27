@@ -1,7 +1,7 @@
 'use client'
 
 import { useLocale, useTranslations } from 'next-intl'
-import { Link } from '@/i18n/routing'
+import { Link, type Locale } from '@/i18n/routing'
 import NextLink from 'next/link'
 import { MapPin } from 'lucide-react'
 import SocialIcons from '@/components/common/SocialIcons'
@@ -10,7 +10,7 @@ import { OFFICE_MAPS_URL } from '@/lib/office'
 export default function Footer() {
   const t = useTranslations('footer')
   const tTopbar = useTranslations('topbar')
-  const locale = useLocale() as 'es' | 'en' | 'de'
+  const locale = useLocale() as Locale
   const hasOffice = locale === 'es'
 
   return (

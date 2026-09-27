@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import { Link, useRouter, usePathname } from '@/i18n/routing'
+import { Link, useRouter, usePathname, routing, type Locale } from '@/i18n/routing'
 import NextLink from 'next/link'
 import Image from 'next/image'
 import TopBar from '@/components/layout/TopBar'
@@ -22,7 +22,7 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
-  const locale = useLocale() as 'es' | 'en' | 'de'
+  const locale = useLocale() as Locale
   const router = useRouter()
   const openCart = useCart((s) => s.openCart)
   const cartCount = useCart((s) => s.items.reduce((acc, i) => acc + i.quantity, 0))
@@ -56,7 +56,7 @@ export default function Header() {
     return () => { document.body.style.overflow = '' }
   }, [mobileOpen])
 
-  const switchLocale = (loc: 'es' | 'en' | 'de') => {
+  const switchLocale = (loc: Locale) => {
     router.replace(pathname, { locale: loc })
     setMobileOpen(false)
   }
@@ -231,7 +231,7 @@ export default function Header() {
             <div className="mt-8">
               <p className="text-xs uppercase tracking-widest text-[#9A9A9A] mb-3">{t('language')}</p>
               <div className="flex gap-2">
-                {(['es', 'en', 'de'] as const).map(loc => (
+                {routing.locales.map(loc => (
                   <button
                     key={loc}
                     type="button"

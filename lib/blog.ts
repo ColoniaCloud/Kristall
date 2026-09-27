@@ -11,7 +11,7 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
-export type BlogLocale = 'es' | 'en' | 'de'
+export type BlogLocale = 'es' | 'en' | 'de' | 'pt'
 
 export interface MediaDoc {
   url?: string | null

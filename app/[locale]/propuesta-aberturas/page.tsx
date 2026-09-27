@@ -7,6 +7,7 @@ import PropuestaVidrieriasGarantia from '@/components/sections/propuesta-vidrier
 import PropuestaVidrieriasCompromisos from '@/components/sections/propuesta-vidrierias/PropuestaVidrieriasCompromisos'
 import PropuestaVidrieriasCTA from '@/components/sections/propuesta-vidrierias/PropuestaVidrieriasCTA'
 import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
+import { setRequestLocale } from 'next-intl/server'
 
 export const revalidate = 3600
 
@@ -23,6 +24,11 @@ const pageMeta: Record<string, { title: string; description: string }> = {
     title: 'Angebot für Fenster- und Türenhändler — Kristall-Partnerprogramm',
     description: 'Erweitern Sie Ihr Geschäft als Fenster- und Türenhändler mit dem Kristall-Partnerprogramm: technischer und kaufmännischer Support sowie digitale Garantie für jede Installation.',
   },
+  pt: {
+    title: 'Proposta Esquadrias — Programa de Parceiros Kristall',
+    description:
+      'Some uma nova unidade de negócio à sua empresa de esquadrias com o Programa de Parceiros Kristall: suporte técnico, comercial e Garantia Digital em cada instalação.',
+  },
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -38,7 +44,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function PropuestaVidrieriasPage() {
+export default async function PropuestaVidrieriasPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  setRequestLocale(locale)
+
   return (
     <>
       <PropuestaVidrieriasHero />

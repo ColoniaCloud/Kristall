@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl'
 import { Mail, MapPin } from 'lucide-react'
 import LanguageSelector from '@/components/common/LanguageSelector'
+import type { Locale } from '@/i18n/routing'
 import SocialIcons from '@/components/common/SocialIcons'
 import { OFFICE_MAPS_URL } from '@/lib/office'
 
@@ -23,7 +24,7 @@ import { OFFICE_MAPS_URL } from '@/lib/office'
 
 export default function TopBar() {
   const t = useTranslations('topbar')
-  const locale = useLocale() as 'es' | 'en' | 'de'
+  const locale = useLocale() as Locale
   const email = t('email')
   const hasOffice = locale === 'es'
 

@@ -1,5 +1,5 @@
 import { NextIntlClientProvider } from 'next-intl'
-import { getMessages } from 'next-intl/server'
+import { getMessages, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 import Header from '@/components/layout/Header'
@@ -60,6 +60,14 @@ const localeMeta: Record<string, { title: string; description: string; locale: s
   },
 }
 
+/**
+ * Sin esto el segmento [locale] no tiene params conocidos en build y NINGUNA
+ * ruta del sitio público se prerenderiza (ver AUDITORIA-SEO-GEO-AIO.md, P1-1).
+ */
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }))
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const meta = localeMeta[locale] ?? localeMeta.es
@@ -105,6 +113,10 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params
   if (!routing.locales.includes(locale as (typeof routing.locales)[number])) notFound()
+  // Habilita el renderizado estático: sin esta llamada getMessages/getTranslations
+  // leen la request y vuelven dinámica toda página del árbol. Cada page.tsx bajo
+  // [locale] tiene que llamarla también.
+  setRequestLocale(locale)
   const messages = await getMessages()
   return (
     <html lang={locale}>

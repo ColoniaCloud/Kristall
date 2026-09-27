@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
-import { Link } from '@/i18n/routing'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { Link, routing } from '@/i18n/routing'
 import ProductCard from '@/components/product/ProductCard'
 import ExteriorComingSoon from '@/components/sections/ExteriorComingSoon'
 import { LINEAS, LINEA_SLUGS, getLinea, lineaDestacadaSrc, lineaLogoSrc, type Linea } from '@/lib/catalogo'
@@ -9,9 +9,18 @@ import { buildAlternates, productJsonLd, BASE } from '@/lib/seo'
 
 export function generateStaticParams() {
   return LINEA_SLUGS.flatMap((slug) =>
-    ['es', 'en', 'de'].map((locale) => ({ locale, linea: slug })),
+    routing.locales.map((locale) => ({ locale, linea: slug })),
   )
 }
+/**
+ * El catálogo es un set cerrado: sale de data/catalogo.json, que se sincroniza en
+ * el `prebuild`, así que el build siempre tiene la lista completa y no hay params
+ * válidos fuera de generateStaticParams. Con dynamicParams=false el router rechaza
+ * cualquier otro slug de entrada, en vez de renderizar y cachear una página de 404
+ * por cada URL inventada que pruebe un bot.
+ */
+export const dynamicParams = false
+
 
 async function tagline(locale: string, linea: Linea): Promise<string> {
   const tm = await getTranslations({ locale, namespace: 'product_modal' })
@@ -52,6 +61,7 @@ interface PageProps {
 
 export default async function LineaPage({ params }: PageProps) {
   const { locale, linea: slug } = await params
+  setRequestLocale(locale)
   const linea = getLinea(slug)
   if (!linea) notFound()
 

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
-import { Link } from '@/i18n/routing'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { Link, routing } from '@/i18n/routing'
 import ProductCard from '@/components/product/ProductCard'
 import ProductDetail from '@/components/product/ProductDetail'
 import ExteriorComingSoon from '@/components/sections/ExteriorComingSoon'
@@ -11,10 +11,19 @@ import { buildAlternates, productJsonLd, resolveProductImage, BASE } from '@/lib
 export function generateStaticParams() {
   return LINEAS.flatMap((linea) =>
     linea.productos.flatMap((p) =>
-      ['es', 'en', 'de'].map((locale) => ({ locale, linea: linea.slug, producto: productoSlug(p) })),
+      routing.locales.map((locale) => ({ locale, linea: linea.slug, producto: productoSlug(p) })),
     ),
   )
 }
+/**
+ * El catálogo es un set cerrado: sale de data/catalogo.json, que se sincroniza en
+ * el `prebuild`, así que el build siempre tiene la lista completa y no hay params
+ * válidos fuera de generateStaticParams. Con dynamicParams=false el router rechaza
+ * cualquier otro slug de entrada, en vez de renderizar y cachear una página de 404
+ * por cada URL inventada que pruebe un bot.
+ */
+export const dynamicParams = false
+
 
 interface RouteParams {
   locale: string
@@ -73,6 +82,7 @@ interface PageProps {
 
 export default async function ProductoPage({ params }: PageProps) {
   const { locale, linea: slug, producto: productoParam } = await params
+  setRequestLocale(locale)
   const resolved = resolveRoute(slug, productoParam)
   if (!resolved) notFound()
   const { linea, producto } = resolved

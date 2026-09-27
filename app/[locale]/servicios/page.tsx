@@ -3,11 +3,13 @@ import ServicesHero from '@/components/sections/services/ServicesHero'
 import ServicesPolarizedApp from '@/components/sections/services/ServicesPolarizedApp'
 import ServicesCTA from '@/components/sections/services/ServicesCTA'
 import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
+import { setRequestLocale } from 'next-intl/server'
 
 const pageMeta: Record<string, { title: string; description: string }> = {
   es: { title: 'Software para instaladores', description: 'Descubrí Polarized, la app de cálculo de Kristall Film para instaladores profesionales de láminas automotrices. Herramienta gratuita y precisa.' },
   en: { title: 'Installer Software', description: "Discover Polarized, Kristall Film's calculation app for professional window film installers. Free and accurate tool for automotive technicians." },
   de: { title: 'Installateur-Software', description: 'Entdecken Sie Polarized, die Berechnungs-App von Kristall Film für professionelle Folieninstallateure. Kostenloses Werkzeug für Kfz-Techniker.' },
+  pt: { title: 'Software para instaladores', description: 'Conheça o Polarized, o app de cálculo da Kristall Film para instaladores profissionais de películas automotivas. Ferramenta gratuita e precisa.' },
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -21,7 +23,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function ServiciosPage() {
+export default async function ServiciosPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  setRequestLocale(locale)
+
   return (
     <>
       <ServicesHero />

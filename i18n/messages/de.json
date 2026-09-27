@@ -1,4 +1,9 @@
 {
+  "not_found": {
+    "title": "Seite nicht gefunden",
+    "description": "Der gesuchte Inhalt existiert nicht oder wurde verschoben.",
+    "cta": "Zurück zur Startseite"
+  },
   "nav": {
     "home": "Startseite",
     "products": "Produkte",

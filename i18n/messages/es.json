@@ -1,4 +1,9 @@
 {
+  "not_found": {
+    "title": "Página no encontrada",
+    "description": "El contenido que buscás no existe o fue movido.",
+    "cta": "Volver al inicio"
+  },
   "nav": {
     "home": "Inicio",
     "products": "Productos",

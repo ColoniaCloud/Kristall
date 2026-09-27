@@ -5,6 +5,7 @@ import ConcesionariasEquipamiento from '@/components/sections/concesionarias/Con
 import ConcesionariasRequisitos from '@/components/sections/concesionarias/ConcesionariasRequisitos'
 import ConcesionariasCTA from '@/components/sections/concesionarias/ConcesionariasCTA'
 import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
+import { setRequestLocale } from 'next-intl/server'
 
 export const revalidate = 3600
 
@@ -21,6 +22,11 @@ const pageMeta: Record<string, { title: string; description: string }> = {
     title: 'Autohaus-Programm',
     description: 'Steigern Sie Ihre Marge bei jeder Neuwagenübergabe mit dem Kristall-Tönungsprogramm: ohne Exklusivität, mit digitaler Garantie sowie technischem und kaufmännischem Support.',
   },
+  pt: {
+    title: 'Programa para Concessionárias',
+    description:
+      'Some uma margem premium a cada entrega de zero-quilômetro com o programa de insulfilm Kristall: sem exclusividade, com garantia digital e suporte técnico e comercial.',
+  },
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -34,7 +40,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function ConcesionariasPage() {
+export default async function ConcesionariasPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  setRequestLocale(locale)
+
   return (
     <>
       <ConcesionariasHero />

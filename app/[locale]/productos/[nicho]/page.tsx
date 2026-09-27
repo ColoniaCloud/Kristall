@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
-import { Link } from '@/i18n/routing'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { Link, routing } from '@/i18n/routing'
 import CategoryCard from '@/components/product/CategoryCard'
 import ExteriorComingSoon from '@/components/sections/ExteriorComingSoon'
 import { NICHOS, lineasPorNicho, type Nicho } from '@/lib/catalogo'
@@ -8,9 +8,18 @@ import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
 
 export function generateStaticParams() {
   return NICHOS.flatMap((nicho) =>
-    ['es', 'en', 'de'].map((locale) => ({ locale, nicho })),
+    routing.locales.map((locale) => ({ locale, nicho })),
   )
 }
+/**
+ * El catálogo es un set cerrado: sale de data/catalogo.json, que se sincroniza en
+ * el `prebuild`, así que el build siempre tiene la lista completa y no hay params
+ * válidos fuera de generateStaticParams. Con dynamicParams=false el router rechaza
+ * cualquier otro slug de entrada, en vez de renderizar y cachear una página de 404
+ * por cada URL inventada que pruebe un bot.
+ */
+export const dynamicParams = false
+
 
 const isNicho = (v: string): v is Nicho => (NICHOS as string[]).includes(v)
 
@@ -39,6 +48,7 @@ interface PageProps {
 
 export default async function NichoPage({ params }: PageProps) {
   const { locale, nicho } = await params
+  setRequestLocale(locale)
   if (!isNicho(nicho)) notFound()
 
   const tp = await getTranslations({ locale, namespace: 'products' })

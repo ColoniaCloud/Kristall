@@ -3,6 +3,7 @@ import PuntoHero from '@/components/sections/punto/PuntoHero'
 import PuntoPillars from '@/components/sections/punto/PuntoPillars'
 import PuntoCTA from '@/components/sections/punto/PuntoCTA'
 import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
+import { setRequestLocale } from 'next-intl/server'
 
 export const revalidate = 3600
 
@@ -19,6 +20,11 @@ const pageMeta: Record<string, { title: string; description: string }> = {
     title: 'Punto Kristall — Installateurprogramm',
     description: 'Werden Sie Punto-Kristall-Werkstatt: Wir bringen Ihnen Kunden, geben Ihnen die Werkzeuge für den Verkaufsabschluss, rücken Sie ins Rampenlicht und unterstützen Ihr Wachstum.',
   },
+  pt: {
+    title: 'Ponto Kristall — Programa para Instaladores',
+    description:
+      'Cadastre sua oficina como Ponto Kristall: levamos clientes até você, damos as ferramentas para fechar vendas, colocamos você em evidência e apoiamos seu crescimento.',
+  },
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -34,7 +40,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function PuntoKristallPage() {
+export default async function PuntoKristallPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  setRequestLocale(locale)
+
   return (
     <>
       <PuntoHero />

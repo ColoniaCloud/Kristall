@@ -5,11 +5,13 @@ import AboutValues from '@/components/sections/about/AboutValues'
 import AboutCTA from '@/components/sections/about/AboutCTA'
 import StatsRow from '@/components/sections/StatsRow'
 import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
+import { setRequestLocale } from 'next-intl/server'
 
 const pageMeta: Record<string, { title: string; description: string }> = {
   es: { title: 'Nosotros', description: 'Conocé la historia, los valores y la tecnología alemana detrás de Kristall Film, distribuidor oficial de láminas automotrices y arquitectónicas en Argentina.' },
   en: { title: 'About Us', description: 'Learn about the history, values and German technology behind Kristall Film, official distributor of automotive and architectural window films in Argentina.' },
   de: { title: 'Über uns', description: 'Erfahren Sie mehr über die Geschichte, Werte und Technologie hinter Kristall Film, dem offiziellen Vertrieb für Folien in Argentinien.' },
+  pt: { title: 'Sobre nós', description: 'Conheça a história, os valores e a tecnologia alemã por trás da Kristall Film, distribuidora oficial de películas automotivas e arquitetônicas na América Latina.' },
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -23,7 +25,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function NosotrosPage() {
+export default async function NosotrosPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  setRequestLocale(locale)
+
   return (
     <>
       <AboutHero />

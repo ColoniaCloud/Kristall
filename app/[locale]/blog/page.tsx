@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/routing'
 import { buildAlternates, DEFAULT_OG_IMAGE } from '@/lib/seo'
 import { getPublishedArticles, localized, coverMedia, type BlogLocale } from '@/lib/blog'
@@ -12,6 +12,7 @@ const pageMeta: Record<string, { title: string; description: string }> = {
   es: { title: 'Blog', description: 'Artículos técnicos, guías de instalación y novedades sobre láminas automotrices, arquitectónicas y protección de pintura de Kristall Film.' },
   en: { title: 'Blog', description: 'Technical articles, installation guides and news about automotive, architectural window films and paint protection from Kristall Film.' },
   de: { title: 'Blog', description: 'Technische Artikel, Installationsanleitungen und Neuigkeiten rund um Automobil-, Architekturfolien und Lackschutz von Kristall Film.' },
+  pt: { title: 'Blog', description: 'Artigos técnicos, guias de instalação e novidades sobre películas automotivas, arquitetônicas e proteção de pintura da Kristall Film.' },
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -43,6 +44,7 @@ interface PageProps {
 
 export default async function BlogPage({ params }: PageProps) {
   const { locale } = await params
+  setRequestLocale(locale)
   const loc = locale as BlogLocale
   const t = await getTranslations({ locale, namespace: 'blog' })
   const articles = await getPublishedArticles(12)

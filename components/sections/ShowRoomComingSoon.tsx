@@ -50,7 +50,13 @@ export default function ShowRoomComingSoon() {
   return (
     <section ref={sectionRef} className="relative overflow-hidden mb-8 h-[220px] md:h-[280px] bg-[#1A1A1A]">
       {/* Video de fondo — object-top: recorta desde abajo, donde el clip tiene
-          una marca de agua chica que no queremos mostrar. */}
+          una marca de agua chica que no queremos mostrar.
+
+          preload="none": son 3.5 MB de video decorativo. Con "auto" el navegador
+          lo bajaba entero en cada carga del home, también en celular, aunque el
+          visitante nunca llegara a esta sección. El IntersectionObserver de
+          arriba dispara el play() —y con él la descarga— solo si entra en
+          viewport. */}
       <video
         ref={videoRef}
         className="absolute inset-0 w-full h-full object-cover object-top"
@@ -58,7 +64,7 @@ export default function ShowRoomComingSoon() {
         muted
         loop
         playsInline
-        preload="auto"
+        preload="none"
         aria-hidden="true"
       />
 
