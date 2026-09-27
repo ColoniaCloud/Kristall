@@ -24,11 +24,13 @@ const CSP = [
   // nonces configurados. Sacarlos exige migrar a CSP con nonce, que es un
   // cambio aparte.
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com",
-  // fonts.googleapis.com sirve la hoja de estilos que app/globals.css importa
-  // con @import, y fonts.gstatic.com los archivos de fuente que esa hoja pide.
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  // Ya no hace falta fonts.googleapis.com: las fuentes las autohospeda next/font
+  // (lib/fonts.ts) y salen de nuestro propio origen. La plantilla de mail de
+  // lib/mail/ sí sigue pidiéndole la hoja a Google, pero eso lo renderiza el
+  // cliente de correo y no pasa por este CSP.
+  "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com",
-  "font-src 'self' data: https://fonts.gstatic.com",
+  "font-src 'self' data:",
   "media-src 'self' blob:",
   "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
   // El Panel de Cliente registra un service worker (public/cliente/sw.js).

@@ -1,12 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Anybody:wght@900&display=swap');
-
-@font-face {
-  font-family: 'Clash Display';
-  src: url('/fonts/ClashDisplay-Variable.woff2') format('woff2-variations');
-  font-weight: 200 700;
-  font-display: swap;
-}
+/* Las fuentes ya no se declaran acá: las autohospeda `next/font` desde
+   lib/fonts.ts, que inyecta los @font-face en el CSS crítico y precarga los
+   archivos. Antes había dos @import a fonts.googleapis.com y un @font-face
+   local, y esa cadena de descubrimiento demoraba la tipografía final ~2.9 s.
+   Las variables de abajo apuntan a las que define next/font. */
 
 @import "tailwindcss";
 
@@ -53,9 +49,8 @@
   --text-on-dark-muted: rgba(255, 255, 255, 0.35);
   --r: 8px;
   --rl: 12px;
-  --font-display: 'Clash Display', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
-  --font-brand: 'Anybody', sans-serif;
+  --font-display: var(--font-clash-display), sans-serif;
+  --font-body: var(--font-dm-sans), sans-serif;
   --btn-primary-bg: linear-gradient(to bottom, #1C1C1C, #0A0A0A);
   --btn-primary-border: rgba(255, 255, 255, 0.08);
   --btn-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);

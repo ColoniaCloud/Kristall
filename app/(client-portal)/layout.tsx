@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { fontsClassName } from '@/lib/fonts'
 
 export const metadata: Metadata = {
   title: { default: 'Panel de Cliente | Kristall Film', template: '%s | Panel Kristall' },
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function ClientPortalLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
+    <html lang="es" className={fontsClassName}>
       <body className="kf-app-theme min-h-screen bg-background text-foreground antialiased">
         {children}
       </body>

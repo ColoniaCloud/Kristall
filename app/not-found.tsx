@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import './globals.css'
+import { fontsClassName } from '@/lib/fonts'
 
 /**
  * 404 raíz — y, en la práctica, **el que más se sirve**. Los 404 que resuelve el
@@ -29,7 +30,7 @@ export const metadata = {
 
 export default function RootNotFound() {
   return (
-    <html lang="es">
+    <html lang="es" className={fontsClassName}>
       <body className="bg-[#F2F2F0] text-[#0A0A0A]">
         <main className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center px-6 text-center">
           <p className="mb-4 text-xs font-medium uppercase tracking-widest text-[#9A9A9A]">404</p>

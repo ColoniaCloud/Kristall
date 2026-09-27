@@ -7,6 +7,7 @@ import Footer from '@/components/layout/Footer'
 import WhatsAppFloatingButton from '@/components/layout/WhatsAppFloatingButton'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import type { Metadata } from 'next'
+import { fontsClassName } from '@/lib/fonts'
 
 const organizationLd = {
   '@context': 'https://schema.org',
@@ -119,7 +120,7 @@ export default async function LocaleLayout({
   setRequestLocale(locale)
   const messages = await getMessages()
   return (
-    <html lang={locale}>
+    <html lang={locale} className={fontsClassName}>
       <body className="flex min-h-screen flex-col">
         <NextIntlClientProvider messages={messages}>
           <Header />
