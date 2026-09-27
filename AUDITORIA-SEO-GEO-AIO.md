@@ -720,3 +720,66 @@ Nada de esto es código:
 - **La dirección de CABA con link a Google Maps sigue siendo solo para `es`** (`Footer`/`TopBar`, vía
   `hasOffice = locale === 'es'`). Se dejó tal cual porque es una decisión comercial, no un bug: si hay
   operación en Brasil con dirección propia, ahí hay que tocarlo.
+
+---
+
+## P3-5 resuelto — `llms.txt` se genera desde el catálogo
+
+Los dos archivos dejaron de estar escritos a mano en `public/` y ahora se generan en el build desde
+`lib/catalogo.ts`, la misma capa que usa el sitio. El contenido vive en `lib/llms.ts` y se sirve desde
+`app/llms.txt/route.ts` y `app/llms-full.txt/route.ts`, ambos con `dynamic = 'force-static'` (se
+prerenderizan, así que en runtime cuestan lo mismo que un estático). `public/llms.txt` y
+`public/llms-full.txt` se eliminaron: un archivo en `public/` gana sobre la ruta y el contenido generado
+dejaría de servirse sin aviso.
+
+Lo único editorial que queda a mano es la prosa que no sale de la planilla: el resumen, las FAQ y los
+programas comerciales. Todo número, código, VLT, IR, UV, espesor, garantía y URL se deriva del catálogo.
+
+### Datos corregidos
+
+| Afirmación anterior | Dato real |
+|---|---|
+| Karbon: garantía 7 años | **10 años** |
+| Karbon: IR ~50–70% | **73% y 86%** |
+| KLASS: VLT 5/15/35/50 | solo **5% y 15%** |
+| KERAMX: VLT 5/15/35/70 | solo **5% y 15%** |
+| KRYPTON: VLT 5/20/35/transparente, IR 85–90% | un producto: KS4-15, VLT **15%**, IR **95%** |
+| «VLT de 5% a 50%» | **5% a 90%** |
+| «IR hasta 95% (Keramx)» | **98%, y es Kaiser** |
+| «99% UV en todas las líneas» | **99%, 92% y 25% según producto** — Klear declara 25% y Klass 15 declara 92% |
+| Faltaban Kron, Kore y Kaiser | las 13 líneas y los 21 productos figuran |
+| «premier manufacturer and distributor» | «distribuidor oficial», que es lo que dice el resto del sitio |
+
+### Además
+
+- **Ahora hay URLs.** Era el mayor faltante: un `llms.txt` es, antes que nada, un índice de links, y el
+  anterior solo mencionaba el dominio. Ahora lleva link a cada línea, a cada una de las 21 fichas de
+  producto, a los tres programas comerciales, al software, a la verificación de garantías y a las
+  páginas de empresa. **50 URLs, las 50 verificadas contra el build** (la única que no da 200 es la raíz
+  del dominio, que redirige 307 a `/es` por diseño).
+- **Un solo idioma, coherente.** Antes `llms.txt` estaba en inglés y `llms-full.txt` en español sin
+  razón. Ahora los dos en español —el locale por defecto y el `x-default`— con las URLs apuntando a
+  `/es/` y una sección que anuncia los otros tres idiomas.
+- **FAQ técnicas reescritas** sobre datos reales, incluida una que antes no existía y que el propio
+  catálogo vuelve interesante: por qué el VLT no predice el rechazo de calor (Kron al 5% de VLT rechaza
+  11% de IR; Kaiser al 70% rechaza 98%). Se agregó una FAQ sobre legalidad del VLT que **no** afirma un
+  valor legal —varía por jurisdicción— y deriva a consultar la normativa local.
+
+### Corrección a este informe
+
+Dos cosas que la primera pasada dijo mal, verificadas ahora contra `data/catalogo.json`:
+
+- **El UVR no es 99% en todo el catálogo.** El informe lo daba por bueno al listar los datos reales;
+  Klear 8 y 12 mil declaran 25% y Klass 15 declara 92%. La versión generada no generaliza.
+- **«Polarized App» no es naming obsoleto.** El informe decía que el sitio ya lo había reemplazado por
+  «Portal Instaladores». En realidad el sitio usa los dos nombres para cosas distintas: Polarized App es
+  el software de gestión (namespace `services`) y el Portal de Instaladores es la superficie donde la red
+  entra a su cuenta (`portal_instaladores`). Los archivos generados los distinguen.
+
+### Observación que queda abierta
+
+La columna «Tecnología» de la planilla llega cruda a las páginas públicas y por lo tanto también a estos
+archivos: «Arq Nano ceramic + sputtering», «Arquitectura Decoracion» (sin tilde), «Black out Mate»,
+«Frost Blanco». Son etiquetas internas, y el sitio ya las muestra en los H1 de las páginas de línea, así
+que no es algo que introduzcan estos archivos — pero conviene pulirlas en la planilla o mapearlas a
+nombres comerciales, porque hoy son parte de lo que un modelo cita.
