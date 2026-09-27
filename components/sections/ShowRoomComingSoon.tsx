@@ -33,18 +33,33 @@ export default function ShowRoomComingSoon() {
 
     // Arrancamos el video recién cuando la sección entra en viewport, mismo
     // patrón que ServicesSection.
+    //
+    // Con `preload="none"` el play() tiene que disparar la descarga, así que un
+    // solo intento es frágil: si el navegador lo rechaza —política de autoplay,
+    // o el ahorro de energía que pausa video muteado cuando la pestaña no está en
+    // primer plano— antes se cortaba el observer igual y el video quedaba
+    // congelado para siempre. Ahora solo dejamos de intentar cuando la
+    // reproducción arrancó de verdad, y reintentamos al volver la pestaña al
+    // frente.
+    let started = false
+    const tryPlay = () => {
+      if (started) return
+      video.play().then(() => { started = true }).catch(() => {})
+    }
+
     const io = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
-          video.play().catch(() => {})
-          io.disconnect()
-        }
+        if (entries[0].isIntersecting) tryPlay()
       },
       { threshold: 0.35 },
     )
     io.observe(section)
+    document.addEventListener('visibilitychange', tryPlay)
 
-    return () => io.disconnect()
+    return () => {
+      io.disconnect()
+      document.removeEventListener('visibilitychange', tryPlay)
+    }
   }, [])
 
   return (
