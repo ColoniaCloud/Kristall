@@ -151,9 +151,9 @@ export function renderActivarGarantia(d: DatosActivarGarantia): { subject: strin
   const activationLink = escapeHtml(d.activationLink)
 
   return {
-    subject: `Activá tu garantía Kristall Film — ${productoEnAsunto}`,
+    subject: `Tu garantía ${productoEnAsunto} está lista para activar.`,
     html: documento({
-      asunto: `Activá tu garantía Kristall Film — ${productoEnAsunto}`,
+      asunto: `Tu garantía ${productoEnAsunto} está lista para activar.`,
       preheader: `${d.taller.nombre} te entregó un producto Kristall Film con garantía. Activala para dejarla a tu nombre.`,
       contenido:
         cabecera(d.logoKristallUrl, 'Pendiente de activación') +
