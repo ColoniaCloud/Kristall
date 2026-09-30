@@ -372,9 +372,16 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
   if (path === '/api/portal/v1/auth/login' && method === 'POST') {
     const { email, password } = (body ?? {}) as { email?: string; password?: string }
     if (email && password) {
-      // Con un email que empiece en "basic" se loguea como nivel BASIC, para
-      // poder probar el Panel Clientes sin las secciones de instalador.
-      const accessLevel = email.startsWith('basic') ? 'BASIC' : 'INSTALLER'
+      // El prefijo del email elige el nivel, para poder recorrer los tres
+      // paneles sin tocar la base:
+      //   basic@...      -> Panel Clientes
+      //   revendedor@... -> Portal Revendedor (Mis precios + stock con garantía)
+      //   cualquier otro -> Portal Instalador
+      const accessLevel = email.startsWith('basic')
+        ? 'BASIC'
+        : email.startsWith('revendedor')
+          ? 'RESELLER'
+          : 'INSTALLER'
       return {
         status: 200,
         data: { contactId: MOCK_CONTACT_ID, name: MOCK_CONTACT.name, company: MOCK_CONTACT.company, accessLevel, credentialVersion: MOCK_CREDENTIAL_VERSION },
@@ -437,7 +444,60 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
   }
 
   m = match(path, /^\/api\/portal\/v1\/contacts\/([^/]+)\/stock$/)
-  if (m && method === 'GET') return { status: 200, data: m[1] === MOCK_CONTACT_ID ? MOCK_STOCK : [] }
+  if (m && method === 'GET') {
+    if (m[1] !== MOCK_CONTACT_ID) return { status: 200, data: [] }
+    // El `warrantyUrl` que el CRM agrega solo para el nivel RESELLER. Acá se
+    // manda siempre: el mock no sabe con qué nivel se logueó, y la pantalla de
+    // stock solo lo lee cuando es revendedor. El último rollo va sin link, para
+    // poder ver el caso "garantía ya activada" sin inventar datos.
+    return {
+      status: 200,
+      data: MOCK_STOCK.map((r, i) => ({
+        ...r,
+        warrantyUrl:
+          i === MOCK_STOCK.length - 1
+            ? null
+            : `https://kristallfilm.com/garantia/mock-${r.fullRollCode.toLowerCase()}`,
+      })),
+    }
+  }
+
+  m = match(path, /^\/api\/portal\/v1\/contacts\/([^/]+)\/prices$/)
+  if (m && method === 'GET') {
+    if (m[1] !== MOCK_CONTACT_ID) return { status: 404, data: { error: 'Cliente no encontrado' } }
+    // Tres productos: uno con porcentaje, uno con monto fijo y uno sin
+    // descuento. Es el caso del revendedor real —se pacta lamina por lamina— y
+    // el que hace visible que los productos sin acuerdo van a precio de lista.
+    const catalogo = [
+      { id: 'p-kryon', name: 'Kristall Kryon 15', sku: 'KRY-15', precioLista: 210000, etiqueta: { code: 'KRY16', name: 'Revendedor Kryon', type: 'PERCENTAGE', value: 16.66, label: 'KRY16 — Revendedor Kryon (16.66%)' } },
+      { id: 'p-urban', name: 'Urban Carbon 20', sku: 'URB-20', precioLista: 180000, etiqueta: null },
+      { id: 'p-krypton', name: 'Kristall Krypton 15', sku: 'KRP-15', precioLista: 195000, etiqueta: null },
+      { id: 'p-kit', name: 'Kit de instalación', sku: 'KIT-01', precioLista: 12000, etiqueta: { code: 'FIJO2', name: 'Kit bonificado', type: 'FIXED', value: 2000, label: 'FIJO2 — Kit bonificado ($2.000)' } },
+    ]
+    const items = catalogo.map((p) => {
+      const descuento = !p.etiqueta
+        ? 0
+        : p.etiqueta.type === 'FIXED'
+          ? Math.min(p.etiqueta.value, p.precioLista)
+          : Math.round(p.precioLista * (p.etiqueta.value / 100) * 100) / 100
+      return {
+        ...p,
+        category: 'AUTOMOTIVE',
+        subcategory: null,
+        brand: 'Kristall',
+        shade: null,
+        width: null,
+        length: null,
+        imageUrl: null,
+        descuento,
+        precioConDescuento: Math.round((p.precioLista - descuento) * 100) / 100,
+      }
+    })
+    return {
+      status: 200,
+      data: { items, conDescuento: items.filter((i) => i.descuento > 0).length, ivaIncluido: true },
+    }
+  }
 
   m = match(path, /^\/api\/portal\/v1\/contacts\/([^/]+)\/rolls\/([^/]+)\/installations$/)
   if (m && method === 'POST') {

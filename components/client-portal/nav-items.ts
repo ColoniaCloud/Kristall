@@ -1,4 +1,5 @@
 import {
+  Tags,
   LayoutDashboard,
   ShoppingBag,
   Wallet,
@@ -16,40 +17,47 @@ import {
 import type { AccessLevel } from '@/lib/client-portal/session'
 
 /**
- * Ítems del menú del portal, con el nivel mínimo que los habilita.
+ * Ítems del menú del portal, con **qué niveles** ven cada uno.
  *
- * `BASIC` es el "Panel Clientes" que obtiene cualquier Cliente al activar su
- * cuenta. `INSTALLER` lo habilita a mano un operador del CRM.
+ * ─── Por qué una lista y no un nivel mínimo ────────────────────────────────
+ *
+ * Porque los niveles no son una escalera. `RESELLER` no está por encima ni por
+ * debajo de `INSTALLER`: comparte Compras y Cuenta corriente con BASIC, comparte
+ * Stock con INSTALLER, y no comparte Mi Taller. Con un "nivel mínimo" eso no se
+ * puede expresar, y el intento de forzarlo termina dándole el taller a un
+ * revendedor o quitándole el stock.
  *
  * Esconder un ítem NO es la barrera de seguridad: el CRM revalida el nivel en
  * cada endpoint y responde 403. Esto es solo para no mostrarle al Cliente
  * secciones que no le sirven.
  */
+const TODOS = ['BASIC', 'INSTALLER', 'RESELLER'] as const satisfies readonly AccessLevel[]
 export const CLIENT_NAV_ITEMS = [
-  { href: '/cliente/dashboard', label: 'Dashboard', icon: LayoutDashboard, level: 'BASIC' },
+  { href: '/cliente/dashboard', label: 'Dashboard', icon: LayoutDashboard, niveles: TODOS },
   // Mi Taller va segundo, pegado al Dashboard: es donde el instalador pasa el
   // dia. Compras y Cuenta corriente son consultas, no trabajo diario.
-  { href: '/cliente/taller', label: 'Mi Taller', icon: Wrench, level: 'INSTALLER' },
-  { href: '/cliente/compras', label: 'Compras', icon: ShoppingBag, level: 'BASIC' },
-  { href: '/cliente/cuenta', label: 'Cuenta corriente', icon: Wallet, level: 'BASIC' },
-  { href: '/cliente/stock', label: 'Stock', icon: PackageSearch, level: 'INSTALLER' },
-  { href: '/cliente/instalaciones', label: 'Instalaciones', icon: ShieldCheck, level: 'INSTALLER' },
-  { href: '/cliente/reclamos', label: 'Reclamos', icon: MessageSquareWarning, level: 'INSTALLER' },
-  { href: '/cliente/notificaciones', label: 'Notificaciones', icon: Bell, level: 'BASIC' },
+  { href: '/cliente/taller', label: 'Mi Taller', icon: Wrench, niveles: ['INSTALLER'] },
+  // Mis precios ocupa para el revendedor el lugar que Mi Taller ocupa para el
+  // instalador: es lo que viene a mirar.
+  { href: '/cliente/precios', label: 'Mis precios', icon: Tags, niveles: ['RESELLER'] },
+  { href: '/cliente/compras', label: 'Compras', icon: ShoppingBag, niveles: TODOS },
+  { href: '/cliente/cuenta', label: 'Cuenta corriente', icon: Wallet, niveles: TODOS },
+  { href: '/cliente/stock', label: 'Stock', icon: PackageSearch, niveles: ['INSTALLER', 'RESELLER'] },
+  { href: '/cliente/instalaciones', label: 'Instalaciones', icon: ShieldCheck, niveles: ['INSTALLER'] },
+  { href: '/cliente/reclamos', label: 'Reclamos', icon: MessageSquareWarning, niveles: ['INSTALLER'] },
+  { href: '/cliente/notificaciones', label: 'Notificaciones', icon: Bell, niveles: TODOS },
 ] as const satisfies readonly {
   href: string
   label: string
   icon: typeof LayoutDashboard
-  level: AccessLevel
+  niveles: readonly AccessLevel[]
 }[]
 
 export type ClientNavItem = (typeof CLIENT_NAV_ITEMS)[number]
 
-/** Ítems visibles para un nivel dado. INSTALLER ve todo; BASIC solo los suyos. */
+/** Ítems visibles para un nivel dado: los que lo declaran, sin jerarquía. */
 export function navItemsFor(level: AccessLevel): readonly ClientNavItem[] {
-  return level === 'INSTALLER'
-    ? CLIENT_NAV_ITEMS
-    : CLIENT_NAV_ITEMS.filter((i) => i.level === 'BASIC')
+  return CLIENT_NAV_ITEMS.filter((i) => (i.niveles as readonly AccessLevel[]).includes(level))
 }
 
 /**

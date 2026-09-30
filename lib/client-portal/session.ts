@@ -17,10 +17,20 @@ export const MAX_AGE_DEMO_SECONDS = 60 * 30
  * Nivel de acceso del Cliente, tal como lo devuelve el CRM al iniciar sesión.
  *
  * `BASIC` — "Panel Clientes": compras, cuenta corriente y notificaciones.
- * `INSTALLER` — suma stock, instalaciones y reclamos. Lo habilita un operador
- * del CRM a mano; no se puede pedir desde acá.
+ * `INSTALLER` — suma stock, instalaciones, reclamos y Mi Taller.
+ * `RESELLER` — "Portal Revendedor": compras, cuenta corriente, **sus precios** y
+ * stock. No instala, así que no ve instalaciones, reclamos ni taller.
+ *
+ * ─── No es una escalera ────────────────────────────────────────────────────
+ *
+ * Cuando eran dos, INSTALLER contenía a BASIC y alcanzaba con preguntar por uno.
+ * RESELLER no está arriba ni abajo: comparte compras con BASIC, comparte stock
+ * con INSTALLER, y no comparte Mi Taller. Cualquier `=== 'INSTALLER' ? todo :
+ * BASIC` que sobreviva le deja al revendedor medio panel sin dar ningún error.
+ *
+ * Los habilita un operador del CRM a mano; no se pueden pedir desde acá.
  */
-export type AccessLevel = 'BASIC' | 'INSTALLER'
+export type AccessLevel = 'BASIC' | 'INSTALLER' | 'RESELLER'
 
 export interface ClientSession {
   contactId: string
@@ -54,9 +64,20 @@ export interface ClientSession {
   demo?: true
 }
 
-/** Nivel efectivo de una sesión, tratando las viejas sin nivel como BASIC. */
+const NIVELES: readonly AccessLevel[] = ['BASIC', 'INSTALLER', 'RESELLER']
+
+/**
+ * Nivel efectivo de una sesión, tratando las viejas sin nivel como BASIC.
+ *
+ * Valida contra la lista en vez de comparar con un nivel: con
+ * `=== 'INSTALLER' ? 'INSTALLER' : 'BASIC'`, una sesión de revendedor caía en el
+ * `else` y veía el menú básico — sin precios y sin stock, y sin ningún error que
+ * lo delatara. Un nivel desconocido (una sesión vieja, o uno nuevo del CRM que
+ * acá todavía no existe) cae a BASIC, que es lo restrictivo.
+ */
 export function levelOf(session: ClientSession | null): AccessLevel {
-  return session?.accessLevel === 'INSTALLER' ? 'INSTALLER' : 'BASIC'
+  const nivel = session?.accessLevel
+  return nivel && NIVELES.includes(nivel) ? nivel : 'BASIC'
 }
 
 export function buildClientSessionCookie(data: ClientSession) {

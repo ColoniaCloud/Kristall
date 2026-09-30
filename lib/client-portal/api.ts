@@ -117,6 +117,19 @@ export interface StockRoll {
   }[]
   /** Cuenta SOLO instalaciones ACTIVE (activadas por el cliente final) — no usar para cupo. */
   _count: { installations: number }
+  /**
+   * El link de garantía para pasarle a quien compre este rollo.
+   *
+   * **Solo llega con nivel `RESELLER`.** Un instalador no lo necesita —genera sus
+   * propios sub-códigos desde el portal— y el CRM se lo excluye a propósito: el
+   * token que lleva adentro es una capacidad al portador. Un revendedor no
+   * instala, así que es lo único que le puede entregar a su comprador.
+   *
+   * `null` cuando el rollo ya no tiene ninguna instalación sin activar: no hay
+   * nada que pasar, y un link a "esta garantía ya fue activada" confunde más de
+   * lo que ayuda.
+   */
+  warrantyUrl?: string | null
 }
 
 export interface Installation {
@@ -174,7 +187,12 @@ export interface Notification {
   createdAt: string
 }
 
-export type AccessLevel = 'BASIC' | 'INSTALLER'
+/**
+ * Duplicado a proposito con el de `lib/client-portal/session.ts`: este describe
+ * lo que **devuelve el CRM**, y aquel lo que guarda la cookie. Si el CRM agrega
+ * un nivel, este es el que cambia primero.
+ */
+export type AccessLevel = 'BASIC' | 'INSTALLER' | 'RESELLER'
 
 export interface LoginResult {
   contactId: string
@@ -368,6 +386,55 @@ export function getContact(contactId: string) {
 export function getStock(contactId: string) {
   return callCrmApi<StockRoll[]>(
     `/api/portal/v1/contacts/${encodeURIComponent(contactId)}/stock`,
+    SESSION()
+  )
+}
+
+/** Un producto con lo que le sale a ESTE contacto. Ver getPrices(). */
+export interface PrecioDeProducto {
+  id: string
+  name: string
+  sku: string | null
+  category: ProductCategory | string
+  subcategory: string | null
+  brand: string | null
+  shade: string | null
+  width: number | null
+  length: number | null
+  imageUrl: string | null
+  /** Precio de lista, IVA incluido. Igual para todos. */
+  precioLista: number
+  /** Lo que le sale a este contacto. Igual al de lista si no lleva descuento. */
+  precioConDescuento: number
+  descuento: number
+  /** La etiqueta pactada para este producto, o null si va a precio de lista. */
+  etiqueta: {
+    code: string
+    name: string
+    type: string
+    value: number
+    /** `"KRY16 — Revendedor Kryon (16.66%)"`, el mismo texto que muestra el CRM. */
+    label: string
+  } | null
+}
+
+export interface PreciosResult {
+  items: PrecioDeProducto[]
+  /** Cuantos productos llevan descuento. Cero significa "todo a precio de lista". */
+  conDescuento: number
+  ivaIncluido: boolean
+}
+
+/**
+ * Los precios del revendedor. Nivel `RESELLER` — el CRM devuelve 403 al resto.
+ *
+ * El calculo lo hace el CRM con la misma precedencia que usa al vender, a
+ * proposito: si esta pantalla calculara aparte, el revendedor podria ver un
+ * precio que la venta despues no respeta.
+ */
+export function getPrices(contactId: string) {
+  return callCrmApi<PreciosResult>(
+    `/api/portal/v1/contacts/${encodeURIComponent(contactId)}/prices`,
     SESSION()
   )
 }
