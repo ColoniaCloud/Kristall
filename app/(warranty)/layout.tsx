@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Toaster } from '@/components/ui/sonner'
 import { fontsClassName } from '@/lib/fonts'
+import '../globals.css'
 
 export const metadata: Metadata = {
   title: { default: 'Garantía | Kristall Film', template: '%s | Garantía Kristall' },

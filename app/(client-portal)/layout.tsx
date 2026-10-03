@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { fontsClassName } from '@/lib/fonts'
+import '../globals.css'
 
 export const metadata: Metadata = {
   title: { default: 'Panel de Cliente | Kristall Film', template: '%s | Panel Kristall' },

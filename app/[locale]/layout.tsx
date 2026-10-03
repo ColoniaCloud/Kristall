@@ -8,6 +8,7 @@ import WhatsAppFloatingButton from '@/components/layout/WhatsAppFloatingButton'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import type { Metadata } from 'next'
 import { fontsClassName } from '@/lib/fonts'
+import '../globals.css'
 
 const organizationLd = {
   '@context': 'https://schema.org',

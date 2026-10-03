@@ -48,7 +48,12 @@ const nextConfig: NextConfig = {
   // 200 para toda la cuenta —y este sitio se construye seguido, a veces en el
   // mismo segundo que el CRM y polariz.ar—, lo que tumbaba las otras apps del
   // plan. Mismo valor que crm-polarizados/next.config.ts.
-  experimental: { cpus: 4 },
+  //
+  // globalNotFound: el 404 raíz vive en app/global-not-found.tsx y se arma solo,
+  // con su propio CSS. Hace falta porque app/layout.tsx ya no importa
+  // globals.css (lo pisaba al admin de Payload), y un app/not-found.tsx común
+  // hereda el CSS del layout raíz pero no emite el que importa él mismo.
+  experimental: { cpus: 4, globalNotFound: true },
   // Evita que Next.js infiera mal la raíz del workspace por lockfiles
   // ajenos al proyecto (p. ej. package-lock.json en el home del usuario).
   outputFileTracingRoot: import.meta.dirname,

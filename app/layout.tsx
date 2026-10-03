@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
-import './globals.css'
+// Sin globals.css acá: este layout también envuelve a (payload), y las reglas
+// sin @layer del sitio le ganan a las de Payload (que viven en
+// @layer payload-default) — el admin se veía en Times New Roman y con los
+// colores del sitio. Cada root layout del sitio lo importa por su cuenta.
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://kristallfilm.com'),
