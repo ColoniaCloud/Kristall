@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 import { Copy, Check, Share2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -23,15 +23,19 @@ import { Button } from '@/components/ui/button'
  * destino real es un WhatsApp. Si no está, cae al portapapeles; si tampoco,
  * avisa en vez de fallar callado.
  */
+
+// Que el navegador sepa compartir no cambia mientras la página está abierta.
+const sinSuscripcion = () => () => {}
+
 export default function CopiarLinkGarantia({ url }: { url: string }) {
   const [copiado, setCopiado] = useState(false)
-  const [puedeCompartir, setPuedeCompartir] = useState(false)
-
-  // En el cliente y no al renderizar: `navigator` no existe en el servidor, y
-  // preguntarlo durante el render desincroniza la hidratación.
-  useEffect(() => {
-    setPuedeCompartir(typeof navigator !== 'undefined' && typeof navigator.share === 'function')
-  }, [])
+  // `navigator` no existe en el servidor: el snapshot de servidor dice `false` y
+  // React recién usa el del cliente después de hidratar, así no se desincroniza.
+  const puedeCompartir = useSyncExternalStore(
+    sinSuscripcion,
+    () => typeof navigator.share === 'function',
+    () => false,
+  )
 
   useEffect(() => {
     if (!copiado) return
