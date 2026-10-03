@@ -21,7 +21,7 @@ function PageViewTracker() {
   return null
 }
 
-/** GA4 solo se carga para el sitio público ([locale]) — admin/cliente/garantía quedan afuera. */
+/** GA4 solo se carga para el sitio público ([locale]) y /catalogo-propuesta — admin/cliente/garantía quedan afuera. */
 export default function GoogleAnalytics() {
   if (!GA_ID) return null
   return (
