@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Loader2, PlayCircle } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics'
+import { CONTENEDOR } from './layout'
 import Reveal from './Reveal'
 
 /**
@@ -37,9 +38,9 @@ export default function Demo() {
   }
 
   return (
-    <section className="mx-auto max-w-xl px-5 pb-16">
+    <section className={`${CONTENEDOR} pb-16 lg:pb-24`}>
       <Reveal>
-        <div className="overflow-hidden rounded-3xl border border-white/10 bg-[#141414]">
+        <div className="overflow-hidden rounded-3xl border border-white/10 bg-[#141414] lg:grid lg:grid-cols-[1.3fr_1fr] lg:items-center">
           {/* <img> y no next/image: el optimizador congela los GIF animados. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -51,9 +52,9 @@ export default function Demo() {
             decoding="async"
             className="block h-auto w-full"
           />
-          <div className="p-6">
+          <div className="p-6 lg:p-10">
             <h2
-              className="text-[1.9rem] font-semibold leading-tight tracking-[-0.01em]"
+              className="text-[1.9rem] font-semibold leading-tight tracking-[-0.01em] lg:text-[2.6rem]"
               style={{ fontFamily: 'var(--font-display)' }}
             >
               No te lo contamos: probalo.

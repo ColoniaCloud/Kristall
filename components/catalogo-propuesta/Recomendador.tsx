@@ -1,10 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowRight, Car, ChevronDown, RotateCcw, ShieldCheck, ThermometerSun, Wallet } from 'lucide-react'
+import { ArrowRight, Car, ChevronDown, RotateCcw, ShieldCheck, Sparkles, ThermometerSun, Wallet } from 'lucide-react'
 import { formatPrecio, type Linea, type Variante } from '@/data/lanzamiento'
 import { trackEvent } from '@/lib/analytics'
 import { irALinea } from './eventos'
+import { CONTENEDOR, SECCION, TITULO } from './layout'
 import { mensajeProducto, WhatsAppIcon, WhatsAppLink } from './whatsapp'
 
 type Objetivo = 'precio' | 'calor' | 'seguridad' | 'pintura'
@@ -126,123 +127,166 @@ export default function Recomendador({ lineas, vigente }: { lineas: Linea[]; vig
   }
 
   return (
-    <section className="py-16">
-      <div className="mx-auto max-w-xl px-5">
+    <section className={SECCION}>
+      <div className={CONTENEDOR}>
         <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-white/55">Asesor rápido</p>
-        <h2
-          className="mt-3 text-[clamp(2rem,8vw,3rem)] font-semibold leading-[1.02] tracking-[-0.01em]"
-          style={{ fontFamily: 'var(--font-display)' }}
-        >
+        <h2 className={`mt-3 ${TITULO}`} style={{ fontFamily: 'var(--font-display)' }}>
           ¿Cuál le ofrezco a mi cliente?
         </h2>
 
-        <div className="mt-8 rounded-3xl border border-white/10 bg-[#141414] p-5">
-          <p className="text-sm font-medium text-white/60">1 · ¿Qué es lo que más le importa?</p>
-          <div className="mt-3 grid grid-cols-2 gap-2">
-            {OBJETIVOS.map((o) => (
-              <button
-                key={o.id}
-                type="button"
-                aria-pressed={objetivo === o.id}
-                onClick={() => elegirObjetivo(o.id)}
-                className={`flex min-h-[5.5rem] flex-col items-start justify-between rounded-2xl p-3.5 text-left text-[15px] font-medium leading-snug transition active:scale-[0.98] ${
-                  objetivo === o.id ? 'bg-white text-[#0A0A0A]' : 'border border-white/10 bg-white/[0.03] text-white/85'
-                }`}
-              >
-                <o.icon className="size-5" aria-hidden="true" />
-                {o.label}
-              </button>
-            ))}
-          </div>
-
-          {necesitaTono && (
-            <div className="kf-rise">
-              <p className="mt-6 text-sm font-medium text-white/60">2 · ¿Qué tan oscuro lo quiere?</p>
-              <div className="mt-3 grid grid-cols-3 gap-2">
-                {TONOS.map((t) => (
-                  <button
-                    key={t.id}
-                    type="button"
-                    aria-pressed={tono === t.id}
-                    onClick={() => elegirTono(t.id)}
-                    className={`rounded-2xl px-2 py-3 text-center transition active:scale-[0.98] ${
-                      tono === t.id ? 'bg-white text-[#0A0A0A]' : 'border border-white/10 bg-white/[0.03] text-white/85'
-                    }`}
-                  >
-                    <span className="block text-[15px] font-medium">{t.label}</span>
-                    <span className={`mt-0.5 block text-xs ${tono === t.id ? 'text-black/55' : 'text-white/55'}`}>
-                      {t.detalle}
-                    </span>
-                  </button>
-                ))}
-              </div>
+        {/* PC: el asesor y la tabla, lado a lado. */}
+        <div className="lg:mt-12 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
+          <div className="mt-8 rounded-3xl border border-white/10 bg-[#141414] p-5 lg:mt-0 lg:p-7">
+            <p className="text-sm font-medium text-white/60">1 · ¿Qué es lo que más le importa?</p>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {OBJETIVOS.map((o) => (
+                <button
+                  key={o.id}
+                  type="button"
+                  aria-pressed={objetivo === o.id}
+                  onClick={() => elegirObjetivo(o.id)}
+                  className={`flex min-h-[5.5rem] flex-col items-start justify-between rounded-2xl p-3.5 text-left text-[15px] font-medium leading-snug transition active:scale-[0.98] ${
+                    objetivo === o.id ? 'bg-white text-[#0A0A0A]' : 'border border-white/10 bg-white/[0.03] text-white/85'
+                  }`}
+                >
+                  <o.icon className="size-5" aria-hidden="true" />
+                  {o.label}
+                </button>
+              ))}
             </div>
-          )}
 
-          {listo && mejor && texto && (
-            <div key={`${objetivo}-${tono}`} className="kf-rise mt-6 rounded-2xl border border-[#E6A800]/30 bg-gradient-to-b from-[#E6A800]/10 to-transparent p-5" aria-live="polite">
-              <p className="text-xs font-medium uppercase tracking-[0.14em] text-[#E6A800]">Te recomendamos</p>
-              <div className="mt-3 flex items-center gap-3">
-                {/* eslint-disable-next-line @next/next/no-img-element -- logotipo SVG */}
-                <img src={mejor.linea.logo} alt={mejor.linea.nombre} className="kf-logo-white h-7 w-auto" />
-                <span className="font-mono text-xs text-white/55">{mejor.variante.sku}</span>
+            {necesitaTono && (
+              <div className="kf-rise">
+                <p className="mt-6 text-sm font-medium text-white/60">2 · ¿Qué tan oscuro lo quiere?</p>
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  {TONOS.map((t) => (
+                    <button
+                      key={t.id}
+                      type="button"
+                      aria-pressed={tono === t.id}
+                      onClick={() => elegirTono(t.id)}
+                      className={`rounded-2xl px-2 py-3 text-center transition active:scale-[0.98] ${
+                        tono === t.id ? 'bg-white text-[#0A0A0A]' : 'border border-white/10 bg-white/[0.03] text-white/85'
+                      }`}
+                    >
+                      <span className="block text-[15px] font-medium">{t.label}</span>
+                      <span className={`mt-0.5 block text-xs ${tono === t.id ? 'text-black/55' : 'text-white/55'}`}>
+                        {t.detalle}
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </div>
-              <p className="mt-3 text-[15px] leading-relaxed text-white/80">{texto.motivo}</p>
-              {vigente && (
-                <p className="mt-3 text-sm text-white/55">
-                  <span
-                    className="mr-1 text-2xl font-semibold text-white tabular-nums"
-                    style={{ fontFamily: 'var(--font-display)' }}
+            )}
+
+            {!listo && (
+              // Solo en PC: al lado está la tabla, mucho más alta, y sin esto la
+              // columna del asesor queda con un hueco hasta que se elige algo.
+              <div className="mt-6 hidden min-h-[16rem] flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 px-6 text-center lg:flex">
+                <Sparkles className="size-6 text-[#E6A800]" aria-hidden="true" />
+                <p className="mt-3 max-w-xs text-[15px] leading-relaxed text-white/55">
+                  Respondé {necesitaTono ? 'la segunda pregunta' : 'arriba'} y te decimos qué lámina ofrecerle, con el
+                  precio y una alternativa.
+                </p>
+              </div>
+            )}
+
+            {listo && mejor && texto && (
+              <div key={`${objetivo}-${tono}`} className="kf-rise mt-6 rounded-2xl border border-[#E6A800]/30 bg-gradient-to-b from-[#E6A800]/10 to-transparent p-5" aria-live="polite">
+                <p className="text-xs font-medium uppercase tracking-[0.14em] text-[#E6A800]">Te recomendamos</p>
+                <div className="mt-3 flex items-center gap-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- logotipo SVG */}
+                  <img src={mejor.linea.logo} alt={mejor.linea.nombre} className="kf-logo-white h-7 w-auto" />
+                  <span className="font-mono text-xs text-white/55">{mejor.variante.sku}</span>
+                </div>
+                <p className="mt-3 text-[15px] leading-relaxed text-white/80">{texto.motivo}</p>
+                {vigente && (
+                  <p className="mt-3 text-sm text-white/55">
+                    <span
+                      className="mr-1 text-2xl font-semibold text-white tabular-nums"
+                      style={{ fontFamily: 'var(--font-display)' }}
+                    >
+                      {formatPrecio(mejor.linea.precio)}
+                    </span>
+                    por rollo + IVA
+                  </p>
+                )}
+                {texto.alternativa && (
+                  <p className="mt-3 border-t border-white/10 pt-3 text-sm leading-relaxed text-white/55">
+                    {texto.alternativa}
+                  </p>
+                )}
+                <div className="mt-5 grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => irALinea({ slug: mejor.linea.slug, sku: mejor.variante.sku })}
+                    className="inline-flex h-12 items-center justify-center gap-1.5 rounded-xl border border-white/15 text-[15px] font-medium text-white"
                   >
-                    {formatPrecio(mejor.linea.precio)}
-                  </span>
-                  por rollo + IVA
-                </p>
-              )}
-              {texto.alternativa && (
-                <p className="mt-3 border-t border-white/10 pt-3 text-sm leading-relaxed text-white/55">
-                  {texto.alternativa}
-                </p>
-              )}
-              <div className="mt-5 grid grid-cols-2 gap-2">
+                    Ver lámina
+                    <ArrowRight className="size-4" aria-hidden="true" />
+                  </button>
+                  <WhatsAppLink
+                    mensaje={mensajeProducto(mejor.linea.nombre, mejor.variante.sku)}
+                    donde="recomendador"
+                    linea={mejor.linea.slug}
+                    className="inline-flex h-12 items-center justify-center gap-1.5 rounded-xl bg-white text-[15px] font-semibold text-[#0A0A0A]"
+                  >
+                    <WhatsAppIcon className="size-4 text-[#25D366]" />
+                    Pedir
+                  </WhatsAppLink>
+                </div>
                 <button
                   type="button"
-                  onClick={() => irALinea({ slug: mejor.linea.slug, sku: mejor.variante.sku })}
-                  className="inline-flex h-12 items-center justify-center gap-1.5 rounded-xl border border-white/15 text-[15px] font-medium text-white"
+                  onClick={reiniciar}
+                  className="mx-auto mt-4 flex items-center gap-1.5 text-sm text-white/55"
                 >
-                  Ver lámina
-                  <ArrowRight className="size-4" aria-hidden="true" />
+                  <RotateCcw className="size-3.5" aria-hidden="true" />
+                  Empezar de nuevo
                 </button>
-                <WhatsAppLink
-                  mensaje={mensajeProducto(mejor.linea.nombre, mejor.variante.sku)}
-                  donde="recomendador"
-                  linea={mejor.linea.slug}
-                  className="inline-flex h-12 items-center justify-center gap-1.5 rounded-xl bg-white text-[15px] font-semibold text-[#0A0A0A]"
-                >
-                  <WhatsAppIcon className="size-4 text-[#25D366]" />
-                  Pedir
-                </WhatsAppLink>
               </div>
-              <button
-                type="button"
-                onClick={reiniciar}
-                className="mx-auto mt-4 flex items-center gap-1.5 text-sm text-white/55"
-              >
-                <RotateCcw className="size-3.5" aria-hidden="true" />
-                Empezar de nuevo
-              </button>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-        <Comparativa lineas={lineas} vigente={vigente} />
+          <Comparativa lineas={lineas} vigente={vigente} />
+        </div>
       </div>
     </section>
   )
 }
 
-/** Las líneas en una tabla, de la más económica a la más cara. */
+/**
+ * Las líneas en una tabla, de la más económica a la más cara. En celular va
+ * plegada debajo del asesor; en PC queda abierta a su lado.
+ */
 function Comparativa({ lineas, vigente }: { lineas: Linea[]; vigente: boolean }) {
+  const titulo = `Comparar las ${lineas.length} líneas`
+  return (
+    <>
+      <details
+        className="group mt-4 overflow-hidden rounded-3xl border border-white/10 bg-[#141414] lg:hidden"
+        onToggle={(e) => {
+          if ((e.currentTarget as HTMLDetailsElement).open) trackEvent('catalogo_comparativa')
+        }}
+      >
+        <summary className="flex cursor-pointer list-none items-center justify-between px-5 py-4 text-[15px] font-medium [&::-webkit-details-marker]:hidden">
+          {titulo}
+          <ChevronDown className="size-5 text-white/50 transition group-open:rotate-180" aria-hidden="true" />
+        </summary>
+        <div className="border-t border-white/10">
+          <Tabla lineas={lineas} vigente={vigente} />
+        </div>
+      </details>
+      <div className="hidden overflow-hidden rounded-3xl border border-white/10 bg-[#141414] lg:block">
+        <p className="px-6 py-5 text-base font-medium">{titulo}</p>
+        <div className="border-t border-white/10">
+          <Tabla lineas={lineas} vigente={vigente} />
+        </div>
+      </div>
+    </>
+  )
+}
+
+function Tabla({ lineas, vigente }: { lineas: Linea[]; vigente: boolean }) {
   const filas = [...lineas].sort((a, b) => a.precio - b.precio)
   const irMax = (l: Linea) => {
     const v = l.variantes.map((x) => x.ir).filter((x): x is number => x !== null)
@@ -250,55 +294,43 @@ function Comparativa({ lineas, vigente }: { lineas: Linea[]; vigente: boolean })
   }
 
   return (
-    <details
-      className="group mt-4 overflow-hidden rounded-3xl border border-white/10 bg-[#141414]"
-      onToggle={(e) => {
-        if ((e.currentTarget as HTMLDetailsElement).open) trackEvent('catalogo_comparativa')
-      }}
-    >
-      <summary className="flex cursor-pointer list-none items-center justify-between px-5 py-4 text-[15px] font-medium [&::-webkit-details-marker]:hidden">
-        Comparar las {filas.length} líneas
-        <ChevronDown className="size-5 text-white/50 transition group-open:rotate-180" aria-hidden="true" />
-      </summary>
-      <div className="overflow-x-auto border-t border-white/10">
-        <table className="w-full text-left text-[13px]">
-          <thead className="text-[11px] uppercase tracking-[0.1em] text-white/55">
-            <tr>
-              <th scope="col" className="py-2.5 pl-3 pr-1.5 font-medium">Línea</th>
-              <th scope="col" className="px-1.5 py-2.5 text-right font-medium">IR</th>
-              <th scope="col" className="px-1.5 py-2.5 text-right font-medium">Garantía</th>
-              {vigente && <th scope="col" className="py-2.5 pl-1.5 pr-3 text-right font-medium">Rollo</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {filas.map((l) => {
-              const ir = irMax(l)
-              return (
-                <tr key={l.slug} className="border-t border-white/[0.06]">
-                  <th scope="row" className="py-3 pl-3 pr-1.5 font-normal">
-                    <button
-                      type="button"
-                      onClick={() => irALinea({ slug: l.slug })}
-                      className="text-left"
-                    >
-                      <span className="block font-semibold text-white">{l.nombre}</span>
-                      <span className="block text-xs text-white/55">{l.tecnologia}</span>
-                    </button>
-                  </th>
-                  <td className="whitespace-nowrap px-1.5 py-3 text-right tabular-nums">{ir === null ? '—' : `${ir}%`}</td>
-                  <td className="whitespace-nowrap px-1.5 py-3 text-right tabular-nums">{l.garantiaAnios} años</td>
-                  {vigente && (
-                    <td className="whitespace-nowrap py-3 pl-1.5 pr-3 text-right font-medium tabular-nums">{formatPrecio(l.precio)}</td>
-                  )}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-        <p className="px-5 pb-4 pt-1 text-xs text-white/55">
-          IR: rechazo infrarrojo máximo de la línea. Precios por rollo, sin IVA. PPF viene en rollo de 1.52 × 15 m; el resto, 1.52 × 30 m.
-        </p>
-      </div>
-    </details>
+    <div className="overflow-x-auto">
+      <table className="w-full text-left text-[13px] lg:text-sm">
+        <thead className="text-[11px] uppercase tracking-[0.1em] text-white/55">
+          <tr>
+            <th scope="col" className="py-2.5 pl-3 pr-1.5 font-medium lg:pl-6">Línea</th>
+            <th scope="col" className="px-1.5 py-2.5 text-right font-medium">IR</th>
+            <th scope="col" className="px-1.5 py-2.5 text-right font-medium">Garantía</th>
+            {vigente && <th scope="col" className="py-2.5 pl-1.5 pr-3 text-right font-medium lg:pr-6">Rollo</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {filas.map((l) => {
+            const ir = irMax(l)
+            return (
+              <tr key={l.slug} className="border-t border-white/[0.06] transition-colors lg:hover:bg-white/[0.03]">
+                <th scope="row" className="py-3 pl-3 pr-1.5 font-normal lg:pl-6">
+                  <button type="button" onClick={() => irALinea({ slug: l.slug })} className="text-left">
+                    <span className="block font-semibold text-white">{l.nombre}</span>
+                    <span className="block text-xs text-white/55">{l.tecnologia}</span>
+                  </button>
+                </th>
+                <td className="whitespace-nowrap px-1.5 py-3 text-right tabular-nums">{ir === null ? '—' : `${ir}%`}</td>
+                <td className="whitespace-nowrap px-1.5 py-3 text-right tabular-nums">{l.garantiaAnios} años</td>
+                {vigente && (
+                  <td className="whitespace-nowrap py-3 pl-1.5 pr-3 text-right font-medium tabular-nums lg:pr-6">
+                    {formatPrecio(l.precio)}
+                  </td>
+                )}
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+      <p className="px-5 pb-4 pt-1 text-xs text-white/55 lg:px-6">
+        IR: rechazo infrarrojo máximo de la línea. Precios por rollo, sin IVA. PPF viene en rollo de 1.52 × 15 m; el
+        resto, 1.52 × 30 m.
+      </p>
+    </div>
   )
 }

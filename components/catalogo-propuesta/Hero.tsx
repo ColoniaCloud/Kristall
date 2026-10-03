@@ -1,5 +1,6 @@
 import { ChevronDown } from 'lucide-react'
 import HeroVideo from './HeroVideo'
+import { CONTENEDOR } from './layout'
 import { MENSAJE_GENERAL, WhatsAppIcon, WhatsAppLink } from './whatsapp'
 
 export function FlagStripe({ className = '' }: { className?: string }) {
@@ -21,30 +22,32 @@ export default function Hero({ dias, vigente }: { dias: number; vigente: boolean
     <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden">
       <HeroVideo />
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/70 via-black/35 to-[#0A0A0A]" />
+      {/* En PC el texto va a la izquierda sobre un video apaisado: un velo lateral lo mantiene legible. */}
+      <div className="absolute inset-0 -z-10 hidden bg-gradient-to-r from-black/75 via-black/30 to-transparent lg:block" />
 
-      <header className="flex items-center justify-between px-5 pt-[max(1.25rem,env(safe-area-inset-top))]">
+      <header className={`${CONTENEDOR} flex items-center justify-between pt-[max(1.25rem,env(safe-area-inset-top))] lg:pt-8`}>
         {/* eslint-disable-next-line @next/next/no-img-element -- SVG chico, no gana nada con el optimizador */}
-        <img src="/cat/logob.svg" alt="Kristall Film" width={112} height={26} className="h-6 w-auto" />
+        <img src="/cat/logob.svg" alt="Kristall Film" width={112} height={26} className="h-6 w-auto lg:h-7" />
         <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-white/80 backdrop-blur">
           Para talleres
         </span>
       </header>
 
-      <div className="mx-auto mt-auto w-full max-w-xl px-5 pb-10">
+      <div className={`${CONTENEDOR} mt-auto pb-10 lg:pb-16`}>
         <p className="kf-rise mb-5 flex items-center gap-3 text-[12px] font-medium uppercase tracking-[0.16em] text-[#E6A800]">
           <FlagStripe />
           Lanzamiento · Línea Automotriz
         </p>
 
         <h1
-          className="kf-rise-solid text-[clamp(2.6rem,11vw,4.5rem)] font-semibold leading-[0.98] tracking-[-0.01em]"
+          className="kf-rise-solid max-w-4xl text-[clamp(2.6rem,11vw,4.5rem)] font-semibold leading-[0.98] tracking-[-0.01em] lg:text-[6rem]"
           style={{ fontFamily: 'var(--font-display)' }}
         >
           8 láminas.
           <span className="block text-white/55">Un sistema para tu taller.</span>
         </h1>
 
-        <p className="kf-rise-solid mt-5 max-w-md text-base leading-relaxed text-white/75">
+        <p className="kf-rise-solid mt-5 max-w-md text-base leading-relaxed text-white/75 lg:mt-7 lg:max-w-xl lg:text-xl">
           Tecnología alemana a precio de lanzamiento, garantía digital en cada instalación y un portal para
           gestionar tu negocio desde el celular.
         </p>
@@ -59,24 +62,24 @@ export default function Hero({ dias, vigente }: { dias: number; vigente: boolean
           </p>
         )}
 
-        <div className="kf-rise mt-8 flex flex-col gap-3 sm:flex-row [animation-delay:480ms]">
+        <div className="kf-rise mt-8 flex flex-col gap-3 sm:flex-row lg:max-w-xl [animation-delay:480ms]">
           <a
             href="#productos"
-            className="inline-flex h-14 sm:flex-1 items-center justify-center rounded-xl bg-white px-6 text-base font-semibold text-[#0A0A0A] transition active:scale-[0.98]"
+            className="inline-flex h-14 sm:flex-1 items-center justify-center rounded-xl bg-white px-6 text-base font-semibold text-[#0A0A0A] transition hover:bg-white/90 active:scale-[0.98]"
           >
             Ver los productos
           </a>
           <WhatsAppLink
             mensaje={MENSAJE_GENERAL}
             donde="hero"
-            className="inline-flex h-14 sm:flex-1 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-6 text-base font-medium text-white backdrop-blur transition active:scale-[0.98]"
+            className="inline-flex h-14 sm:flex-1 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-6 text-base font-medium text-white backdrop-blur transition hover:bg-white/10 active:scale-[0.98]"
           >
             <WhatsAppIcon className="size-5" />
             Hablar con un asesor
           </WhatsAppLink>
         </div>
 
-        <a href="#productos" aria-label="Bajar a los productos" className="mx-auto mt-8 flex w-fit text-white/55">
+        <a href="#productos" aria-label="Bajar a los productos" className="mx-auto mt-8 flex w-fit text-white/55 lg:mx-0">
           <ChevronDown className="size-6 animate-bounce motion-reduce:animate-none" />
         </a>
       </div>

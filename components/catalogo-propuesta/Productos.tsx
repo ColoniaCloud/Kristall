@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, ShieldCheck } from 'lucide-react'
 import { formatPrecio, type Categoria, type Linea } from '@/data/lanzamiento'
 import { trackEvent } from '@/lib/analytics'
 import { EVENTO_IR_A_LINEA, type IrALinea } from './eventos'
+import { CONTENEDOR, SECCION, TITULO } from './layout'
 import { mensajeProducto, WhatsAppIcon, WhatsAppLink } from './whatsapp'
 
 type Filtro = 'todos' | Categoria
@@ -18,10 +19,12 @@ const FILTROS: { id: Filtro; label: string }[] = [
 ]
 
 /**
- * Carrusel horizontal: una lámina por pantalla, se pasa con el pulgar. Es el
- * único `scroll-snap` de la página — el snap vertical se traba en el navegador
- * interno de Instagram y el usuario se va.
+ * Celular: carrusel horizontal, una lámina por pantalla, se pasa con el pulgar.
+ * Es el único `scroll-snap` de la página — el snap vertical se traba en el
+ * navegador interno de Instagram y el usuario se va.
+ * PC (`lg`): la misma pista se vuelve una grilla y se ven todas juntas.
  */
+
 export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigente: boolean }) {
   const [filtro, setFiltro] = useState<Filtro>('todos')
   const [activo, setActivo] = useState(0)
@@ -87,9 +90,22 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
         setFiltro('todos')
         if (v >= 0) setSeleccion((prev) => ({ ...prev, [slug]: v }))
       })
-      irA(i, 'auto')
-      setActivo(i)
-      seccion.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const el = pista.current
+      const card = el?.children[lineas.findIndex((l) => l.slug === slug)] as HTMLElement | undefined
+      if (el && card && el.scrollWidth > el.clientWidth + 1) {
+        // Carrusel (celular): centrar la card en la pista y bajar a la sección.
+        irA(i, 'auto')
+        setActivo(i)
+        seccion.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      } else {
+        // Grilla (PC): llevar la card al centro de la pantalla.
+        card?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+      // Un destello dorado para que se vea cuál es.
+      card?.animate(
+        [{ boxShadow: '0 0 0 2px rgba(230,168,0,0.9)' }, { boxShadow: '0 0 0 2px rgba(230,168,0,0)' }],
+        { duration: 1800, delay: 400, easing: 'ease-out' }
+      )
     }
     window.addEventListener(EVENTO_IR_A_LINEA, onIrA)
     return () => window.removeEventListener(EVENTO_IR_A_LINEA, onIrA)
@@ -103,20 +119,19 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
   }
 
   return (
-    <section ref={seccion} id="productos" className="scroll-mt-4 py-16">
-      <div className="mx-auto max-w-xl px-5">
-        <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-white/55">La línea de lanzamiento</p>
-        <h2
-          className="mt-3 text-[clamp(2rem,8vw,3rem)] font-semibold leading-[1.02] tracking-[-0.01em]"
-          style={{ fontFamily: 'var(--font-display)' }}
-        >
-          Elegí con qué vas a trabajar
-        </h2>
-        <p className="mt-3 text-base leading-relaxed text-white/60">
-          Precio por rollo, sin IVA. Deslizá para ver cada lámina.
-        </p>
+    <section ref={seccion} id="productos" className={`scroll-mt-4 ${SECCION}`}>
+      <div className={`${CONTENEDOR} lg:flex lg:items-end lg:justify-between lg:gap-10`}>
+        <div>
+          <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-white/55">La línea de lanzamiento</p>
+          <h2 className={`mt-3 ${TITULO}`} style={{ fontFamily: 'var(--font-display)' }}>
+            Elegí con qué vas a trabajar
+          </h2>
+          <p className="mt-3 text-base leading-relaxed text-white/60 lg:text-lg">
+            Precio por rollo, sin IVA.<span className="lg:hidden"> Deslizá para ver cada lámina.</span>
+          </p>
+        </div>
 
-        <div role="tablist" aria-label="Filtrar por categoría" className="mt-6 flex gap-2">
+        <div role="tablist" aria-label="Filtrar por categoría" className="mt-6 flex shrink-0 gap-2">
           {FILTROS.map((f) => (
             <button
               key={f.id}
@@ -125,7 +140,7 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
               aria-selected={filtro === f.id}
               onClick={() => cambiarFiltro(f.id)}
               className={`h-10 rounded-full px-4 text-sm font-medium transition ${
-                filtro === f.id ? 'bg-white text-[#0A0A0A]' : 'border border-white/15 text-white/70'
+                filtro === f.id ? 'bg-white text-[#0A0A0A]' : 'border border-white/15 text-white/70 hover:border-white/30 hover:text-white'
               }`}
             >
               {f.label}
@@ -136,7 +151,7 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
 
       <div
         ref={pista}
-        className="scrollbar-none mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-[max(1.25rem,calc((100vw-36rem)/2))] pb-2"
+        className="scrollbar-none mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-[max(1.25rem,calc((100vw-36rem)/2))] pb-2 lg:mx-auto lg:mt-12 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-5 lg:overflow-visible lg:px-10 lg:pb-0 xl:grid-cols-4"
         aria-roledescription="carrusel"
         data-sin-barra
       >
@@ -152,7 +167,7 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
         ))}
       </div>
 
-      <div className="mx-auto mt-6 flex max-w-xl items-center justify-between px-5">
+      <div className="mx-auto mt-6 flex max-w-xl items-center justify-between px-5 lg:hidden">
         <div className="flex items-center gap-1.5" aria-hidden="true">
           {visibles.map((l, i) => (
             <span
@@ -230,14 +245,14 @@ function Card({
     <article
       ref={ref}
       aria-label={linea.nombre}
-      className="flex w-[86vw] max-w-[24rem] shrink-0 snap-center flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#141414]"
+      className="flex w-[86vw] max-w-[24rem] shrink-0 snap-center flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#141414] transition-colors lg:w-auto lg:max-w-none lg:hover:border-white/25"
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         <Image
           src={linea.foto}
           alt={linea.variantes[0].vlt === null ? `Auto protegido con ${linea.nombre}` : `Vista a través de una lámina ${linea.nombre}`}
           fill
-          sizes="(max-width: 640px) 86vw, 384px"
+          sizes="(max-width: 640px) 86vw, (max-width: 1024px) 384px, 320px"
           className="object-cover"
           priority={prioridad}
         />

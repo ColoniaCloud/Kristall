@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ArrowUpRight, CalendarClock, LayoutDashboard, MapPin, QrCode } from 'lucide-react'
+import { CONTENEDOR, SECCION, TITULO } from './layout'
 import Reveal from './Reveal'
 import { FlagStripe } from './Hero'
 
@@ -47,24 +48,21 @@ const HERRAMIENTAS: Herramienta[] = [
 /** "Más que lámina": las cuatro herramientas que recibe el taller. */
 export default function Suite() {
   return (
-    <section className="py-16">
-      <div className="mx-auto max-w-xl px-5">
+    <section className={SECCION}>
+      <div className={CONTENEDOR}>
         <p className="flex items-center gap-3 text-[12px] font-medium uppercase tracking-[0.16em] text-[#E6A800]">
           <FlagStripe />
           La suite Kristall
         </p>
-        <h2
-          className="mt-3 text-[clamp(2rem,8vw,3rem)] font-semibold leading-[1.02] tracking-[-0.01em]"
-          style={{ fontFamily: 'var(--font-display)' }}
-        >
+        <h2 className={`mt-3 ${TITULO}`} style={{ fontFamily: 'var(--font-display)' }}>
           Más que lámina:
           <span className="block text-white/55">un sistema para tu negocio.</span>
         </h2>
 
-        <div className="mt-10 space-y-4">
+        <div className="mt-10 grid gap-4 lg:mt-12 lg:grid-cols-2 lg:gap-5">
           {HERRAMIENTAS.map((h, i) => (
-            <Reveal key={h.tag}>
-              <article className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-[#161616] to-[#0F0F0F] p-6">
+            <Reveal key={h.tag} className="h-full">
+              <article className="relative h-full overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-[#161616] to-[#0F0F0F] p-6 lg:p-8">
                 <span
                   className="pointer-events-none absolute -right-2 -top-6 select-none text-[7rem] font-semibold leading-none text-white/[0.04]"
                   style={{ fontFamily: 'var(--font-display)' }}

@@ -8,6 +8,7 @@ import { MENSAJE_GENERAL, WhatsAppIcon, WhatsAppLink } from './whatsapp'
  * sale de pantalla (el hero ya tiene su propio botón) y se esconde sobre las
  * zonas marcadas con `data-sin-barra`: el carrusel, donde taparía el "Lo quiero"
  * de cada lámina, y el cierre, que ya tiene su propio botón de WhatsApp.
+ * En PC no es una barra a todo el ancho sino una pastilla abajo a la derecha.
  */
 export default function BarraWhatsApp() {
   const [pasoHero, setPasoHero] = useState(false)
@@ -41,15 +42,14 @@ export default function BarraWhatsApp() {
 
   return (
     <div
-      className={`fixed inset-x-0 bottom-0 z-50 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 transition duration-300 motion-reduce:transition-none ${
-        visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-full opacity-0'
+      className={`fixed inset-x-0 bottom-0 z-50 bg-gradient-to-t from-[#0A0A0A]/95 from-40% to-transparent px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 transition duration-300 motion-reduce:transition-none lg:inset-x-auto lg:bottom-6 lg:right-6 lg:bg-none lg:p-0 ${
+        visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-full opacity-0 lg:translate-y-4'
       }`}
-      style={{ background: 'linear-gradient(to top, rgba(10,10,10,0.95) 40%, rgba(10,10,10,0))' }}
     >
       <WhatsAppLink
         mensaje={MENSAJE_GENERAL}
         donde="barra"
-        className="mx-auto flex h-14 max-w-xl items-center justify-center gap-2 rounded-2xl bg-[#25D366] text-base font-semibold text-[#0A0A0A] shadow-[0_8px_30px_rgba(37,211,102,0.25)] transition active:scale-[0.98]"
+        className="mx-auto flex h-14 max-w-xl items-center justify-center gap-2 rounded-2xl bg-[#25D366] text-base font-semibold text-[#0A0A0A] shadow-[0_8px_30px_rgba(37,211,102,0.25)] transition hover:bg-[#2fe072] active:scale-[0.98] lg:rounded-full lg:px-7"
       >
         <WhatsAppIcon className="size-5" />
         Quiero trabajar con Kristall
