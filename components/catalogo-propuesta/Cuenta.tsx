@@ -38,7 +38,7 @@ export default function Cuenta({ hasta, ahora }: { hasta: number; ahora: number 
           >
             {String(p.valor).padStart(2, '0')}
           </p>
-          <p className="mt-1.5 text-[11px] uppercase tracking-[0.12em] text-white/45" aria-hidden="true">
+          <p className="mt-1.5 text-[11px] uppercase tracking-[0.12em] text-white/55" aria-hidden="true">
             {p.label}
           </p>
         </div>

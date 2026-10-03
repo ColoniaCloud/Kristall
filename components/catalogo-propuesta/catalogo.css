@@ -24,6 +24,21 @@ html:has(.kf-catalogo-body),
   animation: kf-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
+/* Igual pero sin pasar por opacidad 0: para el título del hero. Chrome no cuenta
+   como LCP un elemento invisible, así que con .kf-rise el LCP se corría hasta
+   que terminaba la animación (medido: ~6 s en celular con 4G simulado). */
+@keyframes kf-rise-solid {
+  from {
+    transform: translateY(18px);
+  }
+  to {
+    transform: none;
+  }
+}
+.kf-rise-solid {
+  animation: kf-rise-solid 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
 /* Revelado al entrar en pantalla: Reveal.tsx agrega .is-in. */
 .kf-reveal {
   opacity: 0;
@@ -38,7 +53,8 @@ html:has(.kf-catalogo-body),
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .kf-rise {
+  .kf-rise,
+  .kf-rise-solid {
     animation: none;
   }
   .kf-reveal {

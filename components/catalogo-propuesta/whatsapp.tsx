@@ -13,6 +13,18 @@ export function mensajeProducto(linea: string, sku?: string): string {
   return `Hola! Vengo del catálogo de lanzamiento. Me interesa ${linea}${sku ? ` (${sku})` : ''}. ¿Me pasan más info?`
 }
 
+/**
+ * Vendedor que compartió el link: `/catalogo-propuesta?v=juan`. Viaja al final
+ * del mensaje de WhatsApp ("Ref: juan") y a los eventos de GA4, así se sabe
+ * quién trajo a cada taller. Es un nombre corto que elige el vendedor, no un id
+ * interno; cualquier otra cosa se ignora.
+ */
+export function refVendedor(): string | null {
+  if (typeof window === 'undefined') return null
+  const v = new URLSearchParams(window.location.search).get('v')?.trim().toLowerCase()
+  return v && /^[a-z0-9-]{2,24}$/.test(v) ? v : null
+}
+
 export const MENSAJE_GENERAL =
   'Hola! Vengo del catálogo de lanzamiento de Kristall y quiero trabajar con ustedes. ¿Me pasan más info?'
 
@@ -39,8 +51,12 @@ export function WhatsAppLink({
       target="_blank"
       rel="noopener noreferrer"
       className={className}
-      onClick={() => {
-        trackEvent('catalogo_whatsapp_click', { donde, linea: linea ?? '' })
+      onClick={(e) => {
+        const vendedor = refVendedor()
+        // El href se completa recién al tocar: así el HTML es el mismo para
+        // todos (la página se sirve cacheada) y no hay desfase al hidratar.
+        if (vendedor) e.currentTarget.href = whatsappHref(`${mensaje} (Ref: ${vendedor})`)
+        trackEvent('catalogo_whatsapp_click', { donde, linea: linea ?? '', vendedor: vendedor ?? '' })
         trackLead('catalogo-propuesta')
       }}
     >

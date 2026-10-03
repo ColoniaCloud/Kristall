@@ -1,4 +1,5 @@
 import { ChevronDown } from 'lucide-react'
+import HeroVideo from './HeroVideo'
 import { MENSAJE_GENERAL, WhatsAppIcon, WhatsAppLink } from './whatsapp'
 
 export function FlagStripe({ className = '' }: { className?: string }) {
@@ -18,18 +19,7 @@ export function FlagStripe({ className = '' }: { className?: string }) {
 export default function Hero({ dias, vigente }: { dias: number; vigente: boolean }) {
   return (
     <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden">
-      {/* Fondo: video sin sonido, con póster para que el primer cuadro aparezca ya. */}
-      <video
-        className="absolute inset-0 -z-20 h-full w-full object-cover"
-        src="/cat/video.mp4"
-        poster="/cat/hero.webp"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        aria-hidden="true"
-      />
+      <HeroVideo />
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/70 via-black/35 to-[#0A0A0A]" />
 
       <header className="flex items-center justify-between px-5 pt-[max(1.25rem,env(safe-area-inset-top))]">
@@ -47,14 +37,14 @@ export default function Hero({ dias, vigente }: { dias: number; vigente: boolean
         </p>
 
         <h1
-          className="kf-rise text-[clamp(2.6rem,11vw,4.5rem)] font-semibold leading-[0.98] tracking-[-0.01em] [animation-delay:120ms]"
+          className="kf-rise-solid text-[clamp(2.6rem,11vw,4.5rem)] font-semibold leading-[0.98] tracking-[-0.01em]"
           style={{ fontFamily: 'var(--font-display)' }}
         >
           8 láminas.
           <span className="block text-white/55">Un sistema para tu taller.</span>
         </h1>
 
-        <p className="kf-rise mt-5 max-w-md text-base leading-relaxed text-white/75 [animation-delay:240ms]">
+        <p className="kf-rise-solid mt-5 max-w-md text-base leading-relaxed text-white/75">
           Tecnología alemana a precio de lanzamiento, garantía digital en cada instalación y un portal para
           gestionar tu negocio desde el celular.
         </p>
@@ -86,7 +76,7 @@ export default function Hero({ dias, vigente }: { dias: number; vigente: boolean
           </WhatsAppLink>
         </div>
 
-        <a href="#productos" aria-label="Bajar a los productos" className="mx-auto mt-8 flex w-fit text-white/40">
+        <a href="#productos" aria-label="Bajar a los productos" className="mx-auto mt-8 flex w-fit text-white/55">
           <ChevronDown className="size-6 animate-bounce motion-reduce:animate-none" />
         </a>
       </div>

@@ -105,7 +105,7 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
   return (
     <section ref={seccion} id="productos" className="scroll-mt-4 py-16">
       <div className="mx-auto max-w-xl px-5">
-        <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-white/45">La línea de lanzamiento</p>
+        <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-white/55">La línea de lanzamiento</p>
         <h2
           className="mt-3 text-[clamp(2rem,8vw,3rem)] font-semibold leading-[1.02] tracking-[-0.01em]"
           style={{ fontFamily: 'var(--font-display)' }}
@@ -262,14 +262,14 @@ function Card({
       </div>
 
       <div className="flex flex-1 flex-col px-5 pb-5 pt-2">
-        <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-white/45">{linea.tecnologia}</p>
+        <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-white/55">{linea.tecnologia}</p>
         <p className="mt-2 line-clamp-3 text-[15px] leading-relaxed text-white/70">{linea.descripcion}</p>
 
         {variante.vlt !== null ? (
           <>
             <div className="mt-5 flex items-center justify-between">
-              <span className="text-xs text-white/45">Transmisión de luz (VLT)</span>
-              <span className="font-mono text-xs text-white/45">{variante.sku}</span>
+              <span className="text-xs text-white/55">Transmisión de luz (VLT)</span>
+              <span className="font-mono text-xs text-white/55">{variante.sku}</span>
             </div>
             <div className="mt-2 flex gap-2">
               {linea.variantes.map((v, i) => (
@@ -306,11 +306,11 @@ function Card({
 
         <dl className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10 text-sm">
           <div className="bg-[#141414] px-3 py-2.5">
-            <dt className="text-[11px] text-white/45">Espesor</dt>
+            <dt className="text-[11px] text-white/55">Espesor</dt>
             <dd className="mt-0.5 font-medium">{linea.espesor}</dd>
           </div>
           <div className="bg-[#141414] px-3 py-2.5">
-            <dt className="text-[11px] text-white/45">Rollo</dt>
+            <dt className="text-[11px] text-white/55">Rollo</dt>
             <dd className="mt-0.5 font-medium">
               {linea.rollo.ancho.toFixed(2)} × {linea.rollo.largo} m
             </dd>
@@ -320,7 +320,7 @@ function Card({
         <div className="mt-auto pt-6">
           {vigente ? (
             <>
-              <p className="text-xs text-white/45">Precio de lanzamiento · por rollo + IVA</p>
+              <p className="text-xs text-white/55">Precio de lanzamiento · por rollo + IVA</p>
               <p
                 className="mt-1 text-[2.4rem] font-semibold leading-none tracking-[-0.01em] tabular-nums"
                 style={{ fontFamily: 'var(--font-display)' }}

@@ -52,7 +52,7 @@ export default function Cierre({
           contacto@kristallfilm.com
         </a>
 
-        <div className="mt-14 flex items-center justify-between text-xs text-white/35">
+        <div className="mt-14 flex items-center justify-between text-xs text-white/50">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/cat/logob.svg" alt="Kristall Film" width={96} height={22} className="h-5 w-auto opacity-60" />
           <Link href="/es" className="underline-offset-4 hover:underline">

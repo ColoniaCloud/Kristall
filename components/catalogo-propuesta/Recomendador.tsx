@@ -128,7 +128,7 @@ export default function Recomendador({ lineas, vigente }: { lineas: Linea[]; vig
   return (
     <section className="py-16">
       <div className="mx-auto max-w-xl px-5">
-        <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-white/45">Asesor rápido</p>
+        <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-white/55">Asesor rápido</p>
         <h2
           className="mt-3 text-[clamp(2rem,8vw,3rem)] font-semibold leading-[1.02] tracking-[-0.01em]"
           style={{ fontFamily: 'var(--font-display)' }}
@@ -170,7 +170,7 @@ export default function Recomendador({ lineas, vigente }: { lineas: Linea[]; vig
                     }`}
                   >
                     <span className="block text-[15px] font-medium">{t.label}</span>
-                    <span className={`mt-0.5 block text-xs ${tono === t.id ? 'text-black/55' : 'text-white/45'}`}>
+                    <span className={`mt-0.5 block text-xs ${tono === t.id ? 'text-black/55' : 'text-white/55'}`}>
                       {t.detalle}
                     </span>
                   </button>
@@ -185,7 +185,7 @@ export default function Recomendador({ lineas, vigente }: { lineas: Linea[]; vig
               <div className="mt-3 flex items-center gap-3">
                 {/* eslint-disable-next-line @next/next/no-img-element -- logotipo SVG */}
                 <img src={mejor.linea.logo} alt={mejor.linea.nombre} className="kf-logo-white h-7 w-auto" />
-                <span className="font-mono text-xs text-white/45">{mejor.variante.sku}</span>
+                <span className="font-mono text-xs text-white/55">{mejor.variante.sku}</span>
               </div>
               <p className="mt-3 text-[15px] leading-relaxed text-white/80">{texto.motivo}</p>
               {vigente && (
@@ -226,7 +226,7 @@ export default function Recomendador({ lineas, vigente }: { lineas: Linea[]; vig
               <button
                 type="button"
                 onClick={reiniciar}
-                className="mx-auto mt-4 flex items-center gap-1.5 text-sm text-white/45"
+                className="mx-auto mt-4 flex items-center gap-1.5 text-sm text-white/55"
               >
                 <RotateCcw className="size-3.5" aria-hidden="true" />
                 Empezar de nuevo
@@ -262,7 +262,7 @@ function Comparativa({ lineas, vigente }: { lineas: Linea[]; vigente: boolean })
       </summary>
       <div className="overflow-x-auto border-t border-white/10">
         <table className="w-full text-left text-[13px]">
-          <thead className="text-[11px] uppercase tracking-[0.1em] text-white/45">
+          <thead className="text-[11px] uppercase tracking-[0.1em] text-white/55">
             <tr>
               <th scope="col" className="py-2.5 pl-3 pr-1.5 font-medium">Línea</th>
               <th scope="col" className="px-1.5 py-2.5 text-right font-medium">IR</th>
@@ -282,7 +282,7 @@ function Comparativa({ lineas, vigente }: { lineas: Linea[]; vigente: boolean })
                       className="text-left"
                     >
                       <span className="block font-semibold text-white">{l.nombre}</span>
-                      <span className="block text-xs text-white/45">{l.tecnologia}</span>
+                      <span className="block text-xs text-white/55">{l.tecnologia}</span>
                     </button>
                   </th>
                   <td className="whitespace-nowrap px-1.5 py-3 text-right tabular-nums">{ir === null ? '—' : `${ir}%`}</td>
@@ -295,7 +295,7 @@ function Comparativa({ lineas, vigente }: { lineas: Linea[]; vigente: boolean })
             })}
           </tbody>
         </table>
-        <p className="px-5 pb-4 pt-1 text-xs text-white/40">
+        <p className="px-5 pb-4 pt-1 text-xs text-white/55">
           IR: rechazo infrarrojo máximo de la línea. Precios por rollo, sin IVA. PPF viene en rollo de 1.52 × 15 m; el resto, 1.52 × 30 m.
         </p>
       </div>

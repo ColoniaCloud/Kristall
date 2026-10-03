@@ -75,7 +75,7 @@ export default function Suite() {
                 <div className="grid size-12 place-items-center rounded-2xl bg-white/[0.06] ring-1 ring-white/10">
                   <h.icon className="size-6 text-white" aria-hidden="true" />
                 </div>
-                <p className="mt-5 text-[12px] font-medium uppercase tracking-[0.14em] text-white/45">{h.tag}</p>
+                <p className="mt-5 text-[12px] font-medium uppercase tracking-[0.14em] text-white/55">{h.tag}</p>
                 <h3
                   className="mt-1.5 text-2xl font-semibold leading-tight tracking-[-0.01em]"
                   style={{ fontFamily: 'var(--font-display)' }}

@@ -54,7 +54,7 @@ export default function Simulador({ lineas }: { lineas: Linea[] }) {
   return (
     <section className="py-16">
       <div className="mx-auto max-w-xl px-5">
-        <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-white/45">Simulador</p>
+        <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-white/55">Simulador</p>
         <h2
           className="mt-3 text-[clamp(2rem,8vw,3rem)] font-semibold leading-[1.02] tracking-[-0.01em]"
           style={{ fontFamily: 'var(--font-display)' }}
@@ -113,7 +113,7 @@ export default function Simulador({ lineas }: { lineas: Linea[] }) {
               onClick={() => elegir(k)}
               aria-pressed={k === i}
               className={`min-w-12 rounded-lg px-2 py-1.5 text-sm font-semibold tabular-nums transition ${
-                k === i ? 'text-white' : 'text-white/40'
+                k === i ? 'text-white' : 'text-white/55'
               }`}
             >
               {n}%
@@ -123,7 +123,7 @@ export default function Simulador({ lineas }: { lineas: Linea[] }) {
 
         <p className="mt-4 min-h-[3rem] text-[15px] leading-relaxed text-white/75">{TEXTOS[vlt] ?? ''}</p>
 
-        <p className="mt-4 text-xs uppercase tracking-[0.14em] text-white/45">Disponible en</p>
+        <p className="mt-4 text-xs uppercase tracking-[0.14em] text-white/55">Disponible en</p>
         <div className="mt-2 flex flex-wrap gap-2">
           {disponibles.map((d) => (
             <button
