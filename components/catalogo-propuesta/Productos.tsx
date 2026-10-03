@@ -1,10 +1,12 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import Image from 'next/image'
 import { ChevronLeft, ChevronRight, ShieldCheck } from 'lucide-react'
 import { formatPrecio, type Categoria, type Linea } from '@/data/lanzamiento'
 import { trackEvent } from '@/lib/analytics'
+import { EVENTO_IR_A_LINEA, type IrALinea } from './eventos'
 import { mensajeProducto, WhatsAppIcon, WhatsAppLink } from './whatsapp'
 
 type Filtro = 'todos' | Categoria
@@ -23,6 +25,10 @@ const FILTROS: { id: Filtro; label: string }[] = [
 export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigente: boolean }) {
   const [filtro, setFiltro] = useState<Filtro>('todos')
   const [activo, setActivo] = useState(0)
+  /** Índice de variante (VLT) elegido por línea. Vive acá para que el simulador
+   *  y el recomendador puedan abrir una lámina con el VLT ya marcado. */
+  const [seleccion, setSeleccion] = useState<Record<string, number>>({})
+  const seccion = useRef<HTMLElement>(null)
   const pista = useRef<HTMLDivElement>(null)
 
   const visibles = useMemo(
@@ -60,12 +66,34 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
     }
   }, [])
 
-  function irA(i: number) {
+  function irA(i: number, behavior: ScrollBehavior = 'smooth') {
     const el = pista.current
     const card = el?.children[i] as HTMLElement | undefined
     if (!el || !card) return
-    el.scrollTo({ left: card.offsetLeft - (el.clientWidth - card.offsetWidth) / 2, behavior: 'smooth' })
+    el.scrollTo({ left: card.offsetLeft - (el.clientWidth - card.offsetWidth) / 2, behavior })
   }
+
+  // Pedidos del simulador y del recomendador: mostrar todas, marcar el VLT,
+  // centrar la card y bajar hasta el carrusel.
+  useEffect(() => {
+    function onIrA(e: Event) {
+      const { slug, sku } = (e as CustomEvent<IrALinea>).detail
+      const i = lineas.findIndex((l) => l.slug === slug)
+      if (i < 0) return
+      const v = sku ? lineas[i].variantes.findIndex((x) => x.sku === sku) : -1
+      // flushSync: la card tiene que estar renderizada (el filtro pudo
+      // ocultarla) antes de medirla para el scroll.
+      flushSync(() => {
+        setFiltro('todos')
+        if (v >= 0) setSeleccion((prev) => ({ ...prev, [slug]: v }))
+      })
+      irA(i, 'auto')
+      setActivo(i)
+      seccion.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+    window.addEventListener(EVENTO_IR_A_LINEA, onIrA)
+    return () => window.removeEventListener(EVENTO_IR_A_LINEA, onIrA)
+  }, [lineas])
 
   function cambiarFiltro(f: Filtro) {
     setFiltro(f)
@@ -75,7 +103,7 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
   }
 
   return (
-    <section id="productos" className="scroll-mt-4 py-16">
+    <section ref={seccion} id="productos" className="scroll-mt-4 py-16">
       <div className="mx-auto max-w-xl px-5">
         <p className="text-[12px] font-medium uppercase tracking-[0.16em] text-white/45">La línea de lanzamiento</p>
         <h2
@@ -113,7 +141,14 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
         data-sin-barra
       >
         {visibles.map((linea, i) => (
-          <Card key={linea.slug} linea={linea} vigente={vigente} prioridad={i === 0} />
+          <Card
+            key={linea.slug}
+            linea={linea}
+            vigente={vigente}
+            prioridad={i === 0}
+            idx={seleccion[linea.slug] ?? 0}
+            onIdx={(n) => setSeleccion((prev) => ({ ...prev, [linea.slug]: n }))}
+          />
         ))}
       </div>
 
@@ -154,8 +189,19 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
   )
 }
 
-function Card({ linea, vigente, prioridad }: { linea: Linea; vigente: boolean; prioridad: boolean }) {
-  const [idx, setIdx] = useState(0)
+function Card({
+  linea,
+  vigente,
+  prioridad,
+  idx,
+  onIdx,
+}: {
+  linea: Linea
+  vigente: boolean
+  prioridad: boolean
+  idx: number
+  onIdx: (n: number) => void
+}) {
   const variante = linea.variantes[idx]
   const ref = useRef<HTMLElement>(null)
   const [vista, setVista] = useState(false)
@@ -232,7 +278,7 @@ function Card({ linea, vigente, prioridad }: { linea: Linea; vigente: boolean; p
                   type="button"
                   aria-pressed={i === idx}
                   onClick={() => {
-                    setIdx(i)
+                    onIdx(i)
                     trackEvent('catalogo_vlt', { linea: linea.slug, sku: v.sku })
                   }}
                   className={`h-10 flex-1 rounded-xl text-sm font-semibold tabular-nums transition ${

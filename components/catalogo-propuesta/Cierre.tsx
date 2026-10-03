@@ -1,10 +1,21 @@
 import Link from 'next/link'
 import { Mail } from 'lucide-react'
+import Cuenta from './Cuenta'
 import { FlagStripe } from './Hero'
 import Reveal from './Reveal'
 import { MENSAJE_GENERAL, WhatsAppIcon, WhatsAppLink } from './whatsapp'
 
-export default function Cierre({ vigente, hasta }: { vigente: boolean; hasta: string }) {
+export default function Cierre({
+  vigente,
+  hasta,
+  hastaMs,
+  ahoraMs,
+}: {
+  vigente: boolean
+  hasta: string
+  hastaMs: number
+  ahoraMs: number
+}) {
   return (
     <section data-sin-barra className="relative overflow-hidden border-t border-white/10 bg-gradient-to-b from-[#0A0A0A] via-[#160606] to-[#0A0A0A] px-5 pb-[max(3rem,env(safe-area-inset-bottom))] pt-16">
       <Reveal className="mx-auto max-w-xl">
@@ -20,6 +31,11 @@ export default function Cierre({ vigente, hasta }: { vigente: boolean; hasta: st
             ? `Los precios de lanzamiento valen hasta el ${hasta}. Escribinos y te armamos el primer pedido.`
             : 'Escribinos y te pasamos la lista de precios vigente.'}
         </p>
+        {vigente && (
+          <div className="mt-6">
+            <Cuenta hasta={hastaMs} ahora={ahoraMs} />
+          </div>
+        )}
         <WhatsAppLink
           mensaje={MENSAJE_GENERAL}
           donde="cierre"

@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import Hero from '@/components/catalogo-propuesta/Hero'
 import Destacados from '@/components/catalogo-propuesta/Destacados'
+import Simulador from '@/components/catalogo-propuesta/Simulador'
 import Productos from '@/components/catalogo-propuesta/Productos'
+import Recomendador from '@/components/catalogo-propuesta/Recomendador'
 import Suite from '@/components/catalogo-propuesta/Suite'
 import Demo from '@/components/catalogo-propuesta/Demo'
 import Cierre from '@/components/catalogo-propuesta/Cierre'
@@ -41,7 +43,8 @@ export const metadata: Metadata = {
 }
 
 export default function CatalogoPropuestaPage() {
-  const vigente = preciosVigentes()
+  const ahora = new Date()
+  const vigente = preciosVigentes(ahora)
   const hasta = VIGENTE_HASTA.toLocaleDateString('es-AR', {
     day: 'numeric',
     month: 'numeric',
@@ -51,12 +54,14 @@ export default function CatalogoPropuestaPage() {
 
   return (
     <main className="kf-catalogo">
-      <Hero dias={diasRestantes()} vigente={vigente} />
+      <Hero dias={diasRestantes(ahora)} vigente={vigente} />
       <Destacados />
+      <Simulador lineas={LINEAS} />
       <Productos lineas={LINEAS} vigente={vigente} />
+      <Recomendador lineas={LINEAS} vigente={vigente} />
       <Suite />
       <Demo />
-      <Cierre vigente={vigente} hasta={hasta} />
+      <Cierre vigente={vigente} hasta={hasta} hastaMs={VIGENTE_HASTA.getTime()} ahoraMs={ahora.getTime()} />
       <BarraWhatsApp />
     </main>
   )
