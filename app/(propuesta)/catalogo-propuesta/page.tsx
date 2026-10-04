@@ -4,6 +4,7 @@ import Destacados from '@/components/catalogo-propuesta/Destacados'
 import Simulador from '@/components/catalogo-propuesta/Simulador'
 import Productos from '@/components/catalogo-propuesta/Productos'
 import Recomendador from '@/components/catalogo-propuesta/Recomendador'
+import PaginaTurnos from '@/components/catalogo-propuesta/PaginaTurnos'
 import Suite from '@/components/catalogo-propuesta/Suite'
 import Demo from '@/components/catalogo-propuesta/Demo'
 import Cierre from '@/components/catalogo-propuesta/Cierre'
@@ -59,6 +60,7 @@ export default function CatalogoPropuestaPage() {
       <Simulador lineas={LINEAS} />
       <Productos lineas={LINEAS} vigente={vigente} />
       <Recomendador lineas={LINEAS} vigente={vigente} />
+      <PaginaTurnos />
       <Suite />
       <Demo />
       <Cierre vigente={vigente} hasta={hasta} hastaMs={VIGENTE_HASTA.getTime()} ahoraMs={ahora.getTime()} />

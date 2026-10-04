@@ -1,41 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { Loader2, PlayCircle } from 'lucide-react'
-import { trackEvent } from '@/lib/analytics'
 import { CONTENEDOR } from './layout'
 import Reveal from './Reveal'
+import { useDemo } from './useDemo'
 
-/**
- * "Probalo ahora": abre el portal de demostración. Repite la lógica de
- * `components/sections/PortalInstaladores.tsx` (POST /api/portal/demo y de ahí a
- * /cliente/taller); el endpoint ya limita a 5 demos por IP por hora.
- */
+/** "Probalo ahora": abre el portal de demostración en Mi Taller. */
 export default function Demo() {
-  const router = useRouter()
-  const [cargando, setCargando] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  async function entrar() {
-    setCargando(true)
-    setError(null)
-    trackEvent('catalogo_demo_click')
-    try {
-      const res = await fetch('/api/portal/demo', { method: 'POST' })
-      if (!res.ok) {
-        const body = (await res.json().catch(() => null)) as { error?: string } | null
-        setError(res.status === 429 && body?.error ? body.error : 'No pudimos abrir la demo. Probá de nuevo en un momento.')
-        return
-      }
-      router.push('/cliente/taller')
-      router.refresh()
-    } catch {
-      setError('No pudimos abrir la demo. Probá de nuevo en un momento.')
-    } finally {
-      setCargando(false)
-    }
-  }
+  const { entrar, cargando, error } = useDemo('/cliente/taller', 'probalo')
 
   return (
     <section className={`${CONTENEDOR} pb-16 lg:pb-24`}>
