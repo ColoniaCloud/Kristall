@@ -31,8 +31,10 @@ const PUNTOS = [
  * el instalador la publica desde Mi Taller → Configuración → Página pública.
  *
  * Sobre el SEO, a propósito "pensada para que te encuentren" y no "posicionás
- * primero": al 2026-10-04 polariz.ar tiene título y descripción por taller, pero
- * todavía no sitemap, robots.txt ni datos estructurados de negocio local.
+ * primero": desde el 2026-10-04 polariz.ar tiene sitemap, robots.txt, canonical,
+ * Open Graph y datos estructurados de negocio local por taller (repo
+ * `polarizar`, lib/seo.ts). Eso hace que Google la encuentre y la entienda; el
+ * puesto en los resultados depende además de cosas que no controlamos.
  */
 export default function PaginaTurnos() {
   // En la demo, Configuración abre directo en la pestaña de la página pública,
