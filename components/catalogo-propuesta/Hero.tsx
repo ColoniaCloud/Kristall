@@ -1,5 +1,6 @@
 import { ChevronDown } from 'lucide-react'
 import HeroVideo from './HeroVideo'
+import Rotador from './Rotador'
 import { CONTENEDOR } from './layout'
 import { MENSAJE_GENERAL, WhatsAppIcon, WhatsAppLink } from './whatsapp'
 
@@ -52,15 +53,23 @@ export default function Hero({ dias, vigente }: { dias: number; vigente: boolean
           gestionar tu negocio desde el celular.
         </p>
 
-        {vigente && (
-          <p className="kf-rise mt-6 inline-flex items-center gap-2 rounded-full border border-[#CC0000]/50 bg-[#CC0000]/15 px-3.5 py-1.5 text-sm text-white [animation-delay:360ms]">
-            <span className="relative flex size-2">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#ff3b3b] opacity-75 motion-reduce:hidden" />
-              <span className="relative inline-flex size-2 rounded-full bg-[#ff3b3b]" />
-            </span>
-            {dias > 1 ? `Precio de lanzamiento · quedan ${dias} días` : 'Precio de lanzamiento · último día'}
-          </p>
-        )}
+        <p className="kf-rise mt-6 inline-flex items-center gap-2 rounded-full border border-[#CC0000]/50 bg-[#CC0000]/15 px-3.5 py-1.5 text-sm text-white [animation-delay:360ms]">
+          <span className="relative flex size-2 shrink-0">
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#ff3b3b] opacity-75 motion-reduce:hidden" />
+            <span className="relative inline-flex size-2 rounded-full bg-[#ff3b3b]" />
+          </span>
+          <Rotador
+            textos={[
+              // Pasado el 1/12 se cae el del precio y quedan los otros tres.
+              ...(vigente
+                ? [dias > 1 ? `Precio de lanzamiento · quedan ${dias} días` : 'Precio de lanzamiento · último día']
+                : []),
+              'Llegamos a toda la Argentina',
+              'Sistema digital para instaladores',
+              'Tu propia web de turnos',
+            ]}
+          />
+        </p>
 
         <div className="kf-rise mt-8 flex flex-col gap-3 sm:flex-row lg:max-w-xl [animation-delay:480ms]">
           <a
