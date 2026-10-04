@@ -1,12 +1,21 @@
 'use client'
 
 import Image from 'next/image'
-import { CalendarCheck, Link2, Loader2, Search, Sparkles } from 'lucide-react'
+import { ArrowUpRight, CalendarCheck, Link2, Loader2, Search, Sparkles } from 'lucide-react'
+import { trackEvent } from '@/lib/analytics'
 import { FlagStripe } from './Hero'
 import { CONTENEDOR, SECCION, TITULO } from './layout'
 import Reveal from './Reveal'
 import { useDemo } from './useDemo'
 import { WhatsAppIcon } from './whatsapp'
+
+/**
+ * Una página publicada de verdad, para que el taller vea el resultado sin
+ * pasar por la demo. Es una cuenta interna de prueba (no un taller real), así
+ * que se puede mostrar sin pedirle permiso a nadie. Si se despublica o cambia
+ * el handle, este link da 404: actualizarlo acá.
+ */
+const EJEMPLO = 'https://polariz.ar/polarizados-del-sur'
 
 const PUNTOS = [
   {
@@ -79,20 +88,32 @@ export default function PaginaTurnos() {
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={entrar}
-            disabled={cargando}
-            className="mt-8 inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-white px-7 text-base font-semibold text-[#0A0A0A] transition hover:bg-white/90 active:scale-[0.98] disabled:opacity-60 sm:w-auto"
-          >
-            {cargando ? (
-              <Loader2 className="size-5 animate-spin" aria-hidden="true" />
-            ) : (
-              <Sparkles className="size-5" aria-hidden="true" />
-            )}
-            Armá la tuya en la demo
-          </button>
-          <p className="mt-2 text-xs text-white/55">Elegís el nombre y la publicás de prueba. Sin registrarte.</p>
+          <div className="mt-8 flex flex-col gap-3 xl:flex-row">
+            <button
+              type="button"
+              onClick={entrar}
+              disabled={cargando}
+              className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-white px-7 text-base font-semibold text-[#0A0A0A] transition hover:bg-white/90 active:scale-[0.98] disabled:opacity-60 xl:w-auto"
+            >
+              {cargando ? (
+                <Loader2 className="size-5 animate-spin" aria-hidden="true" />
+              ) : (
+                <Sparkles className="size-5" aria-hidden="true" />
+              )}
+              Armá la tuya en la demo
+            </button>
+            <a
+              href={EJEMPLO}
+              target="_blank"
+              rel="noopener"
+              onClick={() => trackEvent('catalogo_ejemplo_pagina')}
+              className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl border border-white/20 px-7 text-base font-medium text-white transition hover:border-white/40 hover:bg-white/[0.05] active:scale-[0.98] xl:w-auto"
+            >
+              Ver una página de ejemplo
+              <ArrowUpRight className="size-5" aria-hidden="true" />
+            </a>
+          </div>
+          <p className="mt-2 text-xs text-white/55">En la demo elegís el nombre y la publicás de prueba. Sin registrarte.</p>
           {error && (
             <p role="alert" className="mt-3 text-sm text-[#ff8a8a]">
               {error}
