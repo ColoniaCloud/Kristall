@@ -6,7 +6,7 @@
  * todavía no está cargado ahí. Si cambia un precio o una ficha, se cambia acá
  * Y en el PDF — no hay nada que los sincronice (ver CATALOGO-PROPUESTA.md, D3).
  *
- * Precios por rollo, sin IVA.
+ * Precios finales por rollo (lo que paga el taller; no se les suma IVA).
  */
 
 export type Categoria = 'standard' | 'premium'
@@ -31,7 +31,7 @@ export type Linea = {
   /** Medida del rollo en metros (ancho × largo). */
   rollo: { ancho: number; largo: number }
   garantiaAnios: number
-  /** Precio de lanzamiento por rollo, en pesos, sin IVA. */
+  /** Precio final de lanzamiento por rollo, en pesos. */
   precio: number
   variantes: Variante[]
   foto: string

@@ -127,7 +127,7 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
             Elegí con qué vas a trabajar
           </h2>
           <p className="mt-3 text-base leading-relaxed text-white/60 lg:text-lg">
-            Precio por rollo, sin IVA.<span className="lg:hidden"> Deslizá para ver cada lámina.</span>
+            Precio final por rollo.<span className="lg:hidden"> Deslizá para ver cada lámina.</span>
           </p>
         </div>
 
@@ -335,7 +335,7 @@ function Card({
         <div className="mt-auto pt-6">
           {vigente ? (
             <>
-              <p className="text-xs text-white/55">Precio de lanzamiento · por rollo + IVA</p>
+              <p className="text-xs text-white/55">Precio final de lanzamiento · por rollo</p>
               <p
                 className="mt-1 text-[2.4rem] font-semibold leading-none tracking-[-0.01em] tabular-nums"
                 style={{ fontFamily: 'var(--font-display)' }}

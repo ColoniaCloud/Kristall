@@ -208,7 +208,7 @@ export default function Recomendador({ lineas, vigente }: { lineas: Linea[]; vig
                     >
                       {formatPrecio(mejor.linea.precio)}
                     </span>
-                    por rollo + IVA
+                    precio final por rollo
                   </p>
                 )}
                 {texto.alternativa && (
@@ -328,7 +328,7 @@ function Tabla({ lineas, vigente }: { lineas: Linea[]; vigente: boolean }) {
         </tbody>
       </table>
       <p className="px-5 pb-4 pt-1 text-xs text-white/55 lg:px-6">
-        IR: rechazo infrarrojo máximo de la línea. Precios por rollo, sin IVA. PPF viene en rollo de 1.52 × 15 m; el
+        IR: rechazo infrarrojo máximo de la línea. Precios finales por rollo. PPF viene en rollo de 1.52 × 15 m; el
         resto, 1.52 × 30 m.
       </p>
     </div>
