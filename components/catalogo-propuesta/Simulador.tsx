@@ -9,12 +9,20 @@ import { irALinea } from './eventos'
 import { CONTENEDOR, SECCION, TITULO } from './layout'
 
 /**
- * Contorno de la ventanilla del conductor en /cat/ingresar.jpg, en % de la foto.
- * Si se cambia la foto hay que volver a trazarlo; el contenedor mantiene la
- * proporción exacta de la imagen (1919×1282) para que los % coincidan.
+ * Forma exacta del vidrio de la ventanilla en /cat/ingresar.jpg, sacada de la
+ * propia foto por brillo (ver scripts/mascara-simulador.py). Antes era un
+ * polígono trazado a mano que no seguía la curva de la esquina ni el parante.
+ * El contenedor mantiene la proporción de la foto (1919×1282) para que la
+ * máscara, estirada al 100 %, caiga justo encima.
  */
-const VIDRIO =
-  'polygon(53.5% 15.5%, 66% 11.5%, 78% 7.6%, 84.5% 6.3%, 87% 6.8%, 88.2% 8.6%, 87.6% 11.5%, 80.2% 38%, 79.2% 42.6%, 43.5% 44%, 41.8% 37%, 45.5% 31%)'
+const MASCARA_VIDRIO: React.CSSProperties = {
+  maskImage: 'url(/catalogo-propuesta/ventanilla-mascara.png)',
+  maskSize: '100% 100%',
+  maskRepeat: 'no-repeat',
+  WebkitMaskImage: 'url(/catalogo-propuesta/ventanilla-mascara.png)',
+  WebkitMaskSize: '100% 100%',
+  WebkitMaskRepeat: 'no-repeat',
+}
 
 const TEXTOS: Record<number, string> = {
   5: 'Máxima privacidad: desde afuera casi no se ve el interior.',
@@ -78,7 +86,7 @@ export default function Simulador({ lineas }: { lineas: Linea[] }) {
             />
             <div
               className="absolute inset-0 transition-[background-color] duration-500 ease-out motion-reduce:transition-none"
-              style={{ clipPath: VIDRIO, backgroundColor: `rgba(8, 10, 12, ${velo(vlt)})` }}
+              style={{ ...MASCARA_VIDRIO, backgroundColor: `rgba(8, 10, 12, ${velo(vlt)})` }}
               aria-hidden="true"
             />
             <div className="absolute bottom-3 left-3 rounded-2xl bg-black/60 px-4 py-2 backdrop-blur lg:bottom-5 lg:left-5">
