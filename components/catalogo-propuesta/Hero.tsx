@@ -22,7 +22,9 @@ export default function Hero({ dias, vigente }: { dias: number; vigente: boolean
   return (
     <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden">
       <HeroVideo />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/70 via-black/35 to-[#0A0A0A]" />
+      {/* El velo sube más alto y más oscuro detrás del texto: con el video en
+          movimiento, el título y la bajada tienen que leerse en cualquier cuadro. */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/70 via-black/60 via-35% to-[#0A0A0A] to-80%" />
       {/* En PC el texto va a la izquierda sobre un video apaisado: un velo lateral lo mantiene legible. */}
       <div className="absolute inset-0 -z-10 hidden bg-gradient-to-r from-black/75 via-black/30 to-transparent lg:block" />
 
@@ -48,7 +50,7 @@ export default function Hero({ dias, vigente }: { dias: number; vigente: boolean
           <span className="block text-white/55">Un sistema para tu taller.</span>
         </h1>
 
-        <p className="kf-rise-solid mt-5 max-w-md text-base leading-relaxed text-white/75 lg:mt-7 lg:max-w-xl lg:text-xl">
+        <p className="kf-rise-solid mt-5 max-w-md text-base leading-relaxed text-white lg:mt-7 lg:max-w-xl lg:text-xl">
           Tecnología alemana a precio de lanzamiento, garantía digital en cada instalación y un portal para
           gestionar tu negocio desde el celular.
         </p>
