@@ -31,6 +31,7 @@ export type ClaimStatus = 'OPEN' | 'IN_REVIEW' | 'RESOLVED' | 'REJECTED'
  */
 import type { ProductCategory } from '@/lib/client-portal/product-category'
 import type { BuildingUse, DatosObra, FilmSide, GlassType } from '@/lib/obra'
+import type { ClaimIssueType } from '@/lib/reclamos'
 export type { ProductCategory }
 export { PRODUCT_CATEGORY_LABELS } from '@/lib/client-portal/product-category'
 
@@ -166,6 +167,9 @@ export interface Claim {
   status: ClaimStatus
   description: string
   createdAt: string
+  /** Null en reclamos anteriores a octubre 2026. */
+  issueType: ClaimIssueType | null
+  affectedPanes: number | null
   installation: { installationCode: string; status: string }
 }
 
@@ -496,6 +500,10 @@ export interface CreateClaimInput {
   reporterName: string
   reporterEmail: string
   reporterPhone?: string
+  /** Tipo de problema, paños (arquitectura) y fotos. Ver lib/reclamos.ts. */
+  issueType?: ClaimIssueType
+  affectedPanes?: number
+  photos?: { data: string; mimeType: string }[]
 }
 
 export function createClaim(contactId: string, input: CreateClaimInput) {

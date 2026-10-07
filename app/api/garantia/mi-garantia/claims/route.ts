@@ -48,6 +48,10 @@ export async function POST(request: NextRequest) {
       reporterEmail: body.reporterEmail?.trim() || undefined,
       reporterPhone: body.reporterPhone?.trim() || undefined,
       description,
+      // Tipo, paños y fotos: los valida el CRM.
+      issueType: body.issueType || undefined,
+      affectedPanes: body.affectedPanes || undefined,
+      photos: Array.isArray(body.photos) ? body.photos : undefined,
     })
     return NextResponse.json(claim, { status: 201 })
   } catch (err) {

@@ -41,6 +41,28 @@ const WARRANTY_STATUSES: Record<string, unknown> = {
     filmSide: 'INTERIOR',
     buildingUse: 'COMMERCIAL',
   },
+  // Arquitectura activa: el reclamo ofrece la rotura del vidrio y los paños.
+  'mock-active-arq': {
+    installationCode: 'LOT-20260801-0003-R002-I1',
+    status: 'ACTIVE',
+    product: { id: 'clyproduct5', name: 'SILVER 20 ARQ', brand: 'Kristall' },
+    productCategory: 'ARCHITECTURAL',
+    isActive: true,
+    daysRemaining: 3600,
+    expiresAt: '2036-08-12T00:00:00.000Z',
+    assetType: 'BUILDING',
+    installer: { name: 'Vidriería Sur', logoPath: null },
+    vehicleType: null,
+    plate: null,
+    clientEmail: 'cliente@ejemplo.com',
+    warrantyMonths: 120,
+    siteAddress: 'Av. Córdoba, CABA',
+    areaM2: 18.5,
+    paneCount: 6,
+    glassType: 'DVH',
+    filmSide: 'INTERIOR',
+    buildingUse: 'COMMERCIAL',
+  },
   // Arquitectura en blanco: la activación tiene que pedir la dirección.
   'mock-pending-arq-vacia': {
     installationCode: 'LOT-20260801-0003-R002-I2',
@@ -253,8 +275,19 @@ const MOCK_CLAIMS = [
     id: 'clc1',
     status: 'OPEN',
     description: 'Se despegó una esquina',
+    issueType: 'DESPEGUE',
+    affectedPanes: null,
     createdAt: '2026-07-01T00:00:00.000Z',
     installation: { installationCode: 'LOT-20260705-0001-R003-I1', status: 'ACTIVE' },
+  },
+  {
+    id: 'clc2',
+    status: 'IN_REVIEW',
+    description: 'Apareció una rajadura en el paño del medio, de borde a borde.',
+    issueType: 'ROTURA_VIDRIO',
+    affectedPanes: 1,
+    createdAt: '2026-09-20T00:00:00.000Z',
+    installation: { installationCode: 'LOT-20260801-0003-R002-I1', status: 'ACTIVE' },
   },
 ]
 

@@ -9,6 +9,9 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
+import type { ProductCategory } from '@/lib/client-portal/product-category'
+import { extrasParaEnviar } from '@/lib/reclamos'
+import CamposReclamo, { RECLAMO_EN_BLANCO, type ValoresReclamo } from './CamposReclamo'
 
 const schema = z
   .object({
@@ -25,9 +28,18 @@ const schema = z
 
 type FormData = z.infer<typeof schema>
 
-export default function ClaimForm({ token }: { token: string }) {
+export default function ClaimForm({
+  token,
+  categoria,
+}: {
+  token: string
+  /** El rubro de la lámina: decide si se ofrece la rotura del vidrio y los paños. */
+  categoria: ProductCategory | null
+}) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'error' | 'success'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+  const [extras, setExtras] = useState<ValoresReclamo>(RECLAMO_EN_BLANCO)
+  const [faltaTipo, setFaltaTipo] = useState(false)
 
   const {
     register,
@@ -36,13 +48,17 @@ export default function ClaimForm({ token }: { token: string }) {
   } = useForm<FormData>({ resolver: zodResolver(schema) })
 
   const onSubmit = async (data: FormData) => {
+    if (!extras.issueType) {
+      setFaltaTipo(true)
+      return
+    }
     setStatus('loading')
     setErrorMsg('')
     try {
       const res = await fetch('/api/garantia/claims', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, activationToken: token }),
+        body: JSON.stringify({ ...data, ...extrasParaEnviar(categoria, extras), activationToken: token }),
       })
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
@@ -86,6 +102,15 @@ export default function ClaimForm({ token }: { token: string }) {
         <Label htmlFor="reporterPhone">Teléfono (opcional)</Label>
         <Input id="reporterPhone" type="tel" {...register('reporterPhone')} />
       </div>
+      <CamposReclamo
+        categoria={categoria}
+        valores={extras}
+        cambiar={(v) => {
+          setExtras(v)
+          if (v.issueType) setFaltaTipo(false)
+        }}
+        error={faltaTipo ? 'Elegí qué pasó' : undefined}
+      />
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="description">Descripción del problema</Label>
         <Textarea id="description" rows={4} {...register('description')} />

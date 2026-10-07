@@ -12,6 +12,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 import type { Installation } from '@/lib/client-portal/api'
+import { extrasParaEnviar } from '@/lib/reclamos'
+import CamposReclamo, { RECLAMO_EN_BLANCO, type ValoresReclamo } from '@/components/warranty/CamposReclamo'
 
 const schema = z.object({
   installationId: z.string().min(1, 'Elegí una instalación'),
@@ -27,24 +29,34 @@ export default function ClaimForm({ installations }: { installations: Installati
   const router = useRouter()
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+  const [extras, setExtras] = useState<ValoresReclamo>(RECLAMO_EN_BLANCO)
+  const [faltaTipo, setFaltaTipo] = useState(false)
 
   const {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) })
 
   const activeInstallations = installations.filter((i) => i.status === 'ACTIVE')
+  // El rubro sale de la instalación elegida: cambia qué problemas se ofrecen.
+  const elegida = activeInstallations.find((i) => i.id === watch('installationId'))
+  const categoria = elegida?.roll.product.category ?? null
 
   const onSubmit = async (data: FormData) => {
+    if (!extras.issueType) {
+      setFaltaTipo(true)
+      return
+    }
     setStatus('loading')
     setErrorMsg('')
     try {
       const res = await fetch('/api/portal/claims', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, ...extrasParaEnviar(categoria, extras) }),
       })
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
@@ -72,7 +84,14 @@ export default function ClaimForm({ installations }: { installations: Installati
     <form onSubmit={handleSubmit(onSubmit)} className="flex max-w-lg flex-col gap-4">
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="installationId">Instalación</Label>
-        <Select onValueChange={(v) => setValue('installationId', v, { shouldValidate: true })}>
+        <Select
+          onValueChange={(v) => {
+            setValue('installationId', v, { shouldValidate: true })
+            // Otra lámina puede ser de otro rubro: la rotura del vidrio elegida
+            // para una de arquitectura no vale para una de auto.
+            setExtras((e) => ({ ...e, issueType: '', affectedPanes: '' }))
+          }}
+        >
           <SelectTrigger id="installationId" className="w-full">
             <SelectValue placeholder="Elegí una instalación" />
           </SelectTrigger>
@@ -103,6 +122,16 @@ export default function ClaimForm({ installations }: { installations: Installati
         <Label htmlFor="reporterPhone">Teléfono (opcional)</Label>
         <Input id="reporterPhone" type="tel" {...register('reporterPhone')} />
       </div>
+
+      <CamposReclamo
+        categoria={categoria}
+        valores={extras}
+        cambiar={(v) => {
+          setExtras(v)
+          if (v.issueType) setFaltaTipo(false)
+        }}
+        error={faltaTipo ? 'Elegí qué pasó' : undefined}
+      />
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="description">Descripción del problema</Label>

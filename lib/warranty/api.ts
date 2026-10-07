@@ -1,5 +1,6 @@
 import { callCrmApi } from '@/lib/crm/api'
 import type { DatosObra } from '@/lib/obra'
+import type { ClaimIssueType } from '@/lib/reclamos'
 
 /** Lanza si falta: sin la key el CRM devuelve 401 y el error se lee como
  *  "no encontramos esa garantía". Ver la nota en lib/client-portal/api.ts. */
@@ -126,6 +127,10 @@ export type CreateWarrantyClaimInput = {
   reporterPhone?: string
   reporterDni?: string
   description: string
+  /** Tipo de problema, paños (arquitectura) y fotos. Ver lib/reclamos.ts. */
+  issueType?: ClaimIssueType
+  affectedPanes?: number
+  photos?: { data: string; mimeType: string }[]
 } & (
   | { activationToken: string; installationCode?: never }
   | { installationCode: string; activationToken?: never }

@@ -443,6 +443,21 @@ cuando tiene un problema.
 | `description` | **Sí** |
 | `reporterEmail` **o** `reporterDni` | Al menos uno de los dos, **Sí** |
 | `reporterPhone` | No |
+| `issueType`, `affectedPanes`, `photos` | No — ver abajo |
+
+**Tipo de problema, paños y fotos (desde octubre 2026).** Opcionales —un integrador viejo que no los
+manda sigue funcionando—, pero conviene pedirlos siempre:
+
+| Campo | Tipo | Notas |
+|---|---|---|
+| `issueType` | `"BURBUJAS" \| "DESPEGUE" \| "DECOLORACION" \| "ROTURA_VIDRIO" \| "OTRO"` | `ROTURA_VIDRIO` **solo en láminas de arquitectura**; en una de auto o PPF responde `400 { "error": "Ese tipo de problema no aplica a esta lámina" }`. |
+| `affectedPanes` | entero positivo | Paños afectados. Solo arquitectura; en otro rubro se descarta. |
+| `photos` | array de hasta **3** `{ "data": "<base64 sin data:>", "mimeType": "image/jpeg" \| "image/png" \| "image/webp" }` | Hasta 900 KB de base64 por foto: achicalas en el navegador antes de mandarlas. |
+
+La **rotura del vidrio por estrés térmico está cubierta** por Kristall en láminas de arquitectura. Se
+evalúa con el tipo de vidrio y el lado de la lámina registrados en la instalación (datos de obra,
+sección 2), así que una foto de la rajadura entera ayuda. Un dato fuera de rango devuelve `400` con el
+motivo en `error` (por ejemplo `"Hasta 3 fotos"` o `"La foto es muy pesada"`).
 
 **Response `201`:**
 ```json

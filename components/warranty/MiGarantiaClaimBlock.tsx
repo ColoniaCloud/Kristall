@@ -9,6 +9,9 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
+import type { ProductCategory } from '@/lib/client-portal/product-category'
+import { extrasParaEnviar } from '@/lib/reclamos'
+import CamposReclamo, { RECLAMO_EN_BLANCO, type ValoresReclamo } from './CamposReclamo'
 
 /**
  * Reportar un problema desde la sesión de código corto.
@@ -37,12 +40,16 @@ type FormData = z.infer<typeof schema>
 interface Props {
   installationCode: string
   productName: string
+  /** El rubro de la lámina: decide si se ofrece la rotura del vidrio y los paños. */
+  categoria: ProductCategory | null
 }
 
-export default function MiGarantiaClaimBlock({ installationCode, productName }: Props) {
+export default function MiGarantiaClaimBlock({ installationCode, productName, categoria }: Props) {
   const [abierto, setAbierto] = useState(false)
   const [status, setStatus] = useState<'idle' | 'loading' | 'error' | 'success'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+  const [extras, setExtras] = useState<ValoresReclamo>(RECLAMO_EN_BLANCO)
+  const [faltaTipo, setFaltaTipo] = useState(false)
 
   const {
     register,
@@ -51,13 +58,17 @@ export default function MiGarantiaClaimBlock({ installationCode, productName }: 
   } = useForm<FormData>({ resolver: zodResolver(schema) })
 
   const onSubmit = async (data: FormData) => {
+    if (!extras.issueType) {
+      setFaltaTipo(true)
+      return
+    }
     setStatus('loading')
     setErrorMsg('')
     try {
       const res = await fetch('/api/garantia/mi-garantia/claims', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, ...extrasParaEnviar(categoria, extras) }),
       })
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
@@ -126,8 +137,18 @@ export default function MiGarantiaClaimBlock({ installationCode, productName }: 
             <Input id="reporterPhone" inputMode="tel" {...register('reporterPhone')} />
           </div>
 
+          <CamposReclamo
+            categoria={categoria}
+            valores={extras}
+            cambiar={(v) => {
+              setExtras(v)
+              if (v.issueType) setFaltaTipo(false)
+            }}
+            error={faltaTipo ? 'Elegí qué pasó' : undefined}
+          />
+
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="description">¿Qué le pasa?</Label>
+            <Label htmlFor="description">Contanos un poco más</Label>
             <Textarea id="description" rows={4} {...register('description')} />
             {errors.description && (
               <span className="text-sm text-destructive">{errors.description.message}</span>

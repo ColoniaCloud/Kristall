@@ -16,7 +16,11 @@ export default async function MiGarantiaPage() {
       <h1 className="text-center font-heading text-2xl font-semibold">Mi garantía</h1>
       <StatusCard status={session} />
       {session.isActive && (
-        <MiGarantiaClaimBlock installationCode={session.installationCode} productName={session.product.name} />
+        <MiGarantiaClaimBlock
+          installationCode={session.installationCode}
+          productName={session.product.name}
+          categoria={session.productCategory ?? null}
+        />
       )}
       <WarrantyLogoutButton />
     </div>

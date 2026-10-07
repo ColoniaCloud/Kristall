@@ -334,9 +334,12 @@ hizo el trabajo. `areaM2` es número. Valores de los enums en `WARRANTY_API.md` 
 
 ```json
 [
-  { "id": "clc...", "status": "OPEN", "description": "Se despegó una esquina", "createdAt": "2026-07-01T00:00:00.000Z", "installation": { "installationCode": "LOT-...-R003-I1", "status": "ACTIVE" } }
+  { "id": "clc...", "status": "OPEN", "description": "Se despegó una esquina", "issueType": "DESPEGUE", "affectedPanes": null, "createdAt": "2026-07-01T00:00:00.000Z", "installation": { "installationCode": "LOT-...-R003-I1", "status": "ACTIVE" } }
 ]
 ```
+
+`issueType` y `affectedPanes` vienen en `null` en los reclamos anteriores a octubre 2026. Las fotos
+**no** salen por acá: son del cliente final y las evalúa Kristall desde el CRM.
 
 ### 4.5 `POST /api/portal/v1/contacts/:contactId/claims` — Crear un reclamo *(nivel INSTALLER)*
 
@@ -362,6 +365,9 @@ rollo vendido a ese `contactId` (ya lo garantiza tu login).
 | `reporterName` | **Sí** |
 | `reporterEmail` | **Sí** |
 | `reporterPhone` | No |
+| `issueType` | No — mismos valores y regla de rubro que `WARRANTY_API.md` 5.3 |
+| `affectedPanes` | No — solo arquitectura |
+| `photos` | No — hasta 3, mismo formato que `WARRANTY_API.md` 5.3 |
 
 **Response `201`:** `{ "id": "clc...", "status": "OPEN" }`
 

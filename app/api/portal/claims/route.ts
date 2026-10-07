@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
   if (!session) return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
 
   const body = await request.json()
-  const { installationId, description, reporterName, reporterEmail, reporterPhone } = body
+  const { installationId, description, reporterName, reporterEmail, reporterPhone, issueType, affectedPanes, photos } = body
   if (!installationId || !description || !reporterName || !reporterEmail) {
     return NextResponse.json(
       { error: 'installationId, description, reporterName y reporterEmail son requeridos' },
@@ -34,6 +34,10 @@ export async function POST(request: NextRequest) {
       reporterName,
       reporterEmail,
       reporterPhone,
+      // Tipo, paños y fotos: los valida el CRM.
+      issueType: issueType || undefined,
+      affectedPanes: affectedPanes || undefined,
+      photos: Array.isArray(photos) ? photos : undefined,
     })
     return NextResponse.json(claim, { status: 201 })
   } catch (err) {
