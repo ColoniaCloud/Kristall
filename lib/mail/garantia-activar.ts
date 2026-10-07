@@ -108,7 +108,7 @@ function firmaTaller(taller: { nombre: string; logoUrl: string | null }): string
 function pie(legal: string): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${C.foot};border-top:1px solid ${C.hair};"><tr><td class="px" style="padding:24px 40px;">
   <div style="font-family:${F};font-size:11px;font-weight:600;letter-spacing:.06em;color:${C.text};">KRISTALL<sup style="font-size:7px;line-height:0;">&reg;</sup></div>
-  <div style="font-family:${F};font-size:11px;color:${C.legal};line-height:1.7;padding-bottom:14px;">Performance aplicada al confort<br>Tecnología alemana de láminas de alto rendimiento.<br>
+  <div style="font-family:${F};font-size:11px;color:${C.legal};line-height:1.7;padding-bottom:14px;">Performance aplicada al confort<br>Tecnología alemana en láminas de alto rendimiento.<br>
     <a href="mailto:ventas@kristallfilm.com" style="color:${C.legal};text-decoration:none;">ventas@kristallfilm.com</a> &middot; <a href="https://www.kristallfilm.com" style="color:${C.legal};text-decoration:none;">www.kristallfilm.com</a></div>
   <div style="height:1px;background:${C.hair};margin-bottom:14px;font-size:0;line-height:0;"></div>
   <div style="font-family:${F};font-size:10px;line-height:1.7;color:${C.legal};">${legal}</div>

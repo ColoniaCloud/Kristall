@@ -89,10 +89,11 @@ export default function CamposReclamo({
             )
           })}
         </div>
+        {/* Sin prometer cobertura: se sacó a pedido el 2026-10-07, igual que la
+            línea del certificado. Se evalúa caso por caso desde el CRM. */}
         {valores.issueType === 'ROTURA_VIDRIO' && (
           <p className="text-xs text-muted-foreground">
-            La rotura del vidrio por estrés térmico está cubierta. La evaluamos con el tipo de vidrio y la
-            instalación registrados: si podés, mandá una foto de la rajadura entera.
+            Si podés, mandá una foto de la rajadura entera.
           </p>
         )}
         {error && <span className="text-sm text-destructive">{error}</span>}
