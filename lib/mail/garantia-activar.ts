@@ -169,7 +169,7 @@ export function renderActivarGarantia(d: DatosActivarGarantia): { subject: strin
     <div style="font-family:${F};font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:${C.muted};font-weight:600;padding-bottom:4px;">Tu código de garantía</div>
     <div style="font-family:${F};font-size:16px;font-weight:600;color:${C.ink};letter-spacing:.04em;">${escapeHtml(d.installationCode)}</div>
   </td></tr></table>
-  <div style="font-family:${F};font-size:13px;line-height:1.7;color:${C.text};padding-top:20px;">Vas a necesitar tu nombre, tu email y la patente del vehículo. Si el botón no funciona, entrá a <a href="${escapeHtml(d.accederLink)}" style="color:${C.ink};">kristallfilm.com/garantia</a> con el código de arriba.</div>
+  <div style="font-family:${F};font-size:13px;line-height:1.7;color:${C.text};padding-top:20px;">Vas a necesitar tu nombre y tu email. Si el botón no funciona, entrá a <a href="${escapeHtml(d.accederLink)}" style="color:${C.ink};">kristallfilm.com/garantia</a> con el código de arriba.</div>
   <div style="font-family:${F};font-size:12px;line-height:1.7;color:${C.muted};padding-top:16px;">Producto: <span style="color:${C.ink};">${escapeHtml(d.producto)}</span></div>
 </td></tr></table>` +
         pie(LEGAL),

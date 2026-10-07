@@ -25,6 +25,10 @@ import {
 } from '@/components/ui/dialog'
 import type { AssetType } from '@/lib/client-portal/workshop'
 import { TIPO_LABEL } from '@/lib/client-portal/taller-format'
+import CamposObra, { OBRA_EN_BLANCO, obraParaEnviar, type ValoresObra } from '../CamposObra'
+
+/** Una ventana o un edificio llevan datos de obra; un auto, marca y modelo. */
+const esObra = (t: AssetType) => t === 'WINDOW' || t === 'BUILDING'
 
 /**
  * Alta de un vehículo o superficie para un cliente final.
@@ -33,6 +37,10 @@ import { TIPO_LABEL } from '@/lib/client-portal/taller-format'
  * poder cargar "el Corolla azul" y seguir trabajando. Los datos se completan
  * después, y el CRM solo exige tener el vehículo cargado —no completo— para
  * poder terminar una orden.
+ *
+ * Para una ventana o un edificio no se pide marca ni modelo sino los datos de
+ * la obra (`CamposObra`): al terminar la orden viajan tal cual a la garantía,
+ * y el cliente los ve en su certificado.
  *
  * No hay edición ni borrado todavía: quedaron fuera del contrato de esta fase
  * (ver CLIENT_PORTAL_API.md 4.10.4).
@@ -55,6 +63,8 @@ export default function WorkshopAssetForm({
     year: '',
     color: '',
   })
+  const [obra, setObra] = useState<ValoresObra>(OBRA_EN_BLANCO)
+  const obraSeleccionada = esObra(form.type)
 
   const set = (campo: keyof typeof form) => (e: { target: { value: string } }) =>
     setForm((f) => ({ ...f, [campo]: e.target.value }))
@@ -66,16 +76,23 @@ export default function WorkshopAssetForm({
       const res = await fetch(`/api/portal/workshop/clients/${clientId}/assets`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, year: form.year || null }),
+        // Cada tipo manda lo suyo: un edificio con marca y modelo, o un auto
+        // con dirección de obra, sería una ficha que se contradice.
+        body: JSON.stringify(
+          obraSeleccionada
+            ? { type: form.type, identifier: form.identifier, ...obraParaEnviar(obra) }
+            : { ...form, year: form.year || null }
+        ),
       })
       const body = await res.json().catch(() => ({}))
       if (!res.ok) {
         toast.error(body.error ?? 'No pudimos guardar el vehículo')
         return
       }
-      toast.success('Vehículo agregado')
+      toast.success(obraSeleccionada ? 'Superficie agregada' : 'Vehículo agregado')
       setAbierto(false)
       setForm({ type: 'VEHICLE', identifier: '', brand: '', model: '', year: '', color: '' })
+      setObra(OBRA_EN_BLANCO)
       router.refresh()
     } catch {
       toast.error('Sin conexión. Probá de nuevo en un momento.')
@@ -87,9 +104,9 @@ export default function WorkshopAssetForm({
   return (
     <Dialog open={abierto} onOpenChange={setAbierto}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Nuevo vehículo</DialogTitle>
+          <DialogTitle>{obraSeleccionada ? 'Nueva superficie' : 'Nuevo vehículo'}</DialogTitle>
           <DialogDescription>
             Cargá lo que tengas a mano. Después lo completás.
           </DialogDescription>
@@ -117,7 +134,7 @@ export default function WorkshopAssetForm({
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="identifier">
-              {form.type === 'VEHICLE' ? 'Patente' : 'Identificación'}
+              {form.type === 'VEHICLE' ? 'Patente' : 'Cómo la reconocés'}
             </Label>
             <Input
               id="identifier"
@@ -128,6 +145,9 @@ export default function WorkshopAssetForm({
             />
           </div>
 
+          {obraSeleccionada ? (
+            <CamposObra valores={obra} cambiar={(campo, v) => setObra((o) => ({ ...o, [campo]: v }))} />
+          ) : (
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="brand">Marca</Label>
@@ -154,6 +174,7 @@ export default function WorkshopAssetForm({
               <Input id="color" value={form.color} onChange={set('color')} />
             </div>
           </div>
+          )}
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setAbierto(false)}>

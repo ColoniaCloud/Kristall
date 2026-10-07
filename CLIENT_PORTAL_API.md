@@ -307,10 +307,28 @@ rollo aparezca en esta lista.
     "assetDescription": "Toyota Corolla 2022",
     "activatedAt": "2026-06-10T00:00:00.000Z",
     "expiresAt": "2027-06-10T00:00:00.000Z",
-    "roll": { "fullRollCode": "LOT-20260705-0001-R003", "product": { "id": "clp...", "name": "KRYPTON 05", "sku": "KR-05" } }
+    "roll": { "fullRollCode": "LOT-20260705-0001-R003", "product": { "id": "clp...", "name": "KRYPTON 05", "sku": "KR-05", "category": "AUTOMOTIVE" } },
+    "siteAddress": null, "areaM2": null, "paneCount": null, "glassType": null, "filmSide": null, "buildingUse": null
+  },
+  {
+    "id": "cli...",
+    "installationCode": "LOT-20260801-0003-R002-I1",
+    "status": "ACTIVE",
+    "assetType": "BUILDING",
+    "assetDescription": "Frente vidriado, planta baja",
+    "activatedAt": "2026-08-12T00:00:00.000Z",
+    "expiresAt": "2036-08-12T00:00:00.000Z",
+    "roll": { "fullRollCode": "LOT-20260801-0003-R002", "product": { "id": "clp...", "name": "SILVER 20 ARQ", "sku": "KARQ-S20", "category": "ARCHITECTURAL" } },
+    "siteAddress": "Av. Córdoba 1850, piso 4, CABA", "areaM2": 18.5, "paneCount": 6,
+    "glassType": "DVH", "filmSide": "INTERIOR", "buildingUse": "COMMERCIAL"
   }
 ]
 ```
+
+`roll.product.category` (`AUTOMOTIVE | ARCHITECTURAL | PPF`) dice qué ficha dibujar, sin adivinar por
+qué campos vienen llenos. Los **datos de obra** (`siteAddress` … `buildingUse`) vienen siempre, en
+`null` fuera de arquitectura, y acá la dirección llega **completa**: el que pregunta es el taller que
+hizo el trabajo. `areaM2` es número. Valores de los enums en `WARRANTY_API.md` sección 2.
 
 ### 4.4 `GET /api/portal/v1/contacts/:contactId/claims` — Historial de reclamos *(nivel INSTALLER)*
 
@@ -417,7 +435,13 @@ punto de más que después rompen el reclamo.
   "clientPhone": "+5491112345678",
   "vehicleType": "SUV",
   "plate": "AB123CD",
-  "assetDescription": "Ventanal del living, 6 paños"
+  "assetDescription": "Ventanal del living, 6 paños",
+  "siteAddress": "Av. Córdoba 1850, piso 4, CABA",
+  "areaM2": 18.5,
+  "paneCount": 6,
+  "glassType": "DVH",
+  "filmSide": "INTERIOR",
+  "buildingUse": "COMMERCIAL"
 }
 ```
 
@@ -427,8 +451,12 @@ deriva de ahí el rubro de la instalación y **descarta lo que no corresponde**:
 
 | Rubro del producto | Se guarda | Se descarta | `assetType` que queda |
 |---|---|---|---|
-| `ARCHITECTURAL` | `assetDescription` | `vehicleType`, `plate` | `BUILDING` |
-| `AUTOMOTIVE` · `PPF` | `vehicleType`, `plate` | `assetDescription` | `VEHICLE` si vino `vehicleType`, si no `null` |
+| `ARCHITECTURAL` | `assetDescription` y los datos de obra (`siteAddress`, `areaM2`, `paneCount`, `glassType`, `filmSide`, `buildingUse`) | `vehicleType`, `plate` | `BUILDING` |
+| `AUTOMOTIVE` · `PPF` | `vehicleType`, `plate` | `assetDescription` y los datos de obra | `VEHICLE` si vino `vehicleType`, si no `null` |
+
+Los datos de obra conviene cargarlos acá: el instalador es el único que sabe sobre qué vidrio puso
+la lámina y de qué lado, y es lo primero que se mira ante un reclamo de rotura. Tipos y valores en
+`WARRANTY_API.md` sección 2.
 
 Es deliberado que no haya forma de declarar el rubro desde el request: una lámina no cambia de
 naturaleza según quién la ponga. Mandar los campos del otro rubro no es un error —se ignoran en
@@ -600,7 +628,10 @@ tira por un click. Hay que borrar las OT primero, a mano y a conciencia.
   {
     "id": "cla...", "workshopClientId": "clw...", "type": "VEHICLE",
     "identifier": "AB 123 CD", "brand": "Toyota", "model": "Corolla", "year": 2022,
-    "color": null, "notes": null, "createdAt": "2026-09-01T12:00:00.000Z",
+    "color": null,
+    "siteAddress": null, "areaM2": null, "paneCount": null,
+    "glassType": null, "filmSide": null, "buildingUse": null,
+    "notes": null, "createdAt": "2026-09-01T12:00:00.000Z",
     "_count": { "workOrders": 3 }
   }
 ]
@@ -610,6 +641,16 @@ tira por un click. Hay que borrar las OT primero, a mano y a conciencia.
 `VEHICLE`). Todos los demás campos son opcionales — `identifier` es la patente, el número de unidad o
 como el instalador llame a esa superficie, y **no es único**: dos clientes pueden traer la misma
 chapa mal tipeada y bloquear eso rompería el alta rápida sin ganar nada.
+
+**Datos de obra.** Con `type` `WINDOW` o `BUILDING` el `POST` acepta los mismos campos de obra que
+4.8 (`siteAddress`, `areaM2`, `paneCount`, `glassType`, `filmSide`, `buildingUse`); con `VEHICLE` u
+`OTHER` se descartan. Al pasar la OT a `TERMINADA` viajan tal cual a la garantía —solo si el rollo es
+de arquitectura—, y si `areaM2` quedó vacío se usa lo que la OT declaró haber puesto de ese rollo. Acá
+`areaM2` llega como **string** (Decimal), igual que los importes de Mi Taller.
+
+Un pedido de turno de arquitectura que se convierte en OT crea el activo como `BUILDING` con
+`siteAddress` y, si el tipo de inmueble era `CASA`/`OFICINA`/`LOCAL`, `buildingUse`. Los m² y vidrios
+que estimó el cliente **no** se copian: en la garantía tiene que quedar lo medido.
 
 **No hay `PATCH` ni `DELETE` de vehículos todavía.** Quedó fuera del contrato de esta fase; es una
 adición mecánica cuando la pantalla lo necesite.

@@ -1,5 +1,6 @@
 import { callCrmApi } from '@/lib/crm/api'
 import type { RollStatus, ProductCategory } from '@/lib/client-portal/api'
+import type { BuildingUse, FilmSide, GlassType } from '@/lib/obra'
 
 /**
  * Mi Taller — el puente hacia los endpoints `/workshop/*` del CRM.
@@ -70,6 +71,13 @@ export interface WorkshopAsset {
   model: string | null
   year: number | null
   color: string | null
+  /** Datos de obra: solo en WINDOW/BUILDING. `areaM2` llega como string (Money). */
+  siteAddress: string | null
+  areaM2: Money
+  paneCount: number | null
+  glassType: GlassType | null
+  filmSide: FilmSide | null
+  buildingUse: BuildingUse | null
   notes: string | null
   createdAt: string
   _count?: { workOrders: number }
@@ -291,6 +299,13 @@ export interface WorkshopAssetInput {
   year?: number | null
   color?: string | null
   notes?: string | null
+  /** Datos de obra. El CRM los descarta si `type` no es WINDOW ni BUILDING. */
+  siteAddress?: string | null
+  areaM2?: number | null
+  paneCount?: number | null
+  glassType?: GlassType | null
+  filmSide?: FilmSide | null
+  buildingUse?: BuildingUse | null
 }
 
 export function listWorkshopAssets(contactId: string, clientId: string) {

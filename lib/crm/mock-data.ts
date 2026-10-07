@@ -3,11 +3,14 @@
  * Los shapes están copiados literalmente de los ejemplos de WARRANTY_API.md
  * y CLIENT_PORTAL_API.md — si cambia el contrato documentado, actualizar acá.
  *
- * Tokens de garantía disponibles: mock-pending, mock-active, mock-expired, mock-voided.
+ * Tokens de garantía disponibles: mock-pending, mock-active, mock-expired, mock-voided,
+ * y de arquitectura mock-pending-arq (con la obra precargada) y mock-pending-arq-vacia.
  * Cliente de portal: cualquier email/password loguea como mock-contact-1.
  */
 
 import { getWorkshopMock } from './mock-workshop'
+import type { Installation, ProductCategory } from '@/lib/client-portal/api'
+import type { DatosObra } from '@/lib/obra'
 
 interface MockResponse {
   status: number
@@ -15,6 +18,51 @@ interface MockResponse {
 }
 
 const WARRANTY_STATUSES: Record<string, unknown> = {
+  // Arquitectura con la obra precargada por el taller. La dirección llega
+  // recortada, como la devuelve el CRM en este endpoint público.
+  'mock-pending-arq': {
+    installationCode: 'LOT-20260801-0003-R002-I1',
+    status: 'PENDING',
+    product: { id: 'clyproduct5', name: 'SILVER 20 ARQ', brand: 'Kristall' },
+    productCategory: 'ARCHITECTURAL',
+    isActive: false,
+    daysRemaining: 0,
+    expiresAt: null,
+    assetType: 'BUILDING',
+    installer: { name: 'Vidriería Sur', logoPath: null },
+    vehicleType: null,
+    plate: null,
+    clientEmail: 'cliente@ejemplo.com',
+    warrantyMonths: 120,
+    siteAddress: 'Av. Córdoba, CABA',
+    areaM2: 18.5,
+    paneCount: 6,
+    glassType: 'DVH',
+    filmSide: 'INTERIOR',
+    buildingUse: 'COMMERCIAL',
+  },
+  // Arquitectura en blanco: la activación tiene que pedir la dirección.
+  'mock-pending-arq-vacia': {
+    installationCode: 'LOT-20260801-0003-R002-I2',
+    status: 'PENDING',
+    product: { id: 'clyproduct5', name: 'SILVER 20 ARQ', brand: 'Kristall' },
+    productCategory: 'ARCHITECTURAL',
+    isActive: false,
+    daysRemaining: 0,
+    expiresAt: null,
+    assetType: 'BUILDING',
+    installer: { name: 'Vidriería Sur', logoPath: null },
+    vehicleType: null,
+    plate: null,
+    clientEmail: null,
+    warrantyMonths: 120,
+    siteAddress: null,
+    areaM2: null,
+    paneCount: null,
+    glassType: null,
+    filmSide: null,
+    buildingUse: null,
+  },
   'mock-pending': {
     installationCode: 'LOT-20260705-0001-R003-I1',
     status: 'PENDING',
@@ -135,7 +183,7 @@ const MOCK_STOCK = [
     lot: { lotNumber: 'LOT-20260705-0001' },
     // maxInstallations: 1 a propósito — ya tiene 1 instalación generada, para probar el
     // camino de "este rollo ya no admite más instalaciones" sin necesitar estado mutable.
-    product: { id: 'clp1', name: 'KRYPTON 05', sku: 'KR-05', warrantyConfig: { maxInstallations: 1, installWarrantyMonths: 12, warrantyEnabled: true } },
+    product: { id: 'clp1', name: 'KRYPTON 05', sku: 'KR-05', category: 'AUTOMOTIVE', warrantyConfig: { maxInstallations: 1, installWarrantyMonths: 12, warrantyEnabled: true } },
     installations: [
       { id: 'cli1', installationCode: 'LOT-20260705-0001-R003-I1', status: 'ACTIVE', activatedAt: '2026-06-10T00:00:00.000Z', expiresAt: '2027-06-10T00:00:00.000Z', vehicleType: 'SUV', plate: 'AB123CD' },
     ],
@@ -147,13 +195,23 @@ const MOCK_STOCK = [
     status: 'SOLD',
     lot: { lotNumber: 'LOT-20260705-0002' },
     // maxInstallations: 3 con 0 generadas — para probar el camino exitoso de creación.
-    product: { id: 'clp2', name: 'KAISER 20', sku: 'KA-20', warrantyConfig: { maxInstallations: 3, installWarrantyMonths: 36, warrantyEnabled: true } },
+    product: { id: 'clp2', name: 'KAISER 20', sku: 'KA-20', category: 'AUTOMOTIVE', warrantyConfig: { maxInstallations: 3, installWarrantyMonths: 36, warrantyEnabled: true } },
+    installations: [],
+    _count: { installations: 0 },
+  },
+  {
+    id: 'clr3',
+    fullRollCode: 'LOT-20260801-0003-R002',
+    status: 'SOLD',
+    lot: { lotNumber: 'LOT-20260801-0003' },
+    // Rollo de arquitectura: el alta de instalación pide los datos de la obra.
+    product: { id: 'clp5', name: 'SILVER 20 ARQ', sku: 'KARQ-S20', category: 'ARCHITECTURAL', warrantyConfig: { maxInstallations: 15, installWarrantyMonths: 120, warrantyEnabled: true } },
     installations: [],
     _count: { installations: 0 },
   },
 ]
 
-const MOCK_INSTALLATIONS = [
+const MOCK_INSTALLATIONS: Installation[] = [
   {
     id: 'cli1',
     installationCode: 'LOT-20260705-0001-R003-I1',
@@ -162,7 +220,20 @@ const MOCK_INSTALLATIONS = [
     assetDescription: 'Toyota Corolla 2022',
     activatedAt: '2026-06-10T00:00:00.000Z',
     expiresAt: '2027-06-10T00:00:00.000Z',
-    roll: { fullRollCode: 'LOT-20260705-0001-R003', product: { id: 'clp1', name: 'KRYPTON 05', sku: 'KR-05' } },
+    roll: { fullRollCode: 'LOT-20260705-0001-R003', product: { id: 'clp1', name: 'KRYPTON 05', sku: 'KR-05', category: 'AUTOMOTIVE' } },
+    siteAddress: null, areaM2: null, paneCount: null, glassType: null, filmSide: null, buildingUse: null,
+  },
+  {
+    id: 'cli3',
+    installationCode: 'LOT-20260801-0003-R002-I1',
+    status: 'ACTIVE',
+    assetType: 'BUILDING',
+    assetDescription: 'Frente vidriado, planta baja',
+    activatedAt: '2026-08-12T00:00:00.000Z',
+    expiresAt: '2036-08-12T00:00:00.000Z',
+    roll: { fullRollCode: 'LOT-20260801-0003-R002', product: { id: 'clp5', name: 'SILVER 20 ARQ', sku: 'KARQ-S20', category: 'ARCHITECTURAL' } },
+    // Completa: esta lista la ve el taller, no un link reenviado.
+    siteAddress: 'Av. Córdoba 1850, piso 4, CABA', areaM2: 18.5, paneCount: 6, glassType: 'DVH', filmSide: 'INTERIOR', buildingUse: 'COMMERCIAL',
   },
   {
     id: 'cli2',
@@ -172,7 +243,8 @@ const MOCK_INSTALLATIONS = [
     assetDescription: null,
     activatedAt: null,
     expiresAt: null,
-    roll: { fullRollCode: 'LOT-20260705-0002-R001', product: { id: 'clp2', name: 'KAISER 20', sku: 'KA-20' } },
+    roll: { fullRollCode: 'LOT-20260705-0002-R001', product: { id: 'clp2', name: 'KAISER 20', sku: 'KA-20', category: 'AUTOMOTIVE' } },
+    siteAddress: null, areaM2: null, paneCount: null, glassType: null, filmSide: null, buildingUse: null,
   },
 ]
 
@@ -317,6 +389,19 @@ const MOCK_DECLARATIONS: {
 
 function match(path: string, pattern: RegExp): RegExpMatchArray | null {
   return path.match(pattern)
+}
+
+/** Los datos de obra de un body, o todo en null. Sin validar: es el mock. */
+function datosDeObra(body: unknown): DatosObra {
+  const b = (body ?? {}) as Partial<DatosObra>
+  return {
+    siteAddress: b.siteAddress ?? null,
+    areaM2: b.areaM2 ?? null,
+    paneCount: b.paneCount ?? null,
+    glassType: b.glassType ?? null,
+    filmSide: b.filmSide ?? null,
+    buildingUse: b.buildingUse ?? null,
+  }
 }
 
 export function getMockResponse(path: string, method: string, body: unknown): MockResponse {
@@ -525,7 +610,13 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
         assetDescription: null,
         activatedAt: null,
         expiresAt: null,
-        roll: { fullRollCode: roll.fullRollCode, product: roll.product },
+        roll: {
+          fullRollCode: roll.fullRollCode,
+          product: { ...roll.product, category: roll.product.category as ProductCategory },
+        },
+        // Lo que precargó el taller, si el rollo es de arquitectura. Igual
+        // que en el CRM, en un rollo de auto se descarta.
+        ...datosDeObra(roll.product.category === 'ARCHITECTURAL' ? body : null),
       })
     }
     return {

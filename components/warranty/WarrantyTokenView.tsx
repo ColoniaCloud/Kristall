@@ -57,6 +57,7 @@ export default function WarrantyTokenView({
                 // lo sabe quien está mirando el trabajo.
                 assetTypeFijo: Boolean(status.vehicleType),
                 rubro: status.productCategory === 'ARCHITECTURAL' ? 'ARQUITECTURA' : 'AUTOMOTRIZ',
+                direccionCargada: Boolean(status.siteAddress),
               }}
             />
           </div>

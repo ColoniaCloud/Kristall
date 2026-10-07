@@ -147,6 +147,26 @@ const ROLLOS = [
     installations: [],
     _count: { installations: 0 },
   },
+  {
+    // Lámina de arquitectura: el alta de instalación pide los datos de la obra
+    // en vez de vehículo y patente. Mismo código que `clr3` de mock-data.ts,
+    // que es el que atiende el POST de la instalación.
+    id: 'clr-mock-3',
+    fullRollCode: 'LOT-20260801-0003-R002',
+    status: 'SOLD',
+    lot: { lotNumber: 'LOT-20260801-0003' },
+    product: {
+      id: 'clp5',
+      name: 'SILVER 20 ARQ',
+      sku: 'KARQ-S20',
+      category: 'ARCHITECTURAL',
+      width: '1.52',
+      length: '30',
+      warrantyConfig: { maxInstallations: 15, installWarrantyMonths: 120, warrantyEnabled: true },
+    },
+    installations: [],
+    _count: { installations: 0 },
+  },
 ]
 
 const hoy = new Date()

@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { vehicleType, vehicleLabel } from '@/lib/vehicle-types'
 import type { WarrantyStatus } from '@/lib/warranty/api'
+import { filasDeObra } from '@/lib/obra'
 
 /**
  * La ficha del trabajo, arriba del formulario de activación.
@@ -25,6 +26,10 @@ export default function InstallationSummary({ status }: { status: WarrantyStatus
   if (!esArquitectura) {
     if (status.vehicleType) filas.push(['Tipo de vehículo', vehicleLabel(status.vehicleType)!])
     if (status.plate) filas.push(['Patente', status.plate])
+  } else {
+    // La dirección llega recortada del CRM (sin altura ni piso): esta página
+    // la abre cualquiera que tenga el link. Alcanza para reconocer la obra.
+    filas.push(...filasDeObra(status))
   }
   filas.push(['Duración de la garantía', `${formatDuracion(status.warrantyMonths)} desde que queda activa`])
   if (status.clientEmail) filas.push(['Mail del cliente', status.clientEmail])

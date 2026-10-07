@@ -18,6 +18,7 @@ const schema = z.object({
   clientPhone: z.string().optional(),
   clientDni: z.string().optional(),
   installerName: z.string().optional(),
+  siteAddress: z.string().trim().max(191, 'La dirección es demasiado larga').optional(),
 })
 
 type FormData = z.infer<typeof schema>
@@ -55,6 +56,11 @@ interface Props {
     assetTypeFijo?: boolean
     /** Derivado del producto del rollo. Decide qué opciones se ofrecen. */
     rubro?: Rubro
+    /**
+     * Arquitectura: el taller ya cargó la dirección de la obra. Si vino, no se
+     * vuelve a preguntar — y lo que mande la persona igual no la pisaría.
+     */
+    direccionCargada?: boolean
   }
 }
 
@@ -83,6 +89,10 @@ export default function ActivationForm({ token, onActivated, precargado }: Props
   const rubro: Rubro = precargado?.rubro ?? 'AUTOMOTRIZ'
   const opciones = OPCIONES_POR_RUBRO[rubro]
   const esArquitectura = rubro === 'ARQUITECTURA'
+  // La dirección es lo único de la obra que el dueño sabe seguro. Vidrio y
+  // lado no se le preguntan: los sabe el instalador, y adivinarlos ensucia el
+  // dato con el que después se evalúa un reclamo de rotura.
+  const pedirDireccion = esArquitectura && !precargado?.direccionCargada
 
   const onSubmit = async (data: FormData) => {
     setStatus('loading')
@@ -91,7 +101,8 @@ export default function ActivationForm({ token, onActivated, precargado }: Props
       const res = await fetch(`/api/garantia/${token}/activate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        // La dirección solo viaja si se preguntó: un string vacío no es un dato.
+        body: JSON.stringify({ ...data, siteAddress: pedirDireccion ? data.siteAddress || undefined : undefined }),
       })
       const body = await res.json().catch(() => ({}))
       if (!res.ok) {
@@ -134,6 +145,16 @@ export default function ActivationForm({ token, onActivated, precargado }: Props
         </div>
       )}
 
+      {pedirDireccion && (
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="siteAddress">Dirección de la obra</Label>
+          <Input id="siteAddress" maxLength={191} placeholder="Ej: Av. Siempreviva 742, Springfield" {...register('siteAddress')} />
+          <p className="text-xs text-muted-foreground">
+            Con esto encontramos tu garantía si algún día nos llamás sin el código.
+          </p>
+        </div>
+      )}
+
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="assetDescription">
           {esArquitectura ? '¿Qué se laminó? (opcional)' : 'Descripción (opcional)'}
@@ -142,7 +163,7 @@ export default function ActivationForm({ token, onActivated, precargado }: Props
           id="assetDescription"
           placeholder={
             esArquitectura
-              ? 'Ej: ventanal del living, 6 paños, Av. Siempreviva 742'
+              ? 'Ej: ventanal del living y puerta balcón'
               : 'Ej: Toyota Corolla 2022, patente AB123CD'
           }
           {...register('assetDescription')}

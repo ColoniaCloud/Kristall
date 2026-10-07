@@ -17,6 +17,7 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog'
 import { VEHICLE_TYPES } from '@/lib/vehicle-types'
+import CamposObra, { OBRA_EN_BLANCO, obraParaEnviar, type ValoresObra } from './CamposObra'
 import type { StockRoll, CreatedInstallation } from '@/lib/client-portal/api'
 
 /**
@@ -34,8 +35,9 @@ import type { StockRoll, CreatedInstallation } from '@/lib/client-portal/api'
  * **Qué se pide depende de la lámina, no de una pregunta.** El rollo cuelga de
  * un producto que está clasificado como automotriz o arquitectónico desde que
  * existe, así que para un rollo de arquitectura este diálogo no muestra
- * siluetas de autos ni patente: muestra un campo para describir el trabajo. El
- * CRM aplica la misma regla del otro lado y descarta lo que no corresponda.
+ * siluetas de autos ni patente: muestra los datos de la obra — dirección,
+ * superficie, vidrio, lado y uso (`CamposObra`). El CRM aplica la misma regla
+ * del otro lado y descarta lo que no corresponda.
  */
 
 const schema = z.object({
@@ -76,6 +78,9 @@ export default function NewInstallationDialog({
   // tiene patente.
   const esArquitectura = roll.product.category === 'ARCHITECTURAL'
   const elegido = watch('vehicleType')
+  // Los datos de obra van aparte del form: son controlados y los comparte el
+  // alta de superficies de Mi Taller.
+  const [obra, setObra] = useState<ValoresObra>(OBRA_EN_BLANCO)
 
   const onSubmit = async (data: FormData) => {
     // El tipo de vehículo es obligatorio solo cuando la lámina va sobre un auto.
@@ -104,6 +109,7 @@ export default function NewInstallationDialog({
           vehicleType: esArquitectura ? undefined : data.vehicleType,
           plate: esArquitectura ? undefined : data.plate || undefined,
           assetDescription: esArquitectura ? data.assetDescription || undefined : undefined,
+          ...(esArquitectura ? obraParaEnviar(obra) : {}),
         }),
       })
       const body = await res.json().catch(() => ({}))
@@ -113,6 +119,7 @@ export default function NewInstallationDialog({
         return
       }
       reset()
+      setObra(OBRA_EN_BLANCO)
       onCreated(body as CreatedInstallation)
     } catch {
       setErrorMsg('Error de conexión. Intentá de nuevo.')
@@ -133,17 +140,16 @@ export default function NewInstallationDialog({
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
           {esArquitectura ? (
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="assetDescription">¿Qué se laminó?</Label>
-              <Input
-                id="assetDescription"
-                placeholder="Ventanal del living, 6 paños"
-                {...register('assetDescription')}
-              />
-              <p className="text-xs text-muted-foreground">
-                Con esto tu cliente reconoce su trabajo en la garantía. Un inmueble no tiene patente,
-                así que esto ocupa su lugar.
-              </p>
+            <div className="flex flex-col gap-4">
+              <CamposObra valores={obra} cambiar={(campo, v) => setObra((o) => ({ ...o, [campo]: v }))} />
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="assetDescription">¿Qué se laminó? (opcional)</Label>
+                <Input
+                  id="assetDescription"
+                  placeholder="Ventanal del living y puerta balcón"
+                  {...register('assetDescription')}
+                />
+              </div>
             </div>
           ) : (
           <div className="flex flex-col gap-2">

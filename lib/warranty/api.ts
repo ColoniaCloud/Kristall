@@ -1,4 +1,5 @@
 import { callCrmApi } from '@/lib/crm/api'
+import type { DatosObra } from '@/lib/obra'
 
 /** Lanza si falta: sin la key el CRM devuelve 401 y el error se lee como
  *  "no encontramos esa garantía". Ver la nota en lib/client-portal/api.ts. */
@@ -17,7 +18,12 @@ export type InstallationStatus = 'PENDING' | 'ACTIVE' | 'EXPIRED' | 'VOIDED'
 
 export const ASSET_TYPES: AssetType[] = ['VEHICLE', 'WINDOW', 'BUILDING', 'OTHER']
 
-export interface WarrantyStatus {
+/**
+ * Los datos de obra viajan como en `DatosObra` (lib/obra.ts), con dos
+ * diferencias propias de esta respuesta pública: `siteAddress` llega
+ * **recortada** —sin altura, piso ni unidad— y `areaM2` es número.
+ */
+export interface WarrantyStatus extends Partial<DatosObra> {
   installationCode: string
   status: InstallationStatus
   product: { id: string; name: string; brand: string }
@@ -87,6 +93,12 @@ export interface ActivateInput {
   installedAt?: string
   installerName?: string
   notes?: string
+  /**
+   * Arquitectura: la dirección de la obra, si el taller no la cargó. El CRM no
+   * pisa lo que ya precargó el taller, y la descarta si la lámina no es de
+   * arquitectura.
+   */
+  siteAddress?: string
 }
 
 export function activate(token: string, input: ActivateInput) {

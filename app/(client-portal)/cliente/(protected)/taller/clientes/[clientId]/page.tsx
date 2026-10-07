@@ -18,6 +18,7 @@ import {
   TIPO_LABEL,
   plural,
 } from '@/lib/client-portal/taller-format'
+import { describirSuperficie } from '@/lib/obra'
 
 export const metadata: Metadata = { title: 'Cliente' }
 
@@ -99,6 +100,11 @@ export default async function ClientePage({ params }: { params: Promise<{ client
               <li key={a.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 bg-card p-4">
                 <span className="min-w-0 flex-1 basis-40 font-medium">{describirAsset(a)}</span>
                 <span className="shrink-0 text-sm text-muted-foreground">{TIPO_LABEL[a.type]}</span>
+                {describirSuperficie(a.areaM2, a.paneCount) && (
+                  <span className="shrink-0 text-sm text-muted-foreground tabular-nums">
+                    {describirSuperficie(a.areaM2, a.paneCount)}
+                  </span>
+                )}
                 {a.year && (
                   <span className="shrink-0 text-sm text-muted-foreground tabular-nums">{a.year}</span>
                 )}

@@ -30,6 +30,7 @@ export type ClaimStatus = 'OPEN' | 'IN_REVIEW' | 'RESOLVED' | 'REJECTED'
  * este llega a `next/headers` y arrastrarlo al navegador rompe el build.
  */
 import type { ProductCategory } from '@/lib/client-portal/product-category'
+import type { BuildingUse, DatosObra, FilmSide, GlassType } from '@/lib/obra'
 export type { ProductCategory }
 export { PRODUCT_CATEGORY_LABELS } from '@/lib/client-portal/product-category'
 
@@ -132,7 +133,12 @@ export interface StockRoll {
   warrantyUrl?: string | null
 }
 
-export interface Installation {
+/**
+ * Instalación de la sección 4.3. Los datos de obra (`DatosObra`) solo vienen
+ * llenos en láminas de arquitectura, y acá la dirección llega **completa**: es
+ * el taller el que pregunta.
+ */
+export interface Installation extends DatosObra {
   id: string
   installationCode: string
   status: string
@@ -140,7 +146,7 @@ export interface Installation {
   assetDescription: string | null
   activatedAt: string | null
   expiresAt: string | null
-  roll: { fullRollCode: string; product: { id: string; name: string; sku: string | null } }
+  roll: { fullRollCode: string; product: { id: string; name: string; sku: string | null; category: ProductCategory } }
 }
 
 /** Response de POST .../rolls/:fullRollCode/installations (sección 4.8 de CLIENT_PORTAL_API.md). */
@@ -455,6 +461,15 @@ export interface PreloadInstallation {
   clientPhone?: string
   vehicleType?: string
   plate?: string
+  /** Arquitectura. El CRM los descarta si el rollo es de auto (y al revés con
+   *  vehicleType/plate): decide el producto, no este objeto. */
+  assetDescription?: string
+  siteAddress?: string
+  areaM2?: number
+  paneCount?: number
+  glassType?: GlassType
+  filmSide?: FilmSide
+  buildingUse?: BuildingUse
 }
 
 export function createRollInstallation(

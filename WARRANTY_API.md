@@ -85,6 +85,26 @@ pero la API igual va a devolver `status: "EXPIRED"` si ya venció.
 | `activatedAt` | datetime \| null | Se setea automáticamente al activar. |
 | `expiresAt` | datetime \| null | Se calcula automáticamente: `activatedAt + installWarrantyMonths` (meses definidos por producto, default 12 si el producto no tiene configuración). |
 | `notes` | string \| null | Notas internas opcionales. |
+| `siteAddress` | string \| null | Arquitectura: dirección de la obra. **En la API pública sale recortada** (ver abajo). |
+| `areaM2` | number \| null | Arquitectura: superficie cubierta, en m². |
+| `paneCount` | int \| null | Arquitectura: cantidad de paños. |
+| `glassType` | enum `SIMPLE \| DVH \| LAMINADO \| TEMPLADO \| OTRO` \| null | Arquitectura: sobre qué vidrio se puso la lámina. |
+| `filmSide` | enum `INTERIOR \| EXTERIOR` \| null | Arquitectura: de qué lado del vidrio quedó. |
+| `buildingUse` | enum `RESIDENTIAL \| COMMERCIAL` \| null | Arquitectura: uso del inmueble. |
+
+### Datos de obra (láminas de arquitectura)
+
+Los seis campos de arriba que dicen *Arquitectura* son lo que en un auto son el tipo de vehículo y la
+patente. **Solo se guardan si el producto del rollo es `ARCHITECTURAL`**: en un rollo de auto o PPF
+se descartan en silencio, igual que `vehicleType`/`plate` en uno de arquitectura. Los carga sobre todo
+el taller (portal, sección 4.8 de `CLIENT_PORTAL_API.md`, y las órdenes de Mi Taller); el cliente
+final solo puede completar la dirección al activar, y **nunca pisa lo que ya cargó el taller**.
+
+**La dirección sale recortada de la API pública** (5.1 y 5.5): sin altura, piso, departamento ni
+código postal — `"Av. Córdoba 1850, piso 4, CABA"` sale `"Av. Córdoba, CABA"`. Este endpoint se puede
+leer desde cualquier navegador con el link, y el link se reenvía; para que la persona reconozca su
+obra alcanza con la calle y la localidad. La dirección completa la ven el taller (portal), el CRM y el
+certificado que se le manda por mail al titular.
 
 ### `AssetType` (enum — valores exactos, sensibles a mayúsculas)
 ```
@@ -175,8 +195,9 @@ Base URL: `https://<dominio-del-crm>` (a confirmar con el equipo — no hardcode
 - **Uso:** pantalla previa a mostrar el formulario de activación, o pantalla de "validar garantía".
 - **Importante — esto cambió.** Antes esta respuesta no incluía ningún dato personal. Ahora
   incluye **solo lo que precargó el taller** al generar la instalación: `clientEmail`, `vehicleType`
-  y `plate`. Salen para que la pantalla de activación pueda mostrarle al cliente una ficha con los
-  datos del trabajo y que él los confirme en vez de tipearlos.
+  y `plate` —o, en arquitectura, los datos de obra con la dirección **recortada**—. Salen para que la
+  pantalla de activación pueda mostrarle al cliente una ficha con los datos del trabajo y que él los
+  confirme en vez de tipearlos.
   Lo que el **cliente** carga después (`clientName`, `clientPhone`, `clientDni`) sigue sin salir
   nunca. Tenelo en cuenta: si el link se reenvía, el mail y la patente viajan con él.
 
@@ -195,7 +216,37 @@ Base URL: `https://<dominio-del-crm>` (a confirmar con el equipo — no hardcode
   "vehicleType": "SUV",
   "plate": "AB123CD",
   "clientEmail": "cliente@ejemplo.com",
-  "warrantyMonths": 60
+  "warrantyMonths": 60,
+  "siteAddress": null,
+  "areaM2": null,
+  "paneCount": null,
+  "glassType": null,
+  "filmSide": null,
+  "buildingUse": null
+}
+```
+Una lámina de arquitectura con la obra precargada por el taller:
+```json
+{
+  "installationCode": "LOT-20260801-0003-R002-I1",
+  "status": "PENDING",
+  "product": { "id": "cly...", "name": "SILVER 20 ARQ", "brand": "Kristall" },
+  "productCategory": "ARCHITECTURAL",
+  "isActive": false,
+  "daysRemaining": 0,
+  "expiresAt": null,
+  "assetType": "BUILDING",
+  "installer": { "name": "Polarizados del Sur", "logoPath": null },
+  "vehicleType": null,
+  "plate": null,
+  "clientEmail": "cliente@ejemplo.com",
+  "warrantyMonths": 120,
+  "siteAddress": "Av. Córdoba, CABA",
+  "areaM2": 18.5,
+  "paneCount": 6,
+  "glassType": "DVH",
+  "filmSide": "INTERIOR",
+  "buildingUse": "COMMERCIAL"
 }
 ```
 Cuando está activa:
@@ -234,6 +285,11 @@ vehículo ni la patente en la ficha, y ofrecé `WINDOW | BUILDING | OTHER` en el
 
 `warrantyMonths` sirve estando `PENDING`, que es justo cuando `expiresAt` todavía es `null` y no hay
 otra forma de decirle a la persona cuánto va a durar la garantía.
+
+Los **datos de obra** (`siteAddress`, `areaM2`, `paneCount`, `glassType`, `filmSide`, `buildingUse`)
+vienen siempre, en `null` fuera de arquitectura. `siteAddress` llega **recortada** — ver «Datos de
+obra» en la sección 2. Si con `ARCHITECTURAL` viene `siteAddress: null`, pedile la dirección al
+cliente en la activación (5.2); vidrio y lado no se los preguntes, los sabe el instalador.
 ```
 
 #### El campo `installer`
@@ -298,6 +354,16 @@ curl https://tu-crm.com/api/public/warranty/TOKEN_AQUI
 | `installerName` | No | string |
 | `assetDescription` | No | string |
 | `notes` | No | string |
+| `siteAddress` | No | string, hasta 191. Solo arquitectura. |
+| `areaM2` | No | número positivo. Solo arquitectura. |
+| `paneCount` | No | entero positivo. Solo arquitectura. |
+| `glassType` | No | `"SIMPLE" \| "DVH" \| "LAMINADO" \| "TEMPLADO" \| "OTRO"`. Solo arquitectura. |
+| `filmSide` | No | `"INTERIOR" \| "EXTERIOR"`. Solo arquitectura. |
+| `buildingUse` | No | `"RESIDENTIAL" \| "COMMERCIAL"`. Solo arquitectura. |
+
+Los datos de obra se **descartan** si el producto no es de arquitectura, y **no pisan** lo que ya
+precargó el taller: el cliente solo completa los que quedaron vacíos. En la práctica alcanza con
+mandar `siteAddress` cuando 5.1 la devolvió en `null`.
 
 ⚠️ El backend **no valida** que `assetType` sea uno de los 4 valores permitidos antes de guardarlo —
 si se manda un valor inválido, Prisma tira error y el endpoint responde `500` genérico (no un `400`
@@ -313,6 +379,7 @@ descriptivo). Validá el enum en tu propio formulario/backend antes de enviarlo.
 - `404 { "error": "Garantía no encontrada" }`
 - `400 { "error": "Esta garantía ya fue activada" }`
 - `400 { "error": "assetType, clientName y clientEmail son requeridos" }`
+- `400 { "error": "Datos de la obra inválidos" }` — algún dato de obra fuera de rango o de la lista.
 - `500 { "error": "Error al activar la garantía" }`
 
 ```bash
@@ -443,7 +510,8 @@ curl -X POST https://tu-crm.com/api/public/warranty/TOKEN_AQUI/set-password \
 
 **Body:** `{ "installationCode": "LOT-...-R003-I1", "password": "..." }`.
 
-**Response `200`:** mismo shape que `GET /api/public/warranty/:token` (sección 5.1) — sin PII.
+**Response `200`:** mismo shape que `GET /api/public/warranty/:token` (sección 5.1) — sin PII, y con
+la dirección de obra recortada igual que allá.
 
 **Errores:**
 - `401 { "error": "Credenciales inválidas" }` — código o contraseña incorrectos, o nunca seteó una
