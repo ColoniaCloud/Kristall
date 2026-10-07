@@ -101,8 +101,8 @@ export function describirAsset(asset: {
   identifier: string | null
   brand: string | null
   model: string | null
-} | null): string {
-  if (!asset) return 'Sin vehículo'
+} | null, rubro: RubroDelTaller = 'auto'): string {
+  if (!asset) return `Sin ${PALABRAS_ACTIVO[rubro].singular}`
   const marca = [asset.brand, asset.model].filter(Boolean).join(' ')
   const partes = [marca, asset.identifier].filter(Boolean)
   return partes.length > 0 ? partes.join(' · ') : TIPO_LABEL[asset.type]
@@ -141,4 +141,61 @@ export function formatGarantia(
   if (meses <= 0) return 'Sin garantía'
   if (meses % 12 === 0) return plural(meses / 12, 'año', 'años')
   return plural(meses, 'mes', 'meses')
+}
+
+// ─── Vehículo, obra o las dos ────────────────────────────────────────────────
+
+/** Sobre qué trabaja el taller. Decide si la pantalla dice «vehículo» u «obra». */
+export type RubroDelTaller = 'auto' | 'obra' | 'ambos'
+
+/**
+ * El rubro del taller, para nombrar las cosas.
+ *
+ * **Primero manda lo que compró**, después la configuración. Un taller que
+ * nunca abrió la configuración de Mi Taller figura como automotriz por defecto
+ * (`doesAutomotive` arranca en true en el CRM), y a uno que solo compra
+ * láminas de arquitectura le aparecía «Vehículo» en el alta de una orden. Sus
+ * rollos dicen la verdad sin que tenga que configurar nada. Sin stock, se usa
+ * la configuración; sin configuración tampoco, automotriz, como siempre.
+ */
+export function rubroDelTaller(
+  rolls: { product: { category: string } }[],
+  settings?: { doesAutomotive: boolean; doesArchitectural: boolean } | null
+): RubroDelTaller {
+  const obra = rolls.some((r) => r.product.category === 'ARCHITECTURAL')
+  const auto = rolls.some((r) => r.product.category !== 'ARCHITECTURAL')
+  if (obra || auto) return obra && auto ? 'ambos' : obra ? 'obra' : 'auto'
+  if (settings?.doesArchitectural) return settings.doesAutomotive ? 'ambos' : 'obra'
+  return 'auto'
+}
+
+/** Las palabras de cada rubro. `Singular`/`Plural` con mayúscula, para títulos. */
+export const PALABRAS_ACTIVO: Record<
+  RubroDelTaller,
+  { singular: string; plural: string; Singular: string; Plural: string; elegir: string; ninguno: string }
+> = {
+  auto: {
+    singular: 'vehículo',
+    plural: 'vehículos',
+    Singular: 'Vehículo',
+    Plural: 'Vehículos',
+    elegir: 'Elegí un vehículo',
+    ninguno: 'Este cliente no tiene vehículos cargados',
+  },
+  obra: {
+    singular: 'obra',
+    plural: 'obras',
+    Singular: 'Obra',
+    Plural: 'Obras',
+    elegir: 'Elegí una obra',
+    ninguno: 'Este cliente no tiene obras cargadas',
+  },
+  ambos: {
+    singular: 'vehículo u obra',
+    plural: 'vehículos y obras',
+    Singular: 'Vehículo u obra',
+    Plural: 'Vehículos y obras',
+    elegir: 'Elegí un vehículo u obra',
+    ninguno: 'Este cliente no tiene vehículos ni obras cargados',
+  },
 }

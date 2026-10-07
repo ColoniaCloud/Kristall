@@ -95,7 +95,8 @@ export interface StockRoll {
     category: ProductCategory
     /** null si el producto no tiene WarrantyConfig — en ese caso asumir 15 (default del CRM). */
     warrantyConfig: {
-      maxInstallations: number
+      /** Null = sin límite. Ver limiteDeInstalaciones(). */
+      maxInstallations: number | null
       /** Los meses que cubre la instalación al cliente final, no el rollo. */
       installWarrantyMonths: number
       /** Un producto puede tener config y tenerla apagada. */

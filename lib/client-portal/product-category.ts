@@ -21,3 +21,20 @@ export const PRODUCT_CATEGORY_LABELS: Record<ProductCategory, string> = {
   ARCHITECTURAL: 'Arquitectura',
   PPF: 'PPF',
 }
+
+/**
+ * Cuántas instalaciones admite un rollo. Espejo de `limiteDeInstalaciones()`
+ * en `crm-polarizados/src/lib/warranty.ts`:
+ *
+ * - `maxInstallations: null`: sin límite (lo dejaron vacío en el CRM).
+ * - Sin config: 15.
+ *
+ * `Infinity` significa sin límite: quien lo muestre no dibuja el «de N».
+ */
+export function limiteDeInstalaciones(product: {
+  category: ProductCategory
+  warrantyConfig: { maxInstallations: number | null } | null
+}): number {
+  if (!product.warrantyConfig) return 15
+  return product.warrantyConfig.maxInstallations ?? Infinity
+}

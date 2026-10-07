@@ -1,6 +1,7 @@
 import { callCrmApi } from '@/lib/crm/api'
 import type { RollStatus, ProductCategory } from '@/lib/client-portal/api'
 import type { BuildingUse, FilmSide, GlassType } from '@/lib/obra'
+import { rubroDelTaller, type RubroDelTaller } from '@/lib/client-portal/taller-format'
 
 /**
  * Mi Taller — el puente hacia los endpoints `/workshop/*` del CRM.
@@ -175,7 +176,8 @@ export interface WorkshopStockRoll {
     width: Money
     length: Money
     warrantyConfig: {
-      maxInstallations: number
+      /** Null = sin límite. Ver limiteDeInstalaciones(). */
+      maxInstallations: number | null
       /** Los meses que cubre la instalación al cliente final, no el rollo. */
       installWarrantyMonths: number
       /** Un producto puede tener config y tenerla apagada. */
@@ -822,4 +824,20 @@ export async function crmBookingPhoto(
     bytes: await res.arrayBuffer(),
     mime: res.headers.get('content-type') ?? 'image/jpeg',
   }
+}
+
+/**
+ * El rubro del taller para nombrar las cosas («vehículo», «obra» o las dos).
+ * Ver `rubroDelTaller` en taller-format.ts: manda lo que compró, después la
+ * configuración.
+ *
+ * Nunca tira: es para un texto. Si el CRM no contesta, «vehículo», que es lo
+ * que se mostraba antes de que esto existiera.
+ */
+export async function cargarRubroDelTaller(contactId: string): Promise<RubroDelTaller> {
+  const [stock, settings] = await Promise.all([
+    getWorkshopStock(contactId).catch(() => []),
+    getWorkshopSettings(contactId).catch(() => null),
+  ])
+  return rubroDelTaller(stock, settings)
 }

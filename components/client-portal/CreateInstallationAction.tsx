@@ -8,8 +8,7 @@ import NewInstallationDialog from './NewInstallationDialog'
 import RollDetailsDialog from './RollDetailsDialog'
 import type { CreatedInstallation } from '@/lib/client-portal/api'
 import type { WorkshopStockRoll } from '@/lib/client-portal/workshop'
-
-const DEFAULT_MAX_INSTALLATIONS = 15
+import { limiteDeInstalaciones } from '@/lib/client-portal/product-category'
 
 /**
  * Las dos acciones de una fila de stock: ver la ficha del rollo y generar una
@@ -28,7 +27,8 @@ export default function CreateInstallationAction({ roll }: { roll: WorkshopStock
   const [emailOpen, setEmailOpen] = useState(false)
   const [detailsOpen, setDetailsOpen] = useState(false)
 
-  const max = roll.product.warrantyConfig?.maxInstallations ?? DEFAULT_MAX_INSTALLATIONS
+  // Infinity si el producto no tiene tope.
+  const max = limiteDeInstalaciones(roll.product)
   const disabled = rollStatus === 'EXHAUSTED' || rollStatus === 'VOIDED' || count >= max
 
   const handleCreated = (installation: CreatedInstallation) => {
@@ -53,7 +53,7 @@ export default function CreateInstallationAction({ roll }: { roll: WorkshopStock
         disabled={disabled}
       >
         <Plus className="size-3.5" />
-        Generar instalación ({count}/{max})
+        Generar instalación ({max === Infinity ? count : `${count}/${max}`})
       </Button>
 
       <RollDetailsDialog roll={roll} open={detailsOpen} onOpenChange={setDetailsOpen} />

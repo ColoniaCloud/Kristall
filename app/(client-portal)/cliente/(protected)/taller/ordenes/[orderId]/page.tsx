@@ -4,7 +4,7 @@ import { notFound, redirect } from 'next/navigation'
 import { Phone, ShieldCheck } from 'lucide-react'
 import { getClientSession } from '@/lib/client-portal/session'
 import { loadPortalData } from '@/lib/client-portal/guard'
-import { getWorkOrder } from '@/lib/client-portal/workshop'
+import { cargarRubroDelTaller, getWorkOrder } from '@/lib/client-portal/workshop'
 import { CrmApiError } from '@/lib/crm/api'
 import WorkOrderStatusBadge from '@/components/client-portal/taller/WorkOrderStatusBadge'
 import PageHeader from '@/components/client-portal/PageHeader'
@@ -17,6 +17,8 @@ import {
   formatFecha,
   describirAsset,
   toNumber,
+  PALABRAS_ACTIVO,
+  type RubroDelTaller,
 } from '@/lib/client-portal/taller-format'
 
 export const metadata: Metadata = { title: 'Orden de trabajo' }
@@ -42,6 +44,15 @@ export default async function OrdenPage({ params }: { params: Promise<{ orderId:
     }
   })
 
+  // Con el activo cargado, su tipo dice si es un vehículo o una obra. Sin él,
+  // se nombra según el rubro del taller.
+  const rubro: RubroDelTaller = order.asset
+    ? order.asset.type === 'VEHICLE'
+      ? 'auto'
+      : 'obra'
+    : await cargarRubroDelTaller(session.contactId)
+  const palabras = PALABRAS_ACTIVO[rubro]
+
   const cobrado = order.payments.reduce((s, p) => s + (toNumber(p.amount) ?? 0), 0)
   const total = toNumber(order.priceFinal) ?? toNumber(order.priceQuoted)
   const saldo = total === null ? null : total - cobrado
@@ -57,7 +68,7 @@ export default async function OrdenPage({ params }: { params: Promise<{ orderId:
       <WorkOrderActions order={order} />
 
       <section className="flex flex-col gap-3 rounded-lg border border-border bg-card p-4 md:p-6">
-        <h2 className="font-heading text-lg font-semibold">Cliente y vehículo</h2>
+        <h2 className="font-heading text-lg font-semibold">Cliente y {palabras.singular}</h2>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <Link
             href={`/cliente/taller/clientes/${order.workshopClient.id}`}
@@ -75,10 +86,11 @@ export default async function OrdenPage({ params }: { params: Promise<{ orderId:
             </a>
           )}
         </div>
-        <p className="text-sm text-muted-foreground">{describirAsset(order.asset)}</p>
+        <p className="text-sm text-muted-foreground">{describirAsset(order.asset, rubro)}</p>
         {!order.asset && (
           <p className="text-sm text-amber-700">
-            Falta cargar el vehículo. Lo vas a necesitar para poder terminar la orden.
+            Falta cargar {rubro === 'obra' ? 'la' : 'el'} {palabras.singular}. Lo vas a necesitar para poder
+            terminar la orden.
           </p>
         )}
       </section>

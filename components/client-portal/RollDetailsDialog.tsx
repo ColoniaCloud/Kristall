@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import { formatGarantia, formatFecha } from '@/lib/client-portal/taller-format'
 import { vehicleLabel } from '@/lib/vehicle-types'
-import { PRODUCT_CATEGORY_LABELS } from '@/lib/client-portal/product-category'
+import { limiteDeInstalaciones, PRODUCT_CATEGORY_LABELS } from '@/lib/client-portal/product-category'
 import type { WorkshopStockRoll } from '@/lib/client-portal/workshop'
 
 /**
@@ -54,7 +54,9 @@ export default function RollDetailsDialog({
             </Dato>
             <Dato etiqueta="Garantía">{formatGarantia(roll.product.warrantyConfig)}</Dato>
             <Dato etiqueta="Instalaciones activas">
-              {roll._count.installations} de {roll.product.warrantyConfig?.maxInstallations ?? 15}
+              {limiteDeInstalaciones(roll.product) === Infinity
+                ? roll._count.installations
+                : `${roll._count.installations} de ${limiteDeInstalaciones(roll.product)}`}
             </Dato>
             <Dato etiqueta="Medidas">
               {roll.product.width && roll.product.length

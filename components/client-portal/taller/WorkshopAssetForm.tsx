@@ -48,15 +48,18 @@ const esObra = (t: AssetType) => t === 'WINDOW' || t === 'BUILDING'
 export default function WorkshopAssetForm({
   clientId,
   trigger,
+  tipoInicial = 'VEHICLE',
 }: {
   clientId: string
   trigger: React.ReactNode
+  /** Con qué tipo arranca el alta. Un taller de arquitectura arranca en BUILDING. */
+  tipoInicial?: AssetType
 }) {
   const router = useRouter()
   const [abierto, setAbierto] = useState(false)
   const [enviando, setEnviando] = useState(false)
   const [form, setForm] = useState({
-    type: 'VEHICLE' as AssetType,
+    type: tipoInicial,
     identifier: '',
     brand: '',
     model: '',
@@ -91,7 +94,7 @@ export default function WorkshopAssetForm({
       }
       toast.success(obraSeleccionada ? 'Superficie agregada' : 'Vehículo agregado')
       setAbierto(false)
-      setForm({ type: 'VEHICLE', identifier: '', brand: '', model: '', year: '', color: '' })
+      setForm({ type: tipoInicial, identifier: '', brand: '', model: '', year: '', color: '' })
       setObra(OBRA_EN_BLANCO)
       router.refresh()
     } catch {

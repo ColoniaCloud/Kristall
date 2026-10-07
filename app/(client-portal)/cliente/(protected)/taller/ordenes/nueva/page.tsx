@@ -6,10 +6,12 @@ import {
   listWorkshopClients,
   listWorkshopAssets,
   getWorkshopStock,
+  getWorkshopSettings,
   type WorkshopAsset,
 } from '@/lib/client-portal/workshop'
 import WorkOrderForm from '@/components/client-portal/taller/WorkOrderForm'
 import PageHeader from '@/components/client-portal/PageHeader'
+import { rubroDelTaller } from '@/lib/client-portal/taller-format'
 
 export const metadata: Metadata = { title: 'Nueva orden' }
 
@@ -34,10 +36,15 @@ export default async function NuevaOrdenPage() {
     assetsByClient[c.id] = listas[i]
   })
 
+  // «Vehículo», «Obra» o las dos: sale de los rollos que ya cargamos para el
+  // formulario, y la configuración solo se usa si todavía no tiene stock.
+  const settings = await getWorkshopSettings(session.contactId).catch(() => null)
+  const rubro = rubroDelTaller(rolls, settings)
+
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
       <PageHeader title="Nueva orden" />
-      <WorkOrderForm clients={clients} assetsByClient={assetsByClient} rolls={rolls} />
+      <WorkOrderForm clients={clients} assetsByClient={assetsByClient} rolls={rolls} rubro={rubro} />
     </div>
   )
 }

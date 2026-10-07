@@ -4,7 +4,7 @@ import { notFound, redirect } from 'next/navigation'
 import { Plus, Phone, Mail, Pencil } from 'lucide-react'
 import { getClientSession } from '@/lib/client-portal/session'
 import { loadPortalData } from '@/lib/client-portal/guard'
-import { getWorkshopClient, listWorkOrders } from '@/lib/client-portal/workshop'
+import { cargarRubroDelTaller, getWorkshopClient, listWorkOrders } from '@/lib/client-portal/workshop'
 import { CrmApiError } from '@/lib/crm/api'
 import { Button } from '@/components/ui/button'
 import PageHeader from '@/components/client-portal/PageHeader'
@@ -17,6 +17,7 @@ import {
   formatMoney,
   TIPO_LABEL,
   plural,
+  PALABRAS_ACTIVO,
 } from '@/lib/client-portal/taller-format'
 import { describirSuperficie } from '@/lib/obra'
 
@@ -36,6 +37,8 @@ export default async function ClientePage({ params }: { params: Promise<{ client
     }
   })
   const orders = await loadPortalData(() => listWorkOrders(session.contactId, { clientId }))
+  const rubro = await cargarRubroDelTaller(session.contactId)
+  const palabras = PALABRAS_ACTIVO[rubro]
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
@@ -81,9 +84,12 @@ export default async function ClientePage({ params }: { params: Promise<{ client
 
       <section className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="font-heading text-lg font-semibold">Vehículos</h2>
+          <h2 className="font-heading text-lg font-semibold">{palabras.Plural}</h2>
           <WorkshopAssetForm
             clientId={client.id}
+            // Un taller de arquitectura arranca el alta en «Edificio»: elegir
+            // el tipo cada vez es un paso que no aporta nada.
+            tipoInicial={rubro === 'obra' ? 'BUILDING' : 'VEHICLE'}
             trigger={
               <Button variant="outline" size="sm">
                 <Plus className="size-4" />
@@ -93,7 +99,7 @@ export default async function ClientePage({ params }: { params: Promise<{ client
           />
         </div>
         {client.assets.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Sin vehículos cargados.</p>
+          <p className="text-sm text-muted-foreground">Sin {palabras.plural} cargad{rubro === 'obra' ? 'as' : 'os'}.</p>
         ) : (
           <ul className="flex flex-col divide-y divide-border overflow-hidden rounded-lg border border-border">
             {client.assets.map((a) => (
@@ -131,7 +137,7 @@ export default async function ClientePage({ params }: { params: Promise<{ client
                 >
                   <span className="w-12 shrink-0 font-semibold tabular-nums">#{o.orderNumber}</span>
                   <span className="min-w-0 flex-1 basis-40 truncate text-sm text-muted-foreground">
-                    {describirAsset(o.asset)}
+                    {describirAsset(o.asset, rubro)}
                   </span>
                   <span className="shrink-0 text-sm text-muted-foreground tabular-nums">
                     {o.finishedAt ? formatDateTime(o.finishedAt) : o.scheduledAt ? formatDateTime(o.scheduledAt) : '—'}

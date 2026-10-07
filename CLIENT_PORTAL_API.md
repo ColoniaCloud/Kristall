@@ -287,6 +287,11 @@ cuántos sub-códigos de instalación quedan disponibles en un rollo, comparar `
 las generadas, no solo activas) contra `maxInstallations` — **no** usar `_count.installations`, que cuenta
 únicamente instalaciones `ACTIVE` (ver sección 4.8).
 
+**Sin límite (desde octubre 2026).** `maxInstallations` puede venir en `null`: el producto no tiene tope
+de instalaciones por rollo. La regla completa: config con `null` → sin límite; sin config → 15. Es
+`limiteDeInstalaciones()` en `src/lib/warranty.ts`, con su espejo en
+`kristall-web/lib/client-portal/product-category.ts`.
+
 **`currentLocation` se retiró de esta respuesta (septiembre 2026).** Existió entre agosto y septiembre
 de 2026 y devolvía la última ubicación física conocida del rollo antes de la venta. Se sacó porque es
 custodia interna y podía identificar a un tercero: el FIFO que asigna rollos a una venta no filtra por

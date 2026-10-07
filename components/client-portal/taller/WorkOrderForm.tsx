@@ -21,10 +21,15 @@ import type {
   WorkshopAsset,
   WorkshopStockRoll,
 } from '@/lib/client-portal/workshop'
-import { describirAsset } from '@/lib/client-portal/taller-format'
+import { describirAsset, PALABRAS_ACTIVO, type RubroDelTaller } from '@/lib/client-portal/taller-format'
 
 /**
- * Alta rápida de una orden: cliente → vehículo → trabajo → turno.
+ * Alta rápida de una orden: cliente → vehículo u obra → trabajo → turno.
+ *
+ * El segundo campo se llama según el rubro del taller (`rubro`): a un taller
+ * de arquitectura no se le pregunta por un vehículo. El campo no se saca
+ * nunca: sin él no se puede terminar la orden, porque la garantía necesita
+ * saber sobre qué se puso la lámina.
  *
  * El orden de los campos es el de la conversación real en el mostrador, no el
  * del modelo de datos. Por eso el cliente va primero y el turno último: cuando
@@ -56,11 +61,14 @@ export default function WorkOrderForm({
   clients,
   assetsByClient,
   rolls,
+  rubro = 'auto',
 }: {
   clients: WorkshopClient[]
   assetsByClient: Record<string, WorkshopAsset[]>
   rolls: WorkshopStockRoll[]
+  rubro?: RubroDelTaller
 }) {
+  const palabras = PALABRAS_ACTIVO[rubro]
   const router = useRouter()
   const [enviando, setEnviando] = useState(false)
   const [clientId, setClientId] = useState('')
@@ -167,7 +175,7 @@ export default function WorkOrderForm({
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="vehiculo">Vehículo</Label>
+          <Label htmlFor="vehiculo">{palabras.Singular}</Label>
           <Select value={assetId} onValueChange={setAssetId} disabled={!clientId}>
             <SelectTrigger id="vehiculo">
               <SelectValue
@@ -175,8 +183,8 @@ export default function WorkOrderForm({
                   !clientId
                     ? 'Elegí primero el cliente'
                     : assets.length === 0
-                      ? 'Este cliente no tiene vehículos cargados'
-                      : 'Elegí un vehículo'
+                      ? palabras.ninguno
+                      : palabras.elegir
                 }
               />
             </SelectTrigger>
