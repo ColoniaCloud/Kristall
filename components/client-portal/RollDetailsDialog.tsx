@@ -12,6 +12,7 @@ import { formatGarantia, formatFecha } from '@/lib/client-portal/taller-format'
 import { vehicleLabel } from '@/lib/vehicle-types'
 import { limiteDeInstalaciones, PRODUCT_CATEGORY_LABELS } from '@/lib/client-portal/product-category'
 import type { WorkshopStockRoll } from '@/lib/client-portal/workshop'
+import { formatM2 } from '@/lib/obra'
 
 /**
  * Toda la ficha del rollo, en un popup.
@@ -62,6 +63,14 @@ export default function RollDetailsDialog({
               {roll.product.width && roll.product.length
                 ? `${roll.product.width} × ${roll.product.length} m`
                 : 'Sin cargar'}
+            </Dato>
+            {/* El saldo del rollo: en arquitectura es lo que limita las
+                instalaciones. Usado = órdenes terminadas + instalaciones de
+                Stock; disponible además resta lo reservado en órdenes abiertas. */}
+            <Dato etiqueta="Material">
+              {roll.totalM2 == null
+                ? 'Sin m² cargados'
+                : `${formatM2(roll.usedM2)} usados de ${formatM2(roll.totalM2)} · ${formatM2(roll.availableM2 ?? 0)} disponibles`}
             </Dato>
           </section>
 

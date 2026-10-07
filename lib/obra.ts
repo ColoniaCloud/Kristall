@@ -78,3 +78,8 @@ export function filasDeObra(o: Partial<DatosObra>): [string, string][] {
   if (o.buildingUse) filas.push(['Uso', BUILDING_USE_LABELS[o.buildingUse]])
   return filas
 }
+
+/** «12,5 m²» con coma decimal. */
+export function formatM2(n: number): string {
+  return `${n.toLocaleString('es-AR', { maximumFractionDigits: 2 })} m²`
+}

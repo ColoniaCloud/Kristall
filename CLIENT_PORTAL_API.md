@@ -288,9 +288,15 @@ las generadas, no solo activas) contra `maxInstallations` — **no** usar `_coun
 únicamente instalaciones `ACTIVE` (ver sección 4.8).
 
 **Sin límite (desde octubre 2026).** `maxInstallations` puede venir en `null`: el producto no tiene tope
-de instalaciones por rollo. La regla completa: config con `null` → sin límite; sin config → 15. Es
-`limiteDeInstalaciones()` en `src/lib/warranty.ts`, con su espejo en
-`kristall-web/lib/client-portal/product-category.ts`.
+de instalaciones por rollo. La regla completa: **arquitectura → sin tope por cantidad** (lo limitan los
+m², ver abajo); config con `null` → sin límite; sin config → 15. Es `limiteDeInstalaciones()` en
+`src/lib/warranty.ts`, con su espejo en `kristall-web/lib/client-portal/product-category.ts`.
+
+**Arquitectura se controla por m² (desde octubre 2026).** Cada rollo trae sus m² (`totalM2` en 4.10.11,
+ancho × largo del producto al crearse, corregibles por rollo desde el CRM). Una instalación de
+arquitectura se genera solo si los m² de material que se declaran (`m2Used`, sección 4.8) entran en lo
+disponible del rollo. Un rollo de arquitectura **sin m² cargados no genera instalaciones**: responde 400
+pidiendo que Kristall los cargue.
 
 **`currentLocation` se retiró de esta respuesta (septiembre 2026).** Existió entre agosto y septiembre
 de 2026 y devolvía la última ubicación física conocida del rollo antes de la venta. Se sacó porque es
@@ -468,6 +474,15 @@ deriva de ahí el rubro de la instalación y **descarta lo que no corresponde**:
 Los datos de obra conviene cargarlos acá: el instalador es el único que sabe sobre qué vidrio puso
 la lámina y de qué lado, y es lo primero que se mira ante un reclamo de rotura. Tipos y valores en
 `WARRANTY_API.md` sección 2.
+
+**`m2Used` — obligatorio en arquitectura.** Número positivo: los m² de **material** que salieron del rollo,
+merma incluida (no la superficie pegada, que es `areaM2`). Se controla contra el `availableM2` del rollo
+(4.10.11) y se descuenta de su saldo; cuando el rollo llega a 0 queda `EXHAUSTED`. En auto y PPF se
+ignora. Errores propios, todos `400`:
+
+- `"Indicá cuántos m² de material usaste del rollo."` — no vino `m2Used`.
+- `"Al rollo le quedan X m² disponibles y pediste Y m²."` — no alcanza.
+- `"Este rollo no tiene los m² cargados. Pedile a Kristall que los cargue para poder generar instalaciones."`
 
 Es deliberado que no haya forma de declarar el rubro desde el request: una lámina no cambia de
 naturaleza según quién la ponga. Mandar los campos del otro rubro no es un error —se ignoran en
@@ -883,9 +898,9 @@ Son cuatro números y no es redundancia:
 
 | Campo | Qué es |
 |---|---|
-| `usedM2` | Lo que **ya se cortó**: líneas de órdenes `TERMINADA` o `ENTREGADA`. |
+| `usedM2` | Lo que **ya se cortó**: líneas de órdenes `TERMINADA` o `ENTREGADA`, más el `m2Used` de las instalaciones generadas desde Stock (4.8) que no estén anuladas. Las garantías que genera una orden no suman aparte: su consumo ya está en las líneas. |
 | `reservedM2` | Lo **comprometido y todavía sin cortar**: `PRESUPUESTADA`, `AGENDADA`, `EN_PROCESO`. |
-| `remainingM2` | Lo que físicamente queda en el rollo: `totalM2 − usedM2`. |
+| `remainingM2` | Lo que físicamente queda en el rollo: `totalM2 − usedM2`. `totalM2` es el del rollo (corregible desde el CRM) o, si no tiene, ancho × largo del producto. |
 | `availableM2` | Con lo que se puede contar para un trabajo nuevo: `totalM2 − usedM2 − reservedM2`. |
 
 - **Las órdenes canceladas no cuentan en ninguno**: una orden cancelada no gastó ni comprometió nada.

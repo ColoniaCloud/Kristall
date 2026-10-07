@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/dialog'
 import { VEHICLE_TYPES } from '@/lib/vehicle-types'
 import CamposObra, { OBRA_EN_BLANCO, obraParaEnviar, type ValoresObra } from './CamposObra'
+import { formatM2 } from '@/lib/obra'
 import type { StockRoll, CreatedInstallation } from '@/lib/client-portal/api'
 
 /**
@@ -47,17 +48,24 @@ const schema = z.object({
   vehicleType: z.string().optional(),
   plate: z.string().trim().optional(),
   assetDescription: z.string().trim().optional(),
+  m2Used: z.string().trim().optional(),
 })
 
 type FormData = z.infer<typeof schema>
 
 export default function NewInstallationDialog({
   roll,
+  disponibleM2 = null,
   open,
   onOpenChange,
   onCreated,
 }: {
   roll: StockRoll
+  /**
+   * Arquitectura: m² disponibles en el rollo. Si viene (no null), el diálogo
+   * pide los m² de material usados y no deja pasar más de esto.
+   */
+  disponibleM2?: number | null
   open: boolean
   onOpenChange: (open: boolean) => void
   onCreated: (installation: CreatedInstallation) => void
@@ -90,6 +98,17 @@ export default function NewInstallationDialog({
       setErrorMsg('Elegí el tipo de vehículo')
       return
     }
+    // Arquitectura se controla por m²: sin ellos no hay instalación. El CRM lo
+    // vuelve a controlar contra el saldo real del rollo.
+    const m2Used = Number((data.m2Used ?? '').replace(',', '.'))
+    if (esArquitectura && !(m2Used > 0)) {
+      setErrorMsg('Indicá cuántos m² de material usaste del rollo')
+      return
+    }
+    if (esArquitectura && disponibleM2 != null && m2Used > disponibleM2 + 0.005) {
+      setErrorMsg(`Al rollo le quedan ${formatM2(disponibleM2)} disponibles`)
+      return
+    }
     setStatus('loading')
     setErrorMsg('')
     try {
@@ -109,7 +128,7 @@ export default function NewInstallationDialog({
           vehicleType: esArquitectura ? undefined : data.vehicleType,
           plate: esArquitectura ? undefined : data.plate || undefined,
           assetDescription: esArquitectura ? data.assetDescription || undefined : undefined,
-          ...(esArquitectura ? obraParaEnviar(obra) : {}),
+          ...(esArquitectura ? { ...obraParaEnviar(obra), m2Used } : {}),
         }),
       })
       const body = await res.json().catch(() => ({}))
@@ -141,6 +160,14 @@ export default function NewInstallationDialog({
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
           {esArquitectura ? (
             <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="m2Used">Material usado del rollo (m²) *</Label>
+                <Input id="m2Used" inputMode="decimal" placeholder="14" className="w-32" {...register('m2Used')} />
+                <p className="text-xs text-muted-foreground">
+                  Lo que cortaste del rollo, contando la merma — no la superficie pegada. Se descuenta del
+                  rollo{disponibleM2 != null ? `: quedan ${formatM2(disponibleM2)} disponibles` : ''}.
+                </p>
+              </div>
               <CamposObra valores={obra} cambiar={(campo, v) => setObra((o) => ({ ...o, [campo]: v }))} />
               <div className="flex flex-col gap-1.5">
                 <Label htmlFor="assetDescription">¿Qué se laminó? (opcional)</Label>

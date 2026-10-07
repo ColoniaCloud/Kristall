@@ -198,7 +198,8 @@ export interface WorkshopStockRoll {
   /**
    * Cuatro números, y no es redundancia:
    *
-   *   `usedM2`      lo que ya se cortó (órdenes terminadas o entregadas)
+   *   `usedM2`      lo que ya se cortó (órdenes terminadas o entregadas, más el
+   *                 material de las instalaciones generadas desde Stock)
    *   `reservedM2`  lo comprometido y sin cortar (presupuestadas, agendadas,
    *                 en proceso). Las canceladas no cuentan en ninguno.
    *   `remainingM2` lo que físicamente queda: total − usado

@@ -475,6 +475,8 @@ export interface PreloadInstallation {
   glassType?: GlassType
   filmSide?: FilmSide
   buildingUse?: BuildingUse
+  /** Arquitectura, obligatorio: m² de material usados del rollo, merma incluida. */
+  m2Used?: number
 }
 
 export function createRollInstallation(

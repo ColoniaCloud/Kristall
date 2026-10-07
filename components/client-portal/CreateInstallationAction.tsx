@@ -9,6 +9,7 @@ import RollDetailsDialog from './RollDetailsDialog'
 import type { CreatedInstallation } from '@/lib/client-portal/api'
 import type { WorkshopStockRoll } from '@/lib/client-portal/workshop'
 import { limiteDeInstalaciones } from '@/lib/client-portal/product-category'
+import { formatM2 } from '@/lib/obra'
 
 /**
  * Las dos acciones de una fila de stock: ver la ficha del rollo y generar una
@@ -29,7 +30,19 @@ export default function CreateInstallationAction({ roll }: { roll: WorkshopStock
 
   // Infinity si el producto no tiene tope.
   const max = limiteDeInstalaciones(roll.product)
-  const disabled = rollStatus === 'EXHAUSTED' || rollStatus === 'VOIDED' || count >= max
+  // Arquitectura se controla por m²: sin m² cargados o sin material disponible
+  // no se puede generar. El CRM lo vuelve a controlar; esto es para no ofrecer
+  // un botón que va a rebotar.
+  const esArquitectura = roll.product.category === 'ARCHITECTURAL'
+  const sinM2 = esArquitectura && roll.totalM2 == null
+  const sinMaterial = esArquitectura && roll.availableM2 != null && roll.availableM2 <= 0
+  const disabled =
+    rollStatus === 'EXHAUSTED' || rollStatus === 'VOIDED' || count >= max || sinM2 || sinMaterial
+  const etiqueta = sinM2
+    ? 'Sin m² cargados'
+    : esArquitectura
+      ? `Generar instalación (${formatM2(roll.availableM2 ?? 0)} libres)`
+      : `Generar instalación (${max === Infinity ? count : `${count}/${max}`})`
 
   const handleCreated = (installation: CreatedInstallation) => {
     setCount((c) => c + 1)
@@ -53,12 +66,13 @@ export default function CreateInstallationAction({ roll }: { roll: WorkshopStock
         disabled={disabled}
       >
         <Plus className="size-3.5" />
-        Generar instalación ({max === Infinity ? count : `${count}/${max}`})
+        {etiqueta}
       </Button>
 
       <RollDetailsDialog roll={roll} open={detailsOpen} onOpenChange={setDetailsOpen} />
 
       <NewInstallationDialog
+        disponibleM2={esArquitectura ? roll.availableM2 : null}
         roll={roll}
         open={formOpen}
         onOpenChange={setFormOpen}

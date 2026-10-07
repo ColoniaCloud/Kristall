@@ -26,6 +26,8 @@ export const PRODUCT_CATEGORY_LABELS: Record<ProductCategory, string> = {
  * Cuántas instalaciones admite un rollo. Espejo de `limiteDeInstalaciones()`
  * en `crm-polarizados/src/lib/warranty.ts`:
  *
+ * - Arquitectura: sin tope por cantidad. Lo limitan los m² que quedan en el
+ *   rollo (`availableM2`), no el número de cortes.
  * - `maxInstallations: null`: sin límite (lo dejaron vacío en el CRM).
  * - Sin config: 15.
  *
@@ -35,6 +37,7 @@ export function limiteDeInstalaciones(product: {
   category: ProductCategory
   warrantyConfig: { maxInstallations: number | null } | null
 }): number {
+  if (product.category === 'ARCHITECTURAL') return Infinity
   if (!product.warrantyConfig) return 15
   return product.warrantyConfig.maxInstallations ?? Infinity
 }
