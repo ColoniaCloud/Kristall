@@ -73,6 +73,7 @@ export default function CreateInstallationAction({ roll }: { roll: WorkshopStock
 
       <NewInstallationDialog
         disponibleM2={esArquitectura ? roll.availableM2 : null}
+        anchoM={roll.product.width != null ? Number(roll.product.width) : null}
         roll={roll}
         open={formOpen}
         onOpenChange={setFormOpen}

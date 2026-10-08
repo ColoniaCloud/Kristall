@@ -56,6 +56,7 @@ type FormData = z.infer<typeof schema>
 export default function NewInstallationDialog({
   roll,
   disponibleM2 = null,
+  anchoM = null,
   open,
   onOpenChange,
   onCreated,
@@ -66,6 +67,12 @@ export default function NewInstallationDialog({
    * pide los m² de material usados y no deja pasar más de esto.
    */
   disponibleM2?: number | null
+  /**
+   * Ancho del rollo en metros. Permite cargar el material en metros lineales:
+   * se convierte a m² (lineales × ancho) antes de mandarlo, así el CRM y el
+   * saldo del rollo siguen en m². Sin ancho, solo se ofrece m².
+   */
+  anchoM?: number | null
   open: boolean
   onOpenChange: (open: boolean) => void
   onCreated: (installation: CreatedInstallation) => void
@@ -89,6 +96,12 @@ export default function NewInstallationDialog({
   // Los datos de obra van aparte del form: son controlados y los comparte el
   // alta de superficies de Mi Taller.
   const [obra, setObra] = useState<ValoresObra>(OBRA_EN_BLANCO)
+  // En qué unidad carga el instalador el material. Lo que viaja es siempre m².
+  const [unidad, setUnidad] = useState<'m2' | 'ml'>('m2')
+  const puedeLineales = anchoM != null && anchoM > 0
+  const cantidad = Number((watch('m2Used') ?? '').replace(',', '.'))
+  const m2Equivalentes =
+    unidad === 'ml' && puedeLineales && cantidad > 0 ? Math.round(cantidad * anchoM! * 100) / 100 : null
 
   const onSubmit = async (data: FormData) => {
     // El tipo de vehículo es obligatorio solo cuando la lámina va sobre un auto.
@@ -100,11 +113,17 @@ export default function NewInstallationDialog({
     }
     // Arquitectura se controla por m²: sin ellos no hay instalación. El CRM lo
     // vuelve a controlar contra el saldo real del rollo.
-    const m2Used = Number((data.m2Used ?? '').replace(',', '.'))
-    if (esArquitectura && !(m2Used > 0)) {
-      setErrorMsg('Indicá cuántos m² de material usaste del rollo')
+    const valor = Number((data.m2Used ?? '').replace(',', '.'))
+    if (esArquitectura && !(valor > 0)) {
+      setErrorMsg(
+        unidad === 'ml'
+          ? 'Indicá cuántos metros lineales de material usaste del rollo'
+          : 'Indicá cuántos m² de material usaste del rollo'
+      )
       return
     }
+    // Metros lineales × ancho del rollo = m². El CRM recibe siempre m².
+    const m2Used = unidad === 'ml' && puedeLineales ? Math.round(valor * anchoM! * 100) / 100 : valor
     if (esArquitectura && disponibleM2 != null && m2Used > disponibleM2 + 0.005) {
       setErrorMsg(`Al rollo le quedan ${formatM2(disponibleM2)} disponibles`)
       return
@@ -139,6 +158,7 @@ export default function NewInstallationDialog({
       }
       reset()
       setObra(OBRA_EN_BLANCO)
+      setUnidad('m2')
       onCreated(body as CreatedInstallation)
     } catch {
       setErrorMsg('Error de conexión. Intentá de nuevo.')
@@ -161,11 +181,51 @@ export default function NewInstallationDialog({
           {esArquitectura ? (
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="m2Used">Material usado del rollo (m²) *</Label>
-                <Input id="m2Used" inputMode="decimal" placeholder="14" className="w-32" {...register('m2Used')} />
+                <Label htmlFor="m2Used">Material usado del rollo *</Label>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Input id="m2Used" inputMode="decimal" placeholder={unidad === 'ml' ? '9' : '14'} className="w-32" {...register('m2Used')} />
+                  {/* m² o metros lineales. Los lineales se convierten con el
+                      ancho del rollo; sin ancho no hay cómo, y no se ofrecen. */}
+                  <div role="radiogroup" aria-label="Unidad" className="flex gap-1">
+                    {([
+                      ['m2', 'm²'],
+                      ['ml', 'Metros lineales'],
+                    ] as const).map(([v, texto]) => {
+                      const activo = unidad === v
+                      const deshabilitado = v === 'ml' && !puedeLineales
+                      return (
+                        <button
+                          key={v}
+                          type="button"
+                          role="radio"
+                          aria-checked={activo}
+                          disabled={deshabilitado}
+                          title={deshabilitado ? 'El rollo no tiene ancho cargado' : undefined}
+                          onClick={() => setUnidad(v)}
+                          className={`rounded-lg border px-3 py-1.5 text-sm transition-colors disabled:opacity-50 ${
+                            activo ? 'border-primary bg-primary/10' : 'border-border hover:bg-muted/50'
+                          }`}
+                        >
+                          {texto}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
                 <p className="text-xs text-muted-foreground">
-                  Lo que cortaste del rollo, contando la merma — no la superficie pegada. Se descuenta del
-                  rollo{disponibleM2 != null ? `: quedan ${formatM2(disponibleM2)} disponibles` : ''}.
+                  Lo que cortaste del rollo, contando la merma — no la superficie pegada.
+                  {unidad === 'ml' && puedeLineales && (
+                    <>
+                      {' '}Con el ancho del rollo ({anchoM!.toLocaleString('es-AR')} m)
+                      {m2Equivalentes != null ? ` son ${formatM2(m2Equivalentes)}` : ''}.
+                    </>
+                  )}
+                  {disponibleM2 != null &&
+                    ` Quedan ${formatM2(disponibleM2)} disponibles${
+                      unidad === 'ml' && puedeLineales
+                        ? ` (${(Math.floor((disponibleM2 / anchoM!) * 100) / 100).toLocaleString('es-AR')} m lineales)`
+                        : ''
+                    }.`}
                 </p>
               </div>
               <CamposObra valores={obra} cambiar={(campo, v) => setObra((o) => ({ ...o, [campo]: v }))} />
