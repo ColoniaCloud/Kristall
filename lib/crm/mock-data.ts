@@ -539,6 +539,40 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
     return { status: 200, data: { contactId: MOCK_CONTACT_ID, name: MOCK_CONTACT.name, company: MOCK_CONTACT.company, accessLevel: 'BASIC', credentialVersion: MOCK_CREDENTIAL_VERSION } }
   }
 
+  // Cargar email y datos desde el link de WhatsApp. Tokens de prueba:
+  // "mock-datos" (Cliente sin email) y "mock-confirmar" (mail de confirmación).
+  if (path.startsWith('/api/portal/v1/data-update/confirm?') && method === 'GET') {
+    const token = new URLSearchParams(path.split('?')[1]).get('token')
+    if (token === 'mock-confirmar') return { status: 200, data: { valid: true, email: 'juan@ejemplo.com', name: 'Juan' } }
+    return { status: 404, data: { error: 'El link no es válido.' } }
+  }
+  if (path === '/api/portal/v1/data-update/confirm' && method === 'POST') {
+    const { token } = (body ?? {}) as { token?: string }
+    if (token !== 'mock-confirmar') return { status: 404, data: { error: 'El link no es válido.' } }
+    return { status: 200, data: { ok: true, email: 'juan@ejemplo.com', name: 'Juan', portalActive: false } }
+  }
+  if (path.startsWith('/api/portal/v1/data-update?') && method === 'GET') {
+    const token = new URLSearchParams(path.split('?')[1]).get('token')
+    if (token === 'mock-datos') {
+      return {
+        status: 200,
+        data: {
+          valid: true, firstName: 'Juan', lastName: 'Pérez', company: 'Vidriería Pérez', phone: '1125835244',
+          address: null, city: 'Rosario', state: 'Santa Fe', email: null, pendingEmail: null,
+        },
+      }
+    }
+    return { status: 404, data: { error: 'El link no es válido.' } }
+  }
+  if (path === '/api/portal/v1/data-update' && method === 'POST') {
+    const { token, email } = (body ?? {}) as { token?: string; email?: string }
+    if (token !== 'mock-datos') return { status: 404, data: { error: 'El link no es válido.' } }
+    if (email === 'repetido@ejemplo.com') {
+      return { status: 409, data: { error: 'Ese email ya figura en otra cuenta de cliente. Escribinos y lo resolvemos.' } }
+    }
+    return { status: 200, data: { ok: true, emailSentTo: email } }
+  }
+
   // Recuperación de contraseña. Respuesta genérica a propósito.
   if (path === '/api/portal/v1/auth/request-reset' && method === 'POST') {
     return { status: 200, data: { message: 'Si ese email tiene una cuenta, te mandamos un link para cambiar la contraseña.' } }

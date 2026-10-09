@@ -220,6 +220,56 @@ GET /api/portal/v1/contacts/lookup?email=<email>
 
 ---
 
+## 3.3 Cargar email y datos desde un link de WhatsApp
+
+Para los Clientes (`type: CLIENT`, solo ese tipo) que no tienen email. Desde el CRM (`/whatsapp`, pestaña
+**Pedir datos**, solo SUPERADMIN) se les manda por WhatsApp un link personal a
+`https://<tu-sitio>/cliente/mis-datos/<token>`. El token dura **7 días**, y mandar uno nuevo invalida el
+anterior. **No abre sesión**: sirve para cargar datos, no para entrar al panel.
+
+```
+GET  /api/portal/v1/data-update?token=<token>
+POST /api/portal/v1/data-update
+```
+
+El `GET` valida el link y devuelve los datos para precargar el formulario (solo estos, nunca compras,
+saldo ni garantías: el link pudo haberse reenviado):
+
+```json
+{ "valid": true, "firstName": "Juan", "lastName": "Pérez", "company": "Vidriería Pérez",
+  "phone": "1125835244", "address": null, "city": "Rosario", "state": "Santa Fe",
+  "email": null, "pendingEmail": null }
+```
+
+`pendingEmail` es el email que cargó y todavía no confirmó (para decirle dónde buscar el mail).
+
+El `POST` recibe `{ token, email, firstName, lastName, company?, phone?, address?, city?, state? }`.
+**Los datos básicos se guardan en ese momento; el email no.** Se le manda un mail a ese email con un
+link a `https://<tu-sitio>/cliente/confirmar-email/<token>` (otro token, **24 h**), y el email recién pasa a
+la ficha cuando lo confirma. El link de WhatsApp **no se consume** al mandar el formulario: si se equivocó
+de email, puede volver a mandarlo con el correcto (invalida el mail anterior).
+
+- **200** `{ "ok": true, "emailSentTo": "..." }`
+- **409** — ese email ya figura en otra ficha de comprador (sería el mismo conflicto que bloquea el alta).
+- **429** — 30 envíos cada 15 min por cliente de API, y 5 por hora por link.
+- **502** — los datos se guardaron pero el mail no salió. **503** — SMTP sin configurar.
+
+```
+GET  /api/portal/v1/data-update/confirm?token=<token>  → 200 { "valid": true, "email": "...", "name": "Juan" }
+POST /api/portal/v1/data-update/confirm                → body { "token": "..." }
+```
+
+**La confirmación es un `POST` disparado por un botón, no por abrir el link**: los filtros de correo abren
+los links solos para revisarlos, y eso confirmaría emails que nadie miró. El `POST` deja el email en la
+ficha, da por usado el link de WhatsApp y responde **200** `{ "ok": true, "email", "name", "portalActive" }`
+— con `portalActive: false` conviene ofrecerle activar el Panel de Clientes (sección 3.1), que ahora sí va
+a encontrar su email.
+
+Errores de token en los cuatro: **404** (no existe), **410** (usado o vencido), con `{ "error" }` listo
+para mostrar.
+
+---
+
 ## 4. Referencia de la API
 
 Base URL: `https://<dominio-del-crm>` (a confirmar con el equipo del CRM).

@@ -298,6 +298,70 @@ export function resetPassword(input: { token: string; password: string }) {
   })
 }
 
+// ─── Cargar email y datos desde el link de WhatsApp ──────────────────────────
+//
+// Al Cliente sin email el CRM le manda por WhatsApp un link a
+// /cliente/mis-datos/<token>. Ahí corrige sus datos y escribe su email; el
+// email recién entra a su ficha cuando lo confirma desde el mail que le llega
+// (/cliente/confirmar-email/<token>). Ver CLIENT_PORTAL_API.md, sección 3.3.
+
+export interface DataUpdateInfo {
+  valid: true
+  firstName: string
+  lastName: string
+  company: string | null
+  phone: string | null
+  address: string | null
+  city: string | null
+  state: string | null
+  /** El que ya tiene confirmado. Casi siempre null: el link se manda a quien no tiene. */
+  email: string | null
+  /** El que cargó y todavía no confirmó, para decirle dónde buscar el mail. */
+  pendingEmail: string | null
+}
+
+export interface DataUpdateInput {
+  token: string
+  email: string
+  firstName: string
+  lastName: string
+  company?: string | null
+  phone?: string | null
+  address?: string | null
+  city?: string | null
+  state?: string | null
+}
+
+export function verifyDataUpdateToken(token: string) {
+  return callCrmApi<DataUpdateInfo>(
+    `/api/portal/v1/data-update?token=${encodeURIComponent(token)}`,
+    { apiKey: KEY() }
+  )
+}
+
+/** Guarda los datos y manda el mail de confirmación. El email todavía no entra a la ficha. */
+export function submitDataUpdate(input: DataUpdateInput) {
+  return callCrmApi<{ ok: true; emailSentTo: string }>('/api/portal/v1/data-update', {
+    method: 'POST',
+    apiKey: KEY(),
+    body: input,
+  })
+}
+
+export function verifyEmailConfirmToken(token: string) {
+  return callCrmApi<{ valid: true; email: string; name: string }>(
+    `/api/portal/v1/data-update/confirm?token=${encodeURIComponent(token)}`,
+    { apiKey: KEY() }
+  )
+}
+
+export function confirmEmail(token: string) {
+  return callCrmApi<{ ok: true; email: string; name: string; portalActive: boolean }>(
+    '/api/portal/v1/data-update/confirm',
+    { method: 'POST', apiKey: KEY(), body: { token } }
+  )
+}
+
 // ─── Cuenta corriente ────────────────────────────────────────────────────────
 
 export type InstallmentStatus = 'PENDING' | 'PARTIAL' | 'PAID' | 'OVERDUE'
