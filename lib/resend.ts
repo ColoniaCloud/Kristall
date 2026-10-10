@@ -92,7 +92,7 @@ export async function sendWarrantyActivationEmail(params: {
   const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://kristallfilm.com').replace(/\/$/, '')
   // El logo blanco lo sirve el CRM, igual que el del taller: es el servidor de
   // imágenes de todo lo que sale con la marca hacia el cliente final.
-  const crmUrl = (process.env.CRM_BASE_URL || 'https://kri.kristallfilm.com').replace(/\/$/, '')
+  const crmUrl = (process.env.CRM_BASE_URL || 'https://crm.kristallfilm.com').replace(/\/$/, '')
 
   const { subject, html } = renderActivarGarantia({
     nombreCliente: params.recipientName ?? null,

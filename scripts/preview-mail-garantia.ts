@@ -34,7 +34,7 @@ if (!process.env.NEXT_PUBLIC_SITE_URL || /localhost|127\.0\.0\.1/.test(process.e
   process.env.NEXT_PUBLIC_SITE_URL = 'https://kristallfilm.com'
 }
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
-const crmUrl = (process.env.CRM_BASE_URL || 'https://kri.kristallfilm.com').replace(/\/$/, '')
+const crmUrl = (process.env.CRM_BASE_URL || 'https://crm.kristallfilm.com').replace(/\/$/, '')
 
 const ejemplo = {
   to: destinatario ?? 'ejemplo@ejemplo.com',
