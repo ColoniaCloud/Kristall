@@ -6,6 +6,7 @@ import { Link } from '@/i18n/routing'
 import { useTranslations } from 'next-intl'
 import AnimatedBorderCard from '@/components/common/AnimatedBorderCard'
 import { getLinea, productoNombre, productoSlug, productoDestacadaSrc, lineaDestacadaSrc, lineaLogoSrc, type Producto } from '@/lib/catalogo'
+import { precioDe, formatearArs } from '@/lib/precios'
 
 export interface ProductCardProps {
   producto: Producto
@@ -19,6 +20,7 @@ export default function ProductCard({ producto }: ProductCardProps) {
 
   const linea = getLinea(producto.lineaSlug)
   const nombre = productoNombre(producto)
+  const precio = precioDe(producto)
 
   const rows: [string, string][] = []
   if (producto.vlt != null) rows.push(['VLT', `${producto.vlt}%`])
@@ -55,9 +57,21 @@ export default function ProductCard({ producto }: ProductCardProps) {
 
           {/* Cuerpo */}
           <div className="flex flex-col flex-1 p-4">
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between gap-2 mb-3">
               <p className="text-[16px] font-medium text-[#0A0A0A]" style={{ fontFamily: 'var(--font-display)' }}>{nombre}</p>
+              {!precio && (
+                <span className="text-[10px] uppercase tracking-wider text-[#9A9A9A] border border-[#E4E4E2] rounded-full px-2 py-0.5 whitespace-nowrap">
+                  {t('coming_soon')}
+                </span>
+              )}
             </div>
+            {precio && (
+              <p className="-mt-2 mb-3 text-[13px] text-[#5C5C5C]">
+                <span className="text-[15px] font-medium text-[#0A0A0A] tabular-nums">{formatearArs(precio.ars)}</span>
+                {' · '}
+                {t('price_roll', { medida: precio.medida })}
+              </p>
+            )}
 
             {/* Tabla de datos */}
             <div className="rounded-lg border border-[#E4E4E2] overflow-hidden mt-auto">

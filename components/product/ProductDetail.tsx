@@ -9,6 +9,7 @@ import { Loader2, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { getLinea, productoNombre, productoDestacadaSrc, lineaDestacadaSrc, lineaLogoSrc, type Producto } from '@/lib/catalogo'
 import { trackLead } from '@/lib/analytics'
+import { precioDe, formatearArs } from '@/lib/precios'
 import AddToCartControl from '@/components/cart/AddToCartControl'
 
 interface ProductDetailProps {
@@ -33,6 +34,7 @@ export default function ProductDetail({ producto }: ProductDetailProps) {
 
   const linea = getLinea(producto.lineaSlug)
   const nombre = productoNombre(producto)
+  const precio = precioDe(producto)
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -124,6 +126,20 @@ export default function ProductDetail({ producto }: ProductDetailProps) {
       {/* Columna derecha — carrito de cotización + consulta puntual */}
       <div>
         <div className="mb-6 pb-6 border-b border-[#E4E4E2]">
+          {precio ? (
+            <div className="mb-5">
+              <p className="text-[12px] uppercase tracking-widest text-[#9A9A9A] mb-1">{t('price_label')}</p>
+              <p className="text-2xl font-medium text-[#0A0A0A] tabular-nums" style={{ fontFamily: 'var(--font-display)' }}>
+                {formatearArs(precio.ars)}
+              </p>
+              <p className="text-sm text-[#5C5C5C]">{t('price_roll', { medida: precio.medida })}</p>
+              <p className="text-[11px] text-[#9A9A9A] leading-relaxed mt-1">{t('price_note')}</p>
+            </div>
+          ) : (
+            <span className="inline-block mb-5 text-[11px] uppercase tracking-wider text-[#9A9A9A] border border-[#E4E4E2] rounded-full px-2.5 py-0.5">
+              {t('coming_soon')}
+            </span>
+          )}
           <AddToCartControl producto={producto} nombre={nombre} />
         </div>
 

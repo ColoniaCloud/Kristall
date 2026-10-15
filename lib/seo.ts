@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { productoDestacadaSrc, lineaDestacadaSrc, productoNombre, type Producto, type Linea } from '@/lib/catalogo'
+import { precioDe } from '@/lib/precios'
 
 const BASE = 'https://kristallfilm.com'
 const LOCALES = ['es', 'en', 'de', 'pt'] as const
@@ -44,8 +45,18 @@ export function resolveProductImage(p: Producto): string {
   return existsOnDisk ? own : lineaDestacadaSrc(p.lineaSlug)
 }
 
-/** Nodo `Product` de schema.org para un producto, con URL propia a su página de ficha técnica. */
+/**
+ * Nodo `Product` de schema.org para un producto, con URL propia a su página de ficha técnica.
+ *
+ * Devuelve `null` si el producto no tiene precio (lib/precios.ts): Google marca
+ * como inválido todo `Product` sin `offers`, `review` ni `aggregateRating`, y
+ * en Search Console eso aparecía como error en "Fragmentos de productos".
+ */
 export function productJsonLd(p: Producto, linea: Linea, locale: string) {
+  const precio = precioDe(p)
+  if (!precio) return null
+
+  const url = `${BASE}/${locale}/productos/lineas/${linea.slug}/${p.codigo.toLowerCase()}`
   const additionalProperty = [
     p.vlt != null && { '@type': 'PropertyValue', name: 'VLT', value: `${p.vlt}%` },
     p.ir != null && { '@type': 'PropertyValue', name: 'IR Rejection', value: `${p.ir}%` },
@@ -58,11 +69,20 @@ export function productJsonLd(p: Producto, linea: Linea, locale: string) {
     '@type': 'Product',
     name: productoNombre(p),
     sku: p.codigo,
-    url: `${BASE}/${locale}/productos/lineas/${linea.slug}/${p.codigo.toLowerCase()}`,
+    url,
     image: `${BASE}${resolveProductImage(p)}`,
     brand: { '@type': 'Brand', name: 'Kristall Film' },
     category: linea.nombre,
     ...(additionalProperty.length > 0 && { additionalProperty }),
+    offers: {
+      '@type': 'Offer',
+      url,
+      price: precio.ars,
+      priceCurrency: 'ARS',
+      availability: 'https://schema.org/InStock',
+      itemCondition: 'https://schema.org/NewCondition',
+      seller: { '@type': 'Organization', name: 'Kristall Film' },
+    },
   }
 }
 

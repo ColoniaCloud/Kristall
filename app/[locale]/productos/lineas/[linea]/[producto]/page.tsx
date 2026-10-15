@@ -106,7 +106,7 @@ export default async function ProductoPage({ params }: PageProps) {
         ],
       },
       productJsonLd(producto, linea, locale),
-    ],
+    ].filter((n) => n !== null),
   }
 
   return (

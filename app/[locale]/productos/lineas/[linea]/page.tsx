@@ -83,7 +83,7 @@ export default async function LineaPage({ params }: PageProps) {
           { '@type': 'ListItem', position: 4, name: linea.nombre, item: `${BASE}/${locale}/productos/lineas/${slug}` },
         ],
       },
-      ...productos.map((p) => productJsonLd(p, linea, locale)),
+      ...productos.map((p) => productJsonLd(p, linea, locale)).filter((n) => n !== null),
     ],
   }
 
