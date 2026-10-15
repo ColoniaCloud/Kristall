@@ -139,12 +139,80 @@
     "breadcrumb_home": "Startseite"
   },
   "portal_instaladores": {
-    "title": "Installateur-Portal",
-    "desc": "Ein eigenes Portal, das Sie bei der Führung Ihres Betriebs, der Lagerkontrolle und der Pflege Ihrer Kundenbeziehungen unterstützt.",
+    "eyebrow": "Installateur-Portal",
+    "title": "Ihr Betrieb mit eigener Seite und Online-Terminen",
+    "desc": "Neben Lager, Einkäufen und Garantien bekommt jeder Kristall-Installateur eine eigene Seite auf polariz.ar: Ihre Kunden sehen Leistungen und Preise, fragen einen Termin an, und Sie bestätigen ihn im Portal.",
+    "steps_label": "So funktioniert es",
+    "steps": {
+      "config": {
+        "short": "Einrichten",
+        "title": "Seite einrichten",
+        "desc": "Wählen Sie Ihre Adresse auf polariz.ar, Ihre Leistungen, Preise und Öffnungszeiten. Ohne Designer, ohne Hosting."
+      },
+      "landing": {
+        "short": "Gefunden",
+        "title": "Kunden finden Sie",
+        "desc": "Eine Seite mit Ihrem Logo, Ihren Arbeiten, Ihrem Standort und dem Siegel als autorisierter Kristall-Installateur."
+      },
+      "booking": {
+        "short": "Termin",
+        "title": "Termine online anfragen",
+        "desc": "Kunden wählen Leistung, Tag und freie Uhrzeit bequem am Handy, rund um die Uhr."
+      },
+      "agenda": {
+        "short": "Bestätigen",
+        "title": "Mit einem Tipp bestätigen",
+        "desc": "Die Anfrage landet in Ihrem Kalender im Portal. Bestätigt wird sie zum Arbeitsauftrag."
+      }
+    },
     "cta": "Demo ausprobieren",
+    "cta_secondary": "Installateur werden",
     "note": "*Die Demo verwendet fiktive Daten, damit Sie das gesamte System testen können.",
     "error": "Die Demo konnte nicht geöffnet werden. Bitte versuchen Sie es gleich noch einmal.",
-    "alt": "Rundgang durch das Installateur-Portal"
+    "mock": {
+      "config_title": "Betriebseinstellungen",
+      "tab_general": "Allgemein",
+      "tab_public": "Öffentliche Seite",
+      "address_label": "Ihre Adresse",
+      "services_label": "Leistungen mit Online-Termin",
+      "hours_label": "Öffnungszeiten",
+      "hours_value": "Montag bis Freitag, 9:00 bis 18:00",
+      "hours_short": "Mo–Fr, 9–18 Uhr",
+      "publish": "Seite veröffentlichen",
+      "published": "Seite veröffentlicht",
+      "authorized": "Autorisierter Installateur",
+      "book": "Termin buchen",
+      "services_title": "Leistungen",
+      "services_count": "3 Leistungen",
+      "svc1": "Komplette Scheibentönung",
+      "svc1_desc": "Vier Türen, Heck- und Frontscheibe",
+      "svc2": "Sonnenschutz für Büros",
+      "svc2_desc": "Hohe Außenfenster",
+      "svc3": "Lkw-Scheibentönung",
+      "svc3_desc": "Fenster und Blendschutzstreifen",
+      "tag_booking": "TERMIN",
+      "tag_visit": "VOR ORT",
+      "book_title": "Termin vereinbaren",
+      "step_service": "Leistung",
+      "step_time": "Zeit & Daten",
+      "pick_day": "Tag wählen",
+      "pick_time": "Uhrzeit wählen",
+      "d1": "Mo",
+      "d2": "Di",
+      "d3": "Mi",
+      "d4": "Do",
+      "d5": "Fr",
+      "send": "Termin anfragen",
+      "sent": "Termin angefragt!",
+      "sent_desc": "Sie erhalten eine WhatsApp, sobald der Betrieb bestätigt.",
+      "inbox_title": "Terminanfragen",
+      "inbox_desc": "Anfragen über Ihre öffentliche Seite.",
+      "new": "Neu",
+      "confirm": "Bestätigen",
+      "other_time": "Andere Zeit",
+      "confirmed": "Bestätigt",
+      "order_created": "Arbeitsauftrag geplant"
+    }
   },
   "services": {
     "label": "Software",
@@ -457,7 +525,7 @@
   "product_modal": {
     "categoria_standard": "Standard",
     "categoria_premium": "Premium",
-    "coming_soon": "Demnächst",
+    "coming_soon": "Bald auf Lager",
     "detail_label": "Datenblatt",
     "technology_label": "Technologie",
     "warranty_label": "Garantie",
@@ -467,7 +535,6 @@
     "price_roll": "Rolle {medida}",
     "price_note": "Preis in argentinischen Pesos. Änderungen vorbehalten; fragen Sie nach Installateurpreisen.",
     "price_on_request": "Preis auf Anfrage: zur Angebotsanfrage hinzufügen oder uns schreiben.",
-    "coming_soon": "Bald auf Lager",
     "spec_thickness": "Stärke",
     "spec_roll": "Rolle",
     "thickness_hint_ply": "Anzahl der miteinander laminierten Schichten.",

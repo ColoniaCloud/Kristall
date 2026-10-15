@@ -139,12 +139,80 @@
     "breadcrumb_home": "Inicio"
   },
   "portal_instaladores": {
-    "title": "Portal Instaladores",
-    "desc": "Un portal dedicado para ayudarte en la gestión de tu negocio, control de stock y relaciones con tus clientes.",
+    "eyebrow": "Portal Instaladores",
+    "title": "Tu taller con página propia y turnos online",
+    "desc": "Además de stock, compras y garantías, cada instalador Kristall tiene su página en polariz.ar: tus clientes ven tus servicios y precios, te piden turno, y vos lo confirmás desde el portal.",
+    "steps_label": "Cómo funciona",
+    "steps": {
+      "config": {
+        "short": "Configurás",
+        "title": "Configurás tu página",
+        "desc": "Elegís tu dirección en polariz.ar, tus servicios, precios y horarios. Sin diseñadores ni hosting."
+      },
+      "landing": {
+        "short": "Te encuentran",
+        "title": "Tus clientes te encuentran",
+        "desc": "Una página con tu logo, tus trabajos, tu ubicación y el respaldo de instalador autorizado Kristall."
+      },
+      "booking": {
+        "short": "Piden turno",
+        "title": "Te piden turno online",
+        "desc": "Eligen el servicio, el día y el horario libre desde el celular, a cualquier hora."
+      },
+      "agenda": {
+        "short": "Confirmás",
+        "title": "Lo confirmás en un toque",
+        "desc": "El pedido llega a tu agenda en el portal. Lo confirmás y queda como orden de trabajo."
+      }
+    },
     "cta": "Probar la demo",
+    "cta_secondary": "Quiero ser instalador",
     "note": "*La demo utiliza datos ficticios para que puedas probar todo nuestro sistema.",
     "error": "No pudimos abrir la demo. Probá de nuevo en un momento.",
-    "alt": "Recorrido por el Portal de Instaladores"
+    "mock": {
+      "config_title": "Configuración del taller",
+      "tab_general": "General",
+      "tab_public": "Página pública",
+      "address_label": "Tu dirección",
+      "services_label": "Servicios con turno online",
+      "hours_label": "Horarios",
+      "hours_value": "Lunes a viernes, 09:00 a 18:00",
+      "hours_short": "Lun a vie, 09 a 18 h",
+      "publish": "Publicar página",
+      "published": "Página publicada",
+      "authorized": "Instalador autorizado",
+      "book": "Reservar turno",
+      "services_title": "Servicios",
+      "services_count": "3 servicios",
+      "svc1": "Polarizado completo",
+      "svc1_desc": "Cuatro puertas, luneta y parabrisas",
+      "svc2": "Control térmico de oficinas",
+      "svc2_desc": "Ventanales de exterior en altura",
+      "svc3": "Polarizado de camiones",
+      "svc3_desc": "Ventanas y franja parasol",
+      "tag_booking": "TURNO",
+      "tag_visit": "VISITA",
+      "book_title": "Agendar un turno",
+      "step_service": "Servicio",
+      "step_time": "Horario y datos",
+      "pick_day": "Elegí el día",
+      "pick_time": "Elegí el horario",
+      "d1": "Lun",
+      "d2": "Mar",
+      "d3": "Mié",
+      "d4": "Jue",
+      "d5": "Vie",
+      "send": "Pedir turno",
+      "sent": "¡Turno solicitado!",
+      "sent_desc": "Te avisamos por WhatsApp cuando el taller lo confirme.",
+      "inbox_title": "Pedidos de turno",
+      "inbox_desc": "Lo que te piden desde tu página pública.",
+      "new": "Nuevo",
+      "confirm": "Confirmar",
+      "other_time": "Otro horario",
+      "confirmed": "Confirmado",
+      "order_created": "Orden de trabajo agendada"
+    }
   },
   "services": {
     "label": "Software",
@@ -457,7 +525,7 @@
   "product_modal": {
     "categoria_standard": "Standard",
     "categoria_premium": "Premium",
-    "coming_soon": "Próximamente",
+    "coming_soon": "Próximamente en stock",
     "detail_label": "Ficha técnica",
     "technology_label": "Tecnología",
     "warranty_label": "Garantía",
@@ -467,7 +535,6 @@
     "price_roll": "Rollo {medida}",
     "price_note": "Precio en pesos argentinos. Puede variar sin aviso; consultá el precio para instaladores.",
     "price_on_request": "Consultá el precio: agregalo a tu cotización o escribinos.",
-    "coming_soon": "Próximamente en stock",
     "spec_thickness": "Espesor",
     "spec_roll": "Rollo",
     "thickness_hint_ply": "Cantidad de capas laminadas entre sí.",

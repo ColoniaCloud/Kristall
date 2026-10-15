@@ -66,6 +66,12 @@
   background: linear-gradient(to bottom, #222222, #111111);
 }
 
+/* Barra de progreso de los pasos en la sección del Portal de Instaladores (home). */
+@keyframes turnera-progreso {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
 * { box-sizing: border-box; }
 
 html {

@@ -139,12 +139,80 @@
     "breadcrumb_home": "Início"
   },
   "portal_instaladores": {
-    "title": "Portal de Instaladores",
-    "desc": "Um portal dedicado para ajudar você na gestão do seu negócio, no controle de estoque e no relacionamento com os seus clientes.",
+    "eyebrow": "Portal de Instaladores",
+    "title": "Sua oficina com página própria e agendamento online",
+    "desc": "Além de estoque, compras e garantias, cada instalador Kristall tem sua página em polariz.ar: seus clientes veem seus serviços e preços, pedem um horário, e você confirma pelo portal.",
+    "steps_label": "Como funciona",
+    "steps": {
+      "config": {
+        "short": "Configura",
+        "title": "Você configura sua página",
+        "desc": "Escolhe seu endereço em polariz.ar, seus serviços, preços e horários. Sem designers nem hospedagem."
+      },
+      "landing": {
+        "short": "Te acham",
+        "title": "Seus clientes te encontram",
+        "desc": "Uma página com seu logo, seus trabalhos, sua localização e o selo de instalador autorizado Kristall."
+      },
+      "booking": {
+        "short": "Agendam",
+        "title": "Agendam online",
+        "desc": "Escolhem o serviço, o dia e o horário livre pelo celular, a qualquer hora."
+      },
+      "agenda": {
+        "short": "Confirma",
+        "title": "Você confirma com um toque",
+        "desc": "O pedido chega à sua agenda no portal. Ao confirmar, vira uma ordem de serviço."
+      }
+    },
     "cta": "Testar a demo",
+    "cta_secondary": "Quero ser instalador",
     "note": "*A demo utiliza dados fictícios para que você possa testar todo o nosso sistema.",
     "error": "Não conseguimos abrir a demo. Tente de novo em instantes.",
-    "alt": "Passeio pelo Portal de Instaladores"
+    "mock": {
+      "config_title": "Configuração da oficina",
+      "tab_general": "Geral",
+      "tab_public": "Página pública",
+      "address_label": "Seu endereço",
+      "services_label": "Serviços com agendamento",
+      "hours_label": "Horários",
+      "hours_value": "Segunda a sexta, 09:00 às 18:00",
+      "hours_short": "Seg a sex, 9 às 18 h",
+      "publish": "Publicar página",
+      "published": "Página publicada",
+      "authorized": "Instalador autorizado",
+      "book": "Agendar horário",
+      "services_title": "Serviços",
+      "services_count": "3 serviços",
+      "svc1": "Insulfilm completo",
+      "svc1_desc": "Quatro portas, vidro traseiro e para-brisa",
+      "svc2": "Controle solar para escritórios",
+      "svc2_desc": "Janelas externas em altura",
+      "svc3": "Insulfilm para caminhões",
+      "svc3_desc": "Janelas e faixa para-sol",
+      "tag_booking": "HORÁRIO",
+      "tag_visit": "VISITA",
+      "book_title": "Agendar um horário",
+      "step_service": "Serviço",
+      "step_time": "Horário e dados",
+      "pick_day": "Escolha o dia",
+      "pick_time": "Escolha o horário",
+      "d1": "Seg",
+      "d2": "Ter",
+      "d3": "Qua",
+      "d4": "Qui",
+      "d5": "Sex",
+      "send": "Pedir horário",
+      "sent": "Horário solicitado!",
+      "sent_desc": "Avisamos pelo WhatsApp quando a oficina confirmar.",
+      "inbox_title": "Pedidos de horário",
+      "inbox_desc": "O que pedem pela sua página pública.",
+      "new": "Novo",
+      "confirm": "Confirmar",
+      "other_time": "Outro horário",
+      "confirmed": "Confirmado",
+      "order_created": "Ordem de serviço agendada"
+    }
   },
   "services": {
     "label": "Software",
@@ -457,7 +525,7 @@
   "product_modal": {
     "categoria_standard": "Standard",
     "categoria_premium": "Premium",
-    "coming_soon": "Em breve",
+    "coming_soon": "Em breve em estoque",
     "detail_label": "Ficha técnica",
     "technology_label": "Tecnologia",
     "warranty_label": "Garantia",
@@ -467,7 +535,6 @@
     "price_roll": "Rolo {medida}",
     "price_note": "Preço em pesos argentinos. Sujeito a alterações; consulte o preço para instaladores.",
     "price_on_request": "Consulte o preço: adicione à sua cotação ou fale conosco.",
-    "coming_soon": "Em breve em estoque",
     "spec_thickness": "Espessura",
     "spec_roll": "Rolo",
     "thickness_hint_ply": "Quantidade de camadas laminadas entre si.",

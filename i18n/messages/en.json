@@ -139,12 +139,80 @@
     "breadcrumb_home": "Home"
   },
   "portal_instaladores": {
-    "title": "Installer Portal",
-    "desc": "A dedicated portal to help you run your business, keep track of your stock and manage your customer relationships.",
+    "eyebrow": "Installer Portal",
+    "title": "Your shop with its own page and online booking",
+    "desc": "On top of stock, purchases and warranties, every Kristall installer gets their own page on polariz.ar: your customers see your services and prices, request an appointment, and you confirm it from the portal.",
+    "steps_label": "How it works",
+    "steps": {
+      "config": {
+        "short": "Set up",
+        "title": "Set up your page",
+        "desc": "Pick your polariz.ar address, your services, prices and opening hours. No designers, no hosting."
+      },
+      "landing": {
+        "short": "Get found",
+        "title": "Customers find you",
+        "desc": "A page with your logo, your work, your location and the backing of an authorized Kristall installer."
+      },
+      "booking": {
+        "short": "They book",
+        "title": "They book online",
+        "desc": "They choose the service, the day and a free time slot from their phone, any time."
+      },
+      "agenda": {
+        "short": "Confirm",
+        "title": "Confirm with one tap",
+        "desc": "The request lands in your portal agenda. Confirm it and it becomes a work order."
+      }
+    },
     "cta": "Try the demo",
+    "cta_secondary": "Become an installer",
     "note": "*The demo uses fictitious data so you can try out the whole system.",
     "error": "We couldn't open the demo. Please try again in a moment.",
-    "alt": "Walkthrough of the Installer Portal"
+    "mock": {
+      "config_title": "Shop settings",
+      "tab_general": "General",
+      "tab_public": "Public page",
+      "address_label": "Your address",
+      "services_label": "Services with online booking",
+      "hours_label": "Opening hours",
+      "hours_value": "Monday to Friday, 9:00 to 18:00",
+      "hours_short": "Mon–Fri, 9 to 18 h",
+      "publish": "Publish page",
+      "published": "Page published",
+      "authorized": "Authorized installer",
+      "book": "Book now",
+      "services_title": "Services",
+      "services_count": "3 services",
+      "svc1": "Full car tint",
+      "svc1_desc": "Four doors, rear window and windshield",
+      "svc2": "Office solar control",
+      "svc2_desc": "High exterior windows",
+      "svc3": "Truck tinting",
+      "svc3_desc": "Windows and sun visor strip",
+      "tag_booking": "BOOKING",
+      "tag_visit": "ON-SITE",
+      "book_title": "Book an appointment",
+      "step_service": "Service",
+      "step_time": "Time & details",
+      "pick_day": "Pick a day",
+      "pick_time": "Pick a time",
+      "d1": "Mon",
+      "d2": "Tue",
+      "d3": "Wed",
+      "d4": "Thu",
+      "d5": "Fri",
+      "send": "Request booking",
+      "sent": "Booking requested!",
+      "sent_desc": "We'll let you know on WhatsApp once the shop confirms.",
+      "inbox_title": "Booking requests",
+      "inbox_desc": "What customers request from your public page.",
+      "new": "New",
+      "confirm": "Confirm",
+      "other_time": "Other time",
+      "confirmed": "Confirmed",
+      "order_created": "Work order scheduled"
+    }
   },
   "services": {
     "label": "Software",
@@ -457,7 +525,7 @@
   "product_modal": {
     "categoria_standard": "Standard",
     "categoria_premium": "Premium",
-    "coming_soon": "Coming soon",
+    "coming_soon": "Coming soon in stock",
     "detail_label": "Tech sheet",
     "technology_label": "Technology",
     "warranty_label": "Warranty",
@@ -467,7 +535,6 @@
     "price_roll": "{medida} roll",
     "price_note": "Price in Argentine pesos. Subject to change; ask for installer pricing.",
     "price_on_request": "Ask for the price: add it to your quote or contact us.",
-    "coming_soon": "Coming soon in stock",
     "spec_thickness": "Thickness",
     "spec_roll": "Roll",
     "thickness_hint_ply": "Number of layers laminated together.",
