@@ -4,10 +4,10 @@ import { routing } from './i18n/routing'
 
 const intlMiddleware = createMiddleware(routing)
 
-// Superficies aisladas (Panel de Cliente, Garantías, catálogo de lanzamiento):
+// Superficies aisladas (Panel de Cliente, Garantías, catálogo de lanzamiento, visor 3D):
 // un solo idioma, sin prefijo de locale. No se agregan a config.matcher para no
 // perder el forzado HTTPS de abajo — solo se saltea intlMiddleware para ellas.
-const ISOLATED_PREFIXES = ['/cliente', '/garantia', '/catalogo-propuesta']
+const ISOLATED_PREFIXES = ['/cliente', '/garantia', '/catalogo-propuesta', '/visor-3d']
 
 // La ruta se renombró de /propuesta-vidrierias a /propuesta-aberturas; esta
 // redirige el slug viejo (ya indexado/compartido en producción) al nuevo.

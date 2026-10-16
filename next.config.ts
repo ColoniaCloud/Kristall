@@ -32,7 +32,9 @@ const CSP = [
   "img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com",
   "font-src 'self' data:",
   "media-src 'self' blob:",
-  "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
+  // blob:: el visor 3D (/visor-3d) extrae las texturas del .glb a blob URLs y
+  // las lee con fetch; sin esto el modelo carga sin texturas.
+  "connect-src 'self' blob: https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
   // El Panel de Cliente registra un service worker (public/cliente/sw.js).
   "worker-src 'self' blob:",
   "frame-ancestors 'none'",

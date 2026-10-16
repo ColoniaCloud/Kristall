@@ -12,6 +12,7 @@
     "catalogo:check": "node scripts/sync-catalogo.mjs --check"
   },
   "dependencies": {
+    "@google/model-viewer": "4.1.0",
     "@hookform/resolvers": "^5.2.2",
     "@payloadcms/db-postgres": "3.85.1",
     "@payloadcms/drizzle": "3.85.1",
