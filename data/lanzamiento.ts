@@ -43,6 +43,17 @@ export type Linea = {
 /** Fin del día 1/12/2026 en Argentina. Pasada esta fecha la página oculta los precios. */
 export const VIGENTE_HASTA = new Date('2026-12-01T23:59:59-03:00')
 
+/**
+ * Interruptor de los precios de lanzamiento. En `false` la página se comporta como
+ * si la vigencia hubiera terminado: sin precios, sin cuenta regresiva y sin la
+ * fecha "hasta el 1/12", y cada lámina invita a consultar el precio por WhatsApp.
+ *
+ * Apagado el 2026-10-17: hubo un error en la configuración de los precios y se
+ * están actualizando. Volver a `true` (y revisar `precio` y `VIGENTE_HASTA`)
+ * recién con la lista corregida.
+ */
+export const PRECIOS_PUBLICADOS = false
+
 export const LINEAS: Linea[] = [
   {
     slug: 'klass',
@@ -188,7 +199,7 @@ export const LINEAS: Linea[] = [
 ]
 
 export function preciosVigentes(ahora = new Date()): boolean {
-  return ahora.getTime() <= VIGENTE_HASTA.getTime()
+  return PRECIOS_PUBLICADOS && ahora.getTime() <= VIGENTE_HASTA.getTime()
 }
 
 /** Días enteros que faltan para el fin de la vigencia (0 el último día). */

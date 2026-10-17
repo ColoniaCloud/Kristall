@@ -13,6 +13,16 @@ import type { Producto } from '@/lib/catalogo'
  */
 export const PRECIOS_VIGENTES_DESDE = '2026-10-14'
 
+/**
+ * Interruptor de los precios públicos. En `false` ninguna ficha muestra precio ni
+ * lo publica en el JSON-LD, y la ficha invita a consultarlo. No es lo mismo que
+ * un producto sin precio en la lista: ese sigue mostrando "Próximamente en stock".
+ *
+ * Apagado el 2026-10-17: hubo un error en la configuración de los precios y se
+ * están actualizando. Volver a `true` recién con `PRECIOS` corregido.
+ */
+export const PRECIOS_PUBLICADOS = false
+
 export interface Precio {
   ars: number
   usd: number
@@ -39,8 +49,14 @@ const PRECIOS: Record<string, Precio> = {
   TPUKX: { ars: 1080000, usd: 697.67, medida: ROLLO_15 },
 }
 
+/** Precio de la lista, se publique o no. Sirve para saber si el producto está en stock. */
 export function precioDe(p: Producto): Precio | null {
   return PRECIOS[p.codigo] ?? null
+}
+
+/** Precio que se muestra al público: null mientras los precios no estén publicados. */
+export function precioPublicoDe(p: Producto): Precio | null {
+  return PRECIOS_PUBLICADOS ? precioDe(p) : null
 }
 
 /** "$ 140.000" — siempre en formato argentino, la moneda es ARS en todos los idiomas. */

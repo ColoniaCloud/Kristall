@@ -9,7 +9,7 @@ import { Loader2, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { getLinea, productoNombre, productoDestacadaSrc, lineaDestacadaSrc, lineaLogoSrc, type Producto } from '@/lib/catalogo'
 import { trackLead } from '@/lib/analytics'
-import { precioDe, formatearArs } from '@/lib/precios'
+import { precioDe, precioPublicoDe, formatearArs } from '@/lib/precios'
 import AddToCartControl from '@/components/cart/AddToCartControl'
 
 interface ProductDetailProps {
@@ -34,7 +34,8 @@ export default function ProductDetail({ producto }: ProductDetailProps) {
 
   const linea = getLinea(producto.lineaSlug)
   const nombre = productoNombre(producto)
-  const precio = precioDe(producto)
+  const precio = precioPublicoDe(producto)
+  const enLista = Boolean(precioDe(producto))
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -135,6 +136,8 @@ export default function ProductDetail({ producto }: ProductDetailProps) {
               <p className="text-sm text-[#5C5C5C]">{t('price_roll', { medida: precio.medida })}</p>
               <p className="text-[11px] text-[#9A9A9A] leading-relaxed mt-1">{t('price_note')}</p>
             </div>
+          ) : enLista ? (
+            <p className="mb-5 text-sm text-[#5C5C5C]">{t('price_on_request')}</p>
           ) : (
             <span className="inline-block mb-5 text-[11px] uppercase tracking-wider text-[#9A9A9A] border border-[#E4E4E2] rounded-full px-2.5 py-0.5">
               {t('coming_soon')}

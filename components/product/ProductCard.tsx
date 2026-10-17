@@ -6,7 +6,7 @@ import { Link } from '@/i18n/routing'
 import { useTranslations } from 'next-intl'
 import AnimatedBorderCard from '@/components/common/AnimatedBorderCard'
 import { getLinea, productoNombre, productoSlug, productoDestacadaSrc, lineaDestacadaSrc, lineaLogoSrc, type Producto } from '@/lib/catalogo'
-import { precioDe, formatearArs } from '@/lib/precios'
+import { precioDe, precioPublicoDe, formatearArs } from '@/lib/precios'
 
 export interface ProductCardProps {
   producto: Producto
@@ -20,7 +20,9 @@ export default function ProductCard({ producto }: ProductCardProps) {
 
   const linea = getLinea(producto.lineaSlug)
   const nombre = productoNombre(producto)
-  const precio = precioDe(producto)
+  const precio = precioPublicoDe(producto)
+  // "Próximamente en stock" es para lo que no está en la lista, no para un precio oculto.
+  const enLista = Boolean(precioDe(producto))
 
   const rows: [string, string][] = []
   if (producto.vlt != null) rows.push(['VLT', `${producto.vlt}%`])
@@ -59,7 +61,7 @@ export default function ProductCard({ producto }: ProductCardProps) {
           <div className="flex flex-col flex-1 p-4">
             <div className="flex items-center justify-between gap-2 mb-3">
               <p className="text-[16px] font-medium text-[#0A0A0A]" style={{ fontFamily: 'var(--font-display)' }}>{nombre}</p>
-              {!precio && (
+              {!enLista && (
                 <span className="text-[10px] uppercase tracking-wider text-[#9A9A9A] border border-[#E4E4E2] rounded-full px-2 py-0.5 whitespace-nowrap">
                   {t('coming_soon')}
                 </span>

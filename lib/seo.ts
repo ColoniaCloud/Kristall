@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { productoDestacadaSrc, lineaDestacadaSrc, productoNombre, type Producto, type Linea } from '@/lib/catalogo'
-import { precioDe } from '@/lib/precios'
+import { precioPublicoDe } from '@/lib/precios'
 
 const BASE = 'https://kristallfilm.com'
 const LOCALES = ['es', 'en', 'de', 'pt'] as const
@@ -53,7 +53,8 @@ export function resolveProductImage(p: Producto): string {
  * en Search Console eso aparecía como error en "Fragmentos de productos".
  */
 export function productJsonLd(p: Producto, linea: Linea, locale: string) {
-  const precio = precioDe(p)
+  // Sin precio publicado no se emite `Product`: Google lo marca inválido sin `offers`.
+  const precio = precioPublicoDe(p)
   if (!precio) return null
 
   const url = `${BASE}/${locale}/productos/lineas/${linea.slug}/${p.codigo.toLowerCase()}`

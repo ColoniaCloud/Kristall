@@ -73,7 +73,12 @@ function alternativa(objetivo: Objetivo, [mejor, ...resto]: Opcion[]): Opcion | 
   return undefined
 }
 
-function porQue(objetivo: Objetivo, mejor: Opcion, alt: Opcion | undefined): { motivo: string; alternativa?: string } {
+function porQue(
+  objetivo: Objetivo,
+  mejor: Opcion,
+  alt: Opcion | undefined,
+  vigente: boolean
+): { motivo: string; alternativa?: string } {
   const { linea, variante } = mejor
   if (objetivo === 'pintura') {
     return { motivo: `TPU autorreparable de ${linea.espesor}, con ${linea.garantiaAnios} años de garantía.` }
@@ -87,14 +92,18 @@ function porQue(objetivo: Objetivo, mejor: Opcion, alt: Opcion | undefined): { m
     return {
       motivo: `Es la opción más económica con VLT ${variante.vlt}%, y rechaza ${variante.ir}% del infrarrojo.`,
       alternativa: alt
-        ? `Por ${formatPrecio(alt.linea.precio - linea.precio)} más, ${alt.linea.nombre} rechaza ${alt.variante.ir}% del calor.`
+        ? vigente
+          ? `Por ${formatPrecio(alt.linea.precio - linea.precio)} más, ${alt.linea.nombre} rechaza ${alt.variante.ir}% del calor.`
+          : `Con un poco más de inversión, ${alt.linea.nombre} rechaza ${alt.variante.ir}% del calor.`
         : undefined,
     }
   }
   return {
     motivo: `Es la que más calor rechaza con VLT ${variante.vlt}%: ${variante.ir}% del infrarrojo.`,
     alternativa: alt
-      ? `Si el presupuesto es más ajustado, ${alt.linea.nombre} rechaza ${alt.variante.ir}% por ${formatPrecio(alt.linea.precio)}.`
+      ? vigente
+        ? `Si el presupuesto es más ajustado, ${alt.linea.nombre} rechaza ${alt.variante.ir}% por ${formatPrecio(alt.linea.precio)}.`
+        : `Si el presupuesto es más ajustado, ${alt.linea.nombre} rechaza ${alt.variante.ir}% y es más económica.`
       : undefined,
   }
 }
@@ -108,7 +117,7 @@ export default function Recomendador({ lineas, vigente }: { lineas: Linea[]; vig
   const opciones = listo ? recomendar(lineas, objetivo, tono) : []
   const [mejor] = opciones
   const alt = listo && mejor ? alternativa(objetivo, opciones) : undefined
-  const texto = listo && mejor ? porQue(objetivo, mejor, alt) : null
+  const texto = listo && mejor ? porQue(objetivo, mejor, alt, vigente) : null
 
   function elegirObjetivo(o: Objetivo) {
     setObjetivo(o)

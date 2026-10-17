@@ -466,6 +466,7 @@
     "price_label": "Precio de referencia",
     "price_roll": "Rollo {medida}",
     "price_note": "Precio en pesos argentinos. Puede variar sin aviso; consultá el precio para instaladores.",
+    "price_on_request": "Consultá el precio: agregalo a tu cotización o escribinos.",
     "coming_soon": "Próximamente en stock",
     "spec_thickness": "Espesor",
     "spec_roll": "Rollo",

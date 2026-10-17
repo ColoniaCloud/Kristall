@@ -466,6 +466,7 @@
     "price_label": "Reference price",
     "price_roll": "{medida} roll",
     "price_note": "Price in Argentine pesos. Subject to change; ask for installer pricing.",
+    "price_on_request": "Ask for the price: add it to your quote or contact us.",
     "coming_soon": "Coming soon in stock",
     "spec_thickness": "Thickness",
     "spec_roll": "Roll",
