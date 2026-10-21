@@ -2,6 +2,7 @@ import type { Viewport } from 'next'
 import { redirect } from 'next/navigation'
 import { getClientSession, levelOf } from '@/lib/client-portal/session'
 import BandaDemo from '@/components/client-portal/BandaDemo'
+import BandaSoporte from '@/components/client-portal/BandaSoporte'
 import Sidebar from '@/components/client-portal/Sidebar'
 import TopBar from '@/components/client-portal/TopBar'
 import RegisterServiceWorker from '@/components/client-portal/RegisterServiceWorker'
@@ -32,6 +33,14 @@ export default async function ProtectedLayout({ children }: { children: React.Re
         {/* Arriba de todo y en todas las pantallas: alguien le va a sacar una
             captura a esto y mandarla por WhatsApp. */}
         {session.demo && <BandaDemo />}
+        {session.soporte && (
+          <BandaSoporte
+            operador={session.soporte.operador}
+            cliente={session.company ?? session.name}
+            venceEn={session.soporte.venceEn}
+            activada={session.soporte.activada}
+          />
+        )}
         <TopBar session={session} level={level} />
         {/* El tope de ancho vive acá y no en cada pantalla porque la mitad de
             ellas no lo tenía: en un monitor ancho, una tabla de cuatro

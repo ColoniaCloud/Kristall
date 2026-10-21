@@ -62,6 +62,23 @@ export interface ClientSession {
    * existe en producción**, así que sin esto cada pantalla daría 404.
    */
   demo?: true
+  /**
+   * Si quien está adentro es alguien de Kristall configurándole el panel al
+   * Cliente ("Entrar como el cliente", desde la ficha del CRM).
+   *
+   * En ese caso `credentialVersion` no es la huella de una contraseña sino
+   * `soporte:<id>`, y el CRM deja pasar la sesión aunque la cuenta todavía no
+   * tenga contraseña. Acá solo sirve para dibujar la banda que lo avisa y para
+   * que la cookie venza junto con la sesión del CRM.
+   */
+  soporte?: {
+    /** Quién de Kristall entró, para la banda. */
+    operador: string
+    /** ISO. La cookie vence a esta hora, ni antes ni después. */
+    venceEn: string
+    /** Si el Cliente ya eligió su contraseña. Si no, la banda recuerda mandarle la invitación. */
+    activada: boolean
+  }
 }
 
 const NIVELES: readonly AccessLevel[] = ['BASIC', 'INSTALLER', 'RESELLER']
@@ -83,7 +100,11 @@ export function levelOf(session: ClientSession | null): AccessLevel {
 export function buildClientSessionCookie(data: ClientSession) {
   // Las de demostración vencen antes. Es el mismo mecanismo de siempre: solo
   // cambia cuánto vive la firma.
-  const maxAge = data.demo ? MAX_AGE_DEMO_SECONDS : MAX_AGE_SECONDS
+  const maxAge = data.demo
+    ? MAX_AGE_DEMO_SECONDS
+    : data.soporte
+      ? Math.max(0, Math.floor((Date.parse(data.soporte.venceEn) - Date.now()) / 1000))
+      : MAX_AGE_SECONDS
   return {
     name: CLIENT_SESSION_COOKIE,
     value: createSessionToken(data, maxAge),

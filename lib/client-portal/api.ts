@@ -228,6 +228,26 @@ export function loginClient(email: string, password: string) {
   })
 }
 
+export interface SupportLoginResult extends LoginResult {
+  support: {
+    operatorName: string
+    expiresAt: string
+    activated: boolean
+  }
+}
+
+/**
+ * Canjea el link de "Entrar como el cliente" que generó alguien de Kristall
+ * desde el CRM. Sirve una sola vez y vence en minutos.
+ */
+export function supportLogin(token: string) {
+  return callCrmApi<SupportLoginResult>('/api/portal/v1/auth/support-login', {
+    method: 'POST',
+    apiKey: KEY(),
+    body: { token },
+  })
+}
+
 // ─── Alta de cuenta y recuperación de contraseña ─────────────────────────────
 //
 // El CRM es el dueño de las credenciales: acá solo se hace de puente. Los

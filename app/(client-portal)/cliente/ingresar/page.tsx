@@ -19,6 +19,9 @@ const MOTIVOS: Record<string, string> = {
     'Tu acceso al panel fue dado de baja. Si creés que es un error, escribinos.',
   'clave-cambiada':
     'Se cambió la contraseña de tu cuenta, así que cerramos las sesiones abiertas. Ingresá de nuevo.',
+  // Lo ve alguien de Kristall, no el Cliente: viene de "Entrar como el cliente" en el CRM.
+  'soporte-link':
+    'El link para entrar al panel del cliente venció o ya se usó. Generá uno nuevo desde su ficha en el CRM.',
 }
 
 export default async function IngresarPage({

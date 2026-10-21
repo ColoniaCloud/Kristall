@@ -270,6 +270,47 @@ para mostrar.
 
 ---
 
+## 3.4 Entrar como el cliente (soporte desde el CRM)
+
+Para que alguien de Kristall (ADMIN o SUPERADMIN) le configure el panel a un Cliente mientras habla con
+él por WhatsApp, **sin conocer ni inventar su contraseña**. Desde la ficha del Cliente en el CRM, botón
+**"Entrar al panel como el cliente"**: el CRM arma un link de un solo uso a
+`https://<tu-sitio>/cliente/soporte/<token>` y lo abre en otra pestaña. El token **vence a los 5 minutos**.
+Si el Cliente todavía no tenía cuenta, el CRM la crea en ese momento igual que la invitación (sin
+contraseña y con el nivel elegido en la ficha). Al terminar, el operador le manda la invitación de
+siempre (sección 3.1) y el Cliente elige su contraseña sobre el panel que ya le dejaron armado.
+
+```
+POST /api/portal/v1/auth/support-login
+```
+Body: `{ "token": "..." }`.
+
+- **200** — lo mismo que el login (sección 3), más `support`:
+
+```json
+{ "contactId": "cly...", "name": "Juan Pérez", "company": "Vidriería Sur", "accessLevel": "INSTALLER",
+  "credentialVersion": "soporte:clz...",
+  "support": { "operatorName": "Natalia", "expiresAt": "2026-10-21T19:36:44.000Z", "activated": false } }
+```
+
+- **401** — el link no existe, venció, ya se usó, o la cuenta está deshabilitada. Mensaje listo para mostrar.
+- **429** — 30 canjes cada 15 min por cliente de API.
+
+Cómo se usa del lado del sitio:
+
+- `credentialVersion` se guarda y se manda en `x-portal-credential-version` igual que en una sesión normal.
+  Empieza con `soporte:`, y con ese prefijo **los endpoints de la sección 4 aceptan la sesión aunque la
+  cuenta todavía no tenga contraseña**. El nivel se exige igual: soporte ve lo mismo que vería el Cliente,
+  y `enabled: false` también la corta.
+- La sesión vence en `support.expiresAt` (**2 horas**). La cookie tiene que vencer a esa misma hora:
+  pasado ese momento el CRM responde **401** `La sesión de soporte venció`.
+- Mientras dure, el panel tiene que avisar en todas las pantallas que quien está adentro es
+  `support.operatorName`. Si `support.activated` es `false`, conviene recordarle que al terminar le mande
+  la invitación al Cliente.
+- El CRM registra cada entrada en la auditoría, con quién entró y a qué cuenta.
+
+---
+
 ## 4. Referencia de la API
 
 Base URL: `https://<dominio-del-crm>` (a confirmar con el equipo del CRM).

@@ -508,6 +508,30 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
     return { status: 401, data: { error: 'Credenciales inválidas' } }
   }
 
+  // "Entrar como el cliente" desde el CRM. Link de prueba: /cliente/soporte/mock-soporte
+  // (cualquier otro token da 401, como un link vencido o ya usado).
+  if (path === '/api/portal/v1/auth/support-login' && method === 'POST') {
+    const { token } = (body ?? {}) as { token?: string }
+    if (token === 'mock-soporte') {
+      return {
+        status: 200,
+        data: {
+          contactId: MOCK_CONTACT_ID,
+          name: MOCK_CONTACT.name,
+          company: MOCK_CONTACT.company,
+          accessLevel: 'INSTALLER',
+          credentialVersion: 'soporte:mock-sesion',
+          support: {
+            operatorName: 'Natalia',
+            expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
+            activated: false,
+          },
+        },
+      }
+    }
+    return { status: 401, data: { error: 'El link venció o ya se usó.' } }
+  }
+
   // Alta de cuenta. Token de prueba: "mock-token" (cualquier otro da 404).
   if (path === '/api/portal/v1/auth/request-activation' && method === 'POST') {
     const { email } = (body ?? {}) as { email?: string }
