@@ -41,15 +41,24 @@ import type { StockRoll, CreatedInstallation } from '@/lib/client-portal/api'
  * del otro lado y descarta lo que no corresponda.
  */
 
-const schema = z.object({
-  clientName: z.string().trim().optional(),
-  clientEmail: z.string().trim().email('Revisá el email').or(z.literal('')).optional(),
-  clientPhone: z.string().trim().optional(),
-  vehicleType: z.string().optional(),
-  plate: z.string().trim().optional(),
-  assetDescription: z.string().trim().optional(),
-  m2Used: z.string().trim().optional(),
-})
+const schema = z
+  .object({
+    clientName: z.string().trim().optional(),
+    clientEmail: z.string().trim().email('Revisá el email').or(z.literal('')).optional(),
+    // Segunda vez que se tipea el mail: un punto de más o una letra cambiada se
+    // detecta acá, mientras el cliente sigue al lado, y no cuando el mail de la
+    // garantía rebota.
+    clientEmailConfirm: z.string().trim().optional(),
+    clientPhone: z.string().trim().optional(),
+    vehicleType: z.string().optional(),
+    plate: z.string().trim().optional(),
+    assetDescription: z.string().trim().optional(),
+    m2Used: z.string().trim().optional(),
+  })
+  .refine(
+    (d) => !d.clientEmail || d.clientEmail.toLowerCase() === (d.clientEmailConfirm ?? '').toLowerCase(),
+    { message: 'Los emails no coinciden', path: ['clientEmailConfirm'] }
+  )
 
 type FormData = z.infer<typeof schema>
 
@@ -75,7 +84,11 @@ export default function NewInstallationDialog({
   anchoM?: number | null
   open: boolean
   onOpenChange: (open: boolean) => void
-  onCreated: (installation: CreatedInstallation) => void
+  /**
+   * `cliente` son los datos de contacto recién cargados: el diálogo de envío los
+   * usa para no volver a pedirlos.
+   */
+  onCreated: (installation: CreatedInstallation, cliente: { email?: string; name?: string }) => void
 }) {
   const [status, setStatus] = useState<'idle' | 'loading'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
@@ -159,7 +172,10 @@ export default function NewInstallationDialog({
       reset()
       setObra(OBRA_EN_BLANCO)
       setUnidad('m2')
-      onCreated(body as CreatedInstallation)
+      onCreated(body as CreatedInstallation, {
+        email: data.clientEmail || undefined,
+        name: data.clientName || undefined,
+      })
     } catch {
       setErrorMsg('Error de conexión. Intentá de nuevo.')
       setStatus('idle')
@@ -296,6 +312,22 @@ export default function NewInstallationDialog({
               <p className="text-xs text-muted-foreground">
                 Es a donde le llega la garantía, y con lo que después reclama.
               </p>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="clientEmailConfirm">Repetir email</Label>
+              {/* autoComplete off: que el navegador no lo rellene solo y la
+                  confirmación deje de confirmar nada. */}
+              <Input
+                id="clientEmailConfirm"
+                type="email"
+                autoComplete="off"
+                onPaste={(e) => e.preventDefault()}
+                {...register('clientEmailConfirm')}
+              />
+              {errors.clientEmailConfirm && (
+                <span className="text-sm text-destructive">{errors.clientEmailConfirm.message}</span>
+              )}
             </div>
 
             <div className="flex flex-col gap-1.5">

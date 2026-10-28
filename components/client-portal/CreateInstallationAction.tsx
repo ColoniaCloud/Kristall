@@ -24,6 +24,9 @@ export default function CreateInstallationAction({ roll }: { roll: WorkshopStock
   const [rollStatus, setRollStatus] = useState(roll.status)
   const [count, setCount] = useState(roll.installations.length)
   const [created, setCreated] = useState<CreatedInstallation | null>(null)
+  // Mail y nombre que el instalador ya cargó en el formulario: el diálogo de
+  // envío los trae prellenados en vez de volver a pedirlos.
+  const [cliente, setCliente] = useState<{ email?: string; name?: string }>({})
   const [formOpen, setFormOpen] = useState(false)
   const [emailOpen, setEmailOpen] = useState(false)
   const [detailsOpen, setDetailsOpen] = useState(false)
@@ -44,10 +47,14 @@ export default function CreateInstallationAction({ roll }: { roll: WorkshopStock
       ? `Generar instalación (${formatM2(roll.availableM2 ?? 0)} libres)`
       : `Generar instalación (${max === Infinity ? count : `${count}/${max}`})`
 
-  const handleCreated = (installation: CreatedInstallation) => {
+  const handleCreated = (
+    installation: CreatedInstallation,
+    clienteCargado: { email?: string; name?: string }
+  ) => {
     setCount((c) => c + 1)
     setRollStatus(installation.rollStatus)
     setCreated(installation)
+    setCliente(clienteCargado)
     setFormOpen(false)
     setEmailOpen(true)
   }
@@ -82,6 +89,11 @@ export default function CreateInstallationAction({ roll }: { roll: WorkshopStock
 
       {created && (
         <SendWarrantyEmailDialog
+          // key: el formulario toma los valores iniciales al montarse; sin ella
+          // la segunda instalación arrastraría el mail de la primera.
+          key={created.installationCode}
+          defaultEmail={cliente.email}
+          defaultName={cliente.name}
           open={emailOpen}
           onOpenChange={setEmailOpen}
           installationCode={created.installationCode}

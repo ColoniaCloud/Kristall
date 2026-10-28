@@ -30,11 +30,16 @@ export default function SendWarrantyEmailDialog({
   onOpenChange,
   installationCode,
   activationToken,
+  defaultEmail,
+  defaultName,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
   installationCode: string
   activationToken: string
+  /** Lo que el instalador ya cargó al generar la instalación. */
+  defaultEmail?: string
+  defaultName?: string
 }) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
@@ -44,7 +49,10 @@ export default function SendWarrantyEmailDialog({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormData>({ resolver: zodResolver(schema) })
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: { to: defaultEmail ?? '', recipientName: defaultName ?? '' },
+  })
 
   const onSubmit = async (data: FormData) => {
     setStatus('loading')
