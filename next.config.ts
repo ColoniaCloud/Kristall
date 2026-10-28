@@ -43,6 +43,10 @@ const CSP = [
   "object-src 'none'",
 ].join('; ')
 
+// Proyecto `kristall-web` en Sentry (organización archivex).
+const SENTRY_DSN_PRODUCCION =
+  'https://9da307906351386f1589414fc85836b4@o4512336158457856.ingest.us.sentry.io/4512336189325312'
+
 const nextConfig: NextConfig = {
   // Acota los workers de generación estática del build. El default de Next sale
   // de os.cpus(), y el hosting compartido reporta 64 núcleos que la cuenta no
@@ -59,6 +63,17 @@ const nextConfig: NextConfig = {
   // Evita que Next.js infiera mal la raíz del workspace por lockfiles
   // ajenos al proyecto (p. ej. package-lock.json en el home del usuario).
   outputFileTracingRoot: import.meta.dirname,
+  // El DSN de Sentry va acá y no en las variables del hosting por dos razones:
+  // no es secreto (cualquier navegador lo recibe) y Hostinger reemplaza TODAS
+  // las variables de golpe, sin poder leerlas de vuelta, así que tocarlas para
+  // sumar una es riesgoso. Solo se usa en builds de producción: los de
+  // desarrollo no deben llenar el proyecto con errores de pruebas. Si se define
+  // NEXT_PUBLIC_SENTRY_DSN, esa gana.
+  env: {
+    NEXT_PUBLIC_SENTRY_DSN:
+      process.env.NEXT_PUBLIC_SENTRY_DSN ??
+      (process.env.NODE_ENV === 'production' ? SENTRY_DSN_PRODUCCION : ''),
+  },
   poweredByHeader: false,
   async headers() {
     return [
