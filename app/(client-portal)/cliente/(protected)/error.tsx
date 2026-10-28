@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect } from 'react'
+import * as Sentry from '@sentry/nextjs'
 import { PORTAL_RATE_LIMITED } from '@/lib/client-portal/error-digest'
 
 export default function ProtectedError({
@@ -14,6 +16,13 @@ export default function ProtectedError({
   // CRM, que no es una caída sino saturación: el cartel de "problema de
   // conexión" era directamente falso y no decía qué hacer.
   const saturado = error.digest === PORTAL_RATE_LIMITED
+
+  // Un error con `digest` nació en el servidor y ya lo reportó onRequestError
+  // (instrumentation.ts); acá llega sin mensaje. Reportarlo de nuevo solo
+  // duplica el evento.
+  useEffect(() => {
+    if (!error.digest) Sentry.captureException(error)
+  }, [error])
 
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-24 text-center">

@@ -23,18 +23,18 @@ const CSP = [
   // 'unsafe-inline' y 'unsafe-eval': Next inyecta su bootstrap inline y no hay
   // nonces configurados. Sacarlos exige migrar a CSP con nonce, que es un
   // cambio aparte.
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.clarity.ms https://scripts.clarity.ms",
   // Ya no hace falta fonts.googleapis.com: las fuentes las autohospeda next/font
   // (lib/fonts.ts) y salen de nuestro propio origen. La plantilla de mail de
   // lib/mail/ sí sigue pidiéndole la hoja a Google, pero eso lo renderiza el
   // cliente de correo y no pasa por este CSP.
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com",
+  "img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://*.clarity.ms https://c.bing.com",
   "font-src 'self' data:",
   "media-src 'self' blob:",
   // blob:: el visor 3D (/visor-3d) extrae las texturas del .glb a blob URLs y
   // las lee con fetch; sin esto el modelo carga sin texturas.
-  "connect-src 'self' blob: https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
+  "connect-src 'self' blob: https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://*.clarity.ms https://c.bing.com https://*.sentry.io",
   // El Panel de Cliente registra un service worker (public/cliente/sw.js).
   "worker-src 'self' blob:",
   "frame-ancestors 'none'",

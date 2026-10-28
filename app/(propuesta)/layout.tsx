@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
+import Clarity from '@/components/analytics/Clarity'
 import { fontsClassName } from '@/lib/fonts'
 import '../globals.css'
 import '@/components/catalogo-propuesta/catalogo.css'
@@ -26,6 +27,7 @@ export default function PropuestaLayout({ children }: { children: React.ReactNod
       <body className="kf-catalogo-body min-h-screen antialiased">
         {children}
         <GoogleAnalytics />
+        <Clarity />
       </body>
     </html>
   )

@@ -19,6 +19,7 @@
     "@payloadcms/next": "3.85.1",
     "@payloadcms/plugin-seo": "3.85.1",
     "@payloadcms/richtext-lexical": "3.85.1",
+    "@sentry/nextjs": "10.76.2",
     "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.10.0",
     "clsx": "^2.1.1",
