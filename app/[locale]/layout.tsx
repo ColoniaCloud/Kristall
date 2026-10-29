@@ -6,7 +6,6 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import WhatsAppFloatingButton from '@/components/layout/WhatsAppFloatingButton'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
-import Clarity from '@/components/analytics/Clarity'
 import type { Metadata } from 'next'
 import { fontsClassName } from '@/lib/fonts'
 import '../globals.css'
@@ -141,7 +140,6 @@ export default async function LocaleLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }}
         />
         <GoogleAnalytics />
-        <Clarity />
       </body>
     </html>
   )

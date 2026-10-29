@@ -9,7 +9,7 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
     tracesSampleRate: 0,
     sendDefaultPii: false,
     // Sin grabación de sesión (Replay) a propósito: el portal muestra datos
-    // personales. Para ver qué hace la gente en el sitio público está Clarity.
+    // personales. Para ver qué hace la gente en el sitio está Google Analytics.
     //
     // Ruido que no es un bug nuestro: extensiones del navegador, el selector de
     // traducción, redes que cortan la conexión a mitad de carga.
