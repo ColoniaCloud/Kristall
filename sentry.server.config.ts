@@ -12,9 +12,6 @@ Sentry.init({
   // SENTRY_DEBUG=1 imprime en consola qué hace el SDK; para diagnosticar, no
   // para dejarlo puesto.
   debug: process.env.SENTRY_DEBUG === '1',
-  // Node imprime sus avisos de módulos experimentales (p. ej. SQLite) con
-  // console.error; no son fallas nuestras y llegaron al primer deploy.
-  ignoreErrors: [/ExperimentalWarning/],
   integrations: [
     // Las rutas de /api atrapan el error, lo registran con
     // `console.error('[API/...]', err)` y responden 500: el error nunca sube, y
