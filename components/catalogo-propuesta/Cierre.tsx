@@ -1,29 +1,18 @@
 import Link from 'next/link'
 import { Mail } from 'lucide-react'
-import Cuenta from './Cuenta'
 import { FlagStripe } from './Hero'
 import { CONTENEDOR } from './layout'
 import Reveal from './Reveal'
 import { MENSAJE_GENERAL, WhatsAppIcon, WhatsAppLink } from './whatsapp'
 
-export default function Cierre({
-  vigente,
-  hasta,
-  hastaMs,
-  ahoraMs,
-}: {
-  vigente: boolean
-  hasta: string
-  hastaMs: number
-  ahoraMs: number
-}) {
+export default function Cierre({ vigente }: { vigente: boolean }) {
   return (
     <section
       data-sin-barra
       className="relative overflow-hidden border-t border-white/10 bg-gradient-to-b from-[#0A0A0A] via-[#160606] to-[#0A0A0A] pb-[max(3rem,env(safe-area-inset-bottom))] pt-16 lg:pt-24"
     >
       <Reveal className={CONTENEDOR}>
-        {/* PC: el llamado a la izquierda; contador y botones a la derecha. */}
+        {/* PC: el llamado a la izquierda; botones a la derecha. */}
         <div className="lg:grid lg:grid-cols-2 lg:items-center lg:gap-16">
           <div>
             <FlagStripe />
@@ -35,17 +24,12 @@ export default function Cierre({
             </h2>
             <p className="mt-4 text-base leading-relaxed text-white/65 lg:text-lg">
               {vigente
-                ? `Los precios de lanzamiento valen hasta el ${hasta}. Escribinos y te armamos el primer pedido.`
+                ? 'Escribinos y te armamos el primer pedido.'
                 : 'Escribinos y te pasamos la lista de precios vigente.'}
             </p>
           </div>
 
           <div>
-            {vigente && (
-              <div className="mt-6 lg:mt-0">
-                <Cuenta hasta={hastaMs} ahora={ahoraMs} />
-              </div>
-            )}
             <WhatsAppLink
               mensaje={MENSAJE_GENERAL}
               donde="cierre"

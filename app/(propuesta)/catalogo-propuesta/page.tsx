@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Hero from '@/components/catalogo-propuesta/Hero'
 import Destacados from '@/components/catalogo-propuesta/Destacados'
 import Simulador from '@/components/catalogo-propuesta/Simulador'
+import ListaPrecios from '@/components/catalogo-propuesta/ListaPrecios'
 import Productos from '@/components/catalogo-propuesta/Productos'
 import Recomendador from '@/components/catalogo-propuesta/Recomendador'
 import PaginaTurnos from '@/components/catalogo-propuesta/PaginaTurnos'
@@ -9,13 +10,8 @@ import Suite from '@/components/catalogo-propuesta/Suite'
 import Demo from '@/components/catalogo-propuesta/Demo'
 import Cierre from '@/components/catalogo-propuesta/Cierre'
 import BarraWhatsApp from '@/components/catalogo-propuesta/BarraWhatsApp'
-import { diasRestantes, LINEAS, preciosVigentes, VIGENTE_HASTA } from '@/data/lanzamiento'
-
-/**
- * Se regenera cada hora: así el contador de días avanza y, pasado el
- * 1/12/2026, los precios se ocultan solos sin volver a desplegar.
- */
-export const revalidate = 3600
+import { LINEAS, preciosVigentes } from '@/data/lanzamiento'
+import { getCotizacionOficial } from '@/lib/cotizacion'
 
 const TITULO = 'Lanzamiento Línea Automotriz — Kristall Film'
 const DESCRIPCION =
@@ -43,27 +39,22 @@ export const metadata: Metadata = {
   twitter: { card: 'summary_large_image', images: ['https://kristallfilm.com/catalogo-propuesta/og.jpg'] },
 }
 
-export default function CatalogoPropuestaPage() {
-  const ahora = new Date()
-  const vigente = preciosVigentes(ahora)
-  const hasta = VIGENTE_HASTA.toLocaleDateString('es-AR', {
-    day: 'numeric',
-    month: 'numeric',
-    year: 'numeric',
-    timeZone: 'America/Argentina/Buenos_Aires',
-  })
+export default async function CatalogoPropuestaPage() {
+  const vigente = preciosVigentes()
+  const cotizacion = vigente ? await getCotizacionOficial() : null
 
   return (
     <main className="kf-catalogo">
-      <Hero dias={diasRestantes(ahora)} vigente={vigente} />
+      <Hero />
       <Destacados />
+      {vigente && <ListaPrecios lineas={LINEAS} cotizacion={cotizacion} />}
       <Simulador lineas={LINEAS} />
       <Productos lineas={LINEAS} vigente={vigente} />
       <Recomendador lineas={LINEAS} vigente={vigente} />
       <PaginaTurnos />
       <Suite />
       <Demo />
-      <Cierre vigente={vigente} hasta={hasta} hastaMs={VIGENTE_HASTA.getTime()} ahoraMs={ahora.getTime()} />
+      <Cierre vigente={vigente} />
       <BarraWhatsApp />
     </main>
   )

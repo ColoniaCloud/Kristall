@@ -1,12 +1,13 @@
 /**
  * Lanzamiento Línea Automotriz — datos de /catalogo-propuesta.
  *
- * Copiado a mano de "Lista de precios — Línea Automotriz" (PDF del 29/09/2026).
+ * Fichas copiadas a mano de "Lista de precios — Línea Automotriz" (PDF del 29/09/2026).
+ * Precios actualizados el 2026-11-05 desde "Catalogo kristall.xlsx", columna
+ * "Unidad USD": dólares por rollo. Kryon está en la planilla con precio pero sin
+ * códigos ni VLT/IR/UV, así que sus variantes siguen siendo las del PDF.
  * No sale de `catalogo.json` a propósito: la planilla no tiene precios, y Kryon
  * todavía no está cargado ahí. Si cambia un precio o una ficha, se cambia acá
  * Y en el PDF — no hay nada que los sincronice (ver CATALOGO-PROPUESTA.md, D3).
- *
- * Precios finales por rollo (lo que paga el taller; no se les suma IVA).
  */
 
 export type Categoria = 'standard' | 'premium'
@@ -31,7 +32,7 @@ export type Linea = {
   /** Medida del rollo en metros (ancho × largo). */
   rollo: { ancho: number; largo: number }
   garantiaAnios: number
-  /** Precio final de lanzamiento por rollo, en pesos. */
+  /** Precio de lanzamiento por rollo, en dólares (columna "Unidad USD" de Catalogo kristall.xlsx). */
   precio: number
   variantes: Variante[]
   foto: string
@@ -40,19 +41,15 @@ export type Linea = {
   rasgos?: string[]
 }
 
-/** Fin del día 1/12/2026 en Argentina. Pasada esta fecha la página oculta los precios. */
-export const VIGENTE_HASTA = new Date('2026-12-01T23:59:59-03:00')
-
 /**
- * Interruptor de los precios de lanzamiento. En `false` la página se comporta como
- * si la vigencia hubiera terminado: sin precios, sin cuenta regresiva y sin la
- * fecha "hasta el 1/12", y cada lámina invita a consultar el precio por WhatsApp.
+ * Interruptor de los precios de lanzamiento. En `false` la página no muestra
+ * precios y cada lámina invita a consultar el precio por WhatsApp.
  *
- * Apagado el 2026-10-17: hubo un error en la configuración de los precios y se
- * están actualizando. Volver a `true` (y revisar `precio` y `VIGENTE_HASTA`)
- * recién con la lista corregida.
+ * Apagado el 2026-10-17 por un error en la lista; vuelto a encender el 2026-11-05
+ * con los precios en USD de la planilla. Sin fecha de vigencia ni cuenta regresiva
+ * (decisión del 2026-11-05).
  */
-export const PRECIOS_PUBLICADOS = false
+export const PRECIOS_PUBLICADOS = true
 
 export const LINEAS: Linea[] = [
   {
@@ -65,7 +62,7 @@ export const LINEAS: Linea[] = [
     espesor: '1 ply',
     rollo: { ancho: 1.52, largo: 30 },
     garantiaAnios: 3,
-    precio: 140_000,
+    precio: 135,
     variantes: [
       { sku: 'KLS05', vlt: 5, ir: 20, uv: 99 },
       { sku: 'KLS15', vlt: 15, ir: 20, uv: 92 },
@@ -83,7 +80,7 @@ export const LINEAS: Linea[] = [
     espesor: '1 ply',
     rollo: { ancho: 1.52, largo: 30 },
     garantiaAnios: 3,
-    precio: 160_000,
+    precio: 150,
     variantes: [
       { sku: 'KRN05', vlt: 5, ir: 11, uv: 99 },
       { sku: 'KRN15', vlt: 15, ir: 11, uv: 99 },
@@ -102,7 +99,7 @@ export const LINEAS: Linea[] = [
     espesor: '2 ply',
     rollo: { ancho: 1.52, largo: 30 },
     garantiaAnios: 5,
-    precio: 312_000,
+    precio: 200,
     variantes: [
       { sku: 'KRY05', vlt: 5, ir: 90, uv: 99 },
       { sku: 'KRY15', vlt: 15, ir: 90, uv: 90 },
@@ -121,7 +118,7 @@ export const LINEAS: Linea[] = [
     espesor: '2 ply',
     rollo: { ancho: 1.52, largo: 30 },
     garantiaAnios: 5,
-    precio: 270_000,
+    precio: 200,
     variantes: [
       { sku: 'KRE05', vlt: 5, ir: 25, uv: 99 },
       { sku: 'KRE15', vlt: 15, ir: 23, uv: 99 },
@@ -139,7 +136,7 @@ export const LINEAS: Linea[] = [
     espesor: '2 ply',
     rollo: { ancho: 1.52, largo: 30 },
     garantiaAnios: 10,
-    precio: 360_000,
+    precio: 280,
     variantes: [
       { sku: 'KRB05', vlt: 5, ir: 86, uv: 99 },
       { sku: 'KRB15', vlt: 15, ir: 73, uv: 99 },
@@ -157,7 +154,7 @@ export const LINEAS: Linea[] = [
     espesor: '2 ply',
     rollo: { ancho: 1.52, largo: 30 },
     garantiaAnios: 10,
-    precio: 492_000,
+    precio: 385,
     variantes: [
       { sku: 'KNCE05', vlt: 5, ir: 95, uv: 99 },
       { sku: 'KNCE15', vlt: 15, ir: 95, uv: 99 },
@@ -175,7 +172,7 @@ export const LINEAS: Linea[] = [
     espesor: '4 mil',
     rollo: { ancho: 1.52, largo: 30 },
     garantiaAnios: 10,
-    precio: 624_000,
+    precio: 460,
     variantes: [{ sku: 'KS4-15', vlt: 15, ir: 95, uv: 99 }],
     foto: '/Productos/destacadas/krypton.png',
     logo: '/Productos/logo-linea/krypton.svg',
@@ -190,7 +187,7 @@ export const LINEAS: Linea[] = [
     espesor: '7.5 mil',
     rollo: { ancho: 1.52, largo: 15 },
     garantiaAnios: 15,
-    precio: 1_080_000,
+    precio: 930,
     variantes: [{ sku: 'TPUKX', vlt: null, ir: null, uv: null }],
     foto: '/Productos/destacadas/ppf.png',
     logo: '/Productos/logo-linea/ppf.svg',
@@ -198,17 +195,12 @@ export const LINEAS: Linea[] = [
   },
 ]
 
-export function preciosVigentes(ahora = new Date()): boolean {
-  return PRECIOS_PUBLICADOS && ahora.getTime() <= VIGENTE_HASTA.getTime()
-}
-
-/** Días enteros que faltan para el fin de la vigencia (0 el último día). */
-export function diasRestantes(ahora = new Date()): number {
-  return Math.max(0, Math.floor((VIGENTE_HASTA.getTime() - ahora.getTime()) / 86_400_000))
+export function preciosVigentes(): boolean {
+  return PRECIOS_PUBLICADOS
 }
 
 export function formatPrecio(n: number): string {
   // A mano y no con toLocaleString: el separador depende del ICU del runtime, y
   // si servidor y navegador difieren, React avisa de un mismatch de hidratación.
-  return '$' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  return 'USD ' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 }
