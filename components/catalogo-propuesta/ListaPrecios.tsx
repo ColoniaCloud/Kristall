@@ -104,19 +104,21 @@ export default function ListaPrecios({
                         {l.garantiaAnios} años
                       </td>
                       <td
-                        className={`whitespace-nowrap px-2 py-3.5 text-right text-[1.15rem] font-semibold tabular-nums lg:py-4 lg:text-[1.9rem] ${
+                        className={`whitespace-nowrap px-2 py-3.5 text-right text-[0.95rem] font-semibold tabular-nums lg:py-4 lg:text-[1.5rem] ${
                           cotizacion ? '' : 'pr-4 lg:pr-7'
                         }`}
                         style={{ fontFamily: 'var(--font-display)' }}
                       >
                         {formatPrecio(l.precio)}
+                        <span className="block text-[11px] font-normal leading-none text-white/55 lg:mt-0.5 lg:text-xs">+ IVA</span>
                       </td>
                       {cotizacion && (
                         <td
-                          className="whitespace-nowrap py-3.5 pl-2 pr-4 text-right text-[1.15rem] font-semibold tabular-nums text-white/55 lg:py-4 lg:pr-7 lg:text-[1.9rem]"
+                          className="whitespace-nowrap py-3.5 pl-2 pr-4 text-right text-[0.95rem] font-semibold tabular-nums text-white/55 lg:py-4 lg:pr-7 lg:text-[1.5rem]"
                           style={{ fontFamily: 'var(--font-display)' }}
                         >
                           {formatPesos(l.precio * cotizacion.venta)}
+                          <span className="block text-[11px] font-normal leading-none text-white/55 lg:mt-0.5 lg:text-xs">+ IVA</span>
                         </td>
                       )}
                     </tr>

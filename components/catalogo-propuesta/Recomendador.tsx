@@ -217,7 +217,7 @@ export default function Recomendador({ lineas, vigente }: { lineas: Linea[]; vig
                     >
                       {formatPrecio(mejor.linea.precio)}
                     </span>
-                    por rollo
+                    por rollo + IVA
                   </p>
                 )}
                 {texto.alternativa && (
@@ -329,6 +329,7 @@ function Tabla({ lineas, vigente }: { lineas: Linea[]; vigente: boolean }) {
                 {vigente && (
                   <td className="whitespace-nowrap py-3 pl-1.5 pr-3 text-right font-medium tabular-nums lg:pr-6">
                     {formatPrecio(l.precio)}
+                    <span className="block text-[10px] font-normal text-white/55">+ IVA</span>
                   </td>
                 )}
               </tr>

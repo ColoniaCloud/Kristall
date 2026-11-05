@@ -400,10 +400,11 @@ function Card({
             <>
               <p className="text-xs text-white/55">Precio de lanzamiento · por rollo</p>
               <p
-                className="mt-1 text-[2.4rem] font-semibold leading-none tracking-[-0.01em] tabular-nums"
+                className="mt-1 text-[1.9rem] font-semibold leading-none tracking-[-0.01em] tabular-nums"
                 style={{ fontFamily: 'var(--font-display)' }}
               >
                 {formatPrecio(linea.precio)}
+                <span className="ml-2 text-sm font-medium tracking-normal text-white/55">+ IVA</span>
               </p>
             </>
           ) : (
