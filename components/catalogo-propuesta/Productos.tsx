@@ -31,8 +31,13 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
   /** Índice de variante (VLT) elegido por línea. Vive acá para que el simulador
    *  y el recomendador puedan abrir una lámina con el VLT ya marcado. */
   const [seleccion, setSeleccion] = useState<Record<string, number>>({})
+  /** El usuario ya movió el carrusel: se apagan la pista de deslizar y el pulso del botón. */
+  const [movido, setMovido] = useState(false)
+  /** La pista "Deslizá" está en pantalla (se muestra una sola vez al llegar a la sección). */
+  const [pistaVisible, setPistaVisible] = useState(false)
   const seccion = useRef<HTMLElement>(null)
   const pista = useRef<HTMLDivElement>(null)
+  const zonaPista = useRef<HTMLDivElement>(null)
 
   const visibles = useMemo(
     () => (filtro === 'todos' ? lineas : lineas.filter((l) => l.categoria === filtro)),
@@ -60,12 +65,41 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
           }
         })
         setActivo(mejor)
+        if (el.scrollLeft > 8) {
+          setMovido(true)
+          setPistaVisible(false)
+        }
       })
     }
     el.addEventListener('scroll', onScroll, { passive: true })
     return () => {
       el.removeEventListener('scroll', onScroll)
       cancelAnimationFrame(frame)
+    }
+  }, [])
+
+  // Pista de "deslizá": aparece una vez, cuando la sección ya está en pantalla,
+  // y se va sola a los ~4 s o apenas el usuario mueve el carrusel. Solo en
+  // celular (en PC la pista es una grilla y no hay nada que deslizar).
+  useEffect(() => {
+    const zonaEl = zonaPista.current
+    const pistaEl = pista.current
+    if (!zonaEl || !pistaEl) return
+    let timer: ReturnType<typeof setTimeout> | undefined
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.intersectionRatio < 0.8) return
+        io.disconnect()
+        if (pistaEl.scrollWidth <= pistaEl.clientWidth + 1 || pistaEl.scrollLeft > 8) return
+        setPistaVisible(true)
+        timer = setTimeout(() => setPistaVisible(false), 4200)
+      },
+      { threshold: [0.8] }
+    )
+    io.observe(zonaEl)
+    return () => {
+      io.disconnect()
+      clearTimeout(timer)
     }
   }, [])
 
@@ -149,22 +183,47 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
         </div>
       </div>
 
-      <div
-        ref={pista}
-        className="scrollbar-none mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-[max(1.25rem,calc((100vw-36rem)/2))] pb-2 lg:mx-auto lg:mt-12 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-5 lg:overflow-visible lg:px-10 lg:pb-0 xl:grid-cols-4"
-        aria-roledescription="carrusel"
-        data-sin-barra
-      >
-        {visibles.map((linea, i) => (
-          <Card
-            key={linea.slug}
-            linea={linea}
-            vigente={vigente}
-            prioridad={i === 0}
-            idx={seleccion[linea.slug] ?? 0}
-            onIdx={(n) => setSeleccion((prev) => ({ ...prev, [linea.slug]: n }))}
-          />
-        ))}
+      <div className="relative">
+        <div
+          ref={pista}
+          className="scrollbar-none mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-[max(1.25rem,calc((100vw-36rem)/2))] pb-2 lg:mx-auto lg:mt-12 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-5 lg:overflow-visible lg:px-10 lg:pb-0 xl:grid-cols-4"
+          aria-roledescription="carrusel"
+          data-sin-barra
+        >
+          {visibles.map((linea, i) => (
+            <Card
+              key={linea.slug}
+              linea={linea}
+              vigente={vigente}
+              prioridad={i === 0}
+              idx={seleccion[linea.slug] ?? 0}
+              onIdx={(n) => setSeleccion((prev) => ({ ...prev, [linea.slug]: n }))}
+            />
+          ))}
+        </div>
+
+        {/* Pista de deslizar: se apoya sobre la foto de la primera card, usando la
+            misma caja que las cards para quedar centrada en ella. No intercepta toques. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-8 px-[max(1.25rem,calc((100vw-36rem)/2))] lg:hidden"
+        >
+          {/* Se observa esta caja (la foto de la primera card) y no toda la sección:
+              la sección es más alta que la pantalla y nunca llegaría a la mitad visible. */}
+          <div ref={zonaPista} className="grid aspect-[4/3] w-[86vw] max-w-[24rem] place-items-center">
+            <div
+              className={`flex items-center gap-3 rounded-full border border-[#E6A800]/60 bg-black/70 py-3 pl-5 pr-4 text-[#E6A800] shadow-[0_8px_32px_rgba(0,0,0,0.55)] backdrop-blur transition-all duration-500 ${
+                pistaVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
+              }`}
+            >
+              <span className="text-base font-semibold text-white">Deslizá</span>
+              <svg viewBox="0 0 64 24" width="56" height="21" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="kf-flecha">
+                <path className="kf-flecha-linea" d="M58 12H8" pathLength={1} />
+                <path className="kf-flecha-punta" d="M18 3L8 12L18 21" />
+              </svg>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="mx-auto mt-6 flex max-w-xl items-center justify-between px-5 lg:hidden">
@@ -172,12 +231,12 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
           {visibles.map((l, i) => (
             <span
               key={l.slug}
-              className={`h-1.5 rounded-full transition-all duration-300 ${i === activo ? 'w-6 bg-white' : 'w-1.5 bg-white/25'}`}
+              className={`h-2 rounded-full transition-all duration-300 ${i === activo ? 'w-7 bg-[#E6A800]' : 'w-2 bg-white/30'}`}
             />
           ))}
         </div>
-        <div className="flex items-center gap-2">
-          <span className="mr-1 text-sm tabular-nums text-white/50">
+        <div className="flex items-center gap-2.5">
+          <span className="mr-1 text-sm font-medium tabular-nums text-white/75">
             {activo + 1} / {visibles.length}
           </span>
           <button
@@ -185,18 +244,22 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
             onClick={() => irA(Math.max(0, activo - 1))}
             disabled={activo === 0}
             aria-label="Lámina anterior"
-            className="grid size-10 place-items-center rounded-full border border-white/15 text-white disabled:opacity-30"
+            className="grid size-12 place-items-center rounded-full border-2 border-white/60 bg-white/10 text-white transition active:scale-95 disabled:border-white/15 disabled:bg-transparent disabled:text-white/30"
           >
-            <ChevronLeft className="size-5" />
+            <ChevronLeft className="size-6" />
           </button>
           <button
             type="button"
             onClick={() => irA(Math.min(visibles.length - 1, activo + 1))}
             disabled={activo === visibles.length - 1}
             aria-label="Lámina siguiente"
-            className="grid size-10 place-items-center rounded-full border border-white/15 text-white disabled:opacity-30"
+            className="relative grid size-12 place-items-center rounded-full bg-[#E6A800] text-[#0A0A0A] transition active:scale-95 disabled:bg-transparent disabled:text-white/30 disabled:ring-2 disabled:ring-inset disabled:ring-white/15"
           >
-            <ChevronRight className="size-5" />
+            {/* Anillo que late hasta que el usuario mueve el carrusel por su cuenta. */}
+            {!movido && activo === 0 && (
+              <span aria-hidden="true" className="kf-pulso absolute inset-0 rounded-full bg-[#E6A800]" />
+            )}
+            <ChevronRight className="relative size-6" strokeWidth={2.5} />
           </button>
         </div>
       </div>

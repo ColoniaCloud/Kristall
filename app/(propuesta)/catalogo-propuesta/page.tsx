@@ -47,13 +47,14 @@ export default async function CatalogoPropuestaPage() {
     <main className="kf-catalogo">
       <Hero />
       <Destacados />
-      {vigente && <ListaPrecios lineas={LINEAS} cotizacion={cotizacion} />}
-      <Simulador lineas={LINEAS} />
       <Productos lineas={LINEAS} vigente={vigente} />
+      <Simulador lineas={LINEAS} />
       <Recomendador lineas={LINEAS} vigente={vigente} />
       <PaginaTurnos />
       <Suite />
       <Demo />
+      {/* La lista va al final como resumen: ya vio las láminas, acá compara de un vistazo. */}
+      {vigente && <ListaPrecios lineas={LINEAS} cotizacion={cotizacion} />}
       <Cierre vigente={vigente} />
       <BarraWhatsApp />
     </main>

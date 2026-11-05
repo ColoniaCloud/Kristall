@@ -52,10 +52,78 @@ html:has(.kf-catalogo-body),
   transform: none;
 }
 
+/* Pista de "deslizá" del carrusel (Productos.tsx): una flecha que se dibuja de
+   derecha a izquierda, que es el sentido en que se mueve el dedo. */
+@keyframes kf-flecha-linea {
+  0% {
+    stroke-dashoffset: 1;
+  }
+  55%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes kf-flecha-punta {
+  0%,
+  35% {
+    opacity: 0;
+  }
+  60%,
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes kf-flecha-empuje {
+  0%,
+  100% {
+    transform: translateX(8px);
+  }
+  55% {
+    transform: translateX(-6px);
+  }
+}
+.kf-flecha {
+  animation: kf-flecha-empuje 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.kf-flecha-linea {
+  stroke-dasharray: 1;
+  animation: kf-flecha-linea 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.kf-flecha-punta {
+  animation: kf-flecha-punta 1.5s ease-out infinite;
+}
+
+/* Anillo que se expande detrás del botón "siguiente" hasta que el usuario mueve el carrusel. */
+@keyframes kf-pulso {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.75);
+    opacity: 0;
+  }
+}
+.kf-pulso {
+  animation: kf-pulso 1.6s ease-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .kf-rise,
   .kf-rise-solid {
     animation: none;
+  }
+  .kf-flecha,
+  .kf-flecha-linea,
+  .kf-flecha-punta,
+  .kf-pulso {
+    animation: none;
+  }
+  .kf-flecha-linea {
+    stroke-dasharray: none;
+  }
+  .kf-pulso {
+    display: none;
   }
   .kf-reveal {
     opacity: 1;

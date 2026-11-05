@@ -19,7 +19,7 @@ const vltDe = (l: Linea): string => {
  * La lista completa en una sola pantalla: una fila por línea, ordenada de la
  * más barata a la más cara dentro de cada categoría. Es lo primero que mira un
  * taller que ya sabe qué quiere, así que el precio es lo único grande.
- * Tocar una fila lleva a la lámina en el carrusel de abajo.
+ * Va al final de la página, como resumen. Tocar una fila sube a la lámina en el carrusel.
  */
 export default function ListaPrecios({
   lineas,
@@ -32,10 +32,11 @@ export default function ListaPrecios({
     <section id="precios" className={`scroll-mt-4 ${SECCION}`}>
       <div className={CONTENEDOR}>
         <h2 className={TITULO} style={{ fontFamily: 'var(--font-display)' }}>
-          Lista de precios
+          Resumen de precios
         </h2>
         <p className="mt-3 text-base leading-relaxed text-white/60 lg:text-lg">
-          Cada rollo en dólares{cotizacion ? ' y en pesos' : ''}. Tocá una línea para ver sus láminas.
+          Todas las líneas juntas, por rollo, en dólares{cotizacion ? ' y en pesos' : ''}. Tocá una para volver a su
+          lámina.
         </p>
 
         <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 lg:mt-10">
@@ -103,7 +104,7 @@ export default function ListaPrecios({
                         {l.garantiaAnios} años
                       </td>
                       <td
-                        className={`whitespace-nowrap px-2 py-3.5 text-right text-[1.2rem] font-semibold tabular-nums lg:py-4 lg:text-[1.9rem] ${
+                        className={`whitespace-nowrap px-2 py-3.5 text-right text-[1.15rem] font-semibold tabular-nums lg:py-4 lg:text-[1.9rem] ${
                           cotizacion ? '' : 'pr-4 lg:pr-7'
                         }`}
                         style={{ fontFamily: 'var(--font-display)' }}
@@ -111,7 +112,10 @@ export default function ListaPrecios({
                         {formatPrecio(l.precio)}
                       </td>
                       {cotizacion && (
-                        <td className="whitespace-nowrap py-3.5 pl-2 pr-4 text-right text-[15px] tabular-nums text-white/70 lg:py-4 lg:pr-7 lg:text-lg">
+                        <td
+                          className="whitespace-nowrap py-3.5 pl-2 pr-4 text-right text-[1.15rem] font-semibold tabular-nums text-white/55 lg:py-4 lg:pr-7 lg:text-[1.9rem]"
+                          style={{ fontFamily: 'var(--font-display)' }}
+                        >
                           {formatPesos(l.precio * cotizacion.venta)}
                         </td>
                       )}
