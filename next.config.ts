@@ -29,7 +29,8 @@ const CSP = [
   // lib/mail/ sí sigue pidiéndole la hoja a Google, pero eso lo renderiza el
   // cliente de correo y no pasa por este CSP.
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com",
+  // i.ytimg.com: miniatura del video de /distribuidores-peru (fachada de YouTube).
+  "img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://i.ytimg.com",
   "font-src 'self' data:",
   "media-src 'self' blob:",
   // blob:: el visor 3D (/visor-3d) extrae las texturas del .glb a blob URLs y
@@ -37,6 +38,11 @@ const CSP = [
   "connect-src 'self' blob: https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://*.sentry.io",
   // El Panel de Cliente registra un service worker (public/cliente/sw.js).
   "worker-src 'self' blob:",
+  // El video de /distribuidores-peru se embebe desde youtube-nocookie (sin
+  // cookies de YouTube hasta que el usuario da play). Sin esta línea,
+  // default-src 'self' bloquea el iframe.
+  // 'self' se mantiene: antes los iframes propios pasaban por default-src.
+  "frame-src 'self' https://www.youtube-nocookie.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

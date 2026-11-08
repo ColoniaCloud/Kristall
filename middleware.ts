@@ -7,7 +7,13 @@ const intlMiddleware = createMiddleware(routing)
 // Superficies aisladas (Panel de Cliente, Garantías, catálogo de lanzamiento, visor 3D):
 // un solo idioma, sin prefijo de locale. No se agregan a config.matcher para no
 // perder el forzado HTTPS de abajo — solo se saltea intlMiddleware para ellas.
-const ISOLATED_PREFIXES = ['/cliente', '/garantia', '/catalogo-propuesta', '/visor-3d']
+const ISOLATED_PREFIXES = ['/cliente', '/garantia', '/catalogo-propuesta', '/visor-3d', '/distribuidores-peru']
+
+// La landing de Perú se comparte como /distribuidores-perú, con tilde. La carpeta
+// de la ruta va sin tilde (una "ú" en el nombre de carpeta depende de cómo cada
+// sistema de archivos y el navegador codifiquen el carácter), así que la versión
+// con tilde —que llega codificada como %C3%BA— redirige a la otra.
+const PERU_CON_TILDE = /^\/distribuidores-per(ú|%C3%BA|%c3%ba)\/?$/
 
 // La ruta se renombró de /propuesta-vidrierias a /propuesta-aberturas; esta
 // redirige el slug viejo (ya indexado/compartido en producción) al nuevo.
@@ -34,6 +40,12 @@ export default function middleware(request: NextRequest) {
   }
 
   const { pathname } = request.nextUrl
+
+  if (PERU_CON_TILDE.test(pathname)) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/distribuidores-peru'
+    return NextResponse.redirect(url, { status: 308 })
+  }
 
   const oldSlugMatch = pathname.match(OLD_ABERTURAS_SLUG)
   if (oldSlugMatch) {

@@ -1,0 +1,84 @@
+/* Estilos propios de /distribuidores-peru. Lo importa su page.tsx.
+   Movimiento: entradas con opacidad + 12 px + blur 4 px, escalonadas de a 100 ms
+   (80 ms entre palabras del título). Sin rebote. Con movimiento reducido, todo
+   aparece directo. */
+
+@keyframes kp-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Entrada al cargar (hero). `--d` es la demora de cada pieza. */
+.kp-in {
+  animation: kp-in 560ms cubic-bezier(0.2, 0, 0, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+
+/* Revelado al hacer scroll: Aparece.tsx agrega .is-in al contenedor y cada
+   .kp-item entra con su `--i` (0, 1, 2…) × 100 ms. Es transición y no keyframe:
+   si el usuario vuelve a subir, no se repite. */
+.kp-item {
+  opacity: 0;
+  transform: translateY(12px);
+  filter: blur(4px);
+  transition:
+    opacity 520ms cubic-bezier(0.2, 0, 0, 1),
+    transform 520ms cubic-bezier(0.2, 0, 0, 1),
+    filter 520ms cubic-bezier(0.2, 0, 0, 1);
+  transition-delay: calc(var(--i, 0) * 100ms);
+}
+.is-in .kp-item {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* El trazo dorado del hero (el mismo corte en diagonal del PDF) se dibuja una vez. */
+@keyframes kp-trazo {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+.kp-trazo {
+  animation: kp-trazo 1400ms cubic-bezier(0.65, 0, 0.35, 1) 250ms both;
+}
+
+/* La regla dorada bajo el título crece de izquierda a derecha. */
+@keyframes kp-regla {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.kp-regla {
+  transform-origin: left;
+  animation: kp-regla 700ms cubic-bezier(0.2, 0, 0, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kp-in,
+  .kp-trazo,
+  .kp-regla {
+    animation: none;
+  }
+  .kp-item {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+}
