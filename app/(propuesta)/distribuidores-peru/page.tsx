@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { BadgeCheck, Globe, LayoutDashboard, Mail, Megaphone, ShieldCheck } from 'lucide-react'
 import Aparece from '@/components/distribuidores-peru/Aparece'
+import HeroVideo from '@/components/catalogo-propuesta/HeroVideo'
 import VideoSistema from '@/components/distribuidores-peru/VideoSistema'
 import { WhatsAppFlotante, WhatsAppPeru } from '@/components/distribuidores-peru/WhatsAppPeru'
 import { demora, paso } from '@/components/distribuidores-peru/movimiento'
@@ -364,6 +365,13 @@ function Hero() {
 
   return (
     <section className="relative isolate flex min-h-[92svh] flex-col overflow-hidden lg:min-h-[100svh]">
+      {/* Mismo video de fondo que /catalogo-propuesta: póster en el HTML y el
+          video recién cuando la página terminó de cargar (ver HeroVideo). */}
+      <HeroVideo />
+      {/* Velo semitransparente: deja ver el video pero el texto se lee en
+          cualquier cuadro. Abajo funde con el negro de la sección siguiente. */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/70 via-black/60 via-50% to-[#0A0A0A]" />
+      <div className="absolute inset-0 -z-10 hidden bg-gradient-to-r from-black/70 via-black/30 to-transparent lg:block" />
       <svg
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10 size-full"
