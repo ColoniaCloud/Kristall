@@ -1,9 +1,21 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { trackEvent, trackLead } from '@/lib/analytics'
 import { refVendedor, WhatsAppIcon, whatsappHref } from '@/components/catalogo-propuesta/whatsapp'
 import { MENSAJE_PERU } from '@/data/distribuidores-peru'
+
+/**
+ * El mensaje con que abre WhatsApp. En la página común es `MENSAJE_PERU`; en la
+ * personalizada (/distribuidores-peru/<token>) el servidor lo reemplaza por uno
+ * con el nombre y el negocio del invitado, así quien atiende sabe quién escribe.
+ * Va por contexto para no pasarlo a mano a los cuatro botones.
+ */
+const MensajeContext = createContext(MENSAJE_PERU)
+
+export function MensajePeru({ mensaje, children }: { mensaje: string; children: React.ReactNode }) {
+  return <MensajeContext.Provider value={mensaje}>{children}</MensajeContext.Provider>
+}
 
 /**
  * Link a WhatsApp de la landing de Perú. Mismo número y mismo `?v=vendedor` que
@@ -21,16 +33,17 @@ export function WhatsAppPeru({
   children: React.ReactNode
   ariaLabel?: string
 }) {
+  const mensaje = useContext(MensajeContext)
   return (
     <a
-      href={whatsappHref(MENSAJE_PERU)}
+      href={whatsappHref(mensaje)}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={ariaLabel}
       className={className}
       onClick={(e) => {
         const vendedor = refVendedor()
-        if (vendedor) e.currentTarget.href = whatsappHref(`${MENSAJE_PERU} (Ref: ${vendedor})`)
+        if (vendedor) e.currentTarget.href = whatsappHref(`${mensaje} (Ref: ${vendedor})`)
         trackEvent('peru_whatsapp_click', { donde, vendedor: vendedor ?? '' })
         trackLead('distribuidores-peru')
       }}

@@ -597,6 +597,14 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
     return { status: 200, data: { ok: true, emailSentTo: email } }
   }
 
+  // Invitación a /distribuidores-peru/<token>. Tokens de prueba: "mock-invitado" y "mock-revocado".
+  if (path.startsWith('/api/portal/v1/distributor-invite?') && method === 'GET') {
+    const token = new URLSearchParams(path.split('?')[1]).get('token')
+    if (token === 'mock-invitado') return { status: 200, data: { name: 'Juan Pérez', business: 'Polarizados Lima Norte' } }
+    if (token === 'mock-revocado') return { status: 410, data: { error: 'Esta invitación ya no está disponible.' } }
+    return { status: 404, data: { error: 'La invitación no existe.' } }
+  }
+
   // Recuperación de contraseña. Respuesta genérica a propósito.
   if (path === '/api/portal/v1/auth/request-reset' && method === 'POST') {
     return { status: 200, data: { message: 'Si ese email tiene una cuenta, te mandamos un link para cambiar la contraseña.' } }

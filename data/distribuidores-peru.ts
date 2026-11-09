@@ -20,36 +20,55 @@ export type LineaPeru = {
   garantia: string
 }
 
-/** Las 4 premium que el PDF destaca arriba de la tabla, con su foto del catálogo. */
+/** Las premium que se destacan arriba de la tabla (4 del PDF + 2 de arquitectura), con su foto del catálogo. */
 export const DESTACADAS: {
   nombre: string
   descripcion: string
   datos: string
   foto: string
+  rubro: 'Automotriz' | 'Arquitectura'
 }[] = [
   {
     nombre: 'KeramX',
     descripcion: 'Nanoceramic de alto rendimiento, rechazo infrarrojo superior y claridad óptica excepcional.',
     datos: '95% IR · 99% UV · 10 años',
     foto: '/Productos/destacadas/keramx.png',
+    rubro: 'Automotriz',
   },
   {
     nombre: 'Krypton',
     descripcion: 'Seguridad y nanoceramic en una sola lámina: refuerza el vidrio y retiene fragmentos ante impactos.',
     datos: '95% IR · 99% UV · 4 mil · 10 años',
     foto: '/Productos/destacadas/krypton.png',
+    rubro: 'Automotriz',
   },
   {
     nombre: 'PPF',
     descripcion: 'TPU transparente autorreparable que protege la pintura de impactos, rayones y agentes externos.',
     datos: 'TPU 7.5 mil · 15 años',
     foto: '/Productos/destacadas/ppf.png',
+    rubro: 'Automotriz',
   },
   {
     nombre: 'Karbon',
     descripcion: 'Nanocarbono con alto rechazo térmico, gran claridad y sin interferencia en señales electrónicas.',
     datos: '86% IR · 99% UV · 10 años',
     foto: '/Productos/destacadas/karbon.png',
+    rubro: 'Automotriz',
+  },
+  {
+    nombre: 'Kaiser',
+    descripcion: 'Nanoceramic con sputtering: control solar superior y excelente claridad óptica para obras de alta exigencia.',
+    datos: '98% IR · 99% UV · 10 años',
+    foto: '/Productos/destacadas/kaiser.png',
+    rubro: 'Arquitectura',
+  },
+  {
+    nombre: 'KReflect Silver',
+    descripcion: 'Acabado espejado de alto rendimiento: reduce la ganancia térmica y aporta privacidad en superficies vidriadas.',
+    datos: '88–90% IR · 99% UV · 6 años',
+    foto: '/Productos/destacadas/kreflect.png',
+    rubro: 'Arquitectura',
   },
 ]
 
@@ -62,6 +81,15 @@ export const TABLA: LineaPeru[] = [
   { slug: 'kron', nombre: 'Kron', tecnologia: 'Dyed · 1 ply', vlt: '5 · 15 · 50', ir: '11%', uv: '99%', garantia: '3 años' },
   { slug: 'klass', nombre: 'Klass', tecnologia: 'Dyed · 1 ply', vlt: '5 · 15', ir: '20%', uv: '99%', garantia: '3 años' },
   { slug: 'ppf', nombre: 'PPF', tecnologia: 'TPU self-healing · 7.5 mil', vlt: 'Transparente', ir: '—', uv: '—', garantia: '15 años' },
+]
+
+/**
+ * Líneas de arquitectura. Los datos salen de `data/catalogo.json` (la planilla
+ * del catálogo), no del PDF: el borrador no las trae.
+ */
+export const TABLA_ARQUITECTURA: LineaPeru[] = [
+  { slug: 'kaiser', nombre: 'Kaiser', tecnologia: 'Nanoceramic + sputtering · 2 ply', vlt: '70', ir: '98%', uv: '99%', garantia: '10 años' },
+  { slug: 'kreflect', nombre: 'KReflect Silver', tecnologia: 'Espejado · 2 ply', vlt: '5 · 15', ir: '88–90%', uv: '99%', garantia: '6 años' },
 ]
 
 export const POR_QUE: { titulo: string; texto: string }[] = [
@@ -83,7 +111,7 @@ export const POR_QUE: { titulo: string; texto: string }[] = [
   {
     titulo: 'Red certificada',
     texto:
-      'Instaladores certificados que trabajan con estándares comunes de calidad y quedan registrados en cada Garantía Digital. Cada trabajo lleva el respaldo de la marca.',
+      'Instaladores certificados que trabajan con estándares de calidad y quedan registrados en cada Garantía Digital. Cada trabajo lleva el respaldo de la marca.',
   },
 ]
 
@@ -103,8 +131,8 @@ export const PASOS: string[] = [
   'Activación de su red de talleres',
 ]
 
-/** Video del canal de Kristall: "Sistema de gestión para distribuidores". */
-export const VIDEO_ID = 'w6mtH5ItCfU'
+/** Video del canal de Kristall: "Kristall Presentación CRM" (youtu.be/G1n25kmCjLI). */
+export const VIDEO_ID = 'G1n25kmCjLI'
 
 export const CONTACTO = {
   telefonoVisible: '+54 9 11 6048-4312',

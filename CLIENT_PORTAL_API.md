@@ -222,8 +222,8 @@ GET /api/portal/v1/contacts/lookup?email=<email>
 
 ## 3.3 Cargar email y datos desde un link de WhatsApp
 
-Para los Clientes (`type: CLIENT`, solo ese tipo) que no tienen email. Desde el CRM (`/whatsapp`, pestaña
-**Pedir datos**, solo SUPERADMIN) se les manda por WhatsApp un link personal a
+Para los Clientes (`type: CLIENT`, solo ese tipo) que no tienen email. Desde el CRM (`/whatsapp`, **Pedir datos**,
+solo SUPERADMIN) se les manda por WhatsApp un link personal a
 `https://<tu-sitio>/cliente/mis-datos/<token>`. El token dura **7 días**, y mandar uno nuevo invalida el
 anterior. **No abre sesión**: sirve para cargar datos, no para entrar al panel.
 
@@ -310,6 +310,28 @@ Cómo se usa del lado del sitio:
 - El CRM registra cada entrada en la auditoría, con quién entró y a qué cuenta.
 
 ---
+
+## 3.5 Invitación personalizada a /distribuidores-peru *(solo lectura)*
+
+Una página pública de kristall-web, `/distribuidores-peru/<token>`, saluda al invitado por nombre y negocio. Los
+datos los carga un SUPERADMIN en el CRM (**Contactos Perú → Invitaciones**: nombre, negocio, teléfono y mail), que
+genera el token y manda el link por WhatsApp (plantilla `kristall_propuesta_distribuidor`, es_PE, con botón de URL
+dinámica) y por mail. Tabla `distributor_invites`; lógica en `src/lib/distributor-invite.ts`.
+
+### `GET /api/portal/v1/distributor-invite?token=<token>`
+
+Mismo `x-api-key` que el resto del portal (no hay key nueva).
+
+```json
+{ "name": "Juan Pérez", "business": "Polarizados Lima Norte" }
+```
+
+- Devuelve **solo nombre y negocio**. El teléfono y el mail no salen del CRM: el link puede haberse reenviado.
+- **Cada lectura cuenta como «abierta»** (`openCount`, `firstOpenedAt`, `lastOpenedAt`), por eso kristall-web la
+  deduplica con `cache()` dentro de un mismo render.
+- `404`: el token no existe. `410`: el SUPERADMIN revocó la invitación. `429`: demasiados pedidos desde esa IP.
+- Si el CRM no contesta, kristall-web muestra la página común sin la franja de dedicatoria.
+- El token es aleatorio (16 bytes, base64url), no el id de la fila.
 
 ## 4. Referencia de la API
 
@@ -1172,7 +1194,7 @@ Tres cosas que conviene saber si tocás esto:
   no tiene credenciales propias.
 - **Nada sale del sistema en una sesión de demostración**: ni correo, ni
   WhatsApp, ni avisos a los administradores. Las guardias están en el emisor
-  (`mailer.ts`, `whatsapp.ts`, `notifications.ts`), no en cada lugar que llama.
+  (`mailer.ts`, `whatsapp/notices.ts`, `notifications.ts`), no en cada lugar que llama.
 
 Los espejos se generan con `npm run demo:espejos` y `npm run
 demo:espejos:verificar` falla si alguno quedó viejo. **Si agregás un endpoint al

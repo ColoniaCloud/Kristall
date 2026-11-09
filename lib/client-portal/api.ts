@@ -382,6 +382,25 @@ export function confirmEmail(token: string) {
   )
 }
 
+// ─── Invitación a /distribuidores-peru/<token> ───────────────────────────────
+
+/** A quién va dedicada la propuesta. Solo nombre y negocio: teléfono y mail son del CRM. */
+export interface DistributorInvite {
+  name: string
+  business: string
+}
+
+/**
+ * Lee la invitación del link. Cuenta como «abierta» en el CRM. 404 si no existe,
+ * 410 si se revocó: `CrmApiError` con ese `status`.
+ */
+export function getDistributorInvite(token: string) {
+  return callCrmApi<DistributorInvite>(
+    `/api/portal/v1/distributor-invite?token=${encodeURIComponent(token)}`,
+    { apiKey: KEY() }
+  )
+}
+
 // ─── Cuenta corriente ────────────────────────────────────────────────────────
 
 export type InstallmentStatus = 'PENDING' | 'PARTIAL' | 'PAID' | 'OVERDUE'
