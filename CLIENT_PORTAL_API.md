@@ -311,26 +311,52 @@ Cómo se usa del lado del sitio:
 
 ---
 
-## 3.5 Invitación personalizada a /distribuidores-peru *(solo lectura)*
+## 3.5 Invitación personalizada a la página de distribuidores *(solo lectura)*
 
-Una página pública de kristall-web, `/distribuidores-peru/<token>`, saluda al invitado por nombre y negocio. Los
-datos los carga un SUPERADMIN en el CRM (**Contactos Perú → Invitaciones**: nombre, negocio, teléfono y mail), que
-genera el token y manda el link por WhatsApp (plantilla `kristall_propuesta_distribuidor`, es_PE, con botón de URL
-dinámica) y por mail. Tabla `distributor_invites`; lógica en `src/lib/distributor-invite.ts`.
+Una página pública de kristall-web saluda al invitado por nombre y negocio y se adapta a su país. Los datos los
+carga un SUPERADMIN en el CRM (**Contactos Perú → Invitaciones**: nombre, negocio, teléfono y mail), que genera el
+token y manda el link por WhatsApp (plantilla `kristall_propuesta_distribuidor`, es_PE, con botón de URL dinámica) y
+por mail. Tabla `distributor_invites`; lógica en `src/lib/distributor-invite.ts`.
 
-### `GET /api/portal/v1/distributor-invite?token=<token>`
+**El país no se guarda**: sale del código internacional del teléfono (`inviteCountry`). Cada país tiene su ruta, y las
+dos tablas tienen que coincidir (`INVITE_PATH` en el CRM, `PAISES` en `components/distribuidores-peru/paises.ts`):
 
-Mismo `x-api-key` que el resto del portal (no hay key nueva).
+| `country` | Código | Ruta en kristall-web | Qué cambia |
+|---|---|---|---|
+| `PE` | 51 | `/distribuidores-peru/<token>` | Bandera y nombre de Perú |
+| `AR` | 54 | `/distribuidores-argentina/<token>` | Bandera y nombre de Argentina |
+| `UY` | 598 | `/distribuidores-uruguay/<token>` | Bandera y nombre de Uruguay |
+| `OTHER` | cualquier otro | `/propuesta-distribuidor/<token>` | Sin bandera ni país |
+
+El mail lleva la ruta del país. El botón de WhatsApp no puede: la base de la URL está fija en la plantilla aprobada
+por Meta (`/distribuidores-peru/`), así que por WhatsApp todos entran por la ruta de Perú y kristall-web redirige a
+la del país. Solo `/distribuidores-peru` tiene página pública sin token; las otras tres rutas existen únicamente con
+token.
+
+### `GET /api/portal/v1/distributor-invite?token=<token>&for=<país>`
+
+Mismo `x-api-key` que el resto del portal (no hay key nueva). `for` es el país de la ruta desde la que lee
+kristall-web (`PE`, `AR`, `UY` u `OTHER`); es opcional, y sin él la respuesta es siempre la primera.
+
+Si `for` coincide con el país del invitado (o no se manda):
 
 ```json
-{ "name": "Juan Pérez", "business": "Polarizados Lima Norte" }
+{ "name": "Juan Pérez", "business": "Polarizados Lima Norte", "country": "PE" }
 ```
 
-- Devuelve **solo nombre y negocio**. El teléfono y el mail no salen del CRM: el link puede haberse reenviado.
-- **Cada lectura cuenta como «abierta»** (`openCount`, `firstOpenedAt`, `lastOpenedAt`), por eso kristall-web la
-  deduplica con `cache()` dentro de un mismo render.
+Si no coincide, **no se cuenta la visita** y la respuesta dice adónde ir:
+
+```json
+{ "moved": true, "country": "AR" }
+```
+
+- Devuelve **solo nombre, negocio y país**. El teléfono y el mail no salen del CRM: el link puede haberse reenviado.
+- **Cada lectura que devuelve los datos cuenta como «abierta»** (`openCount`, `firstOpenedAt`, `lastOpenedAt`), por
+  eso kristall-web la deduplica con `cache()` dentro de un mismo render. Una respuesta `moved` no cuenta: la visita
+  se cuenta cuando kristall-web vuelve a leer desde la ruta correcta, así una redirección no suma dos.
 - `404`: el token no existe. `410`: el SUPERADMIN revocó la invitación. `429`: demasiados pedidos desde esa IP.
-- Si el CRM no contesta, kristall-web muestra la página común sin la franja de dedicatoria.
+- Si el CRM no contesta, kristall-web muestra la página común del país de la ruta, sin el encabezado de dedicatoria.
+- Si la respuesta no trae `country` (CRM anterior a este cambio), kristall-web usa el país de la ruta.
 - El token es aleatorio (16 bytes, base64url), no el id de la fila.
 
 ## 4. Referencia de la API

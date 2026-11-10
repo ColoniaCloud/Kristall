@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { LandingPeru } from '@/components/distribuidores-peru/LandingPeru'
+import { PAISES } from '@/components/distribuidores-peru/paises'
 
-const TITULO_PAGINA = 'Distribuidor Autorizado en Perú — Kristall Film'
+const TITULO_PAGINA = PAISES.PE.titulo
 const DESCRIPCION =
   'Láminas automotrices y de arquitectura con Garantía Digital en cada instalación y una suite digital para que su red venda más.'
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
     title: TITULO_PAGINA,
     description: DESCRIPCION,
     url: 'https://kristallfilm.com/distribuidores-peru',
-    locale: 'es_PE',
+    locale: PAISES.PE.locale,
   },
 }
 

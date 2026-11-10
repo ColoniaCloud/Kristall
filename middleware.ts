@@ -7,7 +7,19 @@ const intlMiddleware = createMiddleware(routing)
 // Superficies aisladas (Panel de Cliente, Garantías, catálogo de lanzamiento, visor 3D):
 // un solo idioma, sin prefijo de locale. No se agregan a config.matcher para no
 // perder el forzado HTTPS de abajo — solo se saltea intlMiddleware para ellas.
-const ISOLATED_PREFIXES = ['/cliente', '/garantia', '/catalogo-propuesta', '/visor-3d', '/distribuidores-peru']
+const ISOLATED_PREFIXES = [
+  '/cliente',
+  '/garantia',
+  '/catalogo-propuesta',
+  '/visor-3d',
+  // La landing de distribuidores y sus versiones por país (ver
+  // components/distribuidores-peru/paises.ts). Solo la de Perú tiene página
+  // pública; las otras tres existen únicamente con token.
+  '/distribuidores-peru',
+  '/distribuidores-argentina',
+  '/distribuidores-uruguay',
+  '/propuesta-distribuidor',
+]
 
 // La landing de Perú se comparte como /distribuidores-perú, con tilde. La carpeta
 // de la ruta va sin tilde (una "ú" en el nombre de carpeta depende de cómo cada

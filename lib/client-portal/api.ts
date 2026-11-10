@@ -382,21 +382,38 @@ export function confirmEmail(token: string) {
   )
 }
 
-// ─── Invitación a /distribuidores-peru/<token> ───────────────────────────────
+// ─── Invitación a la página de distribuidores (<ruta del país>/<token>) ──────
 
-/** A quién va dedicada la propuesta. Solo nombre y negocio: teléfono y mail son del CRM. */
+/**
+ * El país de la propuesta. Lo decide el CRM por el código del teléfono del
+ * invitado; `OTHER` es la versión sin país. Va como `string` porque el CRM
+ * puede sumar países antes que esta web los conozca.
+ */
+export type DistributorCountry = 'PE' | 'AR' | 'UY' | 'OTHER'
+
+/** A quién va dedicada la propuesta. Solo nombre, negocio y país: teléfono y mail son del CRM. */
 export interface DistributorInvite {
   name: string
   business: string
+  /** Falta si el CRM todavía no manda el país: vale el de la ruta. */
+  country?: string
+}
+
+/** La invitación es de otro país que el de la ruta: hay que redirigir a `country`. No se contó la visita. */
+export interface DistributorInviteMoved {
+  moved: true
+  country: string
 }
 
 /**
- * Lee la invitación del link. Cuenta como «abierta» en el CRM. 404 si no existe,
- * 410 si se revocó: `CrmApiError` con ese `status`.
+ * Lee la invitación del link desde la ruta del país `desde`. Si coincide con el
+ * del invitado, devuelve los datos y cuenta como «abierta» en el CRM; si no,
+ * devuelve `moved` con el país correcto. 404 si no existe, 410 si se revocó:
+ * `CrmApiError` con ese `status`.
  */
-export function getDistributorInvite(token: string) {
-  return callCrmApi<DistributorInvite>(
-    `/api/portal/v1/distributor-invite?token=${encodeURIComponent(token)}`,
+export function getDistributorInvite(token: string, desde: DistributorCountry) {
+  return callCrmApi<DistributorInvite | DistributorInviteMoved>(
+    `/api/portal/v1/distributor-invite?token=${encodeURIComponent(token)}&for=${desde}`,
     { apiKey: KEY() }
   )
 }

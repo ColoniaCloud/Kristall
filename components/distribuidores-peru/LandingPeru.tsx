@@ -5,11 +5,12 @@ import HeroVideo from '@/components/catalogo-propuesta/HeroVideo'
 import VideoSistema from '@/components/distribuidores-peru/VideoSistema'
 import { MensajePeru, WhatsAppFlotante, WhatsAppPeru } from '@/components/distribuidores-peru/WhatsAppPeru'
 import { demora, paso } from '@/components/distribuidores-peru/movimiento'
+import Bandera from '@/components/distribuidores-peru/Bandera'
+import { PAISES, type Pais } from '@/components/distribuidores-peru/paises'
 import { WhatsAppIcon } from '@/components/catalogo-propuesta/whatsapp'
 import { CONTENEDOR, SECCION, TITULO } from '@/components/catalogo-propuesta/layout'
 import {
   CONTACTO,
-  MENSAJE_PERU,
   DESTACADAS,
   PASOS,
   POR_QUE,
@@ -32,60 +33,101 @@ function Rotulo({ children }: { children: React.ReactNode }) {
   return <p className="text-[12px] font-medium uppercase tracking-[0.18em] text-[#E6A800]">{children}</p>
 }
 
-/** Banderita de Perú (rojo, blanco, rojo) para la píldora del encabezado. */
-function BanderaPeru() {
-  return (
-    <span className="inline-flex h-3 w-[18px] shrink-0 overflow-hidden rounded-[2px]" aria-hidden="true">
-      <span className="flex-1 bg-[#D91023]" />
-      <span className="flex-1 bg-white" />
-      <span className="flex-1 bg-[#D91023]" />
-    </span>
-  )
-}
-
 const ICONOS_POR_QUE = [ShieldCheck, LayoutDashboard, Megaphone, BadgeCheck]
 
 /** A quién va dedicada la propuesta (lo que el CRM devuelve para el token). */
 export type Invitado = { name: string; business: string }
 
 /** El mensaje que llega por WhatsApp cuando el invitado toca cualquier botón. */
-function mensajeDe(invitado?: Invitado): string {
-  if (!invitado) return MENSAJE_PERU
+function mensajeDe(pais: Pais, invitado?: Invitado): string {
+  if (!invitado) return PAISES[pais].mensaje
   return `Hola! Soy ${invitado.name} de ${invitado.business}. Vi la propuesta del Programa Distribuidor Autorizado de Kristall y quiero conocerlo.`
 }
 
 /**
- * Franja sobre la portada: dice a quién va dedicada la propuesta. Solo aparece
- * en la versión personalizada (/distribuidores-peru/<token>).
+ * Encabezado sobre la portada, con forma de mail (avatar, De, Para, Asunto): la
+ * propuesta se siente enviada a esa persona. Solo aparece en la versión
+ * personalizada (/distribuidores-peru/<token>). El nombre y el negocio salen del
+ * CRM; el remitente es el mismo que firma el WhatsApp y el mail reales.
  */
 function Dedicatoria({ invitado }: { invitado: Invitado }) {
+  const filas: { etiqueta: string; valor: React.ReactNode; clase?: string }[] = [
+    {
+      etiqueta: 'De',
+      valor: (
+        <>
+          <span className="text-white">Carlos Arrúa</span>
+          <span className="text-white/45"> · Kristall Film</span>
+        </>
+      ),
+    },
+    {
+      etiqueta: 'Para',
+      valor: (
+        <>
+          <span className="text-white">{invitado.name}</span>
+          <span className="text-white/45"> · {invitado.business}</span>
+        </>
+      ),
+    },
+    {
+      etiqueta: 'Asunto',
+      valor: (
+        <>
+          Propuesta del Programa Distribuidor Autorizado para{' '}
+          <span className="text-[#E6A800]">{invitado.business}</span>
+        </>
+      ),
+      clase: 'text-lg font-semibold leading-snug text-white lg:text-2xl',
+    },
+  ]
+
   return (
     <aside
       aria-label="Propuesta personalizada"
-      className="relative z-10 border-b border-[#E6A800]/25 bg-[#0E0E0E] pt-[env(safe-area-inset-top)]"
+      className="relative z-10 border-b border-white/10 bg-[#0E0E0E] pt-[env(safe-area-inset-top)]"
     >
-      <div className={`${CONTENEDOR} flex flex-col gap-1 py-4 lg:flex-row lg:items-baseline lg:gap-5 lg:py-5`}>
-        <p className="kp-in flex items-center gap-3 text-[12px] font-medium uppercase tracking-[0.18em] text-[#E6A800]">
-          <span className="h-px w-6 bg-[#E6A800]" aria-hidden="true" />
-          Propuesta preparada para
-        </p>
-        <p className="kp-in text-white" style={demora(120)}>
-          <span className="text-xl font-semibold lg:text-2xl" style={{ fontFamily: 'var(--font-display)' }}>
-            {invitado.business}
-          </span>
-          <span className="ml-3 text-sm text-white/60 lg:text-base">{invitado.name}</span>
-        </p>
+      <div className={`${CONTENEDOR} flex gap-4 py-5 lg:gap-5 lg:py-7`}>
+        <span
+          aria-hidden="true"
+          className="kp-in mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-full bg-[#E6A800] text-lg font-semibold text-[#0A0A0A] lg:size-12 lg:text-xl"
+          style={{ fontFamily: 'var(--font-display)' }}
+        >
+          K
+        </span>
+        <dl className="min-w-0 flex-1 text-[14px] lg:text-[15px]">
+          {filas.map((f, i) => (
+            <div
+              key={f.etiqueta}
+              className={`kp-in grid grid-cols-[3.5rem_1fr] items-baseline gap-x-3 lg:grid-cols-[4.5rem_1fr] ${
+                i < filas.length - 1 ? 'border-b border-white/[0.07] py-1.5' : 'pb-0.5 pt-3'
+              }`}
+              style={demora(80 + 100 * i)}
+            >
+              <dt className="text-white/45">{f.etiqueta}</dt>
+              <dd className={`min-w-0 break-words ${f.clase ?? 'text-white/80'}`} style={f.clase ? { fontFamily: 'var(--font-display)' } : undefined}>
+                {f.valor}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </aside>
   )
 }
 
-export function LandingPeru({ invitado }: { invitado?: Invitado }) {
+/**
+ * La landing de distribuidores. `pais` elige la versión (bandera y nombre del
+ * país en la portada, mensaje de WhatsApp); sin `pais` es la de Perú, que es la
+ * página pública original. El nombre del componente quedó de cuando solo
+ * existía esa.
+ */
+export function LandingPeru({ invitado, pais = 'PE' }: { invitado?: Invitado; pais?: Pais }) {
   return (
-    <MensajePeru mensaje={mensajeDe(invitado)}>
+    <MensajePeru mensaje={mensajeDe(pais, invitado)}>
     <main className="kf-catalogo">
       {invitado && <Dedicatoria invitado={invitado} />}
-      <Hero />
+      <Hero pais={pais} />
 
       {/* ——— Por qué Kristall ——— */}
       <section id="sistema" className={`scroll-mt-4 ${SECCION}`}>
@@ -410,7 +452,8 @@ export function LandingPeru({ invitado }: { invitado?: Invitado }) {
 }
 
 /** Primera pantalla: la portada del PDF (fondo negro, plano en diagonal y trazo dorado). */
-function Hero() {
+function Hero({ pais }: { pais: Pais }) {
+  const nombrePais = PAISES[pais].nombre
   const lineas = [['Más', 'que'], ['una', 'lámina.'], ['Un', 'sistema.']]
   let n = 0
 
@@ -447,10 +490,13 @@ function Hero() {
       <header className={`${CONTENEDOR} flex items-center justify-between pt-[max(1.25rem,env(safe-area-inset-top))] lg:pt-8`}>
         {/* eslint-disable-next-line @next/next/no-img-element -- SVG chico, no gana nada con el optimizador */}
         <img src="/cat/logob.svg" alt="Kristall Film" width={112} height={26} className="kp-in h-6 w-auto lg:h-7" />
-        <span className="kp-in inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[12px] font-medium tracking-[0.08em] text-white/85 backdrop-blur" style={demora(100)}>
-          <BanderaPeru />
-          PERÚ
-        </span>
+        {/* La versión sin país (invitados de fuera de Perú, Argentina y Uruguay) no lleva píldora. */}
+        {pais !== 'OTHER' && nombrePais && (
+          <span className="kp-in inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[12px] font-medium tracking-[0.08em] text-white/85 backdrop-blur" style={demora(100)}>
+            <Bandera pais={pais} />
+            {nombrePais.toUpperCase()}
+          </span>
+        )}
       </header>
 
       <div className={`${CONTENEDOR} mt-auto pt-16 lg:pt-10`}>

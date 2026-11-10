@@ -597,10 +597,25 @@ export function getMockResponse(path: string, method: string, body: unknown): Mo
     return { status: 200, data: { ok: true, emailSentTo: email } }
   }
 
-  // Invitación a /distribuidores-peru/<token>. Tokens de prueba: "mock-invitado" y "mock-revocado".
+  // Invitación a la página de distribuidores. Tokens de prueba: "mock-invitado"
+  // (Perú), "mock-argentina", "mock-uruguay", "mock-otro" (sin país) y
+  // "mock-revocado". Como el CRM, si se lee desde la ruta de otro país (`for`)
+  // contesta adónde ir en vez de los datos.
   if (path.startsWith('/api/portal/v1/distributor-invite?') && method === 'GET') {
-    const token = new URLSearchParams(path.split('?')[1]).get('token')
-    if (token === 'mock-invitado') return { status: 200, data: { name: 'Juan Pérez', business: 'Polarizados Lima Norte' } }
+    const query = new URLSearchParams(path.split('?')[1])
+    const token = query.get('token')
+    const invitados: Record<string, { name: string; business: string; country: string }> = {
+      'mock-invitado': { name: 'Juan Pérez', business: 'Polarizados Lima Norte', country: 'PE' },
+      'mock-argentina': { name: 'Martina Gómez', business: 'Polarizados Rosario', country: 'AR' },
+      'mock-uruguay': { name: 'Diego Fernández', business: 'Láminas del Este', country: 'UY' },
+      'mock-otro': { name: 'Camila Rojas', business: 'Tint Studio Santiago', country: 'OTHER' },
+    }
+    const invitado = token ? invitados[token] : undefined
+    if (invitado) {
+      const desde = query.get('for')
+      if (desde && desde !== invitado.country) return { status: 200, data: { moved: true, country: invitado.country } }
+      return { status: 200, data: invitado }
+    }
     if (token === 'mock-revocado') return { status: 410, data: { error: 'Esta invitación ya no está disponible.' } }
     return { status: 404, data: { error: 'La invitación no existe.' } }
   }
