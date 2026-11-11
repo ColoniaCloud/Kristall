@@ -18,7 +18,8 @@ import { checkRateLimit, clientIp } from '@/lib/rate-limit'
  * base de demostración.
  */
 export async function POST(request: NextRequest) {
-  const rl = checkRateLimit(`portal-demo:${clientIp(request)}`, 5, 60 * 60)
+  const ip = clientIp(request)
+  const rl = checkRateLimit(`portal-demo:${ip}`, 5, 60 * 60)
   if (!rl.ok) {
     return NextResponse.json(
       { error: 'Ya abriste varias demostraciones. Probá de nuevo en un rato.' },
@@ -27,7 +28,8 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const demo = await crearSesionDemo()
+    // El CRM tiene su propio tope por IP: hay que decirle la del visitante.
+    const demo = await crearSesionDemo(ip === 'unknown' ? undefined : ip)
     const cookie = buildClientSessionCookie({
       contactId: demo.contactId,
       name: demo.nombre,

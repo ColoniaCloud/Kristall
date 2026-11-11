@@ -1195,7 +1195,10 @@ contra el portal real, no tenés que hacer nada distinto: el prefijo lo usa solo
 la sesión de demostración.
 
 **Cómo se abre una sesión.** `POST /api/public/demo/session` (con la api key del
-portal) crea un taller descartable y devuelve:
+portal) crea un taller descartable. kristall-web manda la IP del visitante en la
+cabecera `x-portal-client-ip`: el CRM limita a 5 demostraciones por hora **por
+visitante**, y sin esa cabecera solo ve la IP del servidor de kristall-web, con
+lo que el tope pasa a ser uno solo para todos. Devuelve:
 
 ```json
 {

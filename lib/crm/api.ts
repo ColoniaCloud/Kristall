@@ -35,6 +35,8 @@ interface CallCrmApiOptions {
    * en vez de sobrevivir hasta 12 h. Ver lib/portal-credentials.ts en el CRM.
    */
   portalSession?: boolean
+  /** Cabeceras extra para un endpoint puntual (ej. la IP del visitante al abrir una demo). */
+  headers?: Record<string, string>
 }
 
 /** La sesión del portal, si hay una. */
@@ -84,7 +86,7 @@ export async function callCrmApi<T>(path: string, options: CallCrmApiOptions = {
   const baseUrl = process.env.CRM_BASE_URL
   if (!baseUrl) throw new Error('Missing CRM_BASE_URL')
 
-  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  const headers: Record<string, string> = { ...options.headers, 'Content-Type': 'application/json' }
   if (options.apiKey) headers['x-api-key'] = options.apiKey
 
   let ruta = path

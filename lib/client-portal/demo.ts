@@ -25,10 +25,18 @@ export interface SesionDemo {
   nombre: string
 }
 
-/** Crea un taller de demostración descartable y devuelve con qué abrirle sesión. */
-export function crearSesionDemo() {
+/**
+ * Crea un taller de demostración descartable y devuelve con qué abrirle sesión.
+ *
+ * `ipVisitante` viaja en `x-portal-client-ip` porque el CRM también limita las
+ * demostraciones por IP, y la única IP que ve por su cuenta es la de este
+ * servidor: sin la cabecera, su tope de 5 por hora era uno solo para todos los
+ * visitantes y la sexta persona de la hora quedaba afuera en su primer intento.
+ */
+export function crearSesionDemo(ipVisitante?: string) {
   return callCrmApi<SesionDemo>('/api/public/demo/session', {
     method: 'POST',
     apiKey: KEY(),
+    headers: ipVisitante ? { 'x-portal-client-ip': ipVisitante } : undefined,
   })
 }
