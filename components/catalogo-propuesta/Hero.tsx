@@ -30,7 +30,7 @@ export default function Hero() {
 
       <header className={`${CONTENEDOR} flex items-center justify-between pt-[max(1.25rem,env(safe-area-inset-top))] lg:pt-5`}>
         {/* eslint-disable-next-line @next/next/no-img-element -- logo chico, no gana nada con el optimizador */}
-        <img src="/LogoPlano.png" alt="Kristall Film" width={112} height={26} className="h-6 w-auto lg:h-7" />
+        <img src="/LogoFondoOscuro.png" alt="Kristall Film" width={112} height={26} className="h-6 w-auto lg:h-7" />
         <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-white/80 backdrop-blur">
           Para talleres
         </span>

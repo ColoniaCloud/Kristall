@@ -69,7 +69,7 @@ export default function ExteriorComingSoon() {
         </motion.h2>
 
         <motion.img
-          src="/LogoPlano.png"
+          src="/LogoFondoOscuro.png"
           alt="Kristall Film"
           className="h-7 md:h-8 w-auto"
           variants={logoVariants}

@@ -50,7 +50,7 @@ export default function Cierre({ vigente }: { vigente: boolean }) {
 
         <div className="mt-14 flex items-center justify-between text-xs text-white/50 lg:mt-20">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/LogoPlano.png" alt="Kristall Film" width={96} height={22} className="h-5 w-auto" />
+          <img src="/LogoFondoOscuro.png" alt="Kristall Film" width={96} height={22} className="h-5 w-auto" />
           <Link href="/es" className="underline-offset-4 hover:underline">
             kristallfilm.com
           </Link>

@@ -80,7 +80,7 @@ function Revocada({ pais }: { pais: Pais }) {
     <main className="kf-catalogo flex min-h-svh flex-col">
       <div className={`${CONTENEDOR} flex flex-1 flex-col justify-center py-16`}>
         {/* eslint-disable-next-line @next/next/no-img-element -- SVG chico */}
-        <img src="/LogoPlano.png" alt="Kristall Film" width={112} height={26} className="h-7 w-auto self-start" />
+        <img src="/LogoFondoOscuro.png" alt="Kristall Film" width={112} height={26} className="h-7 w-auto self-start" />
         <h1 className="mt-12 text-4xl font-semibold leading-tight lg:text-6xl" style={{ fontFamily: 'var(--font-display)' }}>
           Esta propuesta ya no está disponible.
         </h1>
