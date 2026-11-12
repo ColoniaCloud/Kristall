@@ -14,6 +14,7 @@ export default function robots(): MetadataRoute.Robots {
           ...routing.locales.map((locale) => `/${locale}/carrito`),
           '/cliente',
           '/garantia',
+          '/brandguides',
         ],
       },
     ],

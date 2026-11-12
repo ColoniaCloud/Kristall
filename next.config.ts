@@ -88,7 +88,9 @@ const nextConfig: NextConfig = {
       // cabeceras, que son las que importan para clickjacking y sniffing.
       { source: '/(.*)', headers: SECURITY_HEADERS },
       {
-        source: '/((?!admin).*)',
+        // /brandguides manda su propio CSP (necesita Google Fonts): dos CSP
+        // juntos se aplican los dos, así que se la saca de este.
+        source: '/((?!admin|brandguides).*)',
         headers: [{ key: 'Content-Security-Policy', value: CSP }],
       },
     ]

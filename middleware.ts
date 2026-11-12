@@ -19,6 +19,8 @@ const ISOLATED_PREFIXES = [
   '/distribuidores-argentina',
   '/distribuidores-uruguay',
   '/propuesta-distribuidor',
+  // Guía de marca interna, detrás de contraseña (app/brandguides/route.ts).
+  '/brandguides',
 ]
 
 // La landing de Perú se comparte como /distribuidores-perú, con tilde. La carpeta
