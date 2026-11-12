@@ -488,8 +488,8 @@ function Hero({ pais }: { pais: Pais }) {
       </svg>
 
       <header className={`${CONTENEDOR} flex items-center justify-between pt-[max(1.25rem,env(safe-area-inset-top))] lg:pt-8`}>
-        {/* eslint-disable-next-line @next/next/no-img-element -- SVG chico, no gana nada con el optimizador */}
-        <img src="/cat/logob.svg" alt="Kristall Film" width={112} height={26} className="kp-in h-6 w-auto lg:h-7" />
+        {/* eslint-disable-next-line @next/next/no-img-element -- logo chico, no gana nada con el optimizador */}
+        <img src="/LogoPlano.png" alt="Kristall Film" width={112} height={26} className="kp-in h-6 w-auto lg:h-7" />
         {/* La versión sin país (invitados de fuera de Perú, Argentina y Uruguay) no lleva píldora. */}
         {pais !== 'OTHER' && nombrePais && (
           <span className="kp-in inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[12px] font-medium tracking-[0.08em] text-white/85 backdrop-blur" style={demora(100)}>

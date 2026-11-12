@@ -75,9 +75,9 @@ export default function Hero() {
         <div className="flex flex-wrap items-center gap-6">
           <motion.div variants={fadeInLeftVariants}>
             <img
-              src="/cat/logob.svg"
+              src="/LogoPlano.png"
               alt="Kristall Film"
-              className="h-12 w-auto opacity-60 hover:opacity-100 transition-opacity duration-300"
+              className="h-12 w-auto"
             />
           </motion.div>
           <div className="flex flex-wrap items-center gap-3">
