@@ -15,11 +15,9 @@ export default function StaticFooter() {
         {/* Col 1: Branding */}
         <div className="col-span-2 lg:col-span-1">
           <div className="flex items-center justify-center lg:justify-start mb-4">
-            <img
-              src="/cat/logob.svg"
-              alt="Kristall"
-              className="h-8 w-auto opacity-60 hover:opacity-100 transition-opacity duration-300"
-            />
+            {/* Sobre fondo oscuro va el logo completo (cápsula blanca con bandera), sin
+                atenuar: es la regla de la guía de marca. No el contorno cat/logob.svg. */}
+            <img src="/LogoPlano.png" alt="Kristall" width={140} height={23} className="h-8 w-auto" />
           </div>
 
           <div className="flex items-center justify-center lg:justify-start mb-4">
