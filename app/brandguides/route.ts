@@ -21,7 +21,7 @@ const CSP = [
   "default-src 'none'",
   "style-src 'unsafe-inline' https://fonts.googleapis.com",
   "font-src data: https://fonts.gstatic.com",
-  // 'self': el logo blanco y los logos de línea salen de public/, como en el sitio.
+  // 'self': el logo (LogoPlano.png) y los logos de línea salen de public/, como en el sitio.
   "img-src 'self' data:",
   "form-action 'self'",
   "base-uri 'none'",
