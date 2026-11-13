@@ -1,62 +1,22 @@
-import { createHash, timingSafeEqual } from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
-import { createSessionToken, readSessionToken } from '@/lib/session'
+import { createSessionToken } from '@/lib/session'
 import { GUIA_HTML } from '@/lib/brandguides/guia-html'
+import { COOKIE, MAX_AGE_SECONDS, PATH, cspFor, hasAccess, passwordMatches, passwordVersion } from '@/lib/brandguides/access'
 
 // Guía de marca interna. No es contenido público: se protege con una
-// contraseña compartida y la página no se indexa.
-//
-// En el repo vive solo el SHA-256 de la contraseña, nunca el texto. Para
-// cambiarla sin tocar código, definir BRANDGUIDES_PASSWORD_SHA256 en el .env
-// del servidor (hash hex de la nueva contraseña).
-const DEFAULT_PASSWORD_SHA256 = '3bf6a0fd9d11f60b016bcae01280c0d93a3ccfbd5821b14232ec6e4cc0dbf733'
+// contraseña compartida y la página no se indexa. La lógica de acceso y el CSP
+// viven en lib/brandguides/access.ts (también los usa la descarga de fuentes).
 
-const COOKIE = 'kf_brandguides'
-const MAX_AGE_SECONDS = 60 * 60 * 24 * 30
-const PATH = '/brandguides'
+const GUIA_CSP = cspFor(GUIA_HTML)
 
-// Esta página tiene su propio CSP (next.config.ts la excluye del general)
-// porque la guía carga DM Sans desde Google Fonts y trae todo lo demás inline.
-const CSP = [
-  "default-src 'none'",
-  "style-src 'unsafe-inline' https://fonts.googleapis.com",
-  "font-src data: https://fonts.gstatic.com",
-  // 'self': el logo (LogoPlano.png) y los logos de línea salen de public/, como en el sitio.
-  "img-src 'self' data:",
-  "form-action 'self'",
-  "base-uri 'none'",
-  "frame-ancestors 'none'",
-].join('; ')
-
-function expectedHash(): Buffer {
-  return Buffer.from(process.env.BRANDGUIDES_PASSWORD_SHA256 || DEFAULT_PASSWORD_SHA256, 'hex')
-}
-
-function passwordMatches(password: string): boolean {
-  const given = createHash('sha256').update(password).digest()
-  const expected = expectedHash()
-  return given.length === expected.length && timingSafeEqual(given, expected)
-}
-
-// El token lleva un pedazo del hash vigente: si se cambia la contraseña, las
-// sesiones abiertas con la anterior dejan de valer.
-function passwordVersion(): string {
-  return expectedHash().toString('hex').slice(0, 12)
-}
-
-function hasAccess(request: NextRequest): boolean {
-  const session = readSessionToken<{ scope: string; v: string }>(request.cookies.get(COOKIE)?.value)
-  return session?.scope === 'brandguides' && session.v === passwordVersion()
-}
-
-function html(body: string, status = 200): NextResponse {
+function html(body: string, status = 200, csp = cspFor(body)): NextResponse {
   return new NextResponse(body, {
     status,
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
       'Cache-Control': 'private, no-store',
       'X-Robots-Tag': 'noindex, nofollow',
-      'Content-Security-Policy': CSP,
+      'Content-Security-Policy': csp,
     },
   })
 }
@@ -97,7 +57,7 @@ ${error ? '<p class="err" role="alert">La contraseña no es correcta. Probá de 
 }
 
 export async function GET(request: NextRequest) {
-  if (hasAccess(request)) return html(GUIA_HTML)
+  if (hasAccess(request)) return html(GUIA_HTML, 200, GUIA_CSP)
   return html(loginPage(false))
 }
 
