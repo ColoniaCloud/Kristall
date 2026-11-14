@@ -91,7 +91,7 @@ function Revocada({ pais }: { pais: Pais }) {
           <MensajePeru mensaje={PAISES[pais].mensaje}>
             <WhatsAppPeru
               donde="revocada"
-              className="inline-flex h-14 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-white px-6 text-base font-semibold text-[#0A0A0A] transition hover:bg-white/90 active:scale-[0.98]"
+              className="inline-flex h-14 items-center justify-center gap-2 whitespace-nowrap rounded-xl btn-primary px-6 text-base transition hover:bg-white/90 active:scale-[0.98]"
             >
               <WhatsAppIcon className="size-5 text-[#25D366]" />
               Escribir por WhatsApp

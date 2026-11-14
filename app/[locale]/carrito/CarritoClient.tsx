@@ -53,7 +53,7 @@ export default function CarritoClient() {
             <button
               type="button"
               onClick={() => setQuoteOpen(true)}
-              className="w-full mt-4 bg-[#0A0A0A] text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-[#2a2a2a] transition-colors"
+              className="w-full mt-4 btn-primary px-6 py-3 rounded-lg text-sm transition-colors"
             >
               {t('request_quote')}
             </button>

@@ -323,7 +323,7 @@ function Card({
         <div className="absolute inset-x-4 top-4 flex items-start justify-between">
           <span
             className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] ${
-              premium ? 'border border-[#FFDA2C]/60 bg-black/50 text-[#FFDA2C] backdrop-blur' : 'bg-[#EB3439] text-white'
+              premium ? 'chip-premium' : 'chip-standard'
             }`}
           >
             {premium ? 'Premium' : 'Standard'}
@@ -414,7 +414,7 @@ function Card({
             mensaje={mensajeProducto(linea.nombre, variante.sku)}
             donde="card"
             linea={linea.slug}
-            className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-white text-[15px] font-semibold text-[#0A0A0A] transition active:scale-[0.98]"
+            className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl btn-primary text-[15px] transition active:scale-[0.98]"
           >
             <WhatsAppIcon className="size-5 text-[#25D366]" />
             Lo quiero para mi taller

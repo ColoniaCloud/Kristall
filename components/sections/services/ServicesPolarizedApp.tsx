@@ -66,7 +66,7 @@ export default function ServicesPolarizedApp() {
 
           <button
             type="button"
-              className="border border-white/25 text-white px-6 py-3 rounded-lg text-[16px] hover:bg-white hover:text-[#0A0A0A] transition-all"
+              className="btn-secondary-dark px-6 py-3 rounded-lg text-[16px] transition-all"
           >
             {t('app_cta')}
           </button>

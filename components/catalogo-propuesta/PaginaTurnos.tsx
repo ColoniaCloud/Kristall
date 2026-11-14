@@ -93,7 +93,7 @@ export default function PaginaTurnos() {
               type="button"
               onClick={entrar}
               disabled={cargando}
-              className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-white px-7 text-base font-semibold text-[#0A0A0A] transition hover:bg-white/90 active:scale-[0.98] disabled:opacity-60 xl:w-auto"
+              className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl btn-primary px-7 text-base transition0 active:scale-[0.98] disabled:opacity-60 xl:w-auto"
             >
               {cargando ? (
                 <Loader2 className="size-5 animate-spin" aria-hidden="true" />

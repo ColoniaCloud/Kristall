@@ -331,7 +331,7 @@ export function LandingPeru({ invitado, pais = 'PE' }: { invitado?: Invitado; pa
             <div className="kp-item mt-8 hidden lg:block" style={paso(2)}>
               <WhatsAppPeru
                 donde="recibe"
-                className="inline-flex h-14 items-center gap-2 rounded-xl bg-white px-6 text-base font-semibold text-[#0A0A0A] transition hover:bg-white/90 active:scale-[0.98]"
+                className="inline-flex h-14 items-center gap-2 rounded-xl btn-primary px-6 text-base transition hover:bg-white/90 active:scale-[0.98]"
               >
                 <WhatsAppIcon className="size-5 text-[#25D366]" />
                 Quiero ser distribuidor
@@ -417,7 +417,7 @@ export function LandingPeru({ invitado, pais = 'PE' }: { invitado?: Invitado; pa
               </WhatsAppPeru>
               <a
                 href={`mailto:${CONTACTO.email}`}
-                className="flex h-14 items-center justify-center gap-2 rounded-2xl border border-white/20 bg-white/5 px-6 text-base font-medium text-white transition hover:bg-white/10 active:scale-[0.98]"
+                className="flex h-14 items-center justify-center gap-2 rounded-2xl btn-secondary-dark px-6 text-base transition hover:bg-white/10 active:scale-[0.98]"
               >
                 <Mail className="size-5" aria-hidden="true" />
                 {CONTACTO.email}
@@ -529,14 +529,14 @@ function Hero({ pais }: { pais: Pais }) {
         <div className="kp-in mt-8 flex flex-col gap-3 sm:flex-row lg:mt-10" style={demora(950)}>
           <WhatsAppPeru
             donde="hero"
-            className="inline-flex h-14 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-white px-6 text-base font-semibold text-[#0A0A0A] transition hover:bg-white/90 active:scale-[0.98]"
+            className="inline-flex h-14 items-center justify-center gap-2 whitespace-nowrap rounded-xl btn-primary px-6 text-base transition hover:bg-white/90 active:scale-[0.98]"
           >
             <WhatsAppIcon className="size-5 text-[#25D366]" />
             Quiero ser distribuidor
           </WhatsAppPeru>
           <a
             href="#video"
-            className="inline-flex h-14 items-center justify-center whitespace-nowrap rounded-xl border border-white/20 bg-white/5 px-6 text-base font-medium text-white backdrop-blur transition hover:bg-white/10 active:scale-[0.98]"
+            className="inline-flex h-14 items-center justify-center whitespace-nowrap rounded-xl btn-secondary-dark px-6 text-base backdrop-blur transition hover:bg-white/10 active:scale-[0.98]"
           >
             Ver cómo funciona
           </a>

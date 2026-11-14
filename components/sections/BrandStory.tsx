@@ -35,7 +35,7 @@ export default function BrandStory() {
       content: (
         <>
           <div className="flex gap-[3px] mb-4">
-            <div className="w-5 h-[3px] rounded-sm bg-[#1A1A1A]" />
+            <div className="w-5 h-[3px] rounded-sm bg-[#000000]" />
             <div className="w-5 h-[3px] rounded-sm bg-[#EB3439]" />
             <div className="w-5 h-[3px] rounded-sm bg-[#FFDA2C]" />
           </div>

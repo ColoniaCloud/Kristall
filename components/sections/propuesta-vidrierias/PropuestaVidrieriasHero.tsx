@@ -62,7 +62,7 @@ export default function PropuestaVidrieriasHero() {
             <div className="max-w-[760px]">
               <div className="flex items-center gap-3 mb-6" style={item(0)}>
                 <div className="flex h-[14px] w-6 overflow-hidden rounded-[2px] flex-shrink-0">
-                  <div className="flex-1 bg-[#1A1A1A]" />
+                  <div className="flex-1 bg-[#000000]" />
                   <div className="flex-1 bg-[#EB3439]" />
                   <div className="flex-1 bg-[#FFDA2C]" />
                 </div>

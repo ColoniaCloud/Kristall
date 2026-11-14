@@ -16,7 +16,7 @@ export default function CatalogDownloadBar() {
         <a
           href="/Catalogo-Kristall-Film.pdf"
           download="Catalogo-Kristall-Film.pdf"
-          className="flex-shrink-0 inline-flex items-center gap-2 bg-white text-[#0A0A0A] px-4 py-2 rounded-lg text-sm font-medium hover:bg-white/90 transition-opacity"
+          className="flex-shrink-0 inline-flex items-center gap-2 btn-primary px-4 py-2 rounded-lg text-sm font-medium transition-opacity"
         >
           <Download size={15} />
           {t('catalog_download_button')}

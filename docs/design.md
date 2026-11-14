@@ -251,19 +251,25 @@ className="grid grid-cols-3 gap-2"
 
 ## Componentes Base
 
-### Botón primario
+### Botones y chips (desde 2026-11-14)
+
+Rojo para la acción principal, amarillo para la secundaria (los colores del
+logo). Las clases viven en `app/globals.css`:
+
+| Clase | Uso |
+|---|---|
+| `btn-primary` | Acción principal. Rojo `#EB3439`, texto blanco en negrita (4,1:1: solo en negrita). |
+| `btn-secondary` | Secundaria sobre fondo claro. Relleno amarillo `#FFDA2C`, texto negro. |
+| `btn-secondary-dark` | Secundaria sobre oscuro o foto. Contorno y texto amarillos. Nunca sobre claro (1,4:1). |
+| `chip-standard` / `chip-premium` | Categoría de la línea: amarillo con texto negro / rojo con texto blanco. |
 
 ```tsx
-// Clase directa
-className="bg-[--accent] text-white px-6 py-3 rounded-[var(--r)]
-           text-sm font-medium tracking-wide
-           hover:opacity-85 transition-opacity duration-200"
-
-// Con shadcn Button
-<Button variant="default" size="default">Explorar catálogo</Button>
+<Link href="/contacto" className="btn-primary px-6 py-3 rounded-lg text-sm">Pedir cotización</Link>
 ```
 
-### Botón outline
+El Portal de Cliente y las garantías usan todavía el `Button` de shadcn (`components/ui/button.tsx`).
+
+### Botón outline (terciario)
 
 ```tsx
 className="border border-[--border-strong] text-[--text-primary] px-6 py-3
@@ -385,13 +391,13 @@ dentro del mismo archivo: es el único lugar a tocar para cambiarlos en todo el 
 
 ## Colores alemanes — Reglas de uso
 
-Los tres colores de la bandera alemana son **exclusivamente decorativos**:
+Los colores de la bandera son los del logo. Juntos firman la marca (tira, chevrón); el rojo y el amarillo, por separado, son además los colores de acción (ver «Botones y chips»):
 
 | Color | Hex | Permitido | Prohibido |
 |-------|-----|-----------|-----------|
-| `--de-black` | `#1A1A1A` | Flag strip, fondos oscuros (Header logo box, Footer) | Reemplazar al `--accent` como CTA |
-| `--de-red` | `#EB3439` | Flag strip, indicadores (texto de error: `#CC0000`) | Botones CTA, backgrounds de sección |
-| `--de-gold` | `#FFDA2C` | Flag strip, badges de categoría (sutil), highlights de specs | Botones CTA, texto principal |
+| `--de-black` | `#1A1A1A` | Fondos oscuros (TopBar, blog). La franja negra de la bandera es `#000000`, como en el logo | — |
+| `--de-red` | `#EB3439` | Flag strip, botón primario, chip Premium (texto de error: `#CC0000`) | Backgrounds de sección, texto chico sin negrita |
+| `--de-gold` | `#FFDA2C` | Flag strip, botón secundario, chip Standard, acentos sobre oscuro | Texto, contorno o ícono sobre fondo claro |
 
 **La bandera aparece siempre como tira de 3 franjas horizontales.** Nunca se usan los colores alemanes como fondos de sección completos.
 
@@ -402,9 +408,9 @@ Los tres colores de la bandera alemana son **exclusivamente decorativos**:
 1. **Sin gradientes de color** — Cero. Ni siquiera en heroes o banners.
 2. **Sin sombras dramáticas** — Solo `--shadow-card` y `--shadow-hover`.
 3. **Sin border-radius excesivo** — Máximo 12px en cards. Los cards no son "píldoras".
-4. **Sin colores saturados** fuera de los tres alemanes y solo en uso decorativo.
+4. **Sin colores saturados** fuera de los de la bandera (decoración, botones y chips).
 5. **Fondo global siempre `#F2F2F0`** — Nunca blanco puro, nunca gris oscuro.
-6. **`--de-red` y `--de-gold` nunca en CTAs** — Solo en la franja decorativa y badges.
+6. **Rojo = acción principal, amarillo = secundaria** — Una sola acción principal por bloque; el amarillo nunca como texto sobre claro.
 7. **`font-display` solo en headings** — No en body text, labels ni UI pequeño.
 8. **Gap del bento grid siempre 8px (`gap-2`)** — Excepciones requieren justificación.
 9. **`use client` solo cuando sea estrictamente necesario** — Estado, eventos browser, hooks.

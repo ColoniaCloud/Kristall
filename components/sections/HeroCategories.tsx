@@ -54,7 +54,7 @@ export default function HeroCategories() {
               </p>
               <Link
                 href="/productos/autos"
-                className="inline-flex items-center h-11 px-5 rounded-lg bg-[#0A0A0A] text-white text-[15px] font-medium transition-colors duration-300 group-hover:bg-white group-hover:text-[#0A0A0A]"
+                className="inline-flex items-center h-11 px-5 rounded-lg btn-primary text-[15px] transition-colors duration-300 group-hover:bg-white group-hover:text-[#0A0A0A]"
               >
                 {t('cta_label')}
               </Link>
@@ -87,7 +87,7 @@ export default function HeroCategories() {
               </p>
               <Link
                 href="/productos/arquitectura"
-                className="inline-flex items-center h-11 px-5 rounded-lg bg-[#0A0A0A] text-white text-[15px] font-medium transition-colors duration-300 group-hover:bg-white group-hover:text-[#0A0A0A]"
+                className="inline-flex items-center h-11 px-5 rounded-lg btn-primary text-[15px] transition-colors duration-300 group-hover:bg-white group-hover:text-[#0A0A0A]"
               >
                 {t('cta_label')}
               </Link>

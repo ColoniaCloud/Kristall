@@ -92,7 +92,7 @@ export default function Hero() {
             <motion.div variants={itemVariants}>
               <Link
                 href="/contacto"
-                className="h-12 flex items-center border border-white/50 text-white px-6 rounded-lg text-[16px] font-medium hover:bg-[#0A0A0A] hover:border-[#0A0A0A] hover:text-white transition-all duration-200"
+                className="h-12 flex items-center btn-secondary-dark px-6 rounded-lg text-[16px] transition-all duration-200"
               >
                 {t('cta_secondary')}
               </Link>

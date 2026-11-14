@@ -49,7 +49,7 @@ export default function ContactCTA() {
             placeholder={t('placeholder')}
             className="border border-white/30 rounded-lg px-3 py-2.5 text-base bg-white/10 text-white placeholder:text-white/40 flex-1 md:w-72 outline-none focus:border-white/70 transition-colors backdrop-blur-sm"
           />
-          <button className="bg-white text-[#0A0A0A] px-6 py-2.5 rounded-lg text-[16px] font-medium tracking-wide hover:bg-white/90 transition-opacity flex-shrink-0">
+          <button className="btn-primary px-6 py-2.5 rounded-lg text-[16px] tracking-wide transition-opacity flex-shrink-0">
             {t('button')}
           </button>
         </div>

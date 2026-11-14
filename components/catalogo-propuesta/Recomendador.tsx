@@ -238,7 +238,7 @@ export default function Recomendador({ lineas, vigente }: { lineas: Linea[]; vig
                     mensaje={mensajeProducto(mejor.linea.nombre, mejor.variante.sku)}
                     donde="recomendador"
                     linea={mejor.linea.slug}
-                    className="inline-flex h-12 items-center justify-center gap-1.5 rounded-xl bg-white text-[15px] font-semibold text-[#0A0A0A]"
+                    className="inline-flex h-12 items-center justify-center gap-1.5 rounded-xl btn-primary text-[15px]"
                   >
                     <WhatsAppIcon className="size-4 text-[#25D366]" />
                     Pedir

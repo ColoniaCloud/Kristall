@@ -198,7 +198,7 @@ export default function PuntoModal({ onClose }: { onClose: () => void }) {
             <button
               type="submit"
               disabled={status === 'sending'}
-              className="w-full bg-[#0A0A0A] text-white py-3 rounded-lg text-sm font-medium hover:opacity-85 transition-opacity disabled:opacity-50 mt-1"
+              className="w-full btn-primary py-3 rounded-lg text-sm transition-opacity disabled:opacity-50 mt-1"
             >
               {status === 'sending' ? t('submitting') : t('submit')}
             </button>

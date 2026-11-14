@@ -185,7 +185,7 @@ export default function PortalInstaladores() {
             </button>
             <Link
               href="/contacto"
-              className="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-lg border-[0.5px] border-[#D4D4D2] bg-white text-[#0A0A0A] text-[15px] font-medium transition-colors hover:bg-[#FAFAF9]"
+              className="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-lg btn-secondary text-[15px] transition-colors"
             >
               {t('cta_secondary')}
               <ArrowRight className="size-4" aria-hidden="true" />

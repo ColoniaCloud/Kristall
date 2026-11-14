@@ -23,7 +23,7 @@ export default function AboutCTA() {
         </div>
         <Link
           href="/contacto"
-          className="bg-white text-[#0A0A0A] px-6 py-3 rounded-lg text-[16px] font-medium hover:bg-white/90 transition-opacity whitespace-nowrap"
+          className="btn-primary px-6 py-3 rounded-lg text-[16px] font-medium transition-opacity whitespace-nowrap"
         >
           {t('cta_button')}
         </Link>

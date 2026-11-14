@@ -28,7 +28,7 @@ export default function ServicesCTA() {
           </Link>
           <Link
             href="/productos"
-            className="inline-block border border-[#0A0A0A] text-[#0A0A0A] px-6 py-3 rounded-lg text-[16px] font-medium hover:bg-[#0A0A0A] hover:text-white transition-colors"
+            className="inline-block btn-secondary px-6 py-3 rounded-lg text-[16px] transition-colors"
           >
             {t('final_cta2')}
           </Link>

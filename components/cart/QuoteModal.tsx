@@ -147,7 +147,7 @@ export default function QuoteModal({ open, onClose }: QuoteModalProps) {
             <button
               type="submit"
               disabled={status === 'loading'}
-              className="w-full bg-[#0A0A0A] text-white px-6 py-3 rounded-lg text-[15px] font-medium hover:bg-[#2a2a2a] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full btn-primary px-6 py-3 rounded-lg text-[15px] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {status === 'loading' ? (
                 <>

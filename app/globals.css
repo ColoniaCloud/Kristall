@@ -51,19 +51,65 @@
   --rl: 12px;
   --font-display: var(--font-clash-display), sans-serif;
   --font-body: var(--font-dm-sans), sans-serif;
-  --btn-primary-bg: linear-gradient(to bottom, #1C1C1C, #0A0A0A);
-  --btn-primary-border: rgba(255, 255, 255, 0.08);
-  --btn-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  /* Botones de la guía de marca: primario rojo, secundario amarillo (los colores
+     del logo). Texto blanco sobre rojo da 4,1:1: alcanza para texto en negrita,
+     por eso .btn-primary fuerza font-weight 600. */
+  --btn-primary-bg: #EB3439;
+  --btn-primary-hover: #D42A30;
+  --btn-primary-border: rgba(0, 0, 0, 0.06);
+  --btn-primary-shadow: 0 1px 2px rgba(235, 52, 57, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  --btn-secondary-bg: #FFDA2C;
+  --btn-secondary-hover: #F2CC1A;
 }
 
 .btn-primary {
   background: var(--btn-primary-bg);
   border: 0.5px solid var(--btn-primary-border);
   box-shadow: var(--btn-primary-shadow);
+  color: #FFFFFF;
+  font-weight: 600;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(to bottom, #222222, #111111);
+  background: var(--btn-primary-hover);
+}
+
+/* Secundario sobre fondo claro: relleno amarillo, texto negro (14:1). */
+.btn-secondary {
+  background: var(--btn-secondary-bg);
+  border: 0.5px solid rgba(0, 0, 0, 0.06);
+  color: #0A0A0A;
+  font-weight: 600;
+}
+
+.btn-secondary:hover {
+  background: var(--btn-secondary-hover);
+}
+
+/* Secundario sobre fondo oscuro o foto: contorno amarillo. Nunca sobre claro:
+   el amarillo sobre blanco da 1,4:1 y no se lee. */
+.btn-secondary-dark {
+  background: transparent;
+  border: 1px solid var(--de-gold);
+  color: var(--de-gold);
+  font-weight: 600;
+}
+
+.btn-secondary-dark:hover {
+  background: rgba(255, 218, 44, 0.1);
+}
+
+/* Chips de categoría de línea. */
+.chip-standard {
+  background: var(--de-gold);
+  color: #0A0A0A;
+  font-weight: 600;
+}
+
+.chip-premium {
+  background: var(--de-red);
+  color: #FFFFFF;
+  font-weight: 700;
 }
 
 /* Barra de progreso de los pasos en la sección del Portal de Instaladores (home). */

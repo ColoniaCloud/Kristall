@@ -7,7 +7,7 @@ import { MENSAJE_GENERAL, WhatsAppIcon, WhatsAppLink } from './whatsapp'
 export function FlagStripe({ className = '' }: { className?: string }) {
   return (
     <span className={`inline-flex h-3 w-6 overflow-hidden rounded-[2px] shrink-0 ${className}`} aria-hidden="true">
-      <span className="flex-1 bg-[#1A1A1A] ring-1 ring-inset ring-white/15" />
+      <span className="flex-1 bg-[#000000] ring-1 ring-inset ring-white/15" />
       <span className="flex-1 bg-[#EB3439]" />
       <span className="flex-1 bg-[#FFDA2C]" />
     </span>
@@ -74,14 +74,14 @@ export default function Hero() {
         <div className="kf-rise mt-8 flex flex-col gap-3 sm:flex-row lg:mt-0 lg:max-w-xl lg:shrink-0 [animation-delay:480ms]">
           <a
             href="#productos"
-            className="inline-flex h-14 sm:flex-1 items-center whitespace-nowrap justify-center rounded-xl bg-white px-6 text-base font-semibold text-[#0A0A0A] transition hover:bg-white/90 active:scale-[0.98]"
+            className="inline-flex h-14 sm:flex-1 items-center whitespace-nowrap justify-center rounded-xl btn-primary px-6 text-base transition active:scale-[0.98]"
           >
             Ver los productos
           </a>
           <WhatsAppLink
             mensaje={MENSAJE_GENERAL}
             donde="hero"
-            className="inline-flex h-14 sm:flex-1 items-center whitespace-nowrap justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-6 text-base font-medium text-white backdrop-blur transition hover:bg-white/10 active:scale-[0.98]"
+            className="inline-flex h-14 sm:flex-1 items-center whitespace-nowrap justify-center gap-2 rounded-xl btn-secondary-dark px-6 text-base backdrop-blur transition hover:bg-white/10 active:scale-[0.98]"
           >
             <WhatsAppIcon className="size-5" />
             Hablar con un asesor
