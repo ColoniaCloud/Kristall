@@ -43,7 +43,7 @@ function HeaderBlock() {
   return (
     <div ref={ref}>
       <span
-        className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] mb-3 block transition-all duration-1000"
+        className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#5C5C5C] mb-3 block transition-all duration-1000"
         style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '0ms' }}
       >
         01 · EL NEGOCIO
@@ -76,7 +76,7 @@ function StepCard({ num, title, body, delay }: { num: string; title: string; bod
         style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(24px)', transitionDelay: `${delay}ms` }}
       >
         <span
-          className="text-3xl font-medium text-[#E6A800] block mb-3"
+          className="text-3xl font-medium text-[#0A0A0A] block mb-3"
           style={{ fontFamily: 'var(--font-display)' }}
         >
           {num}
@@ -97,7 +97,7 @@ function CalloutBlock() {
         className="relative rounded-2xl p-6 flex items-start gap-5 backdrop-blur-md bg-white/[0.06] border border-white/10 transition-all duration-700"
         style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(24px)', transitionDelay: '200ms' }}
       >
-        <div className="w-12 h-12 rounded-xl bg-[#E6A800] flex items-center justify-center flex-shrink-0">
+        <div className="w-12 h-12 rounded-xl bg-[#FFDA2C] flex items-center justify-center flex-shrink-0">
           <TrendingUp size={22} className="text-[#0A0A0A]" />
         </div>
         <div>
@@ -106,7 +106,7 @@ function CalloutBlock() {
             style={{ fontFamily: 'var(--font-display)' }}
           >
             Más margen{' '}
-            <span className="text-[#E6A800]">en cada auto.</span>
+            <span className="text-[#0A0A0A]">en cada auto.</span>
           </p>
           <p className="text-[17px] text-white leading-relaxed">
             El posicionamiento premium alemán y las herramientas de demostración justifican un

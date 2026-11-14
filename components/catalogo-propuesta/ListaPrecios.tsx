@@ -73,7 +73,7 @@ export default function ListaPrecios({
                     <th
                       scope="rowgroup"
                       colSpan={cotizacion ? 5 : 4}
-                      className="px-4 py-2 text-left text-sm font-medium text-[#E6A800] lg:px-7"
+                      className="px-4 py-2 text-left text-sm font-medium text-[#FFDA2C] lg:px-7"
                     >
                       {titulo}
                     </th>
@@ -91,7 +91,7 @@ export default function ListaPrecios({
                             e.stopPropagation()
                             irALinea({ slug: l.slug })
                           }}
-                          className="block rounded text-left outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#E6A800]"
+                          className="block rounded text-left outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#FFDA2C]"
                         >
                           <span className="block text-lg font-semibold leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
                             {l.nombre}

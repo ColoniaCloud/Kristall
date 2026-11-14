@@ -223,7 +223,7 @@ function PillarCard({
         {tag}
       </span>
       <h3
-        className="text-2xl font-medium text-[#E6A800] mb-3"
+        className="text-2xl font-medium text-[#0A0A0A] mb-3"
         style={{ fontFamily: 'var(--font-display)' }}
       >
         {title}
@@ -233,7 +233,7 @@ function PillarCard({
       <ul className="flex flex-col gap-3 mt-auto">
         {benefits.map(({ icon: BIcon, label, description }) => (
           <li key={label} className="flex items-start gap-2.5">
-            <BIcon size={13} className="text-[#E6A800] mt-[3px] flex-shrink-0" />
+            <BIcon size={13} className="text-[#0A0A0A] mt-[3px] flex-shrink-0" />
             <p className="text-[13px] text-white/70 leading-snug">
               <span className="font-semibold text-white/90">{label}</span>
               {' — '}

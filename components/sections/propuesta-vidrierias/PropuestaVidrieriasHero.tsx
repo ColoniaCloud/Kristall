@@ -63,10 +63,10 @@ export default function PropuestaVidrieriasHero() {
               <div className="flex items-center gap-3 mb-6" style={item(0)}>
                 <div className="flex h-[14px] w-6 overflow-hidden rounded-[2px] flex-shrink-0">
                   <div className="flex-1 bg-[#1A1A1A]" />
-                  <div className="flex-1 bg-[#CC0000]" />
-                  <div className="flex-1 bg-[#E6A800]" />
+                  <div className="flex-1 bg-[#EB3439]" />
+                  <div className="flex-1 bg-[#FFDA2C]" />
                 </div>
-                <span className="text-[12px] font-semibold uppercase tracking-[0.15em] text-[#E6A800]">
+                <span className="text-[12px] font-semibold uppercase tracking-[0.15em] text-[#FFDA2C]">
                   Para empresas de aberturas
                 </span>
               </div>
@@ -92,10 +92,10 @@ export default function PropuestaVidrieriasHero() {
               <ul className="space-y-4 mb-10" style={item(200)}>
                 {introPoints.map((point, index) => {
                   const iconMap = [
-                    <Sparkles key="sparkles" className="w-5 h-5 text-[#E6A800]" />,
-                    <Handshake key="handshake" className="w-5 h-5 text-[#CC0000]" />,
-                    <BadgeCheck key="badge" className="w-5 h-5 text-[#E6A800]" />,
-                    <ArrowRight key="arrow" className="w-5 h-5 text-[#CC0000]" />,
+                    <Sparkles key="sparkles" className="w-5 h-5 text-[#FFDA2C]" />,
+                    <Handshake key="handshake" className="w-5 h-5 text-[#EB3439]" />,
+                    <BadgeCheck key="badge" className="w-5 h-5 text-[#FFDA2C]" />,
+                    <ArrowRight key="arrow" className="w-5 h-5 text-[#EB3439]" />,
                   ]
 
                   return (
@@ -132,7 +132,7 @@ export default function PropuestaVidrieriasHero() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/20 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
-                <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#E6A800] mb-2">
+                <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#FFDA2C] mb-2">
                   Programa de socios
                 </p>
                 <p className="text-white text-lg font-medium" style={{ fontFamily: 'var(--font-display)' }}>

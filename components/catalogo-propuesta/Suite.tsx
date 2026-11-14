@@ -50,7 +50,7 @@ export default function Suite() {
   return (
     <section className={SECCION}>
       <div className={CONTENEDOR}>
-        <p className="flex items-center gap-3 text-[12px] font-medium uppercase tracking-[0.16em] text-[#E6A800]">
+        <p className="flex items-center gap-3 text-[12px] font-medium uppercase tracking-[0.16em] text-[#FFDA2C]">
           <FlagStripe />
           La suite Kristall
         </p>
@@ -84,7 +84,7 @@ export default function Suite() {
                 <ul className="mt-4 space-y-2">
                   {h.puntos.map((p) => (
                     <li key={p} className="flex items-center gap-2.5 text-[15px] text-white/85">
-                      <span className="size-1.5 shrink-0 rounded-full bg-[#CC0000]" aria-hidden="true" />
+                      <span className="size-1.5 shrink-0 rounded-full bg-[#EB3439]" aria-hidden="true" />
                       {p}
                     </li>
                   ))}
@@ -92,7 +92,7 @@ export default function Suite() {
                 {h.link && (
                   <Link
                     href={h.link.href}
-                    className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-[#E6A800]"
+                    className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-[#FFDA2C]"
                   >
                     {h.link.label}
                     <ArrowUpRight className="size-4" aria-hidden="true" />

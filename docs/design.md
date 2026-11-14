@@ -42,8 +42,8 @@ Kristall Film vende tecnología alemana de precisión. Cada decisión visual deb
 
   /* Colores alemanes — SOLO decorativos */
   --de-black:        #1A1A1A;   /* Franja negra bandera */
-  --de-red:          #CC0000;   /* Franja roja bandera */
-  --de-gold:         #E6A800;   /* Franja dorada bandera */
+  --de-red:          #EB3439;   /* Franja roja bandera */
+  --de-gold:         #FFDA2C;   /* Franja dorada bandera */
 
   /* Radii */
   --r:               8px;       /* Botones, inputs, chips */
@@ -77,8 +77,8 @@ Kristall Film vende tecnología alemana de precisión. Cada decisión visual deb
 | Token | Hex | Uso |
 |-------|-----|-----|
 | `--de-black` | `#1A1A1A` | Franja bandera, fondo Footer/Header |
-| `--de-red` | `#CC0000` | Franja bandera, indicadores de error |
-| `--de-gold` | `#E6A800` | Franja bandera, highlights opcionales |
+| `--de-red` | `#EB3439` | Franja bandera (el rojo del logo). Los mensajes de error usan `#CC0000`, que se lee mejor sobre blanco |
+| `--de-gold` | `#FFDA2C` | Franja bandera, highlights opcionales |
 
 ### Reglas estrictas de color
 
@@ -390,8 +390,8 @@ Los tres colores de la bandera alemana son **exclusivamente decorativos**:
 | Color | Hex | Permitido | Prohibido |
 |-------|-----|-----------|-----------|
 | `--de-black` | `#1A1A1A` | Flag strip, fondos oscuros (Header logo box, Footer) | Reemplazar al `--accent` como CTA |
-| `--de-red` | `#CC0000` | Flag strip, estados de error/danger, indicadores | Botones CTA, backgrounds de sección |
-| `--de-gold` | `#E6A800` | Flag strip, badges de categoría (sutil), highlights de specs | Botones CTA, texto principal |
+| `--de-red` | `#EB3439` | Flag strip, indicadores (texto de error: `#CC0000`) | Botones CTA, backgrounds de sección |
+| `--de-gold` | `#FFDA2C` | Flag strip, badges de categoría (sutil), highlights de specs | Botones CTA, texto principal |
 
 **La bandera aparece siempre como tira de 3 franjas horizontales.** Nunca se usan los colores alemanes como fondos de sección completos.
 

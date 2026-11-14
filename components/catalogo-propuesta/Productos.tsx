@@ -137,7 +137,7 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
       }
       // Un destello dorado para que se vea cuál es.
       card?.animate(
-        [{ boxShadow: '0 0 0 2px rgba(230,168,0,0.9)' }, { boxShadow: '0 0 0 2px rgba(230,168,0,0)' }],
+        [{ boxShadow: '0 0 0 2px rgba(255,218,44,0.9)' }, { boxShadow: '0 0 0 2px rgba(255,218,44,0)' }],
         { duration: 1800, delay: 400, easing: 'ease-out' }
       )
     }
@@ -212,7 +212,7 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
               la sección es más alta que la pantalla y nunca llegaría a la mitad visible. */}
           <div ref={zonaPista} className="grid aspect-[4/3] w-[86vw] max-w-[24rem] place-items-center">
             <div
-              className={`flex items-center gap-3 rounded-full border border-[#E6A800]/60 bg-black/70 py-3 pl-5 pr-4 text-[#E6A800] shadow-[0_8px_32px_rgba(0,0,0,0.55)] backdrop-blur transition-all duration-500 ${
+              className={`flex items-center gap-3 rounded-full border border-[#FFDA2C]/60 bg-black/70 py-3 pl-5 pr-4 text-[#FFDA2C] shadow-[0_8px_32px_rgba(0,0,0,0.55)] backdrop-blur transition-all duration-500 ${
                 pistaVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
               }`}
             >
@@ -231,7 +231,7 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
           {visibles.map((l, i) => (
             <span
               key={l.slug}
-              className={`h-2 rounded-full transition-all duration-300 ${i === activo ? 'w-7 bg-[#E6A800]' : 'w-2 bg-white/30'}`}
+              className={`h-2 rounded-full transition-all duration-300 ${i === activo ? 'w-7 bg-[#FFDA2C]' : 'w-2 bg-white/30'}`}
             />
           ))}
         </div>
@@ -253,11 +253,11 @@ export default function Productos({ lineas, vigente }: { lineas: Linea[]; vigent
             onClick={() => irA(Math.min(visibles.length - 1, activo + 1))}
             disabled={activo === visibles.length - 1}
             aria-label="Lámina siguiente"
-            className="relative grid size-12 place-items-center rounded-full bg-[#E6A800] text-[#0A0A0A] transition active:scale-95 disabled:bg-transparent disabled:text-white/30 disabled:ring-2 disabled:ring-inset disabled:ring-white/15"
+            className="relative grid size-12 place-items-center rounded-full bg-[#FFDA2C] text-[#0A0A0A] transition active:scale-95 disabled:bg-transparent disabled:text-white/30 disabled:ring-2 disabled:ring-inset disabled:ring-white/15"
           >
             {/* Anillo que late hasta que el usuario mueve el carrusel por su cuenta. */}
             {!movido && activo === 0 && (
-              <span aria-hidden="true" className="kf-pulso absolute inset-0 rounded-full bg-[#E6A800]" />
+              <span aria-hidden="true" className="kf-pulso absolute inset-0 rounded-full bg-[#FFDA2C]" />
             )}
             <ChevronRight className="relative size-6" strokeWidth={2.5} />
           </button>
@@ -323,7 +323,7 @@ function Card({
         <div className="absolute inset-x-4 top-4 flex items-start justify-between">
           <span
             className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] ${
-              premium ? 'border border-[#E6A800]/60 bg-black/50 text-[#E6A800] backdrop-blur' : 'bg-[#CC0000] text-white'
+              premium ? 'border border-[#FFDA2C]/60 bg-black/50 text-[#FFDA2C] backdrop-blur' : 'bg-[#EB3439] text-white'
             }`}
           >
             {premium ? 'Premium' : 'Standard'}
@@ -435,7 +435,7 @@ function Barra({ label, valor, activa }: { label: string; valor: number | null; 
       </div>
       <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-white/10">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-[#CC0000] to-[#E6A800] transition-[width] duration-1000 ease-out motion-reduce:transition-none"
+          className="h-full rounded-full bg-gradient-to-r from-[#EB3439] to-[#FFDA2C] transition-[width] duration-1000 ease-out motion-reduce:transition-none"
           style={{ width: activa ? `${valor}%` : '0%' }}
         />
       </div>

@@ -92,7 +92,7 @@ export default function PuntoModal({ onClose }: { onClose: () => void }) {
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#E4E4E2]">
           <div>
-            <p className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800]">{t('eyebrow')}</p>
+            <p className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#5C5C5C]">{t('eyebrow')}</p>
             <h3 className="text-lg font-semibold text-[#0A0A0A] mt-0.5" style={{ fontFamily: 'var(--font-display)' }}>
               {t('title')}
             </h3>

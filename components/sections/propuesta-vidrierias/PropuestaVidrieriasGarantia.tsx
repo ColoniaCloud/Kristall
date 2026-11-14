@@ -52,13 +52,13 @@ export default function PropuestaVidrieriasGarantia() {
           </p>
           <div className="flex flex-col gap-3 text-sm text-[#5C5C5C]">
             <div className="flex items-center gap-3">
-              <div className="w-5 h-5 rounded-full bg-[#CC0000]/10 flex items-center justify-center text-[#CC0000] flex-shrink-0">
+              <div className="w-5 h-5 rounded-full bg-[#EB3439]/10 flex items-center justify-center text-[#EB3439] flex-shrink-0">
                 <span className="text-xs font-bold">✓</span>
               </div>
               <p>Protege el respaldo de garantía y evita que el cliente quede sin verificación.</p>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-5 h-5 rounded-full bg-[#CC0000]/10 flex items-center justify-center text-[#CC0000] flex-shrink-0">
+              <div className="w-5 h-5 rounded-full bg-[#EB3439]/10 flex items-center justify-center text-[#EB3439] flex-shrink-0">
                 <span className="text-xs font-bold">✓</span>
               </div>
               <p>Fortalece la reputación de tu empresa y la diferencia frente a la competencia.</p>
@@ -78,7 +78,7 @@ export default function PropuestaVidrieriasGarantia() {
         >
           <div className="bg-[#F2F2F0] border border-[--border] rounded-xl p-6 md:p-8 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-hover)] transition-shadow duration-300">
             <div className="flex items-start gap-4 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-[#0A0A0A] flex items-center justify-center text-[#E6A800] flex-shrink-0">
+              <div className="w-12 h-12 rounded-xl bg-[#0A0A0A] flex items-center justify-center text-[#FFDA2C] flex-shrink-0">
                 <ShieldCheck className="w-6 h-6" />
               </div>
               <div>
@@ -103,7 +103,7 @@ export default function PropuestaVidrieriasGarantia() {
                 <Mail className="w-4 h-4" />
                 <span>Envío directo automático</span>
               </div>
-              <div className="flex items-center gap-1 text-xs font-semibold text-[#CC0000]">
+              <div className="flex items-center gap-1 text-xs font-semibold text-[#EB3439]">
                 <span>Trazabilidad 100% digital</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </div>

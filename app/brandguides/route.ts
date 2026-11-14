@@ -32,7 +32,7 @@ function loginPage(error: boolean): string {
 @media (prefers-color-scheme:dark){:root{--bg:#111110;--surface:#1A1A19;--fg:#F2F2F0;--fg2:#B4B4AF;--border:#2A2A28;--err:#F08A80;color-scheme:dark}}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:var(--bg);color:var(--fg);font-family:"DM Sans",system-ui,sans-serif}
-.flag{display:flex;height:4px}.flag i{flex:1}.flag i:nth-child(1){background:#1A1A1A}.flag i:nth-child(2){background:#CC0000}.flag i:nth-child(3){background:#E6A800}
+.flag{display:flex;height:4px}.flag i{flex:1}.flag i:nth-child(1){background:#1A1A1A}.flag i:nth-child(2){background:#EB3439}.flag i:nth-child(3){background:#FFDA2C}
 main{flex:1;display:flex;align-items:center;justify-content:center;padding:24px 16px}
 form{width:100%;max-width:360px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;display:flex;flex-direction:column;gap:14px}
 .eyebrow{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.12em;color:var(--fg2);margin:0}

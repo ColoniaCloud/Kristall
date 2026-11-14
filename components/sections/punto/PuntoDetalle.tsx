@@ -96,7 +96,7 @@ export default function PuntoDetalle() {
         {/* DEMANDA */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           <BlockLeft>
-            <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] block mb-2">
+            <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#5C5C5C] block mb-2">
               DEMANDA
             </span>
             <h3 className="text-2xl font-medium text-[#0A0A0A] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
@@ -125,7 +125,7 @@ export default function PuntoDetalle() {
         {/* CIERRE */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           <BlockLeft>
-            <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] block mb-2">
+            <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#5C5C5C] block mb-2">
               CIERRE
             </span>
             <h3 className="text-2xl font-medium text-[#0A0A0A] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
@@ -160,7 +160,7 @@ export default function PuntoDetalle() {
         {/* IMAGEN */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           <BlockLeft>
-            <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] block mb-2">
+            <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#5C5C5C] block mb-2">
               IMAGEN
             </span>
             <h3 className="text-2xl font-medium text-[#0A0A0A] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
@@ -201,7 +201,7 @@ export default function PuntoDetalle() {
         {/* LEALTAD */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           <BlockLeft>
-            <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] block mb-2">
+            <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#5C5C5C] block mb-2">
               LEALTAD
             </span>
             <h3 className="text-2xl font-medium text-[#0A0A0A] mb-3" style={{ fontFamily: 'var(--font-display)' }}>

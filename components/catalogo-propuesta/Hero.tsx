@@ -8,8 +8,8 @@ export function FlagStripe({ className = '' }: { className?: string }) {
   return (
     <span className={`inline-flex h-3 w-6 overflow-hidden rounded-[2px] shrink-0 ${className}`} aria-hidden="true">
       <span className="flex-1 bg-[#1A1A1A] ring-1 ring-inset ring-white/15" />
-      <span className="flex-1 bg-[#CC0000]" />
-      <span className="flex-1 bg-[#E6A800]" />
+      <span className="flex-1 bg-[#EB3439]" />
+      <span className="flex-1 bg-[#FFDA2C]" />
     </span>
   )
 }
@@ -37,7 +37,7 @@ export default function Hero() {
       </header>
 
       <div className={`${CONTENEDOR} mt-auto pb-10 lg:pb-8`}>
-        <p className="kf-rise mb-5 flex items-center gap-3 lg:mb-3 text-[12px] font-medium uppercase tracking-[0.16em] text-[#E6A800]">
+        <p className="kf-rise mb-5 flex items-center gap-3 lg:mb-3 text-[12px] font-medium uppercase tracking-[0.16em] text-[#FFDA2C]">
           <FlagStripe />
           Línea Automotriz
         </p>
@@ -57,7 +57,7 @@ export default function Hero() {
 
         {/* En PC la píldora va a la derecha de los botones (row-reverse) para ahorrar una fila. */}
         <div className="flex flex-col lg:mt-5 lg:flex-row-reverse lg:items-center lg:justify-end lg:gap-5">
-        <p className="kf-rise mt-6 inline-flex items-center self-start lg:mt-0 gap-2 rounded-full border border-[#CC0000]/50 bg-[#CC0000]/15 px-3.5 py-1.5 text-sm text-white [animation-delay:360ms]">
+        <p className="kf-rise mt-6 inline-flex items-center self-start lg:mt-0 gap-2 rounded-full border border-[#EB3439]/50 bg-[#EB3439]/15 px-3.5 py-1.5 text-sm text-white [animation-delay:360ms]">
           <span className="relative flex size-2 shrink-0">
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#ff3b3b] opacity-75 motion-reduce:hidden" />
             <span className="relative inline-flex size-2 rounded-full bg-[#ff3b3b]" />

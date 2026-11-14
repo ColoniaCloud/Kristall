@@ -52,7 +52,7 @@ function HeaderBlock() {
   return (
     <div ref={ref}>
       <span
-        className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] mb-3 block transition-all duration-1000"
+        className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#5C5C5C] mb-3 block transition-all duration-1000"
         style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '0ms' }}
       >
         02 · QUÉ APORTAMOS
@@ -82,7 +82,7 @@ function ItemCard({ icon: Icon, title, body, delay }: { icon: React.ElementType;
       className="bg-white border border-[#E4E4E2] rounded-2xl p-6 flex items-start gap-4 shadow-[var(--shadow-card)] transition-all duration-700"
       style={{ opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(20px)', transitionDelay: `${delay}ms` }}
     >
-      <div className="w-11 h-11 rounded-xl bg-[#E6A800] flex items-center justify-center flex-shrink-0">
+      <div className="w-11 h-11 rounded-xl bg-[#FFDA2C] flex items-center justify-center flex-shrink-0">
         <Icon size={20} className="text-[#0A0A0A]" />
       </div>
       <div>

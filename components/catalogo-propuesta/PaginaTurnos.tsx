@@ -54,7 +54,7 @@ export default function PaginaTurnos() {
     <section className={`${SECCION} overflow-hidden`}>
       <div className={`${CONTENEDOR} lg:grid lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-16`}>
         <div>
-          <p className="flex items-center gap-3 text-[12px] font-medium uppercase tracking-[0.16em] text-[#E6A800]">
+          <p className="flex items-center gap-3 text-[12px] font-medium uppercase tracking-[0.16em] text-[#FFDA2C]">
             <FlagStripe />
             Tu página de turnos
           </p>

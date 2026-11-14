@@ -192,7 +192,7 @@ export default function Recomendador({ lineas, vigente }: { lineas: Linea[]; vig
               // Solo en PC: al lado está la tabla, mucho más alta, y sin esto la
               // columna del asesor queda con un hueco hasta que se elige algo.
               <div className="mt-6 hidden min-h-[16rem] flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 px-6 text-center lg:flex">
-                <Sparkles className="size-6 text-[#E6A800]" aria-hidden="true" />
+                <Sparkles className="size-6 text-[#FFDA2C]" aria-hidden="true" />
                 <p className="mt-3 max-w-xs text-[15px] leading-relaxed text-white/55">
                   Respondé {necesitaTono ? 'la segunda pregunta' : 'arriba'} y te decimos qué lámina ofrecerle, con el
                   precio y una alternativa.
@@ -201,8 +201,8 @@ export default function Recomendador({ lineas, vigente }: { lineas: Linea[]; vig
             )}
 
             {listo && mejor && texto && (
-              <div key={`${objetivo}-${tono}`} className="kf-rise mt-6 rounded-2xl border border-[#E6A800]/30 bg-gradient-to-b from-[#E6A800]/10 to-transparent p-5" aria-live="polite">
-                <p className="text-xs font-medium uppercase tracking-[0.14em] text-[#E6A800]">Te recomendamos</p>
+              <div key={`${objetivo}-${tono}`} className="kf-rise mt-6 rounded-2xl border border-[#FFDA2C]/30 bg-gradient-to-b from-[#FFDA2C]/10 to-transparent p-5" aria-live="polite">
+                <p className="text-xs font-medium uppercase tracking-[0.14em] text-[#FFDA2C]">Te recomendamos</p>
                 <div className="mt-3 flex items-center gap-3">
                   {/* eslint-disable-next-line @next/next/no-img-element -- logotipo SVG */}
                   <img src={mejor.linea.logo} alt={mejor.linea.nombre} className="kf-logo-white h-7 w-auto" />

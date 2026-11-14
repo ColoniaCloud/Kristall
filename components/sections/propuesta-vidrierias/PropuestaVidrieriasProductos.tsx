@@ -41,21 +41,21 @@ export default function PropuestaVidrieriasProductos() {
       type: 'Capacitación y estándar Kristall',
       desc: 'Si ya contás con equipo propio, lo capacitamos y certificamos para que cada trabajo se ejecute con el mismo nivel de calidad.',
       badge: 'CERTIFICACIÓN',
-      badgeColor: 'bg-[#CC0000]/10 text-[#FF4D4D] border-[#CC0000]/20',
+      badgeColor: 'bg-[#EB3439]/10 text-[#FF4D4D] border-[#EB3439]/20',
     },
     {
       name: 'Red de instaladores certificados',
       type: 'Sin necesidad de armar tu propio equipo',
       desc: 'Si todavía no ofrecés este servicio, ponemos a disposición nuestra red para ejecutar cada trabajo con respaldo de la marca.',
       badge: 'RED',
-      badgeColor: 'bg-[#CC0000]/10 text-[#FF4D4D] border-[#CC0000]/20',
+      badgeColor: 'bg-[#EB3439]/10 text-[#FF4D4D] border-[#EB3439]/20',
     },
     {
       name: 'Herramientas para vender más',
       type: 'Demostradores y material comercial',
       desc: 'Disponés de tótem demostrador solar, medidor infrarrojo y material comercial personalizado para reforzar tus ventas. Estas herramientas pueden adquirirse por separado o bonificarse según el volumen de compra.',
       badge: 'VENTA',
-      badgeColor: 'bg-[#CC0000]/15 text-[#FF4D4D] border-[#CC0000]/30',
+      badgeColor: 'bg-[#EB3439]/15 text-[#FF4D4D] border-[#EB3439]/30',
     },
   ]
 
@@ -65,7 +65,7 @@ export default function PropuestaVidrieriasProductos() {
       type: 'Acompañamiento antes, durante y después',
       desc: 'Nuestro equipo te acompaña en cada etapa para que puedas vender más, resolver dudas y sostener la relación con tus clientes. No solo proveemos film: trabajamos para ayudarte a vender más.',
       badge: 'SOPORTE',
-      badgeColor: 'bg-[#E6A800]/15 text-[#E6A800] border-[#E6A800]/30',
+      badgeColor: 'bg-[#FFDA2C]/15 text-[#FFDA2C] border-[#FFDA2C]/30',
     },
   ]
 
@@ -142,16 +142,16 @@ export default function PropuestaVidrieriasProductos() {
         {/* LÍNEA ARQUITECTURA */}
         <div ref={arqRef} className="mb-10">
           <h3
-            className="text-white text-sm font-semibold uppercase tracking-wider mb-6 flex items-center gap-2 text-[#E6A800]/70"
+            className="text-white text-sm font-semibold uppercase tracking-wider mb-6 flex items-center gap-2 text-[#FFDA2C]/70"
           >
             <span>RESPALDO Y SOPORTE</span>
-            <div className="h-px bg-[#E6A800]/10 flex-1" />
+            <div className="h-px bg-[#FFDA2C]/10 flex-1" />
           </h3>
           <div className="grid grid-cols-1 gap-4">
             {soporte.map((prod, i) => (
               <div
                 key={prod.name}
-                className="backdrop-blur-md bg-black/40 border border-[#E6A800]/25 rounded-xl p-6 transition-all duration-700 hover:bg-black/55 hover:border-[#E6A800]/45"
+                className="backdrop-blur-md bg-black/40 border border-[#FFDA2C]/25 rounded-xl p-6 transition-all duration-700 hover:bg-black/55 hover:border-[#FFDA2C]/45"
                 style={{
                   opacity: arqInView ? 1 : 0,
                   transform: arqInView ? 'translateY(0)' : 'translateY(20px)',
@@ -159,7 +159,7 @@ export default function PropuestaVidrieriasProductos() {
                 }}
               >
                 <div className="flex justify-between items-start gap-4 mb-3">
-                  <h4 className="text-[#E6A800] text-lg font-medium" style={{ fontFamily: 'var(--font-display)' }}>
+                  <h4 className="text-[#FFDA2C] text-lg font-medium" style={{ fontFamily: 'var(--font-display)' }}>
                     {prod.name}
                   </h4>
                   <span className={`text-[9px] font-bold tracking-wider px-2 py-0.5 rounded border ${prod.badgeColor}`}>

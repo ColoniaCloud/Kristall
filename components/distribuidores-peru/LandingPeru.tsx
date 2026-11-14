@@ -30,7 +30,7 @@ const GRUPOS_TABLA = [
 
 /** Rótulo de sección: dorado, como en el PDF de la propuesta. */
 function Rotulo({ children }: { children: React.ReactNode }) {
-  return <p className="text-[12px] font-medium uppercase tracking-[0.18em] text-[#E6A800]">{children}</p>
+  return <p className="text-[12px] font-medium uppercase tracking-[0.18em] text-[#FFDA2C]">{children}</p>
 }
 
 const ICONOS_POR_QUE = [ShieldCheck, LayoutDashboard, Megaphone, BadgeCheck]
@@ -75,7 +75,7 @@ function Dedicatoria({ invitado }: { invitado: Invitado }) {
       valor: (
         <>
           Propuesta del Programa Distribuidor Autorizado para{' '}
-          <span className="text-[#E6A800]">{invitado.business}</span>
+          <span className="text-[#FFDA2C]">{invitado.business}</span>
         </>
       ),
       clase: 'text-lg font-semibold leading-snug text-white lg:text-2xl',
@@ -90,7 +90,7 @@ function Dedicatoria({ invitado }: { invitado: Invitado }) {
       <div className={`${CONTENEDOR} flex gap-4 py-5 lg:gap-5 lg:py-7`}>
         <span
           aria-hidden="true"
-          className="kp-in mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-full bg-[#E6A800] text-lg font-semibold text-[#0A0A0A] lg:size-12 lg:text-xl"
+          className="kp-in mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-full bg-[#FFDA2C] text-lg font-semibold text-[#0A0A0A] lg:size-12 lg:text-xl"
           style={{ fontFamily: 'var(--font-display)' }}
         >
           K
@@ -150,7 +150,7 @@ export function LandingPeru({ invitado, pais = 'PE' }: { invitado?: Invitado; pa
               const Icono = ICONOS_POR_QUE[i]
               return (
                 <article key={item.titulo} className="kp-item bg-[#0A0A0A] p-6 lg:p-10" style={paso(i)}>
-                  <Icono className="size-6 text-[#E6A800]" strokeWidth={1.75} aria-hidden="true" />
+                  <Icono className="size-6 text-[#FFDA2C]" strokeWidth={1.75} aria-hidden="true" />
                   <h3 className="mt-5 text-xl font-semibold lg:text-2xl" style={{ fontFamily: 'var(--font-display)' }}>
                     {item.titulo}
                   </h3>
@@ -162,7 +162,7 @@ export function LandingPeru({ invitado, pais = 'PE' }: { invitado?: Invitado; pa
 
           <Aparece className="mt-12 lg:mt-16">
             <blockquote
-              className="kp-item max-w-4xl border-l-2 border-[#E6A800] pl-5 text-[clamp(1.5rem,5.5vw,2.6rem)] font-semibold leading-[1.12] lg:pl-8"
+              className="kp-item max-w-4xl border-l-2 border-[#FFDA2C] pl-5 text-[clamp(1.5rem,5.5vw,2.6rem)] font-semibold leading-[1.12] lg:pl-8"
               style={{ fontFamily: 'var(--font-display)' }}
             >
               La garantía la pide el cliente final.{' '}
@@ -229,10 +229,10 @@ export function LandingPeru({ invitado, pais = 'PE' }: { invitado?: Invitado; pa
                     <h3 className="text-2xl font-semibold" style={{ fontFamily: 'var(--font-display)' }}>
                       {l.nombre}
                     </h3>
-                    <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#E6A800]">{l.rubro}</span>
+                    <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#FFDA2C]">{l.rubro}</span>
                   </div>
                   <p className="mt-2 text-[15px] leading-relaxed text-white/65">{l.descripcion}</p>
-                  <p className="mt-auto pt-4 text-sm font-medium tabular-nums text-[#E6A800]">{l.datos}</p>
+                  <p className="mt-auto pt-4 text-sm font-medium tabular-nums text-[#FFDA2C]">{l.datos}</p>
                 </div>
               </article>
             ))}
@@ -255,7 +255,7 @@ export function LandingPeru({ invitado, pais = 'PE' }: { invitado?: Invitado; pa
                 {GRUPOS_TABLA.map((g) => (
                   <tbody key={g.titulo}>
                     <tr>
-                      <th scope="colgroup" colSpan={6} className="pb-2 pt-8 text-left text-sm font-medium text-[#E6A800]">
+                      <th scope="colgroup" colSpan={6} className="pb-2 pt-8 text-left text-sm font-medium text-[#FFDA2C]">
                         {g.titulo}
                       </th>
                     </tr>
@@ -278,7 +278,7 @@ export function LandingPeru({ invitado, pais = 'PE' }: { invitado?: Invitado; pa
               <div className="lg:hidden">
               {GRUPOS_TABLA.map((g) => (
               <section key={g.titulo} aria-label={g.titulo} className="mt-8 first:mt-0">
-              <h3 className="mb-2 text-sm font-medium text-[#E6A800]">{g.titulo}</h3>
+              <h3 className="mb-2 text-sm font-medium text-[#FFDA2C]">{g.titulo}</h3>
               <ul className="divide-y divide-white/[0.08] border-y border-white/15">
                 {g.lineas.map((l) => (
                   <li key={l.slug} className="py-4">
@@ -344,7 +344,7 @@ export function LandingPeru({ invitado, pais = 'PE' }: { invitado?: Invitado; pa
               {RECIBE.map((r, i) => (
                 <li key={r.titulo} className="kp-item border-t border-white/12 py-5" style={paso(i)}>
                   <h3 className="flex items-center gap-3 text-lg font-semibold" style={{ fontFamily: 'var(--font-display)' }}>
-                    <span className="h-px w-5 shrink-0 bg-[#E6A800]" aria-hidden="true" />
+                    <span className="h-px w-5 shrink-0 bg-[#FFDA2C]" aria-hidden="true" />
                     {r.titulo}
                   </h3>
                   <p className="mt-2 pl-8 text-[15px] leading-relaxed text-white/60">{r.texto}</p>
@@ -373,10 +373,10 @@ export function LandingPeru({ invitado, pais = 'PE' }: { invitado?: Invitado; pa
               {PASOS.map((p, i) => (
                 <li key={p} className="kp-item relative" style={paso(i)}>
                   <span
-                    className="absolute -left-[29px] top-2 size-2.5 rounded-full bg-[#E6A800] lg:-top-[37px] lg:left-0"
+                    className="absolute -left-[29px] top-2 size-2.5 rounded-full bg-[#FFDA2C] lg:-top-[37px] lg:left-0"
                     aria-hidden="true"
                   />
-                  <span className="block text-4xl font-semibold tabular-nums text-[#E6A800] lg:text-5xl" style={{ fontFamily: 'var(--font-display)' }}>
+                  <span className="block text-4xl font-semibold tabular-nums text-[#FFDA2C] lg:text-5xl" style={{ fontFamily: 'var(--font-display)' }}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <p className="mt-2 max-w-[16rem] text-base leading-snug text-white/80 lg:text-lg">{p}</p>
@@ -389,7 +389,7 @@ export function LandingPeru({ invitado, pais = 'PE' }: { invitado?: Invitado; pa
 
       {/* ——— Cierre ——— */}
       <section id="contacto" data-sin-flotante className="relative isolate overflow-hidden py-20 lg:py-32">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_bottom,rgba(230,168,0,0.12),transparent_60%)]" />
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_bottom,rgba(255,218,44,0.12),transparent_60%)]" />
         <div className={`${CONTENEDOR} lg:grid lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16`}>
           <Aparece>
             <h2
@@ -437,7 +437,7 @@ export function LandingPeru({ invitado, pais = 'PE' }: { invitado?: Invitado; pa
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a
           href="/es"
-          className="group flex min-h-16 w-full items-center justify-center gap-3 bg-[#E6A800] px-5 pb-[env(safe-area-inset-bottom)] text-base font-semibold text-[#0A0A0A] transition-colors hover:bg-[#f2b70f] focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-[#0A0A0A] lg:min-h-20 lg:text-lg"
+          className="group flex min-h-16 w-full items-center justify-center gap-3 bg-[#FFDA2C] px-5 pb-[env(safe-area-inset-bottom)] text-base font-semibold text-[#0A0A0A] transition-colors hover:bg-[#f2b70f] focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-[#0A0A0A] lg:min-h-20 lg:text-lg"
           style={{ fontFamily: 'var(--font-display)' }}
         >
           <Globe className="size-5 transition-transform duration-300 group-hover:rotate-12 lg:size-6" aria-hidden="true" />
@@ -484,7 +484,7 @@ function Hero({ pais }: { pais: Pais }) {
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
       >
-        <path d="M76 0 L100 34" stroke="#E6A800" strokeWidth="1.25" vectorEffect="non-scaling-stroke" fill="none" />
+        <path d="M76 0 L100 34" stroke="#FFDA2C" strokeWidth="1.25" vectorEffect="non-scaling-stroke" fill="none" />
       </svg>
 
       <header className={`${CONTENEDOR} flex items-center justify-between pt-[max(1.25rem,env(safe-area-inset-top))] lg:pt-8`}>
@@ -500,7 +500,7 @@ function Hero({ pais }: { pais: Pais }) {
       </header>
 
       <div className={`${CONTENEDOR} mt-auto pt-16 lg:pt-10`}>
-        <p className="kp-in text-[12px] font-medium uppercase tracking-[0.2em] text-[#E6A800]" style={demora(150)}>
+        <p className="kp-in text-[12px] font-medium uppercase tracking-[0.2em] text-[#FFDA2C]" style={demora(150)}>
           Programa Distribuidor Autorizado
         </p>
 
@@ -509,7 +509,7 @@ function Hero({ pais }: { pais: Pais }) {
           style={{ fontFamily: 'var(--font-display)' }}
         >
           {lineas.map((palabras, i) => (
-            <span key={i} className={`block ${i === 2 ? 'text-[#E6A800]' : ''}`}>
+            <span key={i} className={`block ${i === 2 ? 'text-[#FFDA2C]' : ''}`}>
               {palabras.map((p) => (
                 <span key={p} className="kp-in mr-[0.22em] inline-block last:mr-0" style={demora(250 + 80 * n++)}>
                   {p}
@@ -519,7 +519,7 @@ function Hero({ pais }: { pais: Pais }) {
           ))}
         </h1>
 
-        <span className="kp-regla mt-7 block h-[2px] w-12 bg-[#E6A800] lg:mt-9" style={demora(800)} aria-hidden="true" />
+        <span className="kp-regla mt-7 block h-[2px] w-12 bg-[#FFDA2C] lg:mt-9" style={demora(800)} aria-hidden="true" />
 
         <p className="kp-in mt-6 max-w-xl text-base leading-relaxed text-white/75 lg:text-xl" style={demora(850)}>
           Líneas Standard y Premium para el sector automotor y la arquitectura, respaldadas por un sistema: Garantía Digital en cada
@@ -557,7 +557,7 @@ function Hero({ pais }: { pais: Pais }) {
               className="kp-in grid grid-cols-[7.5rem_1fr] gap-3 border-b border-white/[0.07] py-3.5 lg:block lg:border-b-0 lg:py-5"
               style={demora(1050 + 100 * i)}
             >
-              <dt className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#E6A800] lg:text-[12px]">{t}</dt>
+              <dt className="text-[11px] font-medium uppercase tracking-[0.16em] text-[#FFDA2C] lg:text-[12px]">{t}</dt>
               <dd className="text-sm leading-snug text-white/75 lg:mt-2 lg:text-[15px]">{d}</dd>
             </div>
           ))}

@@ -22,8 +22,8 @@ export default function AboutHero() {
         <div className="flex items-center gap-2 mb-5">
           <div className="flex gap-1">
             <span className="w-4 h-[3px] rounded-sm bg-[#444]" />
-            <span className="w-4 h-[3px] rounded-sm bg-[#CC0000]" />
-            <span className="w-4 h-[3px] rounded-sm bg-[#E6A800]" />
+            <span className="w-4 h-[3px] rounded-sm bg-[#EB3439]" />
+            <span className="w-4 h-[3px] rounded-sm bg-[#FFDA2C]" />
           </div>
           <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-white/35">
             {t('hero_eyebrow')}

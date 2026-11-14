@@ -121,8 +121,8 @@ La interfaz ES el argumento de venta. Cada decisión visual comunica precisión 
   --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
   --shadow-hover: 0 4px 20px rgba(0,0,0,0.10);
   --de-black: #1A1A1A;
-  --de-red: #CC0000;
-  --de-gold: #E6A800;
+  --de-red: #EB3439;
+  --de-gold: #FFDA2C;
   --r: 8px;
   --rl: 12px;
   --font-display: 'Clash Display', sans-serif;

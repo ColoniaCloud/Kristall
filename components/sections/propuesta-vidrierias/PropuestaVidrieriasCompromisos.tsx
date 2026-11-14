@@ -87,7 +87,7 @@ export default function PropuestaVidrieriasCompromisos() {
                 transitionDelay: `${i * 100}ms`,
               }}
             >
-              <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-full bg-[#E6A800]/15 text-[#E6A800] flex-shrink-0">
+              <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-full bg-[#FFDA2C]/15 text-[#FFDA2C] flex-shrink-0">
                 <CheckCircle2 className="h-5 w-5" />
               </div>
               <p className="text-sm text-white/70 leading-relaxed">{compromiso}</p>

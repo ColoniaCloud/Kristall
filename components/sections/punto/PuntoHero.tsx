@@ -34,10 +34,10 @@ export default function PuntoHero() {
         >
           <div className="flex h-[14px] w-6 overflow-hidden rounded-sm flex-shrink-0">
             <div className="flex-1 bg-[#1A1A1A]" />
-            <div className="flex-1 bg-[#CC0000]" />
-            <div className="flex-1 bg-[#E6A800]" />
+            <div className="flex-1 bg-[#EB3439]" />
+            <div className="flex-1 bg-[#FFDA2C]" />
           </div>
-          <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800]">
+          <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#FFDA2C]">
             Programa para instaladores
           </span>
         </div>
@@ -54,7 +54,7 @@ export default function PuntoHero() {
           }}
         >
           Suma tu taller como
-          <span className="block text-[#CC0000]">Punto Kristall</span>
+          <span className="block text-[#EB3439]">Punto Kristall</span>
         </h1>
 
         {/* Body */}

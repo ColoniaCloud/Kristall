@@ -38,7 +38,7 @@ export default function Demo() {
               type="button"
               onClick={entrar}
               disabled={cargando}
-              className="mt-5 inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-[#CC0000] text-base font-semibold text-white transition active:scale-[0.98] disabled:opacity-60"
+              className="mt-5 inline-flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-[#EB3439] text-base font-semibold text-white transition active:scale-[0.98] disabled:opacity-60"
             >
               {cargando ? (
                 <Loader2 className="size-5 animate-spin" aria-hidden="true" />

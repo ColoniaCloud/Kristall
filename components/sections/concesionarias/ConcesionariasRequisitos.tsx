@@ -49,7 +49,7 @@ export default function ConcesionariasRequisitos() {
         {/* Columna izquierda */}
         <div ref={leftRef}>
           <span
-            className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#E6A800] mb-3 block transition-all duration-1000"
+            className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#5C5C5C] mb-3 block transition-all duration-1000"
             style={{ opacity: leftInView ? 1 : 0, transform: leftInView ? 'translateY(0)' : 'translateY(12px)', transitionDelay: '0ms' }}
           >
             03 · LO QUE PEDIMOS

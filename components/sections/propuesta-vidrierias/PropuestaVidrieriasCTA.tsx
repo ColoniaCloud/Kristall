@@ -70,8 +70,8 @@ function ContactForm() {
     <div className="relative w-full bg-white/[0.03] border border-white/10 rounded-2xl p-8 backdrop-blur-md">
       {sent ? (
         <div className="text-center py-6">
-          <div className="w-12 h-12 rounded-full bg-[#E6A800]/15 flex items-center justify-center mx-auto mb-4">
-            <span className="text-[#E6A800] text-xl">✓</span>
+          <div className="w-12 h-12 rounded-full bg-[#FFDA2C] flex items-center justify-center mx-auto mb-4">
+            <span className="text-[#0A0A0A] text-xl">✓</span>
           </div>
           <p className="text-white font-medium mb-2" style={{ fontFamily: 'var(--font-display)' }}>
             {t('success_title')}
@@ -219,10 +219,10 @@ export default function PropuestaVidrieriasCTA() {
               className="backdrop-blur-md bg-white/[0.03] border border-white/5 rounded-xl p-5 hover:bg-white/[0.06] hover:border-white/10 transition-all group cursor-pointer"
             >
               <div className="flex items-center gap-2 mb-2 text-white/40">
-                <MessageSquare className="w-4 h-4 text-[#E6A800]" />
+                <MessageSquare className="w-4 h-4 text-[#FFDA2C]" />
                 <span className="text-[10px] font-bold uppercase tracking-wider">WHATSAPP</span>
               </div>
-              <p className="text-white text-[16px] font-semibold group-hover:text-[#E6A800] transition-colors">
+              <p className="text-white text-[16px] font-semibold group-hover:text-[#FFDA2C] transition-colors">
                 +54 9 11 6048-4312
               </p>
             </a>

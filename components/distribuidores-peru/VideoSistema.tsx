@@ -32,7 +32,7 @@ export default function VideoSistema({ id, titulo }: { id: string; titulo: strin
             setActivo(true)
             trackEvent('peru_video_play', { video: id })
           }}
-          className="group absolute inset-0 block size-full text-left outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#E6A800]"
+          className="group absolute inset-0 block size-full text-left outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#FFDA2C]"
           aria-label={`Reproducir el video: ${titulo}`}
         >
           {/* eslint-disable-next-line @next/next/no-img-element -- miniatura remota de YouTube, fuera del optimizador */}
@@ -44,7 +44,7 @@ export default function VideoSistema({ id, titulo }: { id: string; titulo: strin
           />
           <span className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/10" />
           <span className="absolute inset-0 grid place-items-center">
-            <span className="relative grid size-20 place-items-center rounded-full bg-[#E6A800] text-[#0A0A0A] shadow-[0_12px_40px_rgba(230,168,0,0.35)] transition duration-300 group-hover:scale-105 lg:size-24">
+            <span className="relative grid size-20 place-items-center rounded-full bg-[#FFDA2C] text-[#0A0A0A] shadow-[0_12px_40px_rgba(255,218,44,0.35)] transition duration-300 group-hover:scale-105 lg:size-24">
               <Play className="ml-1 size-8 fill-current lg:size-9" aria-hidden="true" />
             </span>
           </span>

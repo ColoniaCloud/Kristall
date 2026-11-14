@@ -31,8 +31,8 @@ export default function ConcesionariasHero() {
         <div className="flex items-center gap-3 mb-6" style={item(0)}>
           <div className="flex h-[14px] w-6 overflow-hidden rounded-[2px] flex-shrink-0">
             <div className="flex-1 bg-[#1A1A1A]" />
-            <div className="flex-1 bg-[#CC0000]" />
-            <div className="flex-1 bg-[#E6A800]" />
+            <div className="flex-1 bg-[#EB3439]" />
+            <div className="flex-1 bg-[#FFDA2C]" />
           </div>
           <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-white/35">
             Programa para concesionarias
@@ -41,11 +41,11 @@ export default function ConcesionariasHero() {
 
         {/* Badge */}
         <div
-          className="inline-flex items-center gap-2 bg-[#E6A800]/10 border border-[#E6A800]/20 rounded-full px-4 py-1.5 mb-6"
+          className="inline-flex items-center gap-2 bg-[#FFDA2C]/10 border border-[#FFDA2C]/20 rounded-full px-4 py-1.5 mb-6"
           style={item(80)}
         >
-          <span className="w-2 h-2 rounded-full bg-[#E6A800]" />
-          <span className="text-xs text-[#E6A800]/80">Sin exclusividad</span>
+          <span className="w-2 h-2 rounded-full bg-[#FFDA2C]" />
+          <span className="text-xs text-[#FFDA2C]/80">Sin exclusividad</span>
         </div>
 
         {/* Headline */}
@@ -58,7 +58,7 @@ export default function ConcesionariasHero() {
           }}
         >
           Sumá más margen
-          <span className="block text-[#E6A800]">a cada entrega de 0km.</span>
+          <span className="block text-[#FFDA2C]">a cada entrega de 0km.</span>
         </h1>
 
         {/* CTAs */}

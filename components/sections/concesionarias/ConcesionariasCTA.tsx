@@ -71,8 +71,8 @@ function ContactForm() {
     <div className="relative w-full bg-white/[0.03] border border-white/10 rounded-2xl p-8 backdrop-blur-md">
       {sent ? (
         <div className="text-center py-6">
-          <div className="w-12 h-12 rounded-full bg-[#E6A800]/15 flex items-center justify-center mx-auto mb-4">
-            <span className="text-[#E6A800] text-xl">✓</span>
+          <div className="w-12 h-12 rounded-full bg-[#FFDA2C] flex items-center justify-center mx-auto mb-4">
+            <span className="text-[#0A0A0A] text-xl">✓</span>
           </div>
           <p className="text-white font-medium mb-2" style={{ fontFamily: 'var(--font-display)' }}>
             {t('success_title')}
@@ -201,7 +201,7 @@ export default function ConcesionariasCTA() {
           >
             {recap.map((item) => (
               <div key={item} className="flex items-start gap-3">
-                <CheckCircle2 className="w-4 h-4 text-[#E6A800] mt-0.5 flex-shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-[#FFDA2C] mt-0.5 flex-shrink-0" />
                 <p className="text-[15px] text-white/70 leading-relaxed">{item}</p>
               </div>
             ))}
