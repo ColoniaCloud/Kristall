@@ -267,7 +267,7 @@ logo). Las clases viven en `app/globals.css`:
 <Link href="/contacto" className="btn-primary px-6 py-3 rounded-lg text-sm">Pedir cotización</Link>
 ```
 
-El Portal de Cliente y las garantías usan todavía el `Button` de shadcn (`components/ui/button.tsx`).
+En el Portal de Cliente y las garantías se usa el `Button` de shadcn (`components/ui/button.tsx`): `variant="default"` es el primario rojo, `secondary` el amarillo y `outline` el terciario neutro. El color sale de `app/globals.css` (reglas sobre `[class~="group/button"]`), no de `--primary`, que también pinta la navegación activa y los íconos de éxito.
 
 ### Botón outline (terciario)
 

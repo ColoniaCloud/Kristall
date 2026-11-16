@@ -227,6 +227,32 @@ body {
   font-family: var(--font-body);
 }
 
+/* Botones de la marca (guía, sección Color → «Botones y chips»): primario
+   rojo, secundario amarillo, outline = terciario neutro. Se eligen por la
+   clase group/button y no por data-slot (Radix lo pisa con dialog-trigger,
+   sheet-trigger, etc. cuando el botón abre algo), y
+   no por --primary, que también pinta la navegación activa, las tarjetas
+   elegidas y los íconos de éxito: un ✓ rojo se lee como error. CSS plano,
+   sin @layer, para ganarle a las utilities del Button. */
+.kf-app-theme [class~="group/button"][data-variant="default"] {
+  background-color: #EB3439;
+  color: #FFFFFF;
+  border-color: rgb(0 0 0 / 6%);
+  font-weight: 600;
+}
+.kf-app-theme [class~="group/button"][data-variant="default"]:hover {
+  background-color: #D42A30;
+}
+.kf-app-theme [class~="group/button"][data-variant="secondary"] {
+  background-color: #FFDA2C;
+  color: #0A0A0A;
+  border-color: rgb(0 0 0 / 6%);
+  font-weight: 600;
+}
+.kf-app-theme [class~="group/button"][data-variant="secondary"]:hover {
+  background-color: #F2CC1A;
+}
+
 /* ---------------------------------------------------------------------- */
 /* Tema oscuro del Panel CRM de Cliente — escopeado bajo .crm-theme, que   */
 /* se aplica DENTRO de .kf-app-theme (solo en el layout protegido de       */
@@ -307,30 +333,42 @@ html:has(.crm-theme) body {
 /* Botón primario: el mismo relieve de siempre, ahora en luz. Es el botón
    casi-negro sobre claro del sitio público, invertido para la superficie
    oscura del panel. */
-.crm-theme [data-slot="button"][data-variant="default"] {
-  background-image: linear-gradient(to bottom, oklch(0.98 0.003 70), oklch(0.91 0.004 70));
+.crm-theme [class~="group/button"][data-variant="default"] {
+  background-image: linear-gradient(to bottom, #EF4247, #E1303A);
   border-color: oklch(0 0 0 / 12%);
+  color: #FFFFFF;
+  font-weight: 600;
   box-shadow:
     inset 0 1px 0 oklch(1 0 0 / 70%),
     0 1px 2px oklch(0 0 0 / 45%);
 }
-.crm-theme [data-slot="button"][data-variant="default"]:hover {
-  background-image: linear-gradient(to bottom, oklch(1 0 0), oklch(0.95 0.003 70));
+.crm-theme [class~="group/button"][data-variant="default"]:hover {
+  background-image: linear-gradient(to bottom, #F25358, #EB3439);
 }
-.crm-theme [data-slot="button"][data-variant="default"]:active {
-  background-image: linear-gradient(to bottom, oklch(0.88 0.004 70), oklch(0.84 0.005 70));
+.crm-theme [class~="group/button"][data-variant="default"]:active {
+  background-image: linear-gradient(to bottom, #D42A30, #C2252B);
   box-shadow: inset 0 1px 2px oklch(0 0 0 / 25%);
 }
 
-/* Botón secundario/outline: relieve sutil sobre gris de panel */
-.crm-theme [data-slot="button"][data-variant="secondary"],
-.crm-theme [data-slot="button"][data-variant="outline"] {
+/* Secundario sobre el panel oscuro: contorno amarillo, sin relleno. */
+.crm-theme [class~="group/button"][data-variant="secondary"] {
+  background-image: none;
+  background-color: transparent;
+  border-color: #FFDA2C;
+  color: #FFDA2C;
+  font-weight: 600;
+}
+.crm-theme [class~="group/button"][data-variant="secondary"]:hover {
+  background-color: rgb(255 218 44 / 10%);
+}
+
+/* Outline (terciario): relieve sutil sobre gris de panel */
+.crm-theme [class~="group/button"][data-variant="outline"] {
   background-image: linear-gradient(to bottom, oklch(0.29 0.006 70), oklch(0.24 0.006 70));
   border-color: oklch(1 0 0 / 8%);
   box-shadow: inset 0 1px 0 oklch(1 0 0 / 6%);
 }
-.crm-theme [data-slot="button"][data-variant="secondary"]:hover,
-.crm-theme [data-slot="button"][data-variant="outline"]:hover {
+.crm-theme [class~="group/button"][data-variant="outline"]:hover {
   background-image: linear-gradient(to bottom, oklch(0.33 0.006 70), oklch(0.28 0.006 70));
 }
 
