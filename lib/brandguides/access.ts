@@ -7,7 +7,7 @@ import { readSessionToken } from '@/lib/session'
 // En el repo vive solo el SHA-256 de la contraseña, nunca el texto. Para
 // cambiarla sin tocar código, definir BRANDGUIDES_PASSWORD_SHA256 en el .env
 // del servidor (hash hex de la nueva contraseña).
-const DEFAULT_PASSWORD_SHA256 = '3bf6a0fd9d11f60b016bcae01280c0d93a3ccfbd5821b14232ec6e4cc0dbf733'
+const DEFAULT_PASSWORD_SHA256 = 'c2bdeefd0beeeae0fb8eb552a23078c1ac01abedbbd84dff692e9b7d95460a2f'
 
 export const COOKIE = 'kf_brandguides'
 export const MAX_AGE_SECONDS = 60 * 60 * 24 * 30
