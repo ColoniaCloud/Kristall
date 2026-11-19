@@ -1,8 +1,10 @@
 import { Resend } from 'resend'
 import { renderActivarGarantia } from '@/lib/mail/garantia-activar'
 
-function escapeHtml(value: string): string {
-  return value
+// Tolera nulos a propósito: los valores salen de bodies sin tipo, y un campo
+// ausente no debe tirar abajo el envío de un mail entero.
+function escapeHtml(value: string | null | undefined): string {
+  return String(value ?? '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -28,6 +30,24 @@ function getResendClient() {
   return resendClient
 }
 
+/**
+ * `resend.emails.send` NO lanza cuando la API rechaza el envío: devuelve
+ * `{ data: null, error }`. Sin mirar ese `error`, un mail rechazado (dominio
+ * suspendido, destinatario inválido, cuota) se ve exactamente igual que uno
+ * entregado y no deja ni una línea de log. Esta envoltura lo convierte en
+ * excepción, que es lo que los llamadores ya manejan: la ruta de leads lo
+ * registra sin perder el lead, y la de garantías devuelve 502.
+ */
+async function enviar(mail: Parameters<Resend['emails']['send']>[0], descripcion: string) {
+  const { data, error } = await getResendClient().emails.send(mail)
+
+  if (error) {
+    throw new Error(`Resend rechazó ${descripcion}: ${error.name} — ${error.message}`)
+  }
+
+  return data
+}
+
 export async function sendLeadNotification(lead: {
   name: string
   company?: string
@@ -37,14 +57,13 @@ export async function sendLeadNotification(lead: {
   source: string
   cartItems?: { productName: string; codigo?: string; quantity?: number }[]
 }) {
-  const resend = getResendClient()
   const itemsHtml = lead.cartItems?.length
     ? `<h3>Productos solicitados:</h3><ul>${lead.cartItems
         .map((i) => `<li>${escapeHtml(i.productName)}${i.codigo ? ` (${escapeHtml(i.codigo)})` : ''} × ${i.quantity ?? 1}</li>`)
         .join('')}</ul>`
     : ''
 
-  await resend.emails.send({
+  await enviar({
     from: process.env.EMAIL_FROM!,
     to: process.env.EMAIL_LEADS_TO!,
     subject: `Nuevo lead: ${lead.name}${lead.company ? ` — ${lead.company}` : ''}`,
@@ -58,15 +77,14 @@ export async function sendLeadNotification(lead: {
       <p><strong>Mensaje:</strong> ${lead.message ? escapeHtml(lead.message) : '—'}</p>
       ${itemsHtml}
     `,
-  })
+  }, 'la notificación de un lead nuevo')
 }
 
 export async function sendLeadConfirmation(lead: {
   name: string
   email: string
 }) {
-  const resend = getResendClient()
-  await resend.emails.send({
+  await enviar({
     from: process.env.EMAIL_FROM!,
     to: lead.email,
     subject: 'Recibimos tu consulta — Kristall Film',
@@ -77,7 +95,7 @@ export async function sendLeadConfirmation(lead: {
       <br/>
       <p style="color:#9A9A9A;font-size:12px">Kristall Film — Tecnología alemana de precisión</p>
     `,
-  })
+  }, 'la confirmación al visitante')
 }
 
 export async function sendWarrantyActivationEmail(params: {
@@ -88,7 +106,6 @@ export async function sendWarrantyActivationEmail(params: {
   productName: string
   activationLink: string
 }) {
-  const resend = getResendClient()
   const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://kristallfilm.com').replace(/\/$/, '')
   // El logo blanco lo sirve el CRM, igual que el del taller: es el servidor de
   // imágenes de todo lo que sale con la marca hacia el cliente final.
@@ -104,5 +121,8 @@ export async function sendWarrantyActivationEmail(params: {
     logoKristallUrl: `${crmUrl}/logo-blanco.png`,
   })
 
-  await resend.emails.send({ from: process.env.EMAIL_FROM!, to: params.to, subject, html })
+  await enviar(
+    { from: process.env.EMAIL_FROM!, to: params.to, subject, html },
+    'el mail de activación de garantía',
+  )
 }

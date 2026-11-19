@@ -30,6 +30,13 @@ export async function POST(req: NextRequest) {
           }))
       : undefined
 
+    // Un único valor de fuente para la base Y para el mail. Antes el mail
+    // recibía el `source` crudo del body: si el pedido no traía el campo,
+    // `escapeHtml(undefined)` tiraba el envío y el lead quedaba guardado sin que
+    // nadie se enterara. Los formularios del sitio lo mandan siempre, así que el
+    // agujero solo se veía desde afuera.
+    const fuente = typeof source === 'string' && source.trim() ? source : 'contacto'
+
     const payload = await getPayload({ config })
 
     const lead = await payload.create({
@@ -40,7 +47,7 @@ export async function POST(req: NextRequest) {
         email,
         phone,
         message,
-        source: source || 'contacto',
+        source: fuente,
         status: 'nuevo',
         cartItems: validCartItems,
       },
@@ -50,7 +57,7 @@ export async function POST(req: NextRequest) {
     // falla (Resend caído, dominio del lead inválido, etc.), no queremos
     // que el visitante vea un error y reintente generando un lead duplicado.
     try {
-      await sendLeadNotification({ name, company, email, phone, message, source, cartItems: validCartItems })
+      await sendLeadNotification({ name, company, email, phone, message, source: fuente, cartItems: validCartItems })
       await sendLeadConfirmation({ name, email })
     } catch (emailError) {
       console.error('[API/leads] lead guardado pero falló el envío de email', lead.id, emailError)
