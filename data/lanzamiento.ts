@@ -61,7 +61,7 @@ export const LINEAS: Linea[] = [
       'Control solar funcional y construcción de 1 ply para aplicaciones profesionales. Confiabilidad y rendimiento.',
     espesor: '1 ply',
     rollo: { ancho: 1.52, largo: 30 },
-    garantiaAnios: 3,
+    garantiaAnios: 2,
     precio: 135,
     variantes: [
       { sku: 'KLS05', vlt: 5, ir: 20, uv: 99 },

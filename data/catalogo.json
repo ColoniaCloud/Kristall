@@ -1,6 +1,6 @@
 {
   "_comentario": "Generado por scripts/sync-catalogo.mjs desde Google Sheets. No editar a mano.",
-  "generadoEl": "2026-09-23T14:44:42.172Z",
+  "generadoEl": "2026-11-19T22:58:42.004Z",
   "productos": [
     {
       "codigo": "KLS05",
@@ -12,7 +12,7 @@
       "vlt": 5,
       "uvr": 99,
       "ir": 20,
-      "garantiaAnios": 3,
+      "garantiaAnios": 2,
       "espesor": {
         "valor": 1,
         "unidad": "ply"
@@ -28,7 +28,7 @@
       "vlt": 15,
       "uvr": 92,
       "ir": 20,
-      "garantiaAnios": 3,
+      "garantiaAnios": 2,
       "espesor": {
         "valor": 1,
         "unidad": "ply"

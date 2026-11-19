@@ -17,7 +17,7 @@ if (!PASSWORD) {
 }
 
 const PRODUCTOS = [
-  // ─── KLASS (nueva categoría — estándar, 1 ply, 3 años) ───
+  // ─── KLASS (nueva categoría — estándar, 1 ply, 2 años) ───
   {
     name_es: 'KLASS 05 — Línea Estándar',
     name_en: 'KLASS 05 — Standard Line',

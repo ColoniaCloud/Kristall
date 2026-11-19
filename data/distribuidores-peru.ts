@@ -79,7 +79,7 @@ export const TABLA: LineaPeru[] = [
   { slug: 'karbon', nombre: 'Karbon', tecnologia: 'Nanocarbono · 2 ply', vlt: '5 · 15', ir: '86%', uv: '99%', garantia: '10 años' },
   { slug: 'kore', nombre: 'Kore', tecnologia: 'Dyed + Sputtering · 2 ply', vlt: '5 · 15', ir: '—', uv: '99%', garantia: '5 años' },
   { slug: 'kron', nombre: 'Kron', tecnologia: 'Dyed · 1 ply', vlt: '5 · 15 · 50', ir: '11%', uv: '99%', garantia: '3 años' },
-  { slug: 'klass', nombre: 'Klass', tecnologia: 'Dyed · 1 ply', vlt: '5 · 15', ir: '20%', uv: '99%', garantia: '3 años' },
+  { slug: 'klass', nombre: 'Klass', tecnologia: 'Dyed · 1 ply', vlt: '5 · 15', ir: '20%', uv: '99%', garantia: '2 años' },
   { slug: 'ppf', nombre: 'PPF', tecnologia: 'TPU self-healing · 7.5 mil', vlt: 'Transparente', ir: '—', uv: '—', garantia: '10 años' },
 ]
 
