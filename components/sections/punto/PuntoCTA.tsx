@@ -6,7 +6,7 @@ import PuntoModal from './PuntoModal'
 
 const stats = [
   { value: '5 líneas', label: 'Productos disponibles' },
-  { value: '15 años', label: 'Garantía PPF' },
+  { value: '10 años', label: 'Garantía PPF' },
   { value: '3 idiomas', label: 'Soporte técnico' },
   { value: '100%', label: 'Garantía de instalación' },
 ]

@@ -4,7 +4,7 @@ import Reveal from './Reveal'
 const DATOS = [
   { valor: '8', label: 'láminas de lanzamiento' },
   { valor: '95%', label: 'de rechazo infrarrojo en KeramX y Krypton' },
-  { valor: '15 años', label: 'de garantía en PPF' },
+  { valor: '10 años', label: 'de garantía en PPF' },
   { valor: 'Digital', label: 'la garantía de cada instalación' },
 ]
 

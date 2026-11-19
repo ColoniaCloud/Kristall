@@ -52,7 +52,7 @@ function specs(p: Producto): string {
     .join(' · ')
 }
 
-/** Rango de garantías de una línea: «10 años», o «3–15 años» si varían. */
+/** Rango de garantías de una línea: «10 años», o «3–10 años» si varían. */
 function garantiaDeLinea(linea: Linea): string | null {
   const años = linea.productos.map((p) => p.garantiaAnios).filter((v): v is number => v != null)
   if (años.length === 0) return null

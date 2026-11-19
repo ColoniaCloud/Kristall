@@ -45,7 +45,7 @@ export const DESTACADAS: {
   {
     nombre: 'PPF',
     descripcion: 'TPU transparente autorreparable que protege la pintura de impactos, rayones y agentes externos.',
-    datos: 'TPU 7.5 mil · 15 años',
+    datos: 'TPU 7.5 mil · 10 años',
     foto: '/Productos/destacadas/ppf.png',
     rubro: 'Automotriz',
   },
@@ -80,7 +80,7 @@ export const TABLA: LineaPeru[] = [
   { slug: 'kore', nombre: 'Kore', tecnologia: 'Dyed + Sputtering · 2 ply', vlt: '5 · 15', ir: '—', uv: '99%', garantia: '5 años' },
   { slug: 'kron', nombre: 'Kron', tecnologia: 'Dyed · 1 ply', vlt: '5 · 15 · 50', ir: '11%', uv: '99%', garantia: '3 años' },
   { slug: 'klass', nombre: 'Klass', tecnologia: 'Dyed · 1 ply', vlt: '5 · 15', ir: '20%', uv: '99%', garantia: '3 años' },
-  { slug: 'ppf', nombre: 'PPF', tecnologia: 'TPU self-healing · 7.5 mil', vlt: 'Transparente', ir: '—', uv: '—', garantia: '15 años' },
+  { slug: 'ppf', nombre: 'PPF', tecnologia: 'TPU self-healing · 7.5 mil', vlt: 'Transparente', ir: '—', uv: '—', garantia: '10 años' },
 ]
 
 /**

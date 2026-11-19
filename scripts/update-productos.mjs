@@ -24,7 +24,7 @@ const UPDATES = [
         { key: 'Color', value: 'Transparente' },
         { key: 'Autoreparable', value: 'Por calor' },
         { key: 'Rollo', value: '1.52m × 15m' },
-        { key: 'Garantía', value: '15 años' },
+        { key: 'Garantía', value: '10 años' },
       ],
     },
   },

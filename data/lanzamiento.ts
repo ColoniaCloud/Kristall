@@ -186,7 +186,7 @@ export const LINEAS: Linea[] = [
       'Protección transparente de alto rendimiento que preserva la pintura frente a impactos, rayones y agentes externos. Tecnología de autorreparación térmica para mantener el acabado impecable por más tiempo.',
     espesor: '7.5 mil',
     rollo: { ancho: 1.52, largo: 15 },
-    garantiaAnios: 15,
+    garantiaAnios: 10,
     precio: 930,
     variantes: [{ sku: 'TPUKX', vlt: null, ir: null, uv: null }],
     foto: '/Productos/destacadas/ppf.png',

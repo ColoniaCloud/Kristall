@@ -204,7 +204,7 @@
       "vlt": null,
       "uvr": null,
       "ir": null,
-      "garantiaAnios": 15,
+      "garantiaAnios": 10,
       "espesor": {
         "valor": 7.5,
         "unidad": "mil"
